@@ -1,0 +1,17 @@
+@import './base.css';
+
+#app {
+  /* max-width: 1280px; */
+  /* margin: 0 auto; */
+  padding: 1rem;
+  font-weight: normal;
+  background-color: rgb(199, 255, 199);
+}
+
+a,
+.green {
+  text-decoration: none;
+  color: hsla(160, 100%, 37%, 1);
+  transition: 0.4s;
+  padding: 3px;
+}
