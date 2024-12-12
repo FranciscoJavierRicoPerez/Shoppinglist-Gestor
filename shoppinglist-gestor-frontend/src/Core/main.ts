@@ -6,6 +6,10 @@ import PrimeVue from 'primevue/config'
 import Aura from '@primevue/themes/aura'
 
 import App from './App.vue'
+
+import 'bootstrap'
+import 'bootstrap/dist/css/bootstrap.min.css'
+
 import router from './router'
 
 const app = createApp(App)

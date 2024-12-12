@@ -1,4 +1,8 @@
 <script setup lang="ts">
 import ShoppinglistTable from '@/Shoppinglist/components/ShoppinglistTable.vue'
+import ShoppinglistFilter from '@/Shoppinglist/components/ShoppinglistFilter.vue'
 </script>
-<template><ShoppinglistTable></ShoppinglistTable></template>
+<template>
+  <ShoppinglistFilter></ShoppinglistFilter>
+  <ShoppinglistTable></ShoppinglistTable>
+</template>
