@@ -1,17 +1,21 @@
-export interface Shoppinglist {
+import type { Product } from '@/Product/domain/Product'
+
+export interface ShoppinglistDetails {
   id: number
   creationDate: string
   code: string
   closeDate: string | null
   totalPrice: number
   isActive: boolean
+  products: Product[]
 }
 
-export const defaultShoppinglist = {
+export const defaultShoppinglistDetails = {
   id: -1,
   creationDate: '',
   code: '',
-  closeDate: null,
+  closeDate: '',
   totalPrice: -1,
   isActive: false,
+  products: [],
 }

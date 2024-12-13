@@ -3,6 +3,7 @@ import Card from 'primevue/card'
 import Button from 'primevue/button'
 import type { PropType } from 'vue'
 import type { Shoppinglist } from '@/Shoppinglist/domain/Shoppinglist'
+import { RouterLink } from 'vue-router'
 
 defineProps({
   shoppinglist: {
@@ -21,7 +22,9 @@ defineProps({
     </template>
     <template #footer>
       <Button label="Archivar" severity="help"></Button>
-      <Button class="buttons-separation" label="Ver" severity="info"></Button>
+      <RouterLink :to="`/shoppinglist/${shoppinglist.id}`">
+        <Button class="buttons-separation" label="Ver" severity="info"></Button>
+      </RouterLink>
       <Button class="buttons-separation" label="Eliminar" severity="danger"></Button>
     </template>
   </Card>

@@ -1,0 +1,12 @@
+{
+  "id": 2,
+  "creationDate": "04/12/2024",
+  "code": "SHOPPINGLIST-2",
+  "closeDate": null,
+  "totalPrice": 100,
+  "isActive": true,
+  "products": [
+    { "id": 1, "name": "Apples" },
+    { "id": 2, "name": "Meat" }
+  ]
+}
