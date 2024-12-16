@@ -18,10 +18,10 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <Panel>
-    <template #header
-      ><span class="panelHeader">Informacion lista de la compra</span>
-      <Tag style="font-size: large">
+  <Panel style="margin-bottom: 1rem">
+    <template #header><span class="panelHeader">Informacion lista de la compra</span> </template>
+    <p>
+      <Tag style="font-size: large; margin-right: 1rem">
         <div v-if="shoppinglistDetails.isActive">
           <strong>ABIERTA</strong>
         </div>
@@ -29,11 +29,17 @@ onMounted(async () => {
           <strong>CERRADA</strong>
         </div>
       </Tag>
-    </template>
-    <p class="m-0">
-      <Tag severity="info">{{ shoppinglistDetails.code }}</Tag>
-      <Tag severity="danger">Precio total {{ shoppinglistDetails.totalPrice }}</Tag>
-      <Tag severity="warn" :class="{ multiDate: shoppinglistDetails.closeDate !== null }">
+      <Tag severity="info" style="font-size: larger; margin-right: 1rem">{{
+        shoppinglistDetails.code
+      }}</Tag>
+      <Tag severity="danger" style="font-size: larger"
+        >Precio total {{ shoppinglistDetails.totalPrice }} €</Tag
+      >
+      <Tag
+        severity="warn"
+        style="font-size: larger"
+        :class="{ multiDate: shoppinglistDetails.closeDate !== null }"
+      >
         Lista de la compra del {{ shoppinglistDetails.creationDate }}
         <div v-if="shoppinglistDetails.closeDate !== null">
           <strong> al {{ shoppinglistDetails.closeDate }}</strong>
@@ -41,9 +47,6 @@ onMounted(async () => {
       </Tag>
     </p>
   </Panel>
-  <!-- Modificar esto !_!_! -->
-  <div style="margin-bottom: 1rem"></div>
-  <!-- Modificar esto !_!_! -->
   <Panel>
     <template #header><span class="panelHeader">Lista de productos</span></template>
     <ProductDataview :productList="shoppinglistDetails.products"></ProductDataview>
@@ -57,7 +60,6 @@ onMounted(async () => {
 .multiDate {
   margin-left: 1rem;
 }
-
 .panelSeparations {
   margin-right: 0.2rem;
 }
