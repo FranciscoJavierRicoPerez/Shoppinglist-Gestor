@@ -3,7 +3,7 @@
     "id": 2,
     "creationDate": "04/12/2024",
     "code": "SHOPPINGLIST-2",
-    "closeDate": null,
+    "closeDate": "04/12/2024",
     "totalPrice": 100,
     "isActive": true
   },

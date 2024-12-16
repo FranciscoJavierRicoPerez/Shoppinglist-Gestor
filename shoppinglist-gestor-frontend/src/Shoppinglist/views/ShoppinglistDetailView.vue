@@ -5,7 +5,9 @@ import {
   type ShoppinglistDetails,
 } from '@/Shoppinglist/domain/ShoppinglistDetails'
 import { useGetShoppinglistDetails } from '@/Shoppinglist/application/useGetShoppinglistDetails'
-
+import Panel from 'primevue/panel'
+import ProductDataview from '@/Product/components/ProductDataview.vue'
+import Tag from 'primevue/tag'
 const { refetch: getShoppinglistDetails } = useGetShoppinglistDetails()
 
 const shoppinglistDetails = ref<ShoppinglistDetails>({ ...defaultShoppinglistDetails })
@@ -16,5 +18,47 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <p>DETALLE DE LA LISTA DE LA COMPRA</p>
+  <Panel>
+    <template #header
+      ><span class="panelHeader">Informacion lista de la compra</span>
+      <Tag style="font-size: large">
+        <div v-if="shoppinglistDetails.isActive">
+          <strong>ABIERTA</strong>
+        </div>
+        <div v-else>
+          <strong>CERRADA</strong>
+        </div>
+      </Tag>
+    </template>
+    <p class="m-0">
+      <Tag severity="info">{{ shoppinglistDetails.code }}</Tag>
+      <Tag severity="danger">Precio total {{ shoppinglistDetails.totalPrice }}</Tag>
+      <Tag severity="warn" :class="{ multiDate: shoppinglistDetails.closeDate !== null }">
+        Lista de la compra del {{ shoppinglistDetails.creationDate }}
+        <div v-if="shoppinglistDetails.closeDate !== null">
+          <strong> al {{ shoppinglistDetails.closeDate }}</strong>
+        </div>
+      </Tag>
+    </p>
+  </Panel>
+  <!-- Modificar esto !_!_! -->
+  <div style="margin-bottom: 1rem"></div>
+  <!-- Modificar esto !_!_! -->
+  <Panel>
+    <template #header><span class="panelHeader">Lista de productos</span></template>
+    <ProductDataview :productList="shoppinglistDetails.products"></ProductDataview>
+  </Panel>
 </template>
+<style lang="css">
+.panelHeader {
+  font-size: xx-large;
+  font-weight: bold;
+}
+.multiDate {
+  margin-left: 1rem;
+}
+
+.panelSeparations {
+  margin-right: 0.2rem;
+}
+</style>

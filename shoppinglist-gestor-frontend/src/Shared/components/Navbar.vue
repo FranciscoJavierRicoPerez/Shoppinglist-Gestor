@@ -20,7 +20,7 @@ const items = ref([
 <template>
   <div>
     <nav>
-      <Menubar :model="items">
+      <Menubar :model="items" class="menubar">
         <template #item="{ item }">
           <RouterLink :to="item.url"><i :class="item.icon"></i>{{ item.label }}</RouterLink>
         </template>
@@ -28,3 +28,8 @@ const items = ref([
     </nav>
   </div>
 </template>
+<style lang="css">
+.menubar {
+  margin-bottom: 1rem;
+}
+</style>
