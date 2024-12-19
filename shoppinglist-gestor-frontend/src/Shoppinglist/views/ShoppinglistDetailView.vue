@@ -49,7 +49,9 @@ onMounted(async () => {
   </Panel>
   <Panel>
     <template #header><span class="panelHeader">Lista de productos</span></template>
-    <ProductDataview :productList="shoppinglistDetails.products"></ProductDataview>
+    <div class="cardOrganization">
+      <ProductDataview :productList="shoppinglistDetails.products"></ProductDataview>
+    </div>
   </Panel>
 </template>
 <style lang="css">
@@ -62,5 +64,10 @@ onMounted(async () => {
 }
 .panelSeparations {
   margin-right: 0.2rem;
+}
+
+.cardOrganization {
+  display: flex;
+  flex-wrap: wrap;
 }
 </style>

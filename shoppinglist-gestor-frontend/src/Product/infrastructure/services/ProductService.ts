@@ -13,5 +13,7 @@ export function createProduct(data: ResponseProduct): Product {
   return {
     id: data.id,
     name: data.name,
+    quantity: data.quantity,
+    price: data.price,
   }
 }
