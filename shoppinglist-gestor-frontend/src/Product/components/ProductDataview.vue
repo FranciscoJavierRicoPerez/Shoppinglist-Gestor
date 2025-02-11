@@ -4,6 +4,7 @@ import type { Product } from '@/Product/domain/Product'
 import Card from 'primevue/card'
 import Button from 'primevue/button'
 import Tag from 'primevue/tag'
+import { RouterLink } from 'vue-router'
 defineProps({
   productList: {
     type: Object as PropType<Product[]>,
@@ -20,8 +21,9 @@ defineProps({
         <Tag severity="primary">Precio {{ product.price }} €</Tag>
       </template>
       <template #footer>
-        <Button severity="danger" label="Añadir cantidad" style="margin-right: 1rem"></Button>
-        <Button severity="warn" label="Reducir cantidad"></Button>
+        <RouterLink :to="`/product/${product.id}}`">
+          <Button label="Ver" severity="help" style="width: 11.4rem"></Button>
+        </RouterLink>
       </template>
     </Card>
   </div>
