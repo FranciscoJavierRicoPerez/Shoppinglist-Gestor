@@ -5,5 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class RequestCreateShoppinglist {
+public class RequestCreateShoppinglistDTO {
+    private String code;
+    private Double totalPrice;
+    private Boolean isActive;
 }
