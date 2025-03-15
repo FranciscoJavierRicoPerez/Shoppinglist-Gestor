@@ -5,9 +5,7 @@ import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestUpdat
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.ShoppinglistDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.model.Shoppinglist;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 import java.util.Date;
