@@ -25,7 +25,7 @@ public class ShoppinglistController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ShoppinglistController.class);
 
-    @GetMapping
+    @GetMapping("/v1")
     public ResponseEntity<List<ShoppinglistDTO>> getAllShoppinglistActive() {
         LOGGER.info("Getting all actives shoppinglists");
         HttpStatus httpStatus = HttpStatus.OK;
@@ -39,13 +39,13 @@ public class ShoppinglistController {
         return new ResponseEntity<>(shoppinglistDTOS, httpStatus);
     }
 
-    @PostMapping("/create")
+    @PostMapping("/v1/create")
     public ResponseEntity<ShoppinglistDTO> createShoppinglist(@NotNull @RequestBody RequestCreateShoppinglistDTO request) {
         LOGGER.info("Creation of the new shoppinglist");
         return new ResponseEntity<>(shoppinglistService.create(request), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/v1/delete/{id}")
     public ResponseEntity<?> deleteShoppinglist(@PathVariable Long id) {
         LOGGER.info("Delete of the shoppinglist with id: {}", id);
         HttpStatus httpStatus = HttpStatus.OK;
@@ -58,7 +58,7 @@ public class ShoppinglistController {
         return new ResponseEntity<>(httpStatus);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/v1/update")
     public ResponseEntity<ShoppinglistDTO> updateShoppinglist(@RequestBody RequestUpdateShoppinglistDTO request) {
         LOGGER.info("Update the shoppinglist with id: {}", request.getId());
         HttpStatus httpStatus = HttpStatus.CREATED;

@@ -27,7 +27,7 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
     @Override
     public List<ShoppinglistDTO> findActiveShoppinglists() throws ShoppinglistException {
         LOGGER.info("Find all the shoppinglists actives");
-        Optional<Shoppinglist> shoppinglistOptional = shoppinglistRepository.findActiveTrue();
+        Optional<Shoppinglist> shoppinglistOptional = shoppinglistRepository.IsActiveTrue();
         if (shoppinglistOptional.isEmpty()) {
             throw new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND);
         }

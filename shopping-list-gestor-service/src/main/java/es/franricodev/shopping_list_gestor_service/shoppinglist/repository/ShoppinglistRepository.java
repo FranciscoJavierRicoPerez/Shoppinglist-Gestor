@@ -9,6 +9,6 @@ import java.util.Optional;
 @Repository
 public interface ShoppinglistRepository extends JpaRepository<Shoppinglist, Long> {
 
-    Optional<Shoppinglist> findActiveTrue();
+    Optional<Shoppinglist> IsActiveTrue();
 
 }
