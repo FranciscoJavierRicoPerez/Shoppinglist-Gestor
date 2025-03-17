@@ -19,7 +19,6 @@ public class Shoppinglist implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     @Column(name = "CREATION_DATE")
     private Date creationDate;
 

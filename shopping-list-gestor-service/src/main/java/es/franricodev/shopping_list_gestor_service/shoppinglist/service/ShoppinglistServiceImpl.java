@@ -63,6 +63,7 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
         }
         Shoppinglist toUpdate = shoppinglistOptional.get();
         ShoppinglistMapper.INSTANCE.updateShoppinglist(toUpdate, request);
+        toUpdate = shoppinglistRepository.save(toUpdate);
         return ShoppinglistMapper.INSTANCE.toDTO(toUpdate);
     }
 
