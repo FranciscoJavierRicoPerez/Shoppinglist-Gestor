@@ -1,0 +1,121 @@
+{
+	"info": {
+		"_postman_id": "daf0909c-0098-488e-98cb-852d19f3f8d4",
+		"name": "SHOPPINGLIST GESTOR",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21320193"
+	},
+	"item": [
+		{
+			"name": "SHOPPINGLIST",
+			"item": [
+				{
+					"name": "FIND ALL ACTIVES SHOPPINGLIST",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9000/api/shoppinglist/v1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"api",
+								"shoppinglist",
+								"v1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE SHOPPINGLIST",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"code\":\"SHOPPINGLIST-CODE-1\",\r\n    \"totalPrice\": 0.0,\r\n    \"isActive\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9000/api/shoppinglist/v1/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"api",
+								"shoppinglist",
+								"v1",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE SHOPPINGLIST",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9000/api/shoppinglist/v1/delete/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"api",
+								"shoppinglist",
+								"v1",
+								"delete",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE SHOPPINGLIST",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\" : 2,\r\n    \"code\" : \"SHOPPINGLIST-CODE-UPDATED\",\r\n    \"totalPrice\" : 10.5,\r\n    \"isActive\" : true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9000/api/shoppinglist/v1/update",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"api",
+								"shoppinglist",
+								"v1",
+								"update"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
