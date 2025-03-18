@@ -1,6 +1,8 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglist.controller;
 
+import com.mysql.cj.xdevapi.Collection;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestCreateShoppinglistDTO;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestFilterShoppinglistDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestUpdateShoppinglistDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.ShoppinglistDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
@@ -86,6 +88,15 @@ public class ShoppinglistControllerTest {
         ResponseEntity<ShoppinglistDTO> expected = new ResponseEntity<>(shoppinglistDTO, HttpStatus.CREATED);
         Mockito.when(shoppinglistService.updateShoppinglist(requestUpdateShoppinglistDTO)).thenReturn(shoppinglistDTO);
         ResponseEntity<ShoppinglistDTO> real = shoppinglistController.updateShoppinglist(requestUpdateShoppinglistDTO);
+        Assertions.assertEquals(expected.getStatusCode(), real.getStatusCode());
+    }
+
+    @Test
+    void filterShoppinglistTest() throws ShoppinglistException {
+        ResponseEntity<List<ShoppinglistDTO>> expected = new ResponseEntity<>(List.of(shoppinglistDTO), HttpStatus.OK);
+        Mockito.when(shoppinglistService.filterShoppinglist(Mockito.any())).thenReturn(List.of(shoppinglistDTO));
+        ResponseEntity<List<ShoppinglistDTO>> real =
+                shoppinglistController.filterShoppinglist("SHOPPINGLIST-1","18/03/2025","18/03/2025",1D);
         Assertions.assertEquals(expected.getStatusCode(), real.getStatusCode());
     }
 

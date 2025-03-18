@@ -92,6 +92,7 @@ public class ShoppinglistServiceTest {
     void updateShoppinglistTest() throws ShoppinglistException {
         ShoppinglistDTO expected = shoppinglistDTO;
         Mockito.when(shoppinglistRepository.findById(1L)).thenReturn(Optional.of(shoppinglist));
+        Mockito.when(shoppinglistRepository.save(Mockito.any())).thenReturn(shoppinglist);
         ShoppinglistDTO real = shoppinglistService.updateShoppinglist(requestUpdateShoppinglistDTO);
         Assertions.assertEquals(expected.getId(), real.getId());
     }
