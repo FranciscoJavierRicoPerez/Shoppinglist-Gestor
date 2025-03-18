@@ -1,6 +1,7 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglist.controller;
 
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestCreateShoppinglistDTO;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestFilterShoppinglistDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestUpdateShoppinglistDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.ShoppinglistDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
@@ -72,6 +73,29 @@ public class ShoppinglistController {
         return new ResponseEntity<>(updated, httpStatus);
     }
 
+    @GetMapping("/v1/filter")
+    public ResponseEntity<List<ShoppinglistDTO>> filterShoppinglist(
+            @RequestParam(name = "code", required = false) String code,
+            @RequestParam(name = "creationDate", required = false) String creationDate,
+            @RequestParam(name = "closeDate", required = false) String closeDate,
+            @RequestParam(name = "totalPrice", required = false) Double totalPrice) {
+        LOGGER.info("Filter shoppinglists");
+        HttpStatus httpStatus = HttpStatus.OK;
+        List<ShoppinglistDTO> shoppinglistDTOList = null;
+        try {
+            shoppinglistDTOList = shoppinglistService.filterShoppinglist(RequestFilterShoppinglistDTO
+                    .builder()
+                    .createDate(creationDate)
+                    .closeDate(closeDate)
+                    .totalPrice(totalPrice)
+                    .code(code)
+                    .build());
+        } catch (ShoppinglistException e) {
+            LOGGER.error(e.getMessage());
+            httpStatus = HttpStatus.BAD_REQUEST;
+        }
+        return new ResponseEntity<>(shoppinglistDTOList, httpStatus);
+    }
 
 
 }
