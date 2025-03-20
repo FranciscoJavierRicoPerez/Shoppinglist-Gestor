@@ -1,6 +1,7 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglist.service;
 
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestCreateShoppinglistDTO;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestFilterShoppinglistDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestUpdateShoppinglistDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.ShoppinglistDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
@@ -8,6 +9,7 @@ import es.franricodev.shopping_list_gestor_service.shoppinglist.mapper.Shoppingl
 import es.franricodev.shopping_list_gestor_service.shoppinglist.message.ErrorMessages;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.model.Shoppinglist;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.repository.ShoppinglistRepository;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.specifications.ShoppinglistSpecifications;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +67,17 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
         ShoppinglistMapper.INSTANCE.updateShoppinglist(toUpdate, request);
         toUpdate = shoppinglistRepository.save(toUpdate);
         return ShoppinglistMapper.INSTANCE.toDTO(toUpdate);
+    }
+
+    @Override
+    public List<ShoppinglistDTO> filterShoppinglist(RequestFilterShoppinglistDTO request) throws ShoppinglistException {
+        LOGGER.info("Filter shoppinglist");
+        List<Shoppinglist> optionalShoppinglistsFiltered =
+                shoppinglistRepository.findAll(ShoppinglistSpecifications.withFilter(request));
+        if (optionalShoppinglistsFiltered.isEmpty()) {
+            throw new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND);
+        }
+        return ShoppinglistMapper.INSTANCE.toDTOList(optionalShoppinglistsFiltered);
     }
 
 }
