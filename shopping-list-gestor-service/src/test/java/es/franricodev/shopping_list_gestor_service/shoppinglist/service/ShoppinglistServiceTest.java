@@ -3,6 +3,7 @@ package es.franricodev.shopping_list_gestor_service.shoppinglist.service;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestCreateShoppinglistDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestUpdateShoppinglistDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.ShoppinglistDTO;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.ShoppinglistDetailsDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.model.Shoppinglist;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.repository.ShoppinglistRepository;
@@ -34,6 +35,8 @@ public class ShoppinglistServiceTest {
 
     private Shoppinglist shoppinglist;
 
+    private ShoppinglistDetailsDTO shoppinglistDetailsDTO;
+
     @BeforeEach
     void setUp() {
 
@@ -63,6 +66,14 @@ public class ShoppinglistServiceTest {
         requestUpdateShoppinglistDTO.setCode("SHOPPINGLIST-1");
         requestUpdateShoppinglistDTO.setTotalPrice(1D);
         requestUpdateShoppinglistDTO.setIsActive(true);
+
+        shoppinglistDetailsDTO = new ShoppinglistDetailsDTO();
+        shoppinglistDetailsDTO.setId(1L);
+        shoppinglistDetailsDTO.setIsActive(true);
+        shoppinglistDetailsDTO.setCode("SHOPPINGLIST-1");
+        shoppinglistDetailsDTO.setCreationDate(new Date());
+        shoppinglistDetailsDTO.setCloseDate(null);
+        shoppinglistDetailsDTO.setTotalPrice(1D);
     }
 
     @Test
@@ -94,6 +105,14 @@ public class ShoppinglistServiceTest {
         Mockito.when(shoppinglistRepository.findById(1L)).thenReturn(Optional.of(shoppinglist));
         Mockito.when(shoppinglistRepository.save(Mockito.any())).thenReturn(shoppinglist);
         ShoppinglistDTO real = shoppinglistService.updateShoppinglist(requestUpdateShoppinglistDTO);
+        Assertions.assertEquals(expected.getId(), real.getId());
+    }
+
+    @Test
+    void getShoppinglistDetailsTest() throws ShoppinglistException {
+        ShoppinglistDetailsDTO expected = shoppinglistDetailsDTO;
+        Mockito.when(shoppinglistRepository.findById(Mockito.any())).thenReturn(Optional.of(shoppinglist));
+        ShoppinglistDetailsDTO real = shoppinglistService.getShoppinglistDetails(1L);
         Assertions.assertEquals(expected.getId(), real.getId());
     }
 

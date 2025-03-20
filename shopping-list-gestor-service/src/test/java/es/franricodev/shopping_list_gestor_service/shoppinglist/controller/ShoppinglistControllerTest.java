@@ -1,10 +1,7 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglist.controller;
 
 import com.mysql.cj.xdevapi.Collection;
-import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestCreateShoppinglistDTO;
-import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestFilterShoppinglistDTO;
-import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestUpdateShoppinglistDTO;
-import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.ShoppinglistDTO;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.*;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.service.ShoppinglistService;
 import org.junit.jupiter.api.Assertions;
@@ -36,6 +33,8 @@ public class ShoppinglistControllerTest {
 
     private RequestUpdateShoppinglistDTO requestUpdateShoppinglistDTO;
 
+    private ShoppinglistDetailsDTO shoppinglistDetailsDTO;
+
     @BeforeEach
     void setUp() {
         shoppinglistDTO = new ShoppinglistDTO();
@@ -56,6 +55,15 @@ public class ShoppinglistControllerTest {
         requestUpdateShoppinglistDTO.setCode("SHOPPINGLIST-1");
         requestUpdateShoppinglistDTO.setTotalPrice(1D);
         requestUpdateShoppinglistDTO.setIsActive(true);
+
+        shoppinglistDetailsDTO = new ShoppinglistDetailsDTO();
+        shoppinglistDetailsDTO.setId(1L);
+        shoppinglistDetailsDTO.setIsActive(true);
+        shoppinglistDetailsDTO.setCode("SHOPPINGLIST-1");
+        shoppinglistDetailsDTO.setCreationDate(new Date());
+        shoppinglistDetailsDTO.setCloseDate(null);
+        shoppinglistDetailsDTO.setTotalPrice(1D);
+
     }
 
     @Test
@@ -97,6 +105,14 @@ public class ShoppinglistControllerTest {
         Mockito.when(shoppinglistService.filterShoppinglist(Mockito.any())).thenReturn(List.of(shoppinglistDTO));
         ResponseEntity<List<ShoppinglistDTO>> real =
                 shoppinglistController.filterShoppinglist("SHOPPINGLIST-1","18/03/2025","18/03/2025",1D);
+        Assertions.assertEquals(expected.getStatusCode(), real.getStatusCode());
+    }
+
+    @Test
+    void getShoppinglistDetailsTest() throws ShoppinglistException {
+        ResponseEntity<ShoppinglistDetailsDTO> expected = new ResponseEntity<>(shoppinglistDetailsDTO, HttpStatus.OK);
+        Mockito.when(shoppinglistService.getShoppinglistDetails(Mockito.any())).thenReturn(shoppinglistDetailsDTO);
+        ResponseEntity<ShoppinglistDetailsDTO> real = shoppinglistController.getDetails(1L);
         Assertions.assertEquals(expected.getStatusCode(), real.getStatusCode());
     }
 
