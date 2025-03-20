@@ -3,6 +3,7 @@ package es.franricodev.shopping_list_gestor_service.shoppinglist.mapper;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestCreateShoppinglistDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestUpdateShoppinglistDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.ShoppinglistDTO;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.ShoppinglistDetailsDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.model.Shoppinglist;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -28,5 +29,7 @@ public interface ShoppinglistMapper {
     Shoppinglist createShoppinglist(RequestCreateShoppinglistDTO request);
 
     void updateShoppinglist(@MappingTarget Shoppinglist shoppinglist, RequestUpdateShoppinglistDTO request);
+
+    ShoppinglistDetailsDTO shoppinglistToShoppinglistDetailsDTO(Shoppinglist shoppinglist);
 
 }
