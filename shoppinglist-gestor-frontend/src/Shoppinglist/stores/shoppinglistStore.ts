@@ -9,5 +9,9 @@ export const useShoppinglistStore = defineStore('shoppinglistStore', () => {
     shoppinglistArray.value = data
   }
 
-  return { shoppinglistArray, setShoppinglistArray }
+  function addShoppinglist(data: Shoppinglist) {
+    shoppinglistArray.value.push(data)
+  }
+
+  return { shoppinglistArray, setShoppinglistArray, addShoppinglist }
 })
