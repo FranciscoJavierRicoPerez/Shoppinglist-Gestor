@@ -1,9 +1,6 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglist.controller;
 
-import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestCreateShoppinglistDTO;
-import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestFilterShoppinglistDTO;
-import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestUpdateShoppinglistDTO;
-import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.ShoppinglistDTO;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.*;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.service.ShoppinglistService;
 import jakarta.validation.constraints.NotNull;
@@ -97,5 +94,17 @@ public class ShoppinglistController {
         return new ResponseEntity<>(shoppinglistDTOList, httpStatus);
     }
 
-
+    @GetMapping("/v1/{id}/details")
+    public ResponseEntity<ShoppinglistDetailsDTO> getDetails(@PathVariable(name = "id") Long idShoppinglist) {
+       LOGGER.info("Get shoppinglist details");
+       HttpStatus httpStatus = HttpStatus.OK;
+       ShoppinglistDetailsDTO shoppinglistDetailsDTO = null;
+       try {
+            shoppinglistDetailsDTO = shoppinglistService.getShoppinglistDetails(idShoppinglist);
+       }catch (ShoppinglistException e){
+           LOGGER.error(e.getMessage());
+           httpStatus = HttpStatus.BAD_REQUEST;
+       }
+       return new ResponseEntity<>(shoppinglistDetailsDTO, httpStatus);
+    }
 }

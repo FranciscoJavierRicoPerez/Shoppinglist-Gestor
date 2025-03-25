@@ -1,9 +1,6 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglist.service;
 
-import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestCreateShoppinglistDTO;
-import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestFilterShoppinglistDTO;
-import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestUpdateShoppinglistDTO;
-import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.ShoppinglistDTO;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.*;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 
 import java.util.List;
@@ -18,4 +15,7 @@ public interface ShoppinglistService {
     ShoppinglistDTO updateShoppinglist(RequestUpdateShoppinglistDTO request) throws ShoppinglistException;
 
     List<ShoppinglistDTO> filterShoppinglist(RequestFilterShoppinglistDTO request) throws ShoppinglistException;
+
+    ShoppinglistDetailsDTO getShoppinglistDetails(Long id) throws ShoppinglistException;
+
 }

@@ -1,9 +1,6 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglist.service;
 
-import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestCreateShoppinglistDTO;
-import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestFilterShoppinglistDTO;
-import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestUpdateShoppinglistDTO;
-import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.ShoppinglistDTO;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.*;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.mapper.ShoppinglistMapper;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.message.ErrorMessages;
@@ -78,6 +75,16 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
             throw new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND);
         }
         return ShoppinglistMapper.INSTANCE.toDTOList(optionalShoppinglistsFiltered);
+    }
+
+    @Override
+    public ShoppinglistDetailsDTO getShoppinglistDetails(Long id) throws ShoppinglistException {
+        LOGGER.info("Getting the shoppinglist details");
+        Optional<Shoppinglist> optionalShoppinglist = shoppinglistRepository.findById(id);
+        if (optionalShoppinglist.isEmpty()) {
+            throw new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_DETAILS);
+        }
+        return ShoppinglistMapper.INSTANCE.shoppinglistToShoppinglistDetailsDTO(optionalShoppinglist.get());
     }
 
 }
