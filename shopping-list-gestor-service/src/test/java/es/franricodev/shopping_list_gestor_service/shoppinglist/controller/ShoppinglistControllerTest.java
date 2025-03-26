@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @ExtendWith(MockitoExtension.class)
 public class ShoppinglistControllerTest {
@@ -115,5 +116,15 @@ public class ShoppinglistControllerTest {
         ResponseEntity<ShoppinglistDetailsDTO> real = shoppinglistController.getDetails(1L);
         Assertions.assertEquals(expected.getStatusCode(), real.getStatusCode());
     }
+
+    @Test
+    void updateShoppinglistIsActiveTest() throws ShoppinglistException {
+        shoppinglistDTO.setIsActive(false);
+        ResponseEntity<ShoppinglistDTO> expected = new ResponseEntity<>(shoppinglistDTO, HttpStatus.OK);
+        Mockito.when(shoppinglistService.updateShoppinglistIsActive(1L)).thenReturn(shoppinglistDTO);
+        ResponseEntity<ShoppinglistDTO> real = shoppinglistController.updateShoppinglistIsActiveValue(1L);
+        Assertions.assertEquals(Objects.requireNonNull(expected.getBody()).getIsActive(), Objects.requireNonNull(real.getBody()).getIsActive());
+    }
+
 
 }

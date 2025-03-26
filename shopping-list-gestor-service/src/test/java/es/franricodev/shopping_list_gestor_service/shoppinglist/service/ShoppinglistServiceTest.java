@@ -116,4 +116,14 @@ public class ShoppinglistServiceTest {
         Assertions.assertEquals(expected.getId(), real.getId());
     }
 
+    @Test
+    void updateShoppinglistIsActiveValueTest() throws ShoppinglistException {
+        shoppinglistDTO.setIsActive(false);
+        ShoppinglistDTO expected = shoppinglistDTO;
+        Mockito.when(shoppinglistRepository.findById(Mockito.any())).thenReturn(Optional.of(shoppinglist));
+        Mockito.when(shoppinglistRepository.save(Mockito.any())).thenReturn(shoppinglist);
+        ShoppinglistDTO real = shoppinglistService.updateShoppinglistIsActive(1L);
+        Assertions.assertEquals(expected.getIsActive(), real.getIsActive());
+    }
+
 }
