@@ -21,7 +21,7 @@
     "code": "SHOPPINGLIST-3",
     "closeDate": null,
     "totalPrice": 100,
-    "isActive": false
+    "isActive": true
   },
   {
     "id": 4,
@@ -37,7 +37,7 @@
     "code": "SHOPPINGLIST-4",
     "closeDate": null,
     "totalPrice": 100,
-    "isActive": false
+    "isActive": true
   },
   {
     "id": 4,
@@ -53,7 +53,7 @@
     "code": "SHOPPINGLIST-4",
     "closeDate": null,
     "totalPrice": 100,
-    "isActive": false
+    "isActive": true
   },
   {
     "id": 4,

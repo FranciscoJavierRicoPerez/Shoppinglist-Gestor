@@ -13,5 +13,19 @@ export const useShoppinglistStore = defineStore('shoppinglistStore', () => {
     shoppinglistArray.value.push(data)
   }
 
-  return { shoppinglistArray, setShoppinglistArray, addShoppinglist }
+  function getActiveShoppinglist() {
+    return shoppinglistArray.value.filter((value) => value.isActive)
+  }
+
+  function getNoActiveShoppinglist() {
+    return shoppinglistArray.value.filter((value) => !value.isActive)
+  }
+
+  return {
+    shoppinglistArray,
+    setShoppinglistArray,
+    addShoppinglist,
+    getActiveShoppinglist,
+    getNoActiveShoppinglist,
+  }
 })
