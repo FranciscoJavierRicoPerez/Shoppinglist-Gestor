@@ -21,6 +21,7 @@ const shoppinglistNoActiveTable = ref<Shoppinglist[]>([{ ...defaultShoppinglist 
 const { refetch: createShoppinglistMetadata } = useCreateShoppinglistMetadata()
 const store = useShoppinglistStore()
 const toast = useToast()
+const tabsPanelIds = ref<string[]>(['0', '1', '2'])
 
 onMounted(async () => {
   shoppinglistTable.value = await getAllShoppinglist()
@@ -63,6 +64,14 @@ function createToast(toastOptions: ToastMessageOptions) {
     life: toastOptions.life,
   })
 }
+
+function selectTableToShow(element: string) {
+  return element === '0'
+    ? store.shoppinglistArray
+    : element === '1'
+      ? shoppinglistActiveTable.value
+      : shoppinglistNoActiveTable.value
+}
 </script>
 <template>
   <Toast></Toast>
@@ -80,27 +89,15 @@ function createToast(toastOptions: ToastMessageOptions) {
         <Tab value="2">Archivadas</Tab>
       </TabList>
       <TabPanels>
-        <TabPanel value="0">
-          <div class="cardOrganization">
-            <div v-for="shoppinglistData of store.shoppinglistArray">
-              <ShoppinglistCardInfo :shoppinglist="shoppinglistData"></ShoppinglistCardInfo>
+        <div v-for="panelId in tabsPanelIds">
+          <TabPanel :value="panelId">
+            <div class="cardOrganization">
+              <div v-for="shoppinglistData of selectTableToShow(panelId)">
+                <ShoppinglistCardInfo :shoppinglist="shoppinglistData"></ShoppinglistCardInfo>
+              </div>
             </div>
-          </div>
-        </TabPanel>
-        <TabPanel value="1">
-          <div class="cardOrganization">
-            <div v-for="shoppinglistData of shoppinglistActiveTable">
-              <ShoppinglistCardInfo :shoppinglist="shoppinglistData"></ShoppinglistCardInfo>
-            </div>
-          </div>
-        </TabPanel>
-        <TabPanel value="2">
-          <div class="cardOrganization">
-            <div v-for="shoppinglistData of shoppinglistNoActiveTable">
-              <ShoppinglistCardInfo :shoppinglist="shoppinglistData"></ShoppinglistCardInfo>
-            </div>
-          </div>
-        </TabPanel>
+          </TabPanel>
+        </div>
       </TabPanels>
     </Tabs>
   </Panel>
