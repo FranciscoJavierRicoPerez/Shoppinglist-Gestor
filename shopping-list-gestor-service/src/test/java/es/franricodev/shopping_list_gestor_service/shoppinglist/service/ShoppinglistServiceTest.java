@@ -79,8 +79,8 @@ public class ShoppinglistServiceTest {
     @Test
     void findActiveShoppinglistsTest() throws ShoppinglistException {
         List<ShoppinglistDTO> expected = Collections.singletonList(shoppinglistDTO);
-        Mockito.when(shoppinglistRepository.IsActiveTrue()).thenReturn(Optional.of(shoppinglist));
-        List<ShoppinglistDTO> real = shoppinglistService.findActiveShoppinglists();
+        Mockito.when(shoppinglistRepository.findAll()).thenReturn(List.of(shoppinglist));
+        List<ShoppinglistDTO> real = shoppinglistService.findAllShoppinglists();
         Assertions.assertEquals(expected.size(), real.size());
     }
 

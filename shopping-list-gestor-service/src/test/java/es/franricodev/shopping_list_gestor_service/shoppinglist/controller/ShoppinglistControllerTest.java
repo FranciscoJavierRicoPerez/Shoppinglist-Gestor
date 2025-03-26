@@ -71,8 +71,8 @@ public class ShoppinglistControllerTest {
     void getAllShoppinglistActiveTest() throws ShoppinglistException {
         ResponseEntity<List<ShoppinglistDTO>> expected =
                 new ResponseEntity<>(List.of(shoppinglistDTO), HttpStatus.OK);
-        Mockito.when(shoppinglistService.findActiveShoppinglists()).thenReturn(List.of(shoppinglistDTO));
-        ResponseEntity<List<ShoppinglistDTO>> real = shoppinglistController.getAllShoppinglistActive();
+        Mockito.when(shoppinglistService.findAllShoppinglists()).thenReturn(List.of(shoppinglistDTO));
+        ResponseEntity<List<ShoppinglistDTO>> real = shoppinglistController.getAllShoppinglist();
         Assertions.assertEquals(expected.getStatusCode(), real.getStatusCode());
     }
 

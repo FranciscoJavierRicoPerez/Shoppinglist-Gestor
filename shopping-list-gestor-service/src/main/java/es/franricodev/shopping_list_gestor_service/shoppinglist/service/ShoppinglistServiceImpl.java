@@ -24,13 +24,13 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ShoppinglistServiceImpl.class);
 
     @Override
-    public List<ShoppinglistDTO> findActiveShoppinglists() throws ShoppinglistException {
+    public List<ShoppinglistDTO> findAllShoppinglists() throws ShoppinglistException {
         LOGGER.info("Find all the shoppinglists actives");
-        Optional<Shoppinglist> shoppinglistOptional = shoppinglistRepository.IsActiveTrue();
-        if (shoppinglistOptional.isEmpty()) {
+        List<Shoppinglist> shoppinglistList = shoppinglistRepository.findAll();
+        if (shoppinglistList.isEmpty()) {
             throw new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND);
         }
-        return ShoppinglistMapper.INSTANCE.toDTOList(shoppinglistOptional.stream().toList());
+        return ShoppinglistMapper.INSTANCE.toDTOList(shoppinglistList);
     }
 
     @Override

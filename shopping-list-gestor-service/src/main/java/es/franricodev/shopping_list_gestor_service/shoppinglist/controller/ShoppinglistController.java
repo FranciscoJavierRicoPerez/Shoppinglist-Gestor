@@ -24,12 +24,12 @@ public class ShoppinglistController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ShoppinglistController.class);
 
     @GetMapping("/v1")
-    public ResponseEntity<List<ShoppinglistDTO>> getAllShoppinglistActive() {
+    public ResponseEntity<List<ShoppinglistDTO>> getAllShoppinglist() {
         LOGGER.info("Getting all actives shoppinglists");
         HttpStatus httpStatus = HttpStatus.OK;
         List<ShoppinglistDTO> shoppinglistDTOS = new ArrayList<>();
         try {
-            shoppinglistDTOS = shoppinglistService.findActiveShoppinglists();
+            shoppinglistDTOS = shoppinglistService.findAllShoppinglists();
         } catch (ShoppinglistException e) {
             LOGGER.error(e.getMessage());
             httpStatus = HttpStatus.BAD_REQUEST;
