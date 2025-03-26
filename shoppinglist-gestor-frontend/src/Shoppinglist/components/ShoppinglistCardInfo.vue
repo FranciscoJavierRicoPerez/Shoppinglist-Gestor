@@ -4,6 +4,7 @@ import Button from 'primevue/button'
 import type { PropType } from 'vue'
 import type { Shoppinglist } from '@/Shoppinglist/domain/Shoppinglist'
 import { RouterLink } from 'vue-router'
+import Tag from 'primevue/tag'
 
 defineProps({
   shoppinglist: {
@@ -18,10 +19,19 @@ defineProps({
     <template #subtitle>{{ shoppinglist.creationDate }}</template>
     <template #content>
       <p>{{ shoppinglist.totalPrice }}</p>
-      <p>{{ shoppinglist.isActive }}</p>
+      <div v-if="shoppinglist.isActive">
+        <Tag severity="success">
+          <span class="tag-custom">Activo</span>
+        </Tag>
+      </div>
+      <div v-else>
+        <Tag severity="warn">
+          <span class="tag-custom">Archivado</span>
+        </Tag>
+      </div>
     </template>
     <template #footer>
-      <Button label="Archivar" severity="help"></Button>
+      <Button label="Archivar" severity="help" :disabled="!shoppinglist.isActive"></Button>
       <RouterLink :to="`/shoppinglist/${shoppinglist.id}`">
         <Button class="buttons-separation" label="Ver" severity="info"></Button>
       </RouterLink>
@@ -38,5 +48,9 @@ defineProps({
 }
 .buttons-separation {
   margin-left: 1rem;
+}
+.tag-custom {
+  font-size: large;
+  font-weight: bold;
 }
 </style>
