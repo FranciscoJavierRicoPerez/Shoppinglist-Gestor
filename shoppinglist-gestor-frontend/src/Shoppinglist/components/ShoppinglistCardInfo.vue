@@ -12,6 +12,10 @@ defineProps({
     default: () => null,
   },
 })
+
+function archiveShoppinglist() {
+  console.log('archivando la lista de la compra')
+}
 </script>
 <template>
   <Card class="card-general">
@@ -31,7 +35,12 @@ defineProps({
       </div>
     </template>
     <template #footer>
-      <Button label="Archivar" severity="help" :disabled="!shoppinglist.isActive"></Button>
+      <Button
+        label="Archivar"
+        severity="help"
+        :disabled="!shoppinglist.isActive"
+        @click="archiveShoppinglist()"
+      ></Button>
       <RouterLink :to="`/shoppinglist/${shoppinglist.id}`">
         <Button class="buttons-separation" label="Ver" severity="info"></Button>
       </RouterLink>
