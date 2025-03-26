@@ -87,4 +87,17 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
         return ShoppinglistMapper.INSTANCE.shoppinglistToShoppinglistDetailsDTO(optionalShoppinglist.get());
     }
 
+    @Override
+    public ShoppinglistDTO updateShoppinglistIsActive(Long idShoppinglist) throws ShoppinglistException {
+        LOGGER.info("Updating the isActive value from the shoppinglist with id: {}", idShoppinglist);
+        Optional<Shoppinglist> optionalShoppinglist = shoppinglistRepository.findById(idShoppinglist);
+        if (optionalShoppinglist.isEmpty()) {
+            throw new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND);
+        }
+        Shoppinglist shoppinglist = optionalShoppinglist.get();
+        shoppinglist.setIsActive(!shoppinglist.getIsActive());
+        shoppinglistRepository.save(shoppinglist);
+        return ShoppinglistMapper.INSTANCE.toDTO(shoppinglist);
+    }
+
 }

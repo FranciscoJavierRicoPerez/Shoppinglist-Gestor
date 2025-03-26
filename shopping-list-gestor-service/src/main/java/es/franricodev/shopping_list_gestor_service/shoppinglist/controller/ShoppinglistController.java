@@ -107,4 +107,17 @@ public class ShoppinglistController {
        }
        return new ResponseEntity<>(shoppinglistDetailsDTO, httpStatus);
     }
+
+    @PutMapping("/v1/{id}/update/isActive")
+    public ResponseEntity<ShoppinglistDTO> updateShoppinglistIsActiveValue(@PathVariable(name = "id") Long idShoppinglist){
+        LOGGER.info("Update the value isActive of the shoppinglist with id: {}", idShoppinglist);
+        HttpStatus httpStatus = HttpStatus.OK;
+        ShoppinglistDTO shoppinglistDTO = null;
+        try {
+            shoppinglistDTO = shoppinglistService.updateShoppinglistIsActive(idShoppinglist);
+        } catch (ShoppinglistException e) {
+            LOGGER.error(e.getMessage());
+        }
+        return new ResponseEntity<>(shoppinglistDTO, httpStatus);
+    }
 }

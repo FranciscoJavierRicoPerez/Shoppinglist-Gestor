@@ -18,4 +18,5 @@ public interface ShoppinglistService {
 
     ShoppinglistDetailsDTO getShoppinglistDetails(Long id) throws ShoppinglistException;
 
+    ShoppinglistDTO updateShoppinglistIsActive(Long idShoppinglist) throws ShoppinglistException;
 }
