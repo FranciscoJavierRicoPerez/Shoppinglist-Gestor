@@ -18,7 +18,12 @@ function archiveShoppinglist() {
 }
 </script>
 <template>
-  <Card class="card-general">
+  <Card
+    class="card-general"
+    :class="
+      shoppinglist.isActive ? 'card-background-actives-card' : 'card-background-no-actives-card'
+    "
+  >
     <template #title>{{ shoppinglist.code }}</template>
     <template #subtitle>{{ shoppinglist.creationDate }}</template>
     <template #content>
@@ -53,8 +58,16 @@ function archiveShoppinglist() {
   margin-right: 1rem;
   margin-top: 10px;
   max-width: 20rem;
+}
+
+.card-background-actives-card {
   background-color: aliceblue !important;
 }
+
+.card-background-no-actives-card {
+  background-color: rgb(231, 230, 233) !important;
+}
+
 .buttons-separation {
   margin-left: 1rem;
 }
