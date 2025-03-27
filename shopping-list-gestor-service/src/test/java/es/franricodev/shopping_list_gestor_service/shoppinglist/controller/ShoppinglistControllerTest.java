@@ -120,10 +120,9 @@ public class ShoppinglistControllerTest {
     @Test
     void updateShoppinglistIsActiveTest() throws ShoppinglistException {
         shoppinglistDTO.setIsActive(false);
-        ResponseEntity<ShoppinglistDTO> expected = new ResponseEntity<>(shoppinglistDTO, HttpStatus.OK);
         Mockito.when(shoppinglistService.updateShoppinglistIsActive(1L)).thenReturn(shoppinglistDTO);
-        ResponseEntity<ShoppinglistDTO> real = shoppinglistController.updateShoppinglistIsActiveValue(1L);
-        Assertions.assertEquals(Objects.requireNonNull(expected.getBody()).getIsActive(), Objects.requireNonNull(real.getBody()).getIsActive());
+        ResponseEntity<Boolean> real = shoppinglistController.updateShoppinglistIsActiveValue(1L);
+        Assertions.assertEquals(Boolean.TRUE, real.getBody());
     }
 
 

@@ -52,6 +52,7 @@ async function addNewShoppinglist() {
 }
 
 function updateShoppinglistTables() {
+  debugger
   shoppinglistActiveTable.value = store.getActiveShoppinglist()
   shoppinglistNoActiveTable.value = store.getNoActiveShoppinglist()
 }
@@ -93,7 +94,10 @@ function selectTableToShow(element: string) {
           <TabPanel :value="panelId">
             <div class="cardOrganization">
               <div v-for="shoppinglistData of selectTableToShow(panelId)">
-                <ShoppinglistCardInfo :shoppinglist="shoppinglistData"></ShoppinglistCardInfo>
+                <ShoppinglistCardInfo
+                  :shoppinglist="shoppinglistData"
+                  @update-shoppinglist-tables="updateShoppinglistTables"
+                ></ShoppinglistCardInfo>
               </div>
             </div>
           </TabPanel>

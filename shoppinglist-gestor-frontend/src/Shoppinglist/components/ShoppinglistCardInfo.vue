@@ -5,16 +5,24 @@ import type { PropType } from 'vue'
 import type { Shoppinglist } from '@/Shoppinglist/domain/Shoppinglist'
 import { RouterLink } from 'vue-router'
 import Tag from 'primevue/tag'
-
-defineProps({
+import { useUpdateIsActiveShoppinglist } from '@/Shoppinglist/application/useUpdateIsActiveShoppinglist'
+import { useShoppinglistStore } from '@/Shoppinglist/stores/shoppinglistStore'
+const { refetch: updateIsActive } = useUpdateIsActiveShoppinglist()
+const store = useShoppinglistStore()
+const emit = defineEmits(['updateShoppinglistTables'])
+const props = defineProps({
   shoppinglist: {
     type: Object as PropType<Shoppinglist>,
     default: () => null,
   },
 })
 
-function archiveShoppinglist() {
-  console.log('archivando la lista de la compra')
+async function archiveShoppinglist() {
+  let response: boolean = await updateIsActive()
+  if (response) {
+    store.updateShoppinglistActive(props.shoppinglist.id)
+    emit('updateShoppinglistTables')
+  }
 }
 </script>
 <template>
