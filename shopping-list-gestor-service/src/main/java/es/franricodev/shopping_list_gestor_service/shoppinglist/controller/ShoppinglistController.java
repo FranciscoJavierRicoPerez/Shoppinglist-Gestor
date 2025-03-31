@@ -75,7 +75,8 @@ public class ShoppinglistController {
             @RequestParam(name = "code", required = false) String code,
             @RequestParam(name = "creationDate", required = false) String creationDate,
             @RequestParam(name = "closeDate", required = false) String closeDate,
-            @RequestParam(name = "totalPrice", required = false) Double totalPrice) {
+            @RequestParam(name = "totalPrice", required = false) Double totalPrice,
+            @RequestParam(name = "isActive", required = false) Boolean isActive) {
         LOGGER.info("Filter shoppinglists");
         HttpStatus httpStatus = HttpStatus.OK;
         List<ShoppinglistDTO> shoppinglistDTOList = null;
@@ -86,6 +87,7 @@ public class ShoppinglistController {
                     .closeDate(closeDate)
                     .totalPrice(totalPrice)
                     .code(code)
+                    .isActive(isActive)
                     .build());
         } catch (ShoppinglistException e) {
             LOGGER.error(e.getMessage());

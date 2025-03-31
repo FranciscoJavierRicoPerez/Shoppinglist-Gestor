@@ -3,6 +3,7 @@ export interface ShoppinglistFilter {
   code: string
   closeDate: Date | null
   totalPrice: number | null
+  isActive: boolean | null // true || null => ACTIVAS # false => NO_ACTIVAS (ARCHIVADAS)
 }
 
 export const defaultShoppinglistFilter = {
@@ -10,4 +11,5 @@ export const defaultShoppinglistFilter = {
   code: '',
   closeDate: null,
   totalPrice: null,
+  isActive: null,
 }
