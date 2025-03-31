@@ -13,5 +13,33 @@ export const useShoppinglistStore = defineStore('shoppinglistStore', () => {
     shoppinglistArray.value.push(data)
   }
 
-  return { shoppinglistArray, setShoppinglistArray, addShoppinglist }
+  function getActiveShoppinglist() {
+    return shoppinglistArray.value.filter((value) => value.isActive)
+  }
+
+  function getNoActiveShoppinglist() {
+    return shoppinglistArray.value.filter((value) => !value.isActive)
+  }
+
+  function updateShoppinglistActive(id: number) {
+    shoppinglistArray.value.forEach((element) => {
+      if (element.id === id) {
+        element.isActive = !element.isActive
+      }
+    })
+  }
+
+  function removeShoppinglist(id: number) {
+    setShoppinglistArray(shoppinglistArray.value.filter((value) => value.id !== id))
+  }
+
+  return {
+    shoppinglistArray,
+    setShoppinglistArray,
+    addShoppinglist,
+    getActiveShoppinglist,
+    getNoActiveShoppinglist,
+    updateShoppinglistActive,
+    removeShoppinglist,
+  }
 })

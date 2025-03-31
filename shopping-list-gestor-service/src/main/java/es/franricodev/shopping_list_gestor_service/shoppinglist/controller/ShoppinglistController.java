@@ -24,12 +24,12 @@ public class ShoppinglistController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ShoppinglistController.class);
 
     @GetMapping("/v1")
-    public ResponseEntity<List<ShoppinglistDTO>> getAllShoppinglistActive() {
+    public ResponseEntity<List<ShoppinglistDTO>> getAllShoppinglist() {
         LOGGER.info("Getting all actives shoppinglists");
         HttpStatus httpStatus = HttpStatus.OK;
         List<ShoppinglistDTO> shoppinglistDTOS = new ArrayList<>();
         try {
-            shoppinglistDTOS = shoppinglistService.findActiveShoppinglists();
+            shoppinglistDTOS = shoppinglistService.findAllShoppinglists();
         } catch (ShoppinglistException e) {
             LOGGER.error(e.getMessage());
             httpStatus = HttpStatus.BAD_REQUEST;
@@ -75,7 +75,8 @@ public class ShoppinglistController {
             @RequestParam(name = "code", required = false) String code,
             @RequestParam(name = "creationDate", required = false) String creationDate,
             @RequestParam(name = "closeDate", required = false) String closeDate,
-            @RequestParam(name = "totalPrice", required = false) Double totalPrice) {
+            @RequestParam(name = "totalPrice", required = false) Double totalPrice,
+            @RequestParam(name = "isActive", required = false) Boolean isActive) {
         LOGGER.info("Filter shoppinglists");
         HttpStatus httpStatus = HttpStatus.OK;
         List<ShoppinglistDTO> shoppinglistDTOList = null;
@@ -86,6 +87,7 @@ public class ShoppinglistController {
                     .closeDate(closeDate)
                     .totalPrice(totalPrice)
                     .code(code)
+                    .isActive(isActive)
                     .build());
         } catch (ShoppinglistException e) {
             LOGGER.error(e.getMessage());
@@ -106,5 +108,18 @@ public class ShoppinglistController {
            httpStatus = HttpStatus.BAD_REQUEST;
        }
        return new ResponseEntity<>(shoppinglistDetailsDTO, httpStatus);
+    }
+
+    @PutMapping("/v1/{id}/update/isActive")
+    public ResponseEntity<Boolean> updateShoppinglistIsActiveValue(@PathVariable(name = "id") Long idShoppinglist){
+        LOGGER.info("Update the value isActive of the shoppinglist with id: {}", idShoppinglist);
+        HttpStatus httpStatus = HttpStatus.OK;
+        ShoppinglistDTO shoppinglistDTO = null;
+        try {
+            shoppinglistDTO = shoppinglistService.updateShoppinglistIsActive(idShoppinglist);
+        } catch (ShoppinglistException e) {
+            LOGGER.error(e.getMessage());
+        }
+        return new ResponseEntity<>(shoppinglistDTO != null, httpStatus);
     }
 }

@@ -1,35 +1,45 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router'
-import { Menubar } from 'primevue'
-
 import { ref } from 'vue'
+import Menubar from 'primevue/menubar'
+import { RouterLink } from 'vue-router'
 
 const items = ref([
   {
     label: 'Listas de la compra',
     icon: 'pi pi-home',
-    url: '/',
+    to: '/',
   },
   {
     label: 'Información',
     icon: 'pi pi-star',
-    url: '/information',
+    to: '/information',
   },
 ])
 </script>
+
 <template>
-  <div>
-    <nav>
-      <Menubar :model="items" class="menubar">
-        <template #item="{ item }">
-          <RouterLink :to="item.url"><i :class="item.icon"></i>{{ item.label }}</RouterLink>
-        </template>
-      </Menubar>
-    </nav>
-  </div>
+  <nav>
+    <Menubar :model="items" class="menubar">
+      <template #item="{ item, props }">
+        <RouterLink v-if="item.to" v-bind="props" :to="item.to" class="menu-item">
+          <i :class="item.icon"></i>
+          <span>{{ item.label }}</span>
+        </RouterLink>
+      </template>
+    </Menubar>
+  </nav>
 </template>
-<style lang="css">
+
+<style scoped>
 .menubar {
   margin-bottom: 1rem;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: inherit;
 }
 </style>
