@@ -12,5 +12,5 @@ public class ShoppinglistDetailsDTO {
     private Date closeDate;
     private Double totalPrice;
     private Boolean isActive;
-    // private List<Product> products;
+    // private List<ProductDTO> products;
 }

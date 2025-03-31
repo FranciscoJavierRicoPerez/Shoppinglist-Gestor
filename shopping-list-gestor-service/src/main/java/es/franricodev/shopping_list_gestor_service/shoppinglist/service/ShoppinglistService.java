@@ -6,7 +6,7 @@ import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.Shoppi
 import java.util.List;
 
 public interface ShoppinglistService {
-    List<ShoppinglistDTO> findActiveShoppinglists() throws ShoppinglistException;
+    List<ShoppinglistDTO> findAllShoppinglists() throws ShoppinglistException;
 
     ShoppinglistDTO create(RequestCreateShoppinglistDTO request);
 
@@ -18,4 +18,5 @@ public interface ShoppinglistService {
 
     ShoppinglistDetailsDTO getShoppinglistDetails(Long id) throws ShoppinglistException;
 
+    ShoppinglistDTO updateShoppinglistIsActive(Long idShoppinglist) throws ShoppinglistException;
 }

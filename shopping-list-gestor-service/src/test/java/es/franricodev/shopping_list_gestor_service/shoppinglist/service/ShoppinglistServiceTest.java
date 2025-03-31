@@ -79,8 +79,8 @@ public class ShoppinglistServiceTest {
     @Test
     void findActiveShoppinglistsTest() throws ShoppinglistException {
         List<ShoppinglistDTO> expected = Collections.singletonList(shoppinglistDTO);
-        Mockito.when(shoppinglistRepository.IsActiveTrue()).thenReturn(Optional.of(shoppinglist));
-        List<ShoppinglistDTO> real = shoppinglistService.findActiveShoppinglists();
+        Mockito.when(shoppinglistRepository.findAll()).thenReturn(List.of(shoppinglist));
+        List<ShoppinglistDTO> real = shoppinglistService.findAllShoppinglists();
         Assertions.assertEquals(expected.size(), real.size());
     }
 
@@ -114,6 +114,16 @@ public class ShoppinglistServiceTest {
         Mockito.when(shoppinglistRepository.findById(Mockito.any())).thenReturn(Optional.of(shoppinglist));
         ShoppinglistDetailsDTO real = shoppinglistService.getShoppinglistDetails(1L);
         Assertions.assertEquals(expected.getId(), real.getId());
+    }
+
+    @Test
+    void updateShoppinglistIsActiveValueTest() throws ShoppinglistException {
+        shoppinglistDTO.setIsActive(false);
+        ShoppinglistDTO expected = shoppinglistDTO;
+        Mockito.when(shoppinglistRepository.findById(Mockito.any())).thenReturn(Optional.of(shoppinglist));
+        Mockito.when(shoppinglistRepository.save(Mockito.any())).thenReturn(shoppinglist);
+        ShoppinglistDTO real = shoppinglistService.updateShoppinglistIsActive(1L);
+        Assertions.assertEquals(expected.getIsActive(), real.getIsActive());
     }
 
 }

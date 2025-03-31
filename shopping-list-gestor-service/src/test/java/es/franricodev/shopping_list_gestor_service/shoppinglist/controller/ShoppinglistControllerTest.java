@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @ExtendWith(MockitoExtension.class)
 public class ShoppinglistControllerTest {
@@ -70,8 +71,8 @@ public class ShoppinglistControllerTest {
     void getAllShoppinglistActiveTest() throws ShoppinglistException {
         ResponseEntity<List<ShoppinglistDTO>> expected =
                 new ResponseEntity<>(List.of(shoppinglistDTO), HttpStatus.OK);
-        Mockito.when(shoppinglistService.findActiveShoppinglists()).thenReturn(List.of(shoppinglistDTO));
-        ResponseEntity<List<ShoppinglistDTO>> real = shoppinglistController.getAllShoppinglistActive();
+        Mockito.when(shoppinglistService.findAllShoppinglists()).thenReturn(List.of(shoppinglistDTO));
+        ResponseEntity<List<ShoppinglistDTO>> real = shoppinglistController.getAllShoppinglist();
         Assertions.assertEquals(expected.getStatusCode(), real.getStatusCode());
     }
 
@@ -115,5 +116,14 @@ public class ShoppinglistControllerTest {
         ResponseEntity<ShoppinglistDetailsDTO> real = shoppinglistController.getDetails(1L);
         Assertions.assertEquals(expected.getStatusCode(), real.getStatusCode());
     }
+
+    @Test
+    void updateShoppinglistIsActiveTest() throws ShoppinglistException {
+        shoppinglistDTO.setIsActive(false);
+        Mockito.when(shoppinglistService.updateShoppinglistIsActive(1L)).thenReturn(shoppinglistDTO);
+        ResponseEntity<Boolean> real = shoppinglistController.updateShoppinglistIsActiveValue(1L);
+        Assertions.assertEquals(Boolean.TRUE, real.getBody());
+    }
+
 
 }

@@ -4,24 +4,56 @@ import Button from 'primevue/button'
 import type { PropType } from 'vue'
 import type { Shoppinglist } from '@/Shoppinglist/domain/Shoppinglist'
 import { RouterLink } from 'vue-router'
-
-defineProps({
+import Tag from 'primevue/tag'
+import { useUpdateIsActiveShoppinglist } from '@/Shoppinglist/application/useUpdateIsActiveShoppinglist'
+import { useShoppinglistStore } from '@/Shoppinglist/stores/shoppinglistStore'
+const { refetch: updateIsActive } = useUpdateIsActiveShoppinglist()
+const store = useShoppinglistStore()
+const emit = defineEmits(['updateShoppinglistTables'])
+const props = defineProps({
   shoppinglist: {
     type: Object as PropType<Shoppinglist>,
     default: () => null,
   },
 })
+
+async function archiveShoppinglist() {
+  let response: boolean = await updateIsActive()
+  if (response) {
+    store.updateShoppinglistActive(props.shoppinglist.id)
+    emit('updateShoppinglistTables')
+  }
+}
 </script>
 <template>
-  <Card class="card-general">
+  <Card
+    class="card-general"
+    :class="
+      shoppinglist.isActive ? 'card-background-actives-card' : 'card-background-no-actives-card'
+    "
+  >
     <template #title>{{ shoppinglist.code }}</template>
     <template #subtitle>{{ shoppinglist.creationDate }}</template>
     <template #content>
       <p>{{ shoppinglist.totalPrice }}</p>
-      <p>{{ shoppinglist.isActive }}</p>
+      <div v-if="shoppinglist.isActive">
+        <Tag severity="success">
+          <span class="tag-custom">Activo</span>
+        </Tag>
+      </div>
+      <div v-else>
+        <Tag severity="warn">
+          <span class="tag-custom">Archivado</span>
+        </Tag>
+      </div>
     </template>
     <template #footer>
-      <Button label="Archivar" severity="help"></Button>
+      <Button
+        label="Archivar"
+        severity="help"
+        :disabled="!shoppinglist.isActive"
+        @click="archiveShoppinglist()"
+      ></Button>
       <RouterLink :to="`/shoppinglist/${shoppinglist.id}`">
         <Button class="buttons-separation" label="Ver" severity="info"></Button>
       </RouterLink>
@@ -34,9 +66,21 @@ defineProps({
   margin-right: 1rem;
   margin-top: 10px;
   max-width: 20rem;
+}
+
+.card-background-actives-card {
   background-color: aliceblue !important;
 }
+
+.card-background-no-actives-card {
+  background-color: rgb(231, 230, 233) !important;
+}
+
 .buttons-separation {
   margin-left: 1rem;
+}
+.tag-custom {
+  font-size: large;
+  font-weight: bold;
 }
 </style>
