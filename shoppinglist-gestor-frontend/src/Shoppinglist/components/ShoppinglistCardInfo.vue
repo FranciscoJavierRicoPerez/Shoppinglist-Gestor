@@ -7,7 +7,11 @@ import { RouterLink } from 'vue-router'
 import Tag from 'primevue/tag'
 import { useUpdateIsActiveShoppinglist } from '@/Shoppinglist/application/useUpdateIsActiveShoppinglist'
 import { useShoppinglistStore } from '@/Shoppinglist/stores/shoppinglistStore'
+import Toast, { type ToastMessageOptions } from 'primevue/toast'
+import { useToast } from 'primevue/usetoast'
+import { useDeleteShoppinglistData } from '@/Shoppinglist/application/useDeleteShoppinglistData'
 const { refetch: updateIsActive } = useUpdateIsActiveShoppinglist()
+const { refetch: deleteShoppinglist } = useDeleteShoppinglistData()
 const store = useShoppinglistStore()
 const emit = defineEmits(['updateShoppinglistTables'])
 const props = defineProps({
@@ -16,6 +20,7 @@ const props = defineProps({
     default: () => null,
   },
 })
+const toast = useToast()
 
 async function archiveShoppinglist() {
   let response: boolean = await updateIsActive()
@@ -23,6 +28,39 @@ async function archiveShoppinglist() {
     store.updateShoppinglistActive(props.shoppinglist.id)
     emit('updateShoppinglistTables')
   }
+}
+
+async function removeShoppinglist() {
+  debugger
+  let response: boolean = await deleteShoppinglist(props.shoppinglist.id)
+  if (response) {
+    store.removeShoppinglist(props.shoppinglist.id)
+    emit('updateShoppinglistTables')
+    createToast({
+      severity: 'success',
+      summary: 'Borrada lista de la compra',
+      detail: 'Codigo de la lista de la compra borrada: ' + props.shoppinglist.code,
+      life: 3000,
+    })
+  } else {
+    createToast({
+      severity: 'error',
+      summary: 'Error borrando la lista de la compra',
+      detail:
+        'Se ha producido un error en el borrado de la lista de la compra: ' +
+        props.shoppinglist.code,
+      life: 3000,
+    })
+  }
+}
+
+function createToast(toastOptions: ToastMessageOptions) {
+  toast.add({
+    severity: toastOptions.severity,
+    summary: toastOptions.summary,
+    detail: toastOptions.detail,
+    life: toastOptions.life,
+  })
 }
 </script>
 <template>
@@ -57,7 +95,12 @@ async function archiveShoppinglist() {
       <RouterLink :to="`/shoppinglist/${shoppinglist.id}`">
         <Button class="buttons-separation" label="Ver" severity="info"></Button>
       </RouterLink>
-      <Button class="buttons-separation" label="Eliminar" severity="danger"></Button>
+      <Button
+        class="buttons-separation"
+        label="Eliminar"
+        severity="danger"
+        @click="removeShoppinglist()"
+      ></Button>
     </template>
   </Card>
 </template>

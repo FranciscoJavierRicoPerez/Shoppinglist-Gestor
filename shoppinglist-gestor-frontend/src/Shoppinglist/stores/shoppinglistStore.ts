@@ -29,6 +29,10 @@ export const useShoppinglistStore = defineStore('shoppinglistStore', () => {
     })
   }
 
+  function removeShoppinglist(id: number) {
+    setShoppinglistArray(shoppinglistArray.value.filter((value) => value.id !== id))
+  }
+
   return {
     shoppinglistArray,
     setShoppinglistArray,
@@ -36,5 +40,6 @@ export const useShoppinglistStore = defineStore('shoppinglistStore', () => {
     getActiveShoppinglist,
     getNoActiveShoppinglist,
     updateShoppinglistActive,
+    removeShoppinglist,
   }
 })
