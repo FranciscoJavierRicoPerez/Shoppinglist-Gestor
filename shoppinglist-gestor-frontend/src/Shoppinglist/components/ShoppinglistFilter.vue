@@ -14,7 +14,8 @@ import { useGetShoppinglistFiltered } from '@/Shoppinglist/application/useGetSho
 import type { Shoppinglist } from '@/Shoppinglist/domain/Shoppinglist'
 import { useShoppinglistStore } from '@/Shoppinglist/stores/shoppinglistStore'
 import { useGetAllShoppinglist } from '@/Shoppinglist/application/useGetAllShoppinglist'
-
+import { useShoppinglistFilterStore } from '@/Shoppinglist/stores/shoppinglistFilterStore'
+const storeShoppinglistFilter = useShoppinglistFilterStore()
 const store = useShoppinglistStore()
 const { refetch: getAllShoppinglistFiltered } = useGetShoppinglistFiltered()
 const { refetch: getAllShoppinglist } = useGetAllShoppinglist()
@@ -27,11 +28,18 @@ function verifyFilterForm() {
     shoppinglistFilterForm.value.code === '' &&
     shoppinglistFilterForm.value.closeDate === null &&
     shoppinglistFilterForm.value.creationDate === null &&
-    shoppinglistFilterForm.value.totalPrice === null
+    shoppinglistFilterForm.value.totalPrice === null &&
+    shoppinglistFilterForm.value.isActive === null
   )
 }
 
 async function searchShoppinglistByFilter() {
+  shoppinglistFilterForm.value.isActive =
+    storeShoppinglistFilter.actualPanelId === 0
+      ? null
+      : storeShoppinglistFilter.actualPanelId === 1
+        ? true
+        : false
   if (verifyFilterForm()) {
     filteredShoppinglist.value = await getAllShoppinglist()
   } else {
@@ -58,7 +66,7 @@ async function searchShoppinglistByFilter() {
     <!-- Shoppinglist filter form -->
     <div class="container-xxlg">
       <div class="row">
-        <div class="col-4">
+        <div class="col-3">
           <FloatLabel variant="on">
             <DatePicker
               id="datepicker-24h"
@@ -70,7 +78,7 @@ async function searchShoppinglistByFilter() {
             <label for="shoppinglistCreationDate">Fecha de creación</label>
           </FloatLabel>
         </div>
-        <div class="col-4">
+        <div class="col-3">
           <FloatLabel variant="on">
             <DatePicker
               id="datepicker-24h"

@@ -17,6 +17,7 @@ public class ShoppinglistSpecifications {
     private static final String TOTAL_PRICE = "totalPrice";
     private static final String CODE = "code";
     private static final String CLOSE_DATE = "closeDate";
+    private static final String IS_ACTIVE = "isActive";
 
     private ShoppinglistSpecifications() {
         throw new IllegalStateException("ShoppinglistSpecifications.class");
@@ -46,6 +47,9 @@ public class ShoppinglistSpecifications {
         }
         if(!Objects.isNull(filter.getCloseDate()) && !filter.getCloseDate().isEmpty()) {
             predicates.add(builder.equal(root.get(CLOSE_DATE).as(String.class), filter.getCloseDate()));
+        }
+        if(!Objects.isNull(filter.getIsActive())) {
+            predicates.add(builder.equal(root.get(IS_ACTIVE).as(Boolean.class), filter.getIsActive()));
         }
     }
 

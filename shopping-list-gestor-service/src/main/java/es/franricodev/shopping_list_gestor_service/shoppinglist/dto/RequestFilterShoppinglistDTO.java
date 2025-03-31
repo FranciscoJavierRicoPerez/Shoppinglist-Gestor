@@ -10,4 +10,5 @@ public class RequestFilterShoppinglistDTO {
     private String closeDate;
     private String code;
     private Double totalPrice;
+    private Boolean isActive;
 }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { defaultShoppinglist, type Shoppinglist } from '@/Shoppinglist/domain/Shoppinglist'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useGetAllShoppinglist } from '@/Shoppinglist/application/useGetAllShoppinglist'
 import ShoppinglistCardInfo from '@/Shoppinglist/components/ShoppinglistCardInfo.vue'
 import Panel from 'primevue/panel'
@@ -14,6 +14,7 @@ import TabList from 'primevue/tablist'
 import Tab from 'primevue/tab'
 import TabPanels from 'primevue/tabpanels'
 import TabPanel from 'primevue/tabpanel'
+import { useShoppinglistFilterStore } from '@/Shoppinglist/stores/shoppinglistFilterStore'
 const { refetch: getAllShoppinglist } = useGetAllShoppinglist()
 const shoppinglistTable = ref<Shoppinglist[]>([{ ...defaultShoppinglist }])
 const shoppinglistActiveTable = ref<Shoppinglist[]>([{ ...defaultShoppinglist }])
@@ -22,11 +23,18 @@ const { refetch: createShoppinglistMetadata } = useCreateShoppinglistMetadata()
 const store = useShoppinglistStore()
 const toast = useToast()
 const tabsPanelIds = ref<string[]>(['0', '1', '2'])
+const actualPanelSelected = ref<number>(-1)
+
+const storeShoppinglistFilter = useShoppinglistFilterStore()
 
 onMounted(async () => {
   shoppinglistTable.value = await getAllShoppinglist()
   store.setShoppinglistArray(shoppinglistTable.value)
   updateShoppinglistTables()
+})
+
+watch(actualPanelSelected, (newActualPanelSelected) => {
+  storeShoppinglistFilter.setActualPanelId(newActualPanelSelected)
 })
 
 async function addNewShoppinglist() {
@@ -73,6 +81,12 @@ function selectTableToShow(element: string) {
       ? shoppinglistActiveTable.value
       : shoppinglistNoActiveTable.value
 }
+
+function generateTabTitleName(element: string) {
+  // REFACTORIZAR
+  // SERIA INTERESANTE QUE LA LISTA DE TABSID SEA UN MAP CLAVE - VALOR
+  return element === '0' ? 'Todas' : element === '1' ? 'Activas' : 'Archivadas'
+}
 </script>
 <template>
   <Toast></Toast>
@@ -85,9 +99,11 @@ function selectTableToShow(element: string) {
     </div>
     <Tabs value="0">
       <TabList>
-        <Tab value="0">Todas</Tab>
-        <Tab value="1">Activas</Tab>
-        <Tab value="2">Archivadas</Tab>
+        <div v-for="panelId in tabsPanelIds">
+          <Tab :value="panelId" @click="actualPanelSelected = Number(panelId)">
+            {{ generateTabTitleName(panelId) }}</Tab
+          >
+        </div>
       </TabList>
       <TabPanels>
         <div v-for="panelId in tabsPanelIds">

@@ -105,7 +105,7 @@ public class ShoppinglistControllerTest {
         ResponseEntity<List<ShoppinglistDTO>> expected = new ResponseEntity<>(List.of(shoppinglistDTO), HttpStatus.OK);
         Mockito.when(shoppinglistService.filterShoppinglist(Mockito.any())).thenReturn(List.of(shoppinglistDTO));
         ResponseEntity<List<ShoppinglistDTO>> real =
-                shoppinglistController.filterShoppinglist("SHOPPINGLIST-1","18/03/2025","18/03/2025",1D);
+                shoppinglistController.filterShoppinglist("SHOPPINGLIST-1","18/03/2025","18/03/2025",1D, null);
         Assertions.assertEquals(expected.getStatusCode(), real.getStatusCode());
     }
 
