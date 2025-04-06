@@ -22,8 +22,9 @@ defineProps({
       </template>
       <template #footer>
         <RouterLink :to="`/product/${item.id}}`">
-          <Button label="Ver" severity="help" style="width: 11.4rem"></Button>
+          <Button label="Ver" severity="help" style="width: 6.5rem"></Button>
         </RouterLink>
+        <Button label="Quitar" severity="danger" style="width: 6.5rem"></Button>
       </template>
     </Card>
   </div>
