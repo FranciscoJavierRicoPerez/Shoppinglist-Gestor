@@ -4,7 +4,7 @@ import type { ResponseProductDetails } from '../models/ResponseProductDetails'
 import type { ProductDetails } from '@/Product/domain/ProductDetails'
 import { createProductUnitList } from '@/ProductUnit/infrastructure/services/ProductUnitService'
 
-export function createProductArray(data: ResponseProduct[]): Product[] {
+export function createProductArray(data: ResponseProduct[]): Product[] | null {
   let products: Product[] = []
   data.forEach((element) => {
     products.push(createProduct(element))
@@ -16,7 +16,6 @@ export function createProduct(data: ResponseProduct): Product {
   return {
     id: data.id,
     name: data.name,
-    quantity: data.quantity,
     price: data.price,
   }
 }

@@ -1,5 +1,6 @@
 import type { ShoppinglistItem } from '@/ShoppinglistItem/domain/ShoppinglistItem'
 import type { ResponseShoppinglistItem } from '../models/ResponseShoppinglistItem'
+import { createProduct } from '@/Product/infrastructure/services/ProductService'
 
 export function createShoppinglistItemArray(data: ResponseShoppinglistItem[]): ShoppinglistItem[] {
   let shoppinglistItemArray: ShoppinglistItem[] = []
@@ -15,6 +16,6 @@ export function createShoppinglistItem(data: ResponseShoppinglistItem): Shopping
     assignationToListDate: data.assignationToListDate,
     calculatedPrice: data.calculatedPrice,
     quantity: data.quantity,
-    product: null,
+    product: createProduct(data.product),
   }
 }

@@ -11,28 +11,44 @@
       "assignationToListDate": "06/04/2025",
       "quantity": 2,
       "calculatedPrice": 5,
-      "product": null
+      "product": {
+        "id": 1,
+        "name": "Manzanas",
+        "price": 2.5
+      }
     },
     {
       "id": 1,
       "assignationToListDate": "06/04/2025",
       "quantity": 2,
       "calculatedPrice": 5,
-      "product": null
+      "product": {
+        "id": 1,
+        "name": "Manzanas",
+        "price": 2.5
+      }
     },
     {
       "id": 1,
       "assignationToListDate": "06/04/2025",
       "quantity": 2,
       "calculatedPrice": 5,
-      "product": null
+      "product": {
+        "id": 1,
+        "name": "Manzanas",
+        "price": 2.5
+      }
     },
     {
       "id": 1,
       "assignationToListDate": "06/04/2025",
       "quantity": 2,
       "calculatedPrice": 5,
-      "product": null
+      "product": {
+        "id": 1,
+        "name": "Manzanas",
+        "price": 2.5
+      }
     }
   ]
 }

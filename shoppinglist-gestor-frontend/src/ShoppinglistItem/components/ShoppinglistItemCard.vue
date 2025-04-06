@@ -4,7 +4,7 @@ import Card from 'primevue/card'
 import Button from 'primevue/button'
 import Tag from 'primevue/tag'
 import { RouterLink } from 'vue-router'
-import type { ShoppinglistItem } from '../domain/ShoppinglistItem'
+import type { ShoppinglistItem } from '@/ShoppinglistItem/domain/ShoppinglistItem'
 defineProps({
   shoppinglistItemList: {
     type: Object as PropType<ShoppinglistItem[]>,
@@ -13,15 +13,15 @@ defineProps({
 })
 </script>
 <template>
-  <div v-for="product in shoppinglistItemList">
+  <div v-for="item in shoppinglistItemList">
     <Card class="mainCard" style="max-width: 25rem">
-      <template #title>{{ product.id }}</template>
+      <template #title>{{ item.product?.name }}</template>
       <template #content>
-        <Tag severity="info" style="margin-right: 1rem">Cantidad {{ product.quantity }}</Tag>
-        <Tag severity="primary">Precio {{ product.calculatedPrice }} €</Tag>
+        <Tag severity="info" style="margin-right: 1rem">Cantidad {{ item.quantity }}</Tag>
+        <Tag severity="primary">Precio {{ item.calculatedPrice }} €</Tag>
       </template>
       <template #footer>
-        <RouterLink :to="`/product/${product.id}}`">
+        <RouterLink :to="`/product/${item.id}}`">
           <Button label="Ver" severity="help" style="width: 11.4rem"></Button>
         </RouterLink>
       </template>
