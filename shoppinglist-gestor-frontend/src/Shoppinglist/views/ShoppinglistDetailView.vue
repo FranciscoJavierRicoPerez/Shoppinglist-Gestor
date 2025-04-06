@@ -6,8 +6,8 @@ import {
 } from '@/Shoppinglist/domain/ShoppinglistDetails'
 import { useGetShoppinglistDetails } from '@/Shoppinglist/application/useGetShoppinglistDetails'
 import Panel from 'primevue/panel'
-import ProductDataview from '@/Product/components/ProductDataview.vue'
 import Tag from 'primevue/tag'
+import ShoppinglistItemCard from '@/ShoppinglistItem/components/ShoppinglistItemCard.vue'
 const { refetch: getShoppinglistDetails } = useGetShoppinglistDetails()
 
 const shoppinglistDetails = ref<ShoppinglistDetails>({ ...defaultShoppinglistDetails })
@@ -48,9 +48,14 @@ onMounted(async () => {
     </p>
   </Panel>
   <Panel>
-    <template #header><span class="panelHeader">Lista de productos</span></template>
+    <template #header
+      ><span class="panelHeader">Lista de items en la lista de la compra</span></template
+    >
     <div class="cardOrganization">
-      <ProductDataview :productList="shoppinglistDetails.products"></ProductDataview>
+      <!-- <ProductDataview :productList="shoppinglistDetails.products"></ProductDataview> -->
+      <ShoppinglistItemCard
+        :shoppinglistItemList="shoppinglistDetails.items"
+      ></ShoppinglistItemCard>
     </div>
   </Panel>
 </template>
