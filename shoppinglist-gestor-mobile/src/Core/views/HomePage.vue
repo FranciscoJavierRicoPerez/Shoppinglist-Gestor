@@ -35,8 +35,8 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/vue';
-import MessageListItem from '@/components/MessageListItem.vue';
-import { getMessages, Message } from '@/data/messages';
+import MessageListItem from '@/Core/components/MessageListItem.vue';
+import { getMessages, Message } from '@/Core/data/messages';
 import { ref } from 'vue';
 
 const messages = ref<Message[]>(getMessages());

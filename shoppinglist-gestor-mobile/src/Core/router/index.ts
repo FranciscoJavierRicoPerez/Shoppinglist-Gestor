@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
-import HomePage from '../views/HomePage.vue'
+import HomePage from '@/Core/views/HomePage.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -14,7 +14,7 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/message/:id',
-    component: () => import('../views/ViewMessagePage.vue')
+    component: () => import('@/Core/views/ViewMessagePage.vue')
   },
   {
     path: '/shoppinglist',

@@ -47,7 +47,7 @@ import {
   IonToolbar,
 } from '@ionic/vue';
 import { personCircle } from 'ionicons/icons';
-import { getMessage } from '../data/messages';
+import { getMessage } from '../Core/data/messages';
 
 const getBackButtonText = () => {
   const win = window as any;
