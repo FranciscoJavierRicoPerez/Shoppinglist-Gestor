@@ -1,0 +1,7 @@
+{
+  "name": "shoppinglist-gestor-mobile",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
