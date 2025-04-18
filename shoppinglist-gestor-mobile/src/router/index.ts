@@ -5,7 +5,7 @@ import HomePage from '../views/HomePage.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/home'
+    redirect: '/shoppinglist'
   },
   {
     path: '/home',
@@ -15,6 +15,11 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/message/:id',
     component: () => import('../views/ViewMessagePage.vue')
+  },
+  {
+    path: '/shoppinglist',
+    name: 'Shoppinglist',
+    component:()=> import('@/Shoppinglist/views/ShoppinglistView.vue')
   }
 ]
 
