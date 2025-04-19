@@ -1,39 +1,64 @@
 <script setup lang="ts">
-import type { PropType } from 'vue'
-import type { Shoppinglist } from '@/Shoppinglist/domain/Shoppinglist'
-import { RouterLink } from 'vue-router'
-import { useUpdateIsActiveShoppinglist } from '@/Shoppinglist/application/useUpdateIsAct
-import { useDeleteShoppinglistData } from '@/Shoppinglist/application/useDeleteShoppinglistData'
-const { refetch: updateIsActive } = useUpdateIsActiveShoppinglist()
-const { refetch: deleteShoppinglist } = useDeleteShoppinglistData()
-const store = useShoppinglistStore()
-const emit = defineEmits(['updateShoppinglistTables'])
+import type { PropType } from "vue";
+import type { Shoppinglist } from "@/Shoppinglist/domain/Shoppinglist";
+import { RouterLink } from "vue-router";
+//import { useUpdateIsActiveShoppinglist } from '@/Shoppinglist/application/useUpdateIsAct
+import { useDeleteShoppinglistData } from "@/Shoppinglist/application/useDeleteShoppinglistData";
+import {
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonChip,
+} from "@ionic/vue";
+//const { refetch: updateIsActive } = useUpdateIsActiveShoppinglist()
+const { refetch: deleteShoppinglist } = useDeleteShoppinglistData();
+//const store = useShoppinglistStore()
+const emit = defineEmits(["updateShoppinglistTables"]);
 const props = defineProps({
   shoppinglist: {
     type: Object as PropType<Shoppinglist>,
     default: () => null,
   },
-})
+});
 
 async function archiveShoppinglist() {
-  let response: boolean = await updateIsActive()
-  if (response) {
-    store.updateShoppinglistActive(props.shoppinglist.id)
-    emit('updateShoppinglistTables')
-  }
+  //let response: boolean = await updateIsActive()
+  //if (response) {
+  //store.updateShoppinglistActive(props.shoppinglist.id)
+  //emit('updateShoppinglistTables')
+  //}
 }
 
 async function removeShoppinglist() {
-  debugger
-  let response: boolean = await deleteShoppinglist(props.shoppinglist.id)
+  let response: boolean = await deleteShoppinglist(props.shoppinglist.id);
   if (response) {
-    store.removeShoppinglist(props.shoppinglist.id)
-    emit('updateShoppinglistTables')
+    //store.removeShoppinglist(props.shoppinglist.id)
+    emit("updateShoppinglistTables");
   }
 }
-
 </script>
 <template>
+  <IonCard :class="props.shoppinglist.isActive ? 'card-background-actives-card' : 'card-background-no-actives-card'">
+    <IonCardHeader>
+      <IonCardTitle>{{ props.shoppinglist.code }}</IonCardTitle>
+      <IonCardSubtitle>{{ props.shoppinglist.creationDate }}</IonCardSubtitle>
+    </IonCardHeader>
+    <IonCardContent>
+      <div>{{ props.shoppinglist.totalPrice }}</div>
+      <div v-if="props.shoppinglist.isActive">
+        <IonChip :color="'success'">Activo</IonChip>
+      </div>
+      <div v-else>
+        <IonChip :color="'warning'">Archivado</IonChip>
+      </div>
+    </IonCardContent>
+    <IonButton class="buttons-separation" shape="round" color="tertiary">Archivar</IonButton>
+    <IonButton class="buttons-separation" shape="round" color="primary">Ver</IonButton>
+    <IonButton class="buttons-separation"shape="round" color="danger">Eliminar</IonButton>
+  </IonCard>
 </template>
 <style lang="css">
 .card-general {
@@ -51,7 +76,9 @@ async function removeShoppinglist() {
 }
 
 .buttons-separation {
-  margin-left: 1rem;
+  margin-left: 2rem;
+  margin-bottom: 1rem;
+
 }
 .tag-custom {
   font-size: large;
