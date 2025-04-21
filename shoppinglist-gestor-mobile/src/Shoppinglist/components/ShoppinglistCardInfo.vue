@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import type { PropType } from "vue";
 import type { Shoppinglist } from "@/Shoppinglist/domain/Shoppinglist";
-import { RouterLink } from "vue-router";
-//import { useUpdateIsActiveShoppinglist } from '@/Shoppinglist/application/useUpdateIsAct
+import { useUpdateIsActiveShoppinglist } from "@/Shoppinglist/application/useUpdateIsActiveShoppinglist";
 import { useDeleteShoppinglistData } from "@/Shoppinglist/application/useDeleteShoppinglistData";
 import {
   IonButton,
@@ -14,9 +13,9 @@ import {
   IonChip,
 } from "@ionic/vue";
 import { useShoppinglistStore } from "@/Shoppinglist/stores/shoppinglistStore";
-//const { refetch: updateIsActive } = useUpdateIsActiveShoppinglist()
+const { refetch: updateIsActive } = useUpdateIsActiveShoppinglist();
 const { refetch: deleteShoppinglist } = useDeleteShoppinglistData();
-const store = useShoppinglistStore()
+const store = useShoppinglistStore();
 const emit = defineEmits(["updateShoppinglistTables"]);
 const props = defineProps({
   shoppinglist: {
@@ -25,19 +24,21 @@ const props = defineProps({
   },
 });
 
-/* async function archiveShoppinglist() {
-  //let response: boolean = await updateIsActive()
-  //if (response) {
-  //store.updateShoppinglistActive(props.shoppinglist.id)
-  //emit('updateShoppinglistTables')
-  //}
-}*/
+async function archiveShoppinglist() {
+  let response: boolean = await updateIsActive();
+  if (response) {
+    store.updateShoppinglistActive(props.shoppinglist.id);
+    emit("updateShoppinglistTables");
+  }
+}
 
 async function removeShoppinglist() {
-  console.log("INFO: Borrando la lista de la compra con id: " + props.shoppinglist?.id)
+  console.log(
+    "INFO: Borrando la lista de la compra con id: " + props.shoppinglist?.id
+  );
   let response: boolean = await deleteShoppinglist(props.shoppinglist.id);
   if (response) {
-    store.removeShoppinglist(props.shoppinglist.id)
+    store.removeShoppinglist(props.shoppinglist.id);
     emit("updateShoppinglistTables");
   }
 }
@@ -64,13 +65,22 @@ async function removeShoppinglist() {
         <IonChip :color="'warning'">Archivado</IonChip>
       </div>
     </IonCardContent>
-    <IonButton class="buttons-separation" shape="round" color="tertiary"
+    <IonButton
+      class="buttons-separation"
+      shape="round"
+      color="tertiary"
+      @click="archiveShoppinglist"
+      :disabled="!props.shoppinglist.isActive"
       >Archivar</IonButton
     >
     <IonButton class="buttons-separation" shape="round" color="primary"
       >Ver</IonButton
     >
-    <IonButton class="buttons-separation" shape="round" color="danger" @click="removeShoppinglist()"
+    <IonButton
+      class="buttons-separation"
+      shape="round"
+      color="danger"
+      @click="removeShoppinglist()"
       >Eliminar</IonButton
     >
   </IonCard>

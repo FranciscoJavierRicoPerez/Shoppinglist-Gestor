@@ -4,78 +4,14 @@ import {
   IonContent,
   IonFab,
   IonFabButton,
-  IonHeader,
   IonIcon,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
   IonItem,
   IonLabel,
   IonList,
-  IonSegment,
-  IonSegmentButton,
-  IonTab,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
-  IonTitle,
-  IonToolbar,
 } from "@ionic/vue";
 import { onMounted } from "vue";
-
-/*import {
-  defaultShoppinglist,
-  type Shoppinglist,
-} from "@/Shoppinglist/domain/Shoppinglist";
-import { onMounted, reactive, ref } from "vue";
-import { useGetAllShoppinglist } from "@/Shoppinglist/application/useGetAllShoppinglist";
-import { useShoppinglistStore } from "@/Shoppinglist/stores/shoppinglistStore";
-import { useCreateShoppinglistMetadata } from "@/Shoppinglist/application/useCreateShoppinglistMetadata";
-import {
-  InfiniteScrollCustomEvent,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
-  IonInfiniteScroll,
-  IonInfiniteScrollContent,
-  IonItem,
-  IonList,
-  IonListHeader,
-} from "@ionic/vue";
-import ShoppinglistCardInfo from "./ShoppinglistCardInfo.vue";
-const { refetch: getAllShoppinglist } = useGetAllShoppinglist();
-const shoppinglistTable = ref<Shoppinglist[]>([{ ...defaultShoppinglist }]);
-const shoppinglistActiveTable = ref<Shoppinglist[]>([
-  { ...defaultShoppinglist },
-]);
-const shoppinglistNoActiveTable = ref<Shoppinglist[]>([
-  { ...defaultShoppinglist },
-]);
-const { refetch: createShoppinglistMetadata } = useCreateShoppinglistMetadata();
-const store = useShoppinglistStore();
-
-
-onMounted(async () => {
-  shoppinglistTable.value = await getAllShoppinglist();
-  store.setShoppinglistArray(shoppinglistTable.value);
-  updateShoppinglistTables();
-});
-
-async function addNewShoppinglist() {
-  console.log("INFO: Añadiendo una nueva lista de la compra");
-  let shoppinglistMetadata: Shoppinglist = await createShoppinglistMetadata();
-  if (shoppinglistMetadata) {
-    store.addShoppinglist(shoppinglistMetadata);
-    updateShoppinglistTables();
-  }
-}
-
-function updateShoppinglistTables() {
-  shoppinglistActiveTable.value = store.getActiveShoppinglist();
-  shoppinglistNoActiveTable.value = store.getNoActiveShoppinglist();
-}*/
-
 import { ref } from "vue";
 import ShoppinglistCardInfo from "./ShoppinglistCardInfo.vue";
 import { defaultShoppinglist, Shoppinglist } from "../domain/Shoppinglist";
