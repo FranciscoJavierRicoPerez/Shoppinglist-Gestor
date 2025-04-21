@@ -93,24 +93,29 @@ const shoppinglistNoActiveTable = ref<Shoppinglist[]>([
 const { refetch: createShoppinglistMetadata } = useCreateShoppinglistMetadata();
 const store = useShoppinglistStore();
 
-// Lista auxiliar en la cual construyo dinamicamente el listado de listas de la compra que necesito que se
-// vayan mostrando en la pantalla del dispositivo movil
-const items = ref<Shoppinglist[]>([]);
+// Este listado representa los elementos que son visibles actualmente en la pantalla
+const actualShoppinglistVisible = ref<Shoppinglist[]>([]);
 
-// Construye dinamicamente el listado de las shoppinglist
-function generateItems() {
-  const start = items.value.length + 1;
+// Este metodo realiza el calculo de los elementos que van a ser visible, va de 50 en 50
+function updateShoppinglistElementsVisible(removedObject: boolean) {
+  if (removedObject) {
+    // Si se va a borrar un elemento, necesito volver a cargar la lista entera
+    // para que asi la lista de actuales visibles corresponda
+    actualShoppinglistVisible.value = [];
+  }
+  const start = actualShoppinglistVisible.value.length + 1;
+  console.log(store.shoppinglistArray);
   for (let i = 0; i < 50; i++) {
     // ShoppinglistTable.vue (LINEA 105) => Revisar si hay alguna forma de obviar el !== undefined
-    if(store.shoppinglistArray[start + i] !== undefined) {
-      items.value.push(store.shoppinglistArray[start + i]);
+    if (store.shoppinglistArray[start + i] !== undefined) {
+      actualShoppinglistVisible.value.push(store.shoppinglistArray[start + i]);
     }
   }
 }
 
 // Evento infinito
 const ionInfinite = (event: InfiniteScrollCustomEvent) => {
-  generateItems();
+  updateShoppinglistElementsVisible(false);
   setTimeout(() => {
     event.target.complete();
   }, 500);
@@ -119,8 +124,7 @@ const ionInfinite = (event: InfiniteScrollCustomEvent) => {
 onMounted(async () => {
   shoppinglistTable.value = await getAllShoppinglist();
   store.setShoppinglistArray(shoppinglistTable.value);
-  updateShoppinglistTables();
-  generateItems();
+  updateShoppinglistTables(false);
 });
 
 async function addNewShoppinglist() {
@@ -129,14 +133,15 @@ async function addNewShoppinglist() {
   console.log(shoppinglistMetadata);
   if (shoppinglistMetadata) {
     store.addShoppinglist(shoppinglistMetadata);
-    updateShoppinglistTables();
-    generateItems();
+    updateShoppinglistTables(false);
   }
 }
 
-function updateShoppinglistTables() {
+function updateShoppinglistTables(removedObject: boolean = true) {
+  console.log("INFO: Actualizando las listas de la compra");
   shoppinglistActiveTable.value = store.getActiveShoppinglist();
   shoppinglistNoActiveTable.value = store.getNoActiveShoppinglist();
+  updateShoppinglistElementsVisible(removedObject);
 }
 </script>
 <template>
@@ -147,9 +152,12 @@ function updateShoppinglistTables() {
       </IonFabButton>
     </IonFab>
     <IonList>
-      <IonItem v-for="item in items">
+      <IonItem v-for="shoppinglist in actualShoppinglistVisible">
         <IonLabel>
-          <ShoppinglistCardInfo :shoppinglist="item"></ShoppinglistCardInfo>
+          <ShoppinglistCardInfo
+            :shoppinglist="shoppinglist"
+            @updateShoppinglistTables="updateShoppinglistTables"
+          ></ShoppinglistCardInfo>
         </IonLabel>
       </IonItem>
     </IonList>

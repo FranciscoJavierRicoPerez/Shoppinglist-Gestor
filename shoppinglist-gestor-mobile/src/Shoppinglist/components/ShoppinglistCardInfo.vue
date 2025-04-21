@@ -13,9 +13,10 @@ import {
   IonCardTitle,
   IonChip,
 } from "@ionic/vue";
+import { useShoppinglistStore } from "@/Shoppinglist/stores/shoppinglistStore";
 //const { refetch: updateIsActive } = useUpdateIsActiveShoppinglist()
 const { refetch: deleteShoppinglist } = useDeleteShoppinglistData();
-//const store = useShoppinglistStore()
+const store = useShoppinglistStore()
 const emit = defineEmits(["updateShoppinglistTables"]);
 const props = defineProps({
   shoppinglist: {
@@ -32,13 +33,14 @@ const props = defineProps({
   //}
 }*/
 
-/*async function removeShoppinglist() {
+async function removeShoppinglist() {
+  console.log("INFO: Borrando la lista de la compra con id: " + props.shoppinglist?.id)
   let response: boolean = await deleteShoppinglist(props.shoppinglist.id);
   if (response) {
-    //store.removeShoppinglist(props.shoppinglist.id)
+    store.removeShoppinglist(props.shoppinglist.id)
     emit("updateShoppinglistTables");
   }
-}*/
+}
 </script>
 <template>
   <IonCard
@@ -68,7 +70,7 @@ const props = defineProps({
     <IonButton class="buttons-separation" shape="round" color="primary"
       >Ver</IonButton
     >
-    <IonButton class="buttons-separation" shape="round" color="danger"
+    <IonButton class="buttons-separation" shape="round" color="danger" @click="removeShoppinglist()"
       >Eliminar</IonButton
     >
   </IonCard>

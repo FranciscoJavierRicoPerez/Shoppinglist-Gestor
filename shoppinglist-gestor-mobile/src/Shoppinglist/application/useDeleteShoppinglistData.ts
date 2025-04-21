@@ -1,9 +1,8 @@
-//import { deleteShoppinglistData } from '@/Shoppinglist/infrastructure/useCases/deleteShoppinglistData.ts'
+import { deleteShoppinglistData } from '@/Shoppinglist/infrastructure/useCases/deleteShoppinglistData'
 
 export function useDeleteShoppinglistData() {
   async function refetch(id: number): Promise<boolean> {
-    //return deleteShoppinglistData(id)
-    return true
+    return deleteShoppinglistData(id)
   }
 
   return { refetch }
