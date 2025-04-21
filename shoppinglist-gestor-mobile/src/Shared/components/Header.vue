@@ -10,20 +10,20 @@ const props = defineProps({
 </script>
 <template>
   <IonHeader class="custom-header">
-    <IonTitle class="custom-text">{{ props.title }}</IonTitle>
+    <IonTitle class="custom-text-header">{{ props.title }}</IonTitle>
   </IonHeader>
 </template>
 <style lang="css">
 .custom-header {
   background-color: rgb(51, 255, 153);
   margin-bottom: 5px;
-  height: 50px;
+  height: 75px;
 }
-.custom-text {
+.custom-text-header {
   text-align: center;
   font-size: large;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   font-style: italic;
-  margin-top: 1rem;
+  padding: 2rem;
 }
 </style>
