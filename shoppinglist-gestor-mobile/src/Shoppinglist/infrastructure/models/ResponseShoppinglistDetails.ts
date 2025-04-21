@@ -1,4 +1,4 @@
-//import type { ResponseShoppinglistItem } from '@/ShoppinglistItem/infrastructure/models/ResponseShoppinglistItem'
+import type { ResponseShoppinglistItem } from '@/ShoppinglistItem/infrastructure/models/ResponseShoppinglistItem'
 
 export interface ResponseShoppinglistDetails {
   id: number
@@ -7,5 +7,5 @@ export interface ResponseShoppinglistDetails {
   closeDate: string | null
   totalPrice: number
   isActive: boolean
-  //items: ResponseShoppinglistItem[]
+  items: ResponseShoppinglistItem[]
 }

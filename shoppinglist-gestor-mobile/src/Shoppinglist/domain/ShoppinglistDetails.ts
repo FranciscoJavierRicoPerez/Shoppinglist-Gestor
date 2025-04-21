@@ -1,3 +1,5 @@
+import { ShoppinglistItem } from "@/ShoppinglistItem/domain/ShoppinglistItem"
+
 export interface ShoppinglistDetails {
   id: number
   creationDate: string
@@ -5,7 +7,7 @@ export interface ShoppinglistDetails {
   closeDate: string | null
   totalPrice: number
   isActive: boolean
-  //items: ShoppinglistItem[]
+  items: ShoppinglistItem[]
 }
 
 export const defaultShoppinglistDetails = {
@@ -15,5 +17,5 @@ export const defaultShoppinglistDetails = {
   closeDate: '',
   totalPrice: -1,
   isActive: false,
-  //items: [],
+  items: [],
 }

@@ -1,77 +1,95 @@
 <script setup lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+import {
+  InfiniteScrollCustomEvent,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonChip,
+  IonContent,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
+  IonList,
+  IonPage,
+} from "@ionic/vue";
 import Header from "@/Shared/components/Header.vue";
 import Footer from "@/Shared/components/Footer.vue";
-/* import { onMounted, ref } from 'vue'
+import { onMounted, ref } from "vue";
 import {
   defaultShoppinglistDetails,
   type ShoppinglistDetails,
-} from '@/Shoppinglist/domain/ShoppinglistDetails'
-import { useGetShoppinglistDetails } from '@/Shoppinglist/application/useGetShoppinglistDetails'
-import Panel from 'primevue/panel'
-import Tag from 'primevue/tag'
-import Button from 'primevue/button'
-import ShoppinglistItemCard from '@/ShoppinglistItem/components/ShoppinglistItemCard.vue'
-const { refetch: getShoppinglistDetails } = useGetShoppinglistDetails()
+} from "@/Shoppinglist/domain/ShoppinglistDetails";
+import { useGetShoppinglistDetails } from "@/Shoppinglist/application/useGetShoppinglistDetails";
+import { ShoppinglistItem } from "@/ShoppinglistItem/domain/ShoppinglistItem";
+import ShoppinglistItemCard from '@/ShoppinglistItem/components/ShoppinglistItemCard.vue';
+const { refetch: getShoppinglistDetails } = useGetShoppinglistDetails();
 
-const shoppinglistDetails = ref<ShoppinglistDetails>({ ...defaultShoppinglistDetails })
+const shoppinglistDetails = ref<ShoppinglistDetails>({
+  ...defaultShoppinglistDetails,
+});
+
+const actualShoppinglistItemsVisible = ref<ShoppinglistItem[]>([]);
 
 onMounted(async () => {
   // We have to obtain the object ShoppinglistDetails
-  shoppinglistDetails.value = await getShoppinglistDetails()
-})*/
+  shoppinglistDetails.value = await getShoppinglistDetails();
+  updateShoppinglistItemsElementsVisible();
+});
+
+// Evento infinito
+const ionInfinite = (event: InfiniteScrollCustomEvent) => {
+  updateShoppinglistItemsElementsVisible();
+  setTimeout(() => {
+    event.target.complete();
+  }, 500);
+};
+
+function updateShoppinglistItemsElementsVisible() {
+  const start = actualShoppinglistItemsVisible.value.length + 1;
+  for (let i = 0; i < 50; i++) {
+    actualShoppinglistItemsVisible.value.push(
+      shoppinglistDetails.value.items[start + i]
+    );
+  }
+}
 </script>
 <template>
-  <!-- <Panel style="margin-bottom: 1rem">
-    <template #header><span class="panelHeader">Informacion lista de la compra</span> </template>
-    <p>
-      <Tag style="font-size: large; margin-right: 1rem">
-        <div v-if="shoppinglistDetails.isActive">
-          <strong>ABIERTA</strong>
-        </div>
-        <div v-else>
-          <strong>CERRADA</strong>
-        </div>
-      </Tag>
-      <Tag severity="info" style="font-size: larger; margin-right: 1rem">{{
-        shoppinglistDetails.code
-      }}</Tag>
-      <Tag severity="danger" style="font-size: larger"
-        >Precio total {{ shoppinglistDetails.totalPrice }} €</Tag
-      >
-      <Tag
-        severity="warn"
-        style="font-size: larger"
-        :class="{ multiDate: shoppinglistDetails.closeDate !== null }"
-      >
-        Lista de la compra del {{ shoppinglistDetails.creationDate }}
-        <div v-if="shoppinglistDetails.closeDate !== null">
-          <strong> al {{ shoppinglistDetails.closeDate }}</strong>
-        </div>
-      </Tag>
-    </p>
-  </Panel>
-  <Panel>
-    <template #header
-      ><span class="panelHeader">Lista de items en la lista de la compra</span></template
-    >
-    <Button
-      severity="info"
-      label="Añadir nuevo item"
-      style="margin-right: 10px; margin-bottom: 10px"
-    ></Button>
-    <Button severity="danger" label="Quitar items de la lista"></Button>
-    <div class="cardOrganization">
-      <ProductDataview :productList="shoppinglistDetails.products"></ProductDataview>
-      <ShoppinglistItemCard
-        :shoppinglistItemList="shoppinglistDetails.items"
-      ></ShoppinglistItemCard>
-    </div>
-  </Panel> -->
   <IonPage>
     <Header :title="'Detalle de la lista'"></Header>
     <Footer></Footer>
-    <IonContent><p>PRUEBAAA</p></IonContent>
+    <IonContent>
+      <IonCard>
+        <IonCardHeader>
+          <IonCardTitle>
+            <IonChip color="primary">{{ shoppinglistDetails.code }}</IonChip>
+            <div v-if="shoppinglistDetails.isActive">
+              <IonChip color="success">Activa</IonChip>
+            </div>
+            <div v-else>
+              <IonChip color="success">Archivado</IonChip>
+            </div>
+            <IonChip color="danger"
+              >Precio total: {{ shoppinglistDetails.totalPrice }}</IonChip
+            >
+          </IonCardTitle>
+          <IonCardSubtitle>
+            <IonChip color="warning"
+              >Lista de la compra del {{ shoppinglistDetails.creationDate }} al
+              {{ shoppinglistDetails.closeDate }}</IonChip
+            >
+          </IonCardSubtitle>
+        </IonCardHeader>
+        <IonCardContent>
+          <IonList>
+            <ShoppinglistItemCard :shoppinglistItemList="shoppinglistDetails.items"></ShoppinglistItemCard>
+          </IonList>
+          <IonInfiniteScroll @ionInfinite="ionInfinite">
+            <IonInfiniteScrollContent></IonInfiniteScrollContent>
+          </IonInfiniteScroll>
+        </IonCardContent>
+      </IonCard>
+    </IonContent>
   </IonPage>
 </template>
 <style lang="css">

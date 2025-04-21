@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "assignationToListDate": "05/04/2025",
+    "calculatedPrice": 10,
+    "quantity": 2
+  },
+  {
+    "id": 2,
+    "assignationToListDate": "05/04/2025",
+    "calculatedPrice": 10,
+    "quantity": 2
+  },
+  {
+    "id": 3,
+    "assignationToListDate": "05/04/2025",
+    "calculatedPrice": 10,
+    "quantity": 2
+  }
+]

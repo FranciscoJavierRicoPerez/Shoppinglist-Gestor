@@ -43,7 +43,6 @@ function updateShoppinglistElementsVisible(removedObject: boolean) {
     actualShoppinglistVisible.value = [];
   }
   const start = actualShoppinglistVisible.value.length + 1;
-  console.log(store.shoppinglistArray);
   for (let i = 0; i < 50; i++) {
     // ShoppinglistTable.vue (LINEA 105) => Revisar si hay alguna forma de obviar el !== undefined
     if (store.shoppinglistArray[start + i] !== undefined) {
