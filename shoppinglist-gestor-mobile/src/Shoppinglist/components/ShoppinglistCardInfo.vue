@@ -73,9 +73,11 @@ async function removeShoppinglist() {
       :disabled="!props.shoppinglist.isActive"
       >Archivar</IonButton
     >
-    <IonButton class="buttons-separation" shape="round" color="primary"
-      >Ver</IonButton
-    >
+    <RouterLink :to="`/shoppinglist/${shoppinglist.id}`">
+      <IonButton class="buttons-separation" shape="round" color="primary"
+        >Ver</IonButton
+      >
+    </RouterLink>
     <IonButton
       class="buttons-separation"
       shape="round"

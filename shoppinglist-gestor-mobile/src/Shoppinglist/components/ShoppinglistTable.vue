@@ -10,6 +10,7 @@ import {
   IonItem,
   IonLabel,
   IonList,
+  IonPage,
 } from "@ionic/vue";
 import { onMounted } from "vue";
 import { ref } from "vue";
@@ -18,6 +19,8 @@ import { defaultShoppinglist, Shoppinglist } from "../domain/Shoppinglist";
 import { useGetAllShoppinglist } from "../application/useGetAllShoppinglist";
 import { useCreateShoppinglistMetadata } from "../application/useCreateShoppinglistMetadata";
 import { useShoppinglistStore } from "../stores/shoppinglistStore";
+import Header from "@/Shared/components/Header.vue";
+import Footer from "@/Shared/components/Footer.vue";
 const { refetch: getAllShoppinglist } = useGetAllShoppinglist();
 const shoppinglistTable = ref<Shoppinglist[]>([{ ...defaultShoppinglist }]);
 const shoppinglistActiveTable = ref<Shoppinglist[]>([
@@ -81,26 +84,30 @@ function updateShoppinglistTables(removedObject: boolean = true) {
 }
 </script>
 <template>
-  <IonContent>
-    <IonFab horizontal="end" vertical="bottom" slot="fixed">
-      <IonFabButton @click="addNewShoppinglist">
-        <IonIcon name="add-outline" />
-      </IonFabButton>
-    </IonFab>
-    <IonList>
-      <IonItem v-for="shoppinglist in actualShoppinglistVisible">
-        <IonLabel>
-          <ShoppinglistCardInfo
-            :shoppinglist="shoppinglist"
-            @updateShoppinglistTables="updateShoppinglistTables"
-          ></ShoppinglistCardInfo>
-        </IonLabel>
-      </IonItem>
-    </IonList>
-    <IonInfiniteScroll @ionInfinite="ionInfinite">
-      <IonInfiniteScrollContent></IonInfiniteScrollContent>
-    </IonInfiniteScroll>
-  </IonContent>
+  <IonPage>
+    <Header :title="'Listas de la compra'"></Header>
+    <Footer></Footer>
+    <IonContent>
+      <IonFab horizontal="end" vertical="bottom" slot="fixed">
+        <IonFabButton @click="addNewShoppinglist">
+          <IonIcon name="add-outline" />
+        </IonFabButton>
+      </IonFab>
+      <IonList>
+        <IonItem v-for="shoppinglist in actualShoppinglistVisible">
+          <IonLabel>
+            <ShoppinglistCardInfo
+              :shoppinglist="shoppinglist"
+              @updateShoppinglistTables="updateShoppinglistTables"
+            ></ShoppinglistCardInfo>
+          </IonLabel>
+        </IonItem>
+      </IonList>
+      <IonInfiniteScroll @ionInfinite="ionInfinite">
+        <IonInfiniteScrollContent></IonInfiniteScrollContent>
+      </IonInfiniteScroll>
+    </IonContent>
+  </IonPage>
 </template>
 <style>
 .panelHeader {

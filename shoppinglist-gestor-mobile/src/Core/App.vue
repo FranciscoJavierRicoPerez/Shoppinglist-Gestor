@@ -1,17 +1,11 @@
 <template>
   <ion-app>
-    <!--<IonHeader class="custom-header">
-      <IonTitle class="custom-text">Gestor de Listas de Compra</IonTitle>
-    </IonHeader>-->
     <ion-router-outlet />
-    <!--<IonFooter class="custom-footer">
-      <IonTitle class="custom-text">Francisco Javier Rico Pérez - 2025/2026 v0.0.1</IonTitle>
-    </IonFooter>-->
   </ion-app>
 </template>
 
 <script setup lang="ts">
-import { IonApp, IonFooter, IonHeader, IonRouterOutlet, IonTitle } from '@ionic/vue';
+import { IonApp, IonRouterOutlet } from '@ionic/vue';
 </script>
 
 <style scoped>
