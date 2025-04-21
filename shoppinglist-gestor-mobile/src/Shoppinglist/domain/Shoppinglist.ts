@@ -4,7 +4,7 @@ export interface Shoppinglist {
   code: string
   closeDate: string | null
   totalPrice: number
-  isActive: boolean
+  isActive: Boolean | null
 }
 
 export const defaultShoppinglist = {

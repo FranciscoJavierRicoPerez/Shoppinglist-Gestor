@@ -2,11 +2,23 @@
 import {
   InfiniteScrollCustomEvent,
   IonContent,
+  IonFab,
+  IonFabButton,
+  IonHeader,
+  IonIcon,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
   IonItem,
   IonLabel,
   IonList,
+  IonSegment,
+  IonSegmentButton,
+  IonTab,
+  IonTabBar,
+  IonTabButton,
+  IonTabs,
+  IonTitle,
+  IonToolbar,
 } from "@ionic/vue";
 import { onMounted } from "vue";
 
@@ -64,7 +76,7 @@ function updateShoppinglistTables() {
   shoppinglistNoActiveTable.value = store.getNoActiveShoppinglist();
 }*/
 
-import { ref } from 'vue';
+import { ref } from "vue";
 import ShoppinglistCardInfo from "./ShoppinglistCardInfo.vue";
 import { defaultShoppinglist, Shoppinglist } from "../domain/Shoppinglist";
 import { useGetAllShoppinglist } from "../application/useGetAllShoppinglist";
@@ -89,9 +101,12 @@ const items = ref<Shoppinglist[]>([]);
 function generateItems() {
   const start = items.value.length + 1;
   for (let i = 0; i < 50; i++) {
-    items.value.push(store.shoppinglistArray[start + i]);
+    // ShoppinglistTable.vue (LINEA 105) => Revisar si hay alguna forma de obviar el !== undefined
+    if(store.shoppinglistArray[start + i] !== undefined) {
+      items.value.push(store.shoppinglistArray[start + i]);
+    }
   }
-};
+}
 
 // Evento infinito
 const ionInfinite = (event: InfiniteScrollCustomEvent) => {
@@ -104,15 +119,35 @@ const ionInfinite = (event: InfiniteScrollCustomEvent) => {
 onMounted(async () => {
   shoppinglistTable.value = await getAllShoppinglist();
   store.setShoppinglistArray(shoppinglistTable.value);
-  //updateShoppinglistTables();
-  generateItems()
+  updateShoppinglistTables();
+  generateItems();
 });
 
+async function addNewShoppinglist() {
+  console.log("INFO: Añadiendo una nueva lista de la compra");
+  let shoppinglistMetadata: Shoppinglist = await createShoppinglistMetadata();
+  console.log(shoppinglistMetadata);
+  if (shoppinglistMetadata) {
+    store.addShoppinglist(shoppinglistMetadata);
+    updateShoppinglistTables();
+    generateItems();
+  }
+}
+
+function updateShoppinglistTables() {
+  shoppinglistActiveTable.value = store.getActiveShoppinglist();
+  shoppinglistNoActiveTable.value = store.getNoActiveShoppinglist();
+}
 </script>
 <template>
-  <IonContent :fullscreen="true" class="ion-padding">
+  <IonContent>
+    <IonFab horizontal="end" vertical="bottom" slot="fixed">
+      <IonFabButton @click="addNewShoppinglist">
+        <IonIcon name="add-outline" />
+      </IonFabButton>
+    </IonFab>
     <IonList>
-      <IonItem v-for="(item) in items">
+      <IonItem v-for="item in items">
         <IonLabel>
           <ShoppinglistCardInfo :shoppinglist="item"></ShoppinglistCardInfo>
         </IonLabel>

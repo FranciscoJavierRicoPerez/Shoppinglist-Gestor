@@ -24,40 +24,53 @@ const props = defineProps({
   },
 });
 
-async function archiveShoppinglist() {
+/* async function archiveShoppinglist() {
   //let response: boolean = await updateIsActive()
   //if (response) {
   //store.updateShoppinglistActive(props.shoppinglist.id)
   //emit('updateShoppinglistTables')
   //}
-}
+}*/
 
-async function removeShoppinglist() {
+/*async function removeShoppinglist() {
   let response: boolean = await deleteShoppinglist(props.shoppinglist.id);
   if (response) {
     //store.removeShoppinglist(props.shoppinglist.id)
     emit("updateShoppinglistTables");
   }
-}
+}*/
 </script>
 <template>
-  <IonCard :class="props.shoppinglist.isActive ? 'card-background-actives-card' : 'card-background-no-actives-card'">
+  <IonCard
+    :class="
+      props.shoppinglist?.isActive === false ||
+      props.shoppinglist?.isActive === null
+        ? 'card-background-no-actives-card'
+        : 'card-background-actives-card'
+    "
+  >
     <IonCardHeader>
-      <IonCardTitle>{{ props.shoppinglist.code }}</IonCardTitle>
-      <IonCardSubtitle>{{ props.shoppinglist.creationDate }}</IonCardSubtitle>
+      <IonCardTitle>{{ props.shoppinglist?.code }}</IonCardTitle>
+      <IonCardSubtitle>{{ props.shoppinglist?.creationDate }}</IonCardSubtitle>
     </IonCardHeader>
     <IonCardContent>
-      <div>{{ props.shoppinglist.totalPrice }}</div>
-      <div v-if="props.shoppinglist.isActive">
+      <div>{{ props.shoppinglist?.totalPrice }}</div>
+      <div v-if="props.shoppinglist?.isActive">
         <IonChip :color="'success'">Activo</IonChip>
       </div>
       <div v-else>
         <IonChip :color="'warning'">Archivado</IonChip>
       </div>
     </IonCardContent>
-    <IonButton class="buttons-separation" shape="round" color="tertiary">Archivar</IonButton>
-    <IonButton class="buttons-separation" shape="round" color="primary">Ver</IonButton>
-    <IonButton class="buttons-separation"shape="round" color="danger">Eliminar</IonButton>
+    <IonButton class="buttons-separation" shape="round" color="tertiary"
+      >Archivar</IonButton
+    >
+    <IonButton class="buttons-separation" shape="round" color="primary"
+      >Ver</IonButton
+    >
+    <IonButton class="buttons-separation" shape="round" color="danger"
+      >Eliminar</IonButton
+    >
   </IonCard>
 </template>
 <style lang="css">
@@ -76,9 +89,8 @@ async function removeShoppinglist() {
 }
 
 .buttons-separation {
-  margin-left: 2rem;
+  margin-left: 1rem;
   margin-bottom: 1rem;
-
 }
 .tag-custom {
   font-size: large;

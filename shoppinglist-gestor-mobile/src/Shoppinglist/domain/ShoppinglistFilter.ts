@@ -11,5 +11,5 @@ export const defaultShoppinglistFilter = {
   code: '',
   closeDate: null,
   totalPrice: null,
-  isActive: null,
+  isActive: false,
 }
