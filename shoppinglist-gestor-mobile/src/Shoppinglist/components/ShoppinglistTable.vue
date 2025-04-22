@@ -60,13 +60,7 @@ onMounted(async () => {
 watch(selectedTab, (newSelectedTab) => {
   selectedTab.value = newSelectedTab;
   actualShoppinglistVisible.value = [];
-  if (selectedTab.value === "all") {
-    actualShoppinglistVisible.value = store.shoppinglistArray;
-  } else if (selectedTab.value === "actives") {
-    actualShoppinglistVisible.value = store.getActiveShoppinglist();
-  } else {
-    actualShoppinglistVisible.value = store.getNoActiveShoppinglist();
-  }
+  updateShoppinglistElementsVisible(false);
 });
 
 // Este metodo realiza el calculo de los elementos que van a ser visible, va de 50 en 50
@@ -76,34 +70,22 @@ function updateShoppinglistElementsVisible(removedObject: boolean) {
     // para que asi la lista de actuales visibles corresponda
     actualShoppinglistVisible.value = [];
   }
-  // !!! REFACTORIZAR URGENTE ¡¡¡¡
   const start = actualShoppinglistVisible.value.length;
+  // Indicamos con que lista se debe trabajar en funcion del tab seleccionado
+  let selected_list: Shoppinglist[] = [];
+  if (selectedTab.value === "all") {
+    selected_list = store.shoppinglistArray;
+  }
+  if (selectedTab.value === "actives") {
+    selected_list = shoppinglistActiveTable.value;
+  }
+  if (selectedTab.value === "archives") {
+    selected_list = shoppinglistNoActiveTable.value;
+  }
   for (let i = 0; i < 50; i++) {
     // ShoppinglistTable.vue (LINEA 105) => Revisar si hay alguna forma de obviar el !== undefined
-    if (store.shoppinglistArray[start + i] !== undefined) {
-      if (selectedTab.value === "all") {
-        actualShoppinglistVisible.value.push(
-          store.shoppinglistArray[start + i]
-        );
-      } else {
-        if (
-          selectedTab.value === "actives" &&
-          store.shoppinglistArray[start + i].isActive
-        ) {
-          actualShoppinglistVisible.value.push(
-            store.shoppinglistArray[start + i]
-          );
-        } else {
-          if (
-            selectedTab.value === "archives" &&
-            store.shoppinglistArray[start + i].isActive === false
-          ) {
-            actualShoppinglistVisible.value.push(
-              store.shoppinglistArray[start + i]
-            );
-          }
-        }
-      }
+    if (selected_list[start + i] !== undefined) {
+      actualShoppinglistVisible.value.push(selected_list[start + i]);
     }
   }
 }
