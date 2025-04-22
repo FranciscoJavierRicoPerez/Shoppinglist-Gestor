@@ -34,7 +34,7 @@
   {
     "id": 5,
     "creationDate": "04/12/2024",
-    "code": "SHOPPINGLIST-4",
+    "code": "SHOPPINGLIST-5",
     "closeDate": null,
     "totalPrice": 100,
     "isActive": false
@@ -42,7 +42,7 @@
   {
     "id": 6,
     "creationDate": "04/12/2024",
-    "code": "SHOPPINGLIST-4",
+    "code": "SHOPPINGLIST-6",
     "closeDate": null,
     "totalPrice": 100,
     "isActive": true
@@ -50,7 +50,7 @@
   {
     "id": 7,
     "creationDate": "04/12/2024",
-    "code": "SHOPPINGLIST-4",
+    "code": "SHOPPINGLIST-7",
     "closeDate": null,
     "totalPrice": 100,
     "isActive": false
@@ -58,7 +58,7 @@
   {
     "id": 8,
     "creationDate": "04/12/2024",
-    "code": "SHOPPINGLIST-4",
+    "code": "SHOPPINGLIST-8",
     "closeDate": null,
     "totalPrice": 100,
     "isActive": true
