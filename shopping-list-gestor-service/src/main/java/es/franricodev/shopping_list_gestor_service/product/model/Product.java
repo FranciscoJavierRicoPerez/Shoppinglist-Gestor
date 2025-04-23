@@ -1,7 +1,5 @@
 package es.franricodev.shopping_list_gestor_service.product.model;
 
-import es.franricodev.shopping_list_gestor_service.priceCalculator.model.GenericPriceCalculator;
-import es.franricodev.shopping_list_gestor_service.priceCalculator.model.PriceCalculatorType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
@@ -38,9 +36,5 @@ public class Product implements Serializable {
     @Null
     @Column(name = "UPDATE_DATE")
     private Date updateDate;
-
-    private PriceCalculatorType priceCalculatorType;
-
-    private GenericPriceCalculator calculator;
 
 }
