@@ -11,8 +11,12 @@ import {
   IonLabel,
   IonList,
   IonPage,
+  IonSegment,
+  IonSegmentButton,
+  IonSegmentContent,
+  IonSegmentView,
 } from "@ionic/vue";
-import { onMounted } from "vue";
+import { onMounted, watch } from "vue";
 import { ref } from "vue";
 import ShoppinglistCardInfo from "./ShoppinglistCardInfo.vue";
 import { defaultShoppinglist, Shoppinglist } from "../domain/Shoppinglist";
@@ -32,8 +36,32 @@ const shoppinglistNoActiveTable = ref<Shoppinglist[]>([
 const { refetch: createShoppinglistMetadata } = useCreateShoppinglistMetadata();
 const store = useShoppinglistStore();
 
+// Map con las secciones
+const mapSections = ref(
+  new Map<string, string>([
+    ["all", "Todas"],
+    ["actives", "Activas"],
+    ["archives", "Archivadas"],
+  ])
+);
+
+let selectedTab = ref<string>("all");
+
 // Este listado representa los elementos que son visibles actualmente en la pantalla
 const actualShoppinglistVisible = ref<Shoppinglist[]>([]);
+
+onMounted(async () => {
+  shoppinglistTable.value = await getAllShoppinglist();
+  console.log(shoppinglistTable.value);
+  store.setShoppinglistArray(shoppinglistTable.value);
+  updateShoppinglistTables(false);
+});
+
+watch(selectedTab, (newSelectedTab) => {
+  selectedTab.value = newSelectedTab;
+  actualShoppinglistVisible.value = [];
+  updateShoppinglistElementsVisible(false);
+});
 
 // Este metodo realiza el calculo de los elementos que van a ser visible, va de 50 en 50
 function updateShoppinglistElementsVisible(removedObject: boolean) {
@@ -42,11 +70,22 @@ function updateShoppinglistElementsVisible(removedObject: boolean) {
     // para que asi la lista de actuales visibles corresponda
     actualShoppinglistVisible.value = [];
   }
-  const start = actualShoppinglistVisible.value.length + 1;
+  const start = actualShoppinglistVisible.value.length;
+  // Indicamos con que lista se debe trabajar en funcion del tab seleccionado
+  let selected_list: Shoppinglist[] = [];
+  if (selectedTab.value === "all") {
+    selected_list = store.shoppinglistArray;
+  }
+  if (selectedTab.value === "actives") {
+    selected_list = shoppinglistActiveTable.value;
+  }
+  if (selectedTab.value === "archives") {
+    selected_list = shoppinglistNoActiveTable.value;
+  }
   for (let i = 0; i < 50; i++) {
     // ShoppinglistTable.vue (LINEA 105) => Revisar si hay alguna forma de obviar el !== undefined
-    if (store.shoppinglistArray[start + i] !== undefined) {
-      actualShoppinglistVisible.value.push(store.shoppinglistArray[start + i]);
+    if (selected_list[start + i] !== undefined) {
+      actualShoppinglistVisible.value.push(selected_list[start + i]);
     }
   }
 }
@@ -58,12 +97,6 @@ const ionInfinite = (event: InfiniteScrollCustomEvent) => {
     event.target.complete();
   }, 500);
 };
-
-onMounted(async () => {
-  shoppinglistTable.value = await getAllShoppinglist();
-  store.setShoppinglistArray(shoppinglistTable.value);
-  updateShoppinglistTables(false);
-});
 
 async function addNewShoppinglist() {
   console.log("INFO: Añadiendo una nueva lista de la compra");
@@ -87,24 +120,38 @@ function updateShoppinglistTables(removedObject: boolean = true) {
     <Header :title="'Listas de la compra'"></Header>
     <Footer></Footer>
     <IonContent>
+      <IonSegment>
+        <IonSegmentButton
+          v-for="value in mapSections"
+          :value="value[0]"
+          :content-id="value[0]"
+          @click="selectedTab = value[0]"
+        >
+          <IonLabel>{{ value[1] }}</IonLabel>
+        </IonSegmentButton>
+      </IonSegment>
+      <IonSegmentView>
+        <IonSegmentContent v-for="value in mapSections" :id="value[0]">
+          <IonList>
+            <IonItem v-for="shoppinglist in actualShoppinglistVisible">
+              <IonLabel>
+                <ShoppinglistCardInfo
+                  :shoppinglist="shoppinglist"
+                  @updateShoppinglistTables="updateShoppinglistTables"
+                ></ShoppinglistCardInfo>
+              </IonLabel>
+            </IonItem>
+          </IonList>
+          <IonInfiniteScroll @ionInfinite="ionInfinite">
+            <IonInfiniteScrollContent></IonInfiniteScrollContent>
+          </IonInfiniteScroll>
+        </IonSegmentContent>
+      </IonSegmentView>
       <IonFab horizontal="end" vertical="bottom" slot="fixed">
         <IonFabButton @click="addNewShoppinglist">
           <IonIcon name="add-outline" />
         </IonFabButton>
       </IonFab>
-      <IonList>
-        <IonItem v-for="shoppinglist in actualShoppinglistVisible">
-          <IonLabel>
-            <ShoppinglistCardInfo
-              :shoppinglist="shoppinglist"
-              @updateShoppinglistTables="updateShoppinglistTables"
-            ></ShoppinglistCardInfo>
-          </IonLabel>
-        </IonItem>
-      </IonList>
-      <IonInfiniteScroll @ionInfinite="ionInfinite">
-        <IonInfiniteScrollContent></IonInfiniteScrollContent>
-      </IonInfiniteScroll>
     </IonContent>
   </IonPage>
 </template>
