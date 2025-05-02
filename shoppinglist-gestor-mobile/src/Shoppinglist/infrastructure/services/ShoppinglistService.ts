@@ -31,6 +31,6 @@ export function createShoppinglistDetails(data: ResponseShoppinglistDetails): Sh
     closeDate: data.closeDate,
     totalPrice: data.totalPrice,
     isActive: data.isActive,
-    items: createShoppinglistItemArray(data.items),
+    items: data.items !== null ? createShoppinglistItemArray(data.items) : [],
   }
 }

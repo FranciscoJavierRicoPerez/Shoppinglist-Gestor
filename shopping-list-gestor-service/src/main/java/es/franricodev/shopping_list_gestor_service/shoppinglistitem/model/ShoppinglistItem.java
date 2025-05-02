@@ -29,6 +29,8 @@ public class ShoppinglistItem implements Serializable {
     @Column(name = "QUANTITY")
     private Integer quantity;
 
-    private Product product;
+
+
+    // private Product product;
 
 }
