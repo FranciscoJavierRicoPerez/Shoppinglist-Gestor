@@ -45,7 +45,7 @@ public class ShoppinglistController {
     }
 
     @DeleteMapping("/v1/delete/{id}")
-    public ResponseEntity<?> deleteShoppinglist(@PathVariable Long id) {
+    public ResponseEntity<Boolean> deleteShoppinglist(@PathVariable Long id) {
         LOGGER.info("Delete of the shoppinglist with id: {}", id);
         HttpStatus httpStatus = HttpStatus.OK;
         try {
@@ -54,7 +54,7 @@ public class ShoppinglistController {
             LOGGER.error(e.getMessage());
             httpStatus = HttpStatus.BAD_REQUEST;
         }
-        return new ResponseEntity<>(httpStatus);
+        return new ResponseEntity<>(!httpStatus.isError(),httpStatus);
     }
 
     @PutMapping("/v1/update")
