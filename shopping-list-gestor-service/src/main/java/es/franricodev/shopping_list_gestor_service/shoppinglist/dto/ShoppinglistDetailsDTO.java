@@ -1,8 +1,10 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglist.dto;
 
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.ShoppinglistItemDTO;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class ShoppinglistDetailsDTO {
@@ -12,5 +14,5 @@ public class ShoppinglistDetailsDTO {
     private Date closeDate;
     private Double totalPrice;
     private Boolean isActive;
-    // private List<ProductDTO> products;
+    private List<ShoppinglistItemDTO> items;
 }

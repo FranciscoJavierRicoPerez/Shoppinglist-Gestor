@@ -36,8 +36,6 @@ const route = useRoute();
 onMounted(async () => {
   // We have to obtain the object ShoppinglistDetails
   const param = Number(route.params.id);
-  console.log(param);
-  debugger;
   shoppinglistDetails.value = await getShoppinglistDetails(param);
   updateShoppinglistItemsElementsVisible();
 });

@@ -10,8 +10,8 @@ async function getShoppinglistDetails(id: number): Promise<ShoppinglistDetails> 
 }
 
 async function Api(id: number): Promise<ResponseShoppinglistDetails> {
-  const url = import.meta.env.VITE_API_URL_COMPUTER + 'api/shoppinglist/v1' + id;
-  const response = await axios.get('http://192.168.18.7:9000/');
+  const url = import.meta.env.VITE_API_URL_COMPUTER + 'api/shoppinglist/v1/' + id + '/details';
+  const response = await axios.get(url);
   return response.data;
 }
 
