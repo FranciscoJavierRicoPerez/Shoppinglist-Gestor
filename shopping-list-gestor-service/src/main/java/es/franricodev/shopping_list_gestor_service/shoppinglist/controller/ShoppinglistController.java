@@ -57,6 +57,7 @@ public class ShoppinglistController {
         return new ResponseEntity<>(!httpStatus.isError(),httpStatus);
     }
 
+    // TODO: Conectar con el FE
     @PutMapping("/v1/update")
     public ResponseEntity<ShoppinglistDTO> updateShoppinglist(@RequestBody RequestUpdateShoppinglistDTO request) {
         LOGGER.info("Update the shoppinglist with id: {}", request.getId());
@@ -71,6 +72,7 @@ public class ShoppinglistController {
         return new ResponseEntity<>(updated, httpStatus);
     }
 
+    // TODO: Conectar con el FE
     @GetMapping("/v1/filter")
     public ResponseEntity<List<ShoppinglistDTO>> filterShoppinglist(
             @RequestParam(name = "code", required = false) String code,

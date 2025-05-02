@@ -25,7 +25,7 @@ const props = defineProps({
 });
 
 async function archiveShoppinglist() {
-  let response: boolean = await updateIsActive();
+  let response: boolean = await updateIsActive(props.shoppinglist.id);
   if (response) {
     store.updateShoppinglistActive(props.shoppinglist.id);
     emit("updateShoppinglistTables");
