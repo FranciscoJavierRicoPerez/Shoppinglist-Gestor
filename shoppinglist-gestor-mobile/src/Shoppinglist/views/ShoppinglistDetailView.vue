@@ -23,6 +23,7 @@ import {
 import { useGetShoppinglistDetails } from "@/Shoppinglist/application/useGetShoppinglistDetails";
 import { ShoppinglistItem } from "@/ShoppinglistItem/domain/ShoppinglistItem";
 import ShoppinglistItemCard from '@/ShoppinglistItem/components/ShoppinglistItemCard.vue';
+import { useRoute } from "vue-router";
 const { refetch: getShoppinglistDetails } = useGetShoppinglistDetails();
 
 const shoppinglistDetails = ref<ShoppinglistDetails>({
@@ -30,10 +31,14 @@ const shoppinglistDetails = ref<ShoppinglistDetails>({
 });
 
 const actualShoppinglistItemsVisible = ref<ShoppinglistItem[]>([]);
+const route = useRoute();
 
 onMounted(async () => {
   // We have to obtain the object ShoppinglistDetails
-  shoppinglistDetails.value = await getShoppinglistDetails();
+  const param = Number(route.params.id);
+  console.log(param);
+  debugger;
+  shoppinglistDetails.value = await getShoppinglistDetails(param);
   updateShoppinglistItemsElementsVisible();
 });
 

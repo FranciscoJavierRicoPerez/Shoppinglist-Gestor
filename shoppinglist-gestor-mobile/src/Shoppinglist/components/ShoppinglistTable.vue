@@ -120,7 +120,11 @@ function updateShoppinglistTables(removedObject: boolean = true) {
     <Header :title="'Listas de la compra'"></Header>
     <Footer></Footer>
     <IonContent>
-      <IonSegment>
+      <div v-if="actualShoppinglistVisible.length === 0">
+        <p>NO LLEGA NADA!</p> 
+      </div>
+      <div v-else>
+        <IonSegment>
         <IonSegmentButton
           v-for="value in mapSections"
           :value="value[0]"
@@ -147,6 +151,7 @@ function updateShoppinglistTables(removedObject: boolean = true) {
           </IonInfiniteScroll>
         </IonSegmentContent>
       </IonSegmentView>
+      </div>
       <IonFab horizontal="end" vertical="bottom" slot="fixed">
         <IonFabButton @click="addNewShoppinglist">
           <IonIcon name="add-outline" />

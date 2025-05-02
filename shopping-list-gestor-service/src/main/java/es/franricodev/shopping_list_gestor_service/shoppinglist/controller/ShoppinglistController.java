@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@CrossOrigin(origins = {"http://localhost:8100/", "http://192.168.18.7:9000/", "*"})
 @RestController
 @RequestMapping("/api/shoppinglist")
 public class ShoppinglistController {
@@ -111,7 +112,7 @@ public class ShoppinglistController {
     }
 
     @PutMapping("/v1/{id}/update/isActive")
-    public ResponseEntity<Boolean> updateShoppinglistIsActiveValue(@PathVariable(name = "id") Long idShoppinglist){
+    public ResponseEntity<Boolean> updateShoppinglistIsActiveValue(@PathVariable(name = "id") Long idShoppinglist) {
         LOGGER.info("Update the value isActive of the shoppinglist with id: {}", idShoppinglist);
         HttpStatus httpStatus = HttpStatus.OK;
         ShoppinglistDTO shoppinglistDTO = null;

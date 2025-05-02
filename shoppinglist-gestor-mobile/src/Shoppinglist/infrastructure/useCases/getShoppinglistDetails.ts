@@ -2,9 +2,17 @@ import type { ShoppinglistDetails } from '@/Shoppinglist/domain/ShoppinglistDeta
 import type { ResponseShoppinglistDetails } from '@/Shoppinglist/infrastructure/models/ResponseShoppinglistDetails'
 import responseGetShoppinglistDetails from '@/Shoppinglist/infrastructure/mocks/responseGetShoppinglistDetails.json'
 import { createShoppinglistDetails } from '@/Shoppinglist/infrastructure/services/ShoppinglistService'
+import axios from 'axios'
 
-async function getShoppinglistDetails(): Promise<ShoppinglistDetails> {
-  return createShoppinglistDetails(await InMemory())
+async function getShoppinglistDetails(id: number): Promise<ShoppinglistDetails> {
+  const response : ResponseShoppinglistDetails = import.meta.env.VITA_DATA_ACCESS === 'LOCAL' ? await InMemory() : await Api(id); 
+  return createShoppinglistDetails(response)
+}
+
+async function Api(id: number): Promise<ResponseShoppinglistDetails> {
+  const url = import.meta.env.VITE_API_URL_COMPUTER + 'api/shoppinglist/v1' + id;
+  const response = await axios.get('http://192.168.18.7:9000/');
+  return response.data;
 }
 
 async function InMemory(): Promise<ResponseShoppinglistDetails> {
