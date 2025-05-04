@@ -15,6 +15,7 @@ import {
   IonSegmentButton,
   IonSegmentContent,
   IonSegmentView,
+  SegmentChangeEventDetail,
 } from "@ionic/vue";
 import { onMounted, watch } from "vue";
 import { ref } from "vue";
@@ -101,7 +102,6 @@ const ionInfinite = (event: InfiniteScrollCustomEvent) => {
 async function addNewShoppinglist() {
   console.log("INFO: Añadiendo una nueva lista de la compra");
   let shoppinglistMetadata: Shoppinglist = await createShoppinglistMetadata();
-  console.log(shoppinglistMetadata);
   if (shoppinglistMetadata) {
     store.addShoppinglist(shoppinglistMetadata);
     updateShoppinglistTables(false);
@@ -114,13 +114,18 @@ function updateShoppinglistTables(removedObject: boolean = true) {
   shoppinglistNoActiveTable.value = store.getNoActiveShoppinglist();
   updateShoppinglistElementsVisible(removedObject);
 }
+
+function prueba(data: SegmentChangeEventDetail) {
+  selectedTab.value = String(data.value)
+}
+
 </script>
 <template>
   <IonPage>
     <Header :title="'Listas de la compra'"></Header>
     <Footer></Footer>
     <IonContent>
-      <IonSegment>
+      <IonSegment @ion-change="prueba($event.detail)">
         <IonSegmentButton
           v-for="value in mapSections"
           :value="value[0]"
