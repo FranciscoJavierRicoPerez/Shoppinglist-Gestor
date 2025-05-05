@@ -115,7 +115,7 @@ function updateShoppinglistTables(removedObject: boolean = true) {
   updateShoppinglistElementsVisible(removedObject);
 }
 
-function prueba(data: SegmentChangeEventDetail) {
+function assignActualSelectedTabBySlide(data: SegmentChangeEventDetail) {
   selectedTab.value = String(data.value)
 }
 
@@ -125,7 +125,7 @@ function prueba(data: SegmentChangeEventDetail) {
     <Header :title="'Listas de la compra'"></Header>
     <Footer></Footer>
     <IonContent>
-      <IonSegment @ion-change="prueba($event.detail)">
+      <IonSegment @ion-change="assignActualSelectedTabBySlide($event.detail)">
         <IonSegmentButton
           v-for="value in mapSections"
           :value="value[0]"
