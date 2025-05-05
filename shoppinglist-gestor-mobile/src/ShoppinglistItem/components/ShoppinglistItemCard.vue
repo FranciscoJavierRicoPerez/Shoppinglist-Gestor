@@ -24,7 +24,7 @@ const props = defineProps({
 <template>
   <IonItem v-for="shoppinglistItem in shoppinglistItemList">
     <IonLabel>
-      <IonCard>
+      <IonCard class="customCard">
         <IonCardHeader>
           <IonCardTitle>{{ shoppinglistItem.product?.name }}</IonCardTitle>
         </IonCardHeader>
@@ -49,12 +49,7 @@ const props = defineProps({
   </IonItem>
 </template>
 <style lang="css">
-.mainCard {
-  margin-bottom: 1rem;
-  margin-right: 1rem;
-}
-.cardOrganization {
-  display: flex;
-  flex-wrap: wrap;
+.customCard {
+  background-color: rgb(234, 250, 227)
 }
 </style>
