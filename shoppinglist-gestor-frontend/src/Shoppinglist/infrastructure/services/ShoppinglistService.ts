@@ -2,7 +2,7 @@ import type { Shoppinglist } from '@/Shoppinglist/domain/Shoppinglist'
 import type { ResponseShoppinglist } from '@/Shoppinglist/infrastructure/models/ResponseShoppinglist'
 import type { ResponseShoppinglistDetails } from '../models/ResponseShoppinglistDetails'
 import type { ShoppinglistDetails } from '@/Shoppinglist/domain/ShoppinglistDetails'
-import { createProductArray } from '@/Product/infrastructure/services/ProductService'
+import { createShoppinglistItemArray } from '@/ShoppinglistItem/infrastructure/services/shoppinglistItemService'
 
 export function createShoppinglistArray(data: ResponseShoppinglist[]): Shoppinglist[] {
   let shoppinglistArray: Shoppinglist[] = []
@@ -24,6 +24,7 @@ export function createShoppinglist(data: ResponseShoppinglist): Shoppinglist {
 }
 
 export function createShoppinglistDetails(data: ResponseShoppinglistDetails): ShoppinglistDetails {
+  debugger
   return {
     id: data.id,
     creationDate: data.creationDate,
@@ -31,6 +32,6 @@ export function createShoppinglistDetails(data: ResponseShoppinglistDetails): Sh
     closeDate: data.closeDate,
     totalPrice: data.totalPrice,
     isActive: data.isActive,
-    products: createProductArray(data.products),
+    items: createShoppinglistItemArray(data.items),
   }
 }

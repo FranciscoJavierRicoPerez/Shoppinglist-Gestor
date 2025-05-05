@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@CrossOrigin(origins = {"http://localhost:8100/", "http://192.168.18.7:9000/", "*"})
 @RestController
 @RequestMapping("/api/shoppinglist")
 public class ShoppinglistController {
@@ -44,7 +45,7 @@ public class ShoppinglistController {
     }
 
     @DeleteMapping("/v1/delete/{id}")
-    public ResponseEntity<?> deleteShoppinglist(@PathVariable Long id) {
+    public ResponseEntity<Boolean> deleteShoppinglist(@PathVariable Long id) {
         LOGGER.info("Delete of the shoppinglist with id: {}", id);
         HttpStatus httpStatus = HttpStatus.OK;
         try {
@@ -53,9 +54,10 @@ public class ShoppinglistController {
             LOGGER.error(e.getMessage());
             httpStatus = HttpStatus.BAD_REQUEST;
         }
-        return new ResponseEntity<>(httpStatus);
+        return new ResponseEntity<>(!httpStatus.isError(),httpStatus);
     }
 
+    // TODO: Conectar con el FE
     @PutMapping("/v1/update")
     public ResponseEntity<ShoppinglistDTO> updateShoppinglist(@RequestBody RequestUpdateShoppinglistDTO request) {
         LOGGER.info("Update the shoppinglist with id: {}", request.getId());
@@ -70,6 +72,7 @@ public class ShoppinglistController {
         return new ResponseEntity<>(updated, httpStatus);
     }
 
+    // TODO: Conectar con el FE
     @GetMapping("/v1/filter")
     public ResponseEntity<List<ShoppinglistDTO>> filterShoppinglist(
             @RequestParam(name = "code", required = false) String code,
@@ -111,7 +114,7 @@ public class ShoppinglistController {
     }
 
     @PutMapping("/v1/{id}/update/isActive")
-    public ResponseEntity<Boolean> updateShoppinglistIsActiveValue(@PathVariable(name = "id") Long idShoppinglist){
+    public ResponseEntity<Boolean> updateShoppinglistIsActiveValue(@PathVariable(name = "id") Long idShoppinglist) {
         LOGGER.info("Update the value isActive of the shoppinglist with id: {}", idShoppinglist);
         HttpStatus httpStatus = HttpStatus.OK;
         ShoppinglistDTO shoppinglistDTO = null;
