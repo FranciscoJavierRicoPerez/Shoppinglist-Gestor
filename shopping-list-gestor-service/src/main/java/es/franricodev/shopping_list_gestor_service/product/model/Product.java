@@ -22,19 +22,8 @@ public class Product implements Serializable {
     @Column(name = "NAME")
     private String name;
 
-    @Column(name = "PRICE")
-    private Double price;
-
     @NotNull
     @Column(name = "CREATION_DATE")
     private Date creationDate;
-
-    @NotNull
-    @Column(name = "LAST_BUY_DATE")
-    private Date lastBuyDate;
-
-    @Null
-    @Column(name = "UPDATE_DATE")
-    private Date updateDate;
 
 }

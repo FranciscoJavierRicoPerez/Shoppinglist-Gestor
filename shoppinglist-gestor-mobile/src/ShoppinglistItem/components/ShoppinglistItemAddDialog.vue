@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ProductSelector from "@/Product/components/ProductSelector.vue";
 import {
   IonButton,
   IonButtons,
@@ -32,16 +33,11 @@ function closeModal() {
       </IonToolbar>
     </IonHeader>
     <IonContent>
-      <p>Body del modal</p>
+      <ProductSelector></ProductSelector>
     </IonContent>
   </IonModal>
 </template>
 <style lang="css">
-.custom-header {
-  background-color: rgb(51, 255, 153); 
-  margin-bottom: 5px;
-  height: 75px;
-}
 .custom-text-header {
   text-align: center;
   font-size: large;
