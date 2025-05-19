@@ -44,5 +44,4 @@ public class Shoppinglist implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "shoppinglist_id")
     private List<ShoppinglistItem> items;
-
 }

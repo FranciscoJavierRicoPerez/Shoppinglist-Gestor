@@ -6,7 +6,7 @@ import { IonItem, IonList, IonSelect, IonSelectOption } from "@ionic/vue";
 
 const { refetch: getAllProductList } = useGetAllProducts();
 const productSelectorList = ref<Product[]>([]);
-
+const productSelected = ref<Product | null>(null);
 onMounted(async () => {
   productSelectorList.value = await getAllProductList();
 });
@@ -15,9 +15,9 @@ onMounted(async () => {
   <IonList>
     <IonItem>
       <IonSelect aria-label="Productos" placeholder="Selecciona un producto">
-        <IonSelectOption v-for="element in productSelectorList">{{
-          element.name
-        }}</IonSelectOption>
+        <IonSelectOption v-for="element in productSelectorList">
+          {{ element }}</IonSelectOption
+        >
       </IonSelect>
     </IonItem>
   </IonList>

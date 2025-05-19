@@ -1,6 +1,5 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglistitem.model;
 
-import es.franricodev.shopping_list_gestor_service.product.model.Product;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,9 +27,5 @@ public class ShoppinglistItem implements Serializable {
 
     @Column(name = "QUANTITY")
     private Integer quantity;
-
-
-
-    // private Product product;
 
 }
