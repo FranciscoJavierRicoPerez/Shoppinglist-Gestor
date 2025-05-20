@@ -21,7 +21,7 @@ import { onMounted, ref, watch } from "vue";
 import {
   defaultRequestNewShoppinglistItem,
   ResquestNewShoppinglistItem,
-} from "../infrastructure/models/RequestNewShoppinglistItem";
+} from "@/ShoppinglistItem/infrastructure/models/RequestNewShoppinglistItem";
 import { Product } from "@/Product/domain/Product";
 import { useGetAllProducts } from "@/Product/application/useGetAllProducts";
 
@@ -41,6 +41,9 @@ const emit = defineEmits(["updateModalOpenValue"]);
 const productSelectorList = ref<Product[]>([]);
 const productSelected = ref<Product | null>(null);
 
+const calculateSystemSelectorList = ref<string[]>(["Precio Unitario", "KG/€"]);
+const calculateSystemSelected = ref<string>("");
+
 onMounted(async () => {
   productSelectorList.value = await getAllProductList();
 });
@@ -51,8 +54,23 @@ watch(productSelected, (newProductSelected) => {
   }
 });
 
+watch(calculateSystemSelected, (newCalculateSystemSelected) => {
+  if (form.value && newCalculateSystemSelected) {
+    form.value.calculateSystem = newCalculateSystemSelected;
+  }
+});
+
 function closeModal() {
   emit("updateModalOpenValue");
+}
+
+function addShoppinglistItem() {
+  console.log("INFO: Adding new shoppinglist item");
+}
+
+function verifyAddItemForm(): boolean {
+  // TODO: Añadir verificaciones para el formulario
+  return false;
 }
 </script>
 <template>
@@ -93,9 +111,65 @@ function closeModal() {
             label-placement="floating"
             placeholder="Nombre producto"
             v-model="form.requestProduct.name"
+            :disabled="
+              form.requestProduct.name !== '' && productSelected !== null
+            "
           ></IonInput>
         </IonCardContent>
       </IonCard>
+      <IonCard>
+        <IonCardHeader>
+          <IonCardTitle>Item</IonCardTitle>
+        </IonCardHeader>
+        <IonCardContent>
+          <IonList>
+            <IonItem>
+              <IonSelect
+                v-model="calculateSystemSelected"
+                aria-label="Calculo de precio"
+                placeholder="Selecciona el sistema de calculo"
+              >
+                <IonSelectOption
+                  v-for="(element, index) in calculateSystemSelectorList"
+                  :key="index"
+                  :value="element"
+                  >{{ element }}</IonSelectOption
+                >
+              </IonSelect>
+            </IonItem>
+          </IonList>
+        </IonCardContent>
+      </IonCard>
+      <!-- ION CARD PARA EL CALCULO DE LOS ITEMS EN PRECIO UNITARIO -->
+      <IonCard
+        v-if="
+          calculateSystemSelected !== '' &&
+          calculateSystemSelected === 'Precio Unitario'
+        "
+      >
+        <IonCardHeader>
+          <IonCardTitle>Precio Unitario</IonCardTitle>
+        </IonCardHeader>
+        <IonCardContent>
+          <IonInput
+            label="Precio"
+            label-placement="floating"
+            placeholder="Precio del producto"
+            v-model="form.unitaryPrice"
+            type="number"
+          ></IonInput>
+        </IonCardContent>
+      </IonCard>
+      <!-- ********************************************************* -->
+      <!-- ION CARD PARA EL CALCULO DE LOS ITEM EN KG/€-->
+      <!-- ********************************************************** -->
+      <IonButton
+        style="margin-left: 10px; margin-right: 10px"
+        expand="block"
+        @click="addShoppinglistItem()"
+        :disabled="verifyAddItemForm()"
+        >Añadir</IonButton
+      >
     </IonContent>
   </IonModal>
 </template>
