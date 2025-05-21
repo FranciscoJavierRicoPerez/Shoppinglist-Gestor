@@ -1,5 +1,6 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglistitem.model;
 
+import es.franricodev.shopping_list_gestor_service.product.model.Product;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,13 +20,20 @@ public class ShoppinglistItem implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "NAME")
+    private String name;
+
     @Column(name = "ASSIGNATION_LIST_DATE")
     private Date assignationToListDate;
 
-    @Column(name = "CALCULATED_PRICE")
+    private Product product;
+
+    /* @Column(name = "CALCULATED_PRICE")
     private Double calculatedPrice;
 
     @Column(name = "QUANTITY")
-    private Integer quantity;
+    private Integer quantity; */
+
+
 
 }

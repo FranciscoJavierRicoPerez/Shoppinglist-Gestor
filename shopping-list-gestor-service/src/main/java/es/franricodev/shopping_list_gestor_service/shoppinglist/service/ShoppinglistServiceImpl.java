@@ -100,4 +100,9 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
         return ShoppinglistMapper.INSTANCE.toDTO(shoppinglist);
     }
 
+    @Override
+    public Shoppinglist findShoppinglistById(Long id) throws ShoppinglistException {
+        return shoppinglistRepository.findById(id).orElseThrow(() -> new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND));
+    }
+
 }
