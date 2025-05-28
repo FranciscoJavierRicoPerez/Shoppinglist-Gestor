@@ -1,5 +1,8 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglistitem.service;
 
+import es.franricodev.shopping_list_gestor_service.calculateSystem.service.CalculateSystemService;
+import es.franricodev.shopping_list_gestor_service.itemUnit.model.ItemUnit;
+import es.franricodev.shopping_list_gestor_service.itemUnit.service.ItemUnitService;
 import es.franricodev.shopping_list_gestor_service.product.exception.ProductException;
 import es.franricodev.shopping_list_gestor_service.product.model.Product;
 import es.franricodev.shopping_list_gestor_service.product.service.ProductService;
@@ -22,6 +25,12 @@ import java.util.Date;
 public class ShoppinglistItemServiceImpl implements ShoppinglistItemService{
 
     @Autowired
+    private ItemUnitService itemUnitService;
+
+    @Autowired
+    private CalculateSystemService calculateSystemService;
+
+    @Autowired
     private ProductService productService;
 
     @Autowired
@@ -33,7 +42,7 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService{
     private final static Logger logger = LoggerFactory.getLogger(ShoppinglistItemServiceImpl.class);
 
     @Override
-    public ShoppinglistItemDTO createShoppinglistItem(
+    public ShoppinglistItem createShoppinglistItem(
             RequestCreateShoppinglistItem requestCreateShoppinglistItem,
             Long idShoppinglist) throws ShoppinglistItemException {
         logger.info("Creating a new shoppinglist item");
@@ -66,15 +75,23 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService{
             }
             // TODO: PASO_2
             if(product != null) {
-                shoppinglistItem.setProduct(product);
                 shoppinglistItem.setName(product.getName());
             }
             shoppinglistItem.setAssignationToListDate(new Date());
-
-
+            // TODO: PASO_3 -> Añadir al shoppinglistItem el producto
+            shoppinglistItem.getProducts().add(product);
+            // TODO: PASO_4 -> ASIGNAR SISTEMA DE CALCULO DE GASTOS
+            if(requestCreateShoppinglistItem.getProductId() != null) {
+                shoppinglistItem.setCalculateSystem(calculateSystemService.findCalculateSystemById(requestCreateShoppinglistItem.getProductId()));
+            }
+            // TODO: PASO_5 -> CREAR SISTEMA DE UNIDADES DEL PRODUCTO
+            ItemUnit itemUnit = itemUnitService.createItemUnit();
+            itemUnit.setUnitPrice(calculateSystemService.calculateProductPrice(shoppinglistItem.getCalculateSystem(), product));
+            shoppinglistItem.getItemUnits().add(itemUnit);
+            // TODO: PASO_X -> ¿Calcular la informacion asociada al producto creado?
+            return shoppinglistItem;
         } catch (ShoppinglistException | ProductException e) {
             throw new ShoppinglistItemException("ERR_CREATING_SHOPPINGLIST_ITEM");
         }
-        return null;
     }
 }

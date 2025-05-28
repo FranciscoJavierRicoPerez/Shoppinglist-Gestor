@@ -4,6 +4,6 @@ import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.Shoppi
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-//@Repository
-public interface ShoppinglistItemRepository{
+@Repository
+public interface ShoppinglistItemRepository extends JpaRepository<ShoppinglistItem, Long>{
 }

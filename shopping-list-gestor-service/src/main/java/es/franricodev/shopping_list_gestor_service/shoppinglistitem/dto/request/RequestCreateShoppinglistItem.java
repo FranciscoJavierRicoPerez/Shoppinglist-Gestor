@@ -8,5 +8,6 @@ public class RequestCreateShoppinglistItem {
 
     private Long productId;
     private String productName;
+    private Long calculateSystemId;
 
 }
