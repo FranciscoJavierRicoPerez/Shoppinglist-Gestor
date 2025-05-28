@@ -39,10 +39,4 @@ public class ShoppinglistItem implements Serializable {
 
     @ManyToMany(mappedBy = "shoppinglistItems")
     private Set<ItemUnit> itemUnits;
-
-    /* @Column(name = "QUANTITY")
-    private Integer quantity; */
-
-
-
 }
