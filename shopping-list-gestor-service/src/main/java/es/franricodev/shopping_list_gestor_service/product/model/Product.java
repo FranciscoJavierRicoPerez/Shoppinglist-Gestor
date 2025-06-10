@@ -18,7 +18,7 @@ public class Product implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     @Column(name = "NAME", unique = true)
     private String name;
@@ -31,9 +31,9 @@ public class Product implements Serializable {
             CascadeType.PERSIST, CascadeType.MERGE
     })
     @JoinTable(
-            name = "product_shoppinglistitem",
+            name = "product_shoppinglist_item",
             joinColumns = {@JoinColumn(name = "product_id")},
-            inverseJoinColumns = {@JoinColumn(name = "shoppinglistitem_id")}
+            inverseJoinColumns = {@JoinColumn(name = "shoppinglist_item_id")}
     )
     private Set<ShoppinglistItem> shoppinglistItems;
 

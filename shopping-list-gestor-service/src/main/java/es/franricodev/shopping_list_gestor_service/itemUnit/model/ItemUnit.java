@@ -22,12 +22,12 @@ public class ItemUnit {
     private Double unitPrice;
 
     @ManyToMany(cascade = {
-            CascadeType.PERSIST, CascadeType.MERGE
+            CascadeType.ALL
     })
     @JoinTable(
-            name = "itemUnit_shoppinglistItem",
-            joinColumns = {@JoinColumn(name = "itemUnit_id")},
-            inverseJoinColumns = {@JoinColumn(name = "shoppinglistItem_id")}
+            name = "item_unit_shoppinglist_item",
+            joinColumns = {@JoinColumn(name = "item_unit_id")},
+            inverseJoinColumns = {@JoinColumn(name = "shoppinglist_item_id")}
     )
     private Set<ShoppinglistItem> shoppinglistItems;
 }

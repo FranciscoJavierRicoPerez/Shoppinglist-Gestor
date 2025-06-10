@@ -7,6 +7,6 @@ import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.Shoppi
 
 public interface ShoppinglistItemService {
 
-    ShoppinglistItem createShoppinglistItem(RequestCreateShoppinglistItem requestCreateShoppinglistItem, Long idShoppinglist) throws ShoppinglistItemException;
+    ShoppinglistItemDTO createShoppinglistItem(RequestCreateShoppinglistItem requestCreateShoppinglistItem, Long idShoppinglist) throws ShoppinglistItemException;
 
 }

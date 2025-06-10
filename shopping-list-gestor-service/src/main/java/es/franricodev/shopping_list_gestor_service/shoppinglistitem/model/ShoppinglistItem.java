@@ -32,7 +32,8 @@ public class ShoppinglistItem implements Serializable {
     @ManyToMany(mappedBy = "shoppinglistItems")
     private Set<Product> products;
 
-    private CalculateSystem calculateSystem;
+    @ManyToMany(mappedBy = "shoppinglistItems")
+    private Set<CalculateSystem> calculateSystems;
 
     @Column(name = "CALCULATED_PRICE")
     private Double calculatedPrice;

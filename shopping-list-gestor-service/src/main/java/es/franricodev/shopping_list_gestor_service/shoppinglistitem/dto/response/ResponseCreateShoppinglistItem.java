@@ -1,5 +1,6 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response;
 
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.ShoppinglistItemDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,5 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResponseCreateShoppinglistItem {
+    private ShoppinglistItemDTO itemCreated;
     private String responseMessage;
 }

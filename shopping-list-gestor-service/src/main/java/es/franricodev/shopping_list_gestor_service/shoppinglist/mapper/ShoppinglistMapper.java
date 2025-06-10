@@ -5,6 +5,7 @@ import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestUpdat
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.ShoppinglistDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.ShoppinglistDetailsDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.model.Shoppinglist;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.mapper.ShoppinglistItemMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -14,10 +15,10 @@ import org.mapstruct.factory.Mappers;
 import java.util.Date;
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring", uses = {ShoppinglistItemMapper.class})
 public interface ShoppinglistMapper {
 
-    ShoppinglistMapper INSTANCE = Mappers.getMapper(ShoppinglistMapper.class);
+    // ShoppinglistMapper INSTANCE = Mappers.getMapper(ShoppinglistMapper.class);
 
     ShoppinglistDTO toDTO(Shoppinglist shoppinglist);
 
