@@ -13,10 +13,10 @@ import {
 
 import type { PropType } from "vue";
 import { RouterLink } from "vue-router";
-import type { ShoppinglistItem } from "@/ShoppinglistItem/domain/ShoppinglistItem";
+import { ShoppinglistItemMetadata } from "@/ShoppinglistItem/domain/ShoppinglistItemMetadata";
 const props = defineProps({
   shoppinglistItemList: {
-    type: Object as PropType<ShoppinglistItem[]>,
+    type: Object as PropType<ShoppinglistItemMetadata[]>,
     default: () => null,
   },
 });
@@ -26,18 +26,18 @@ const props = defineProps({
     <IonLabel>
       <IonCard class="customCard">
         <IonCardHeader>
-          <IonCardTitle>{{ shoppinglistItem.product?.name }}</IonCardTitle>
+          <IonCardTitle>{{ shoppinglistItem.name }}</IonCardTitle>
         </IonCardHeader>
         <IonCardSubtitle style="margin-left: 3rem">
           <IonChip color="primary"
-            >Cantidad: {{ shoppinglistItem.quantity }}</IonChip
+            >Cantidad: {{ shoppinglistItem.assignationToListDate }}</IonChip
           >
           <IonChip color="success"
-            >Precio: {{ shoppinglistItem.calculatedPrice }}</IonChip
+            >Precio: {{ shoppinglistItem.calculateSystemCode }}</IonChip
           >
         </IonCardSubtitle>
         <IonCardContent style="margin-left: 3rem">
-          <RouterLink :to="`/product/${shoppinglistItem.product?.id}}`"
+          <RouterLink :to="`/product/${shoppinglistItem.id}}`"
             ><IonButton shape="round" color="tertiary"
               >Ver</IonButton
             ></RouterLink

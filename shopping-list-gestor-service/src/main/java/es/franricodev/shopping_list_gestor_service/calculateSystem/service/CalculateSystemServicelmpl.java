@@ -27,9 +27,9 @@ public class CalculateSystemServicelmpl implements CalculateSystemService{
     }
 
     @Override
-    public CalculateSystem findCalculateSystemById(Long id) throws CalculateSystemException {
-        logger.info("Find the calculate system with id: {}", id);
-        return calculateSystemRepository.findById(id).orElseThrow(() -> new CalculateSystemException(CalculateSystemError.CALCULATE_SYSTEM_NOT_FOUND));
+    public CalculateSystem findCalculateSystemByCode(String code) throws CalculateSystemException {
+        logger.info("Find the calculate system with code: {}", code);
+        return calculateSystemRepository.findByCode(code).orElseThrow(() -> new CalculateSystemException(CalculateSystemError.CALCULATE_SYSTEM_NOT_FOUND));
     }
 
     @Override

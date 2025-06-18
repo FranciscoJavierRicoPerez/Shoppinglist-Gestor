@@ -1,6 +1,5 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglistitem.controller;
 
-import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.ShoppinglistItemDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseCreateShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.exception.ShoppinglistItemException;
@@ -14,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = {"http://localhost:8100/", "http://192.168.18.7:9000/", "*"})
 @RestController
 @RequestMapping("/api/shoppinglistitem")
 public class ShoppinglistItemController {

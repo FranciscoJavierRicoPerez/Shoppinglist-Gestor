@@ -9,7 +9,7 @@ public interface CalculateSystemService {
 
     Double calculateProductPrice(CalculateSystem calculateSystem, Product product);
 
-    CalculateSystem findCalculateSystemById(Long id) throws CalculateSystemException;
+    CalculateSystem findCalculateSystemByCode(String code) throws CalculateSystemException;
 
     void assignShoppinglistItemToCalculateSystem(ShoppinglistItem shoppinglistItem,CalculateSystem calculateSystem);
 

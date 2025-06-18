@@ -28,13 +28,14 @@ import { ShoppinglistItem } from "@/ShoppinglistItem/domain/ShoppinglistItem";
 import ShoppinglistItemCard from "@/ShoppinglistItem/components/ShoppinglistItemCard.vue";
 import { useRoute } from "vue-router";
 import ShoppinglistItemAddDialog from "@/ShoppinglistItem/components/ShoppinglistItemAddDialog.vue";
+import { ShoppinglistItemMetadata } from "@/ShoppinglistItem/domain/ShoppinglistItemMetadata";
 const { refetch: getShoppinglistDetails } = useGetShoppinglistDetails();
 
 const shoppinglistDetails = ref<ShoppinglistDetails>({
   ...defaultShoppinglistDetails,
 });
 
-const actualShoppinglistItemsVisible = ref<ShoppinglistItem[]>([]);
+const actualShoppinglistItemsVisible = ref<ShoppinglistItemMetadata[]>([]);
 const route = useRoute();
 
 const openModal = ref<boolean>(false);

@@ -15,6 +15,7 @@ import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.Shopping
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.exception.ShoppinglistItemException;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.mapper.ShoppinglistItemMapper;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.messages.ShoppinglistItemMessagesError;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.ShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.repository.ShoppinglistItemRepository;
 import org.slf4j.Logger;
@@ -72,14 +73,14 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
             shoppinglistItem.setProducts(new HashSet<Product>());
             shoppinglistItem.getProducts().add(product);
             CalculateSystem calculateSystem = null;
-            if(requestCreateShoppinglistItem.getCalculateSystemId() != null) {
-                logger.info("The calculate system with id {} is going to be assigned", requestCreateShoppinglistItem.getCalculateSystemId());
+            if(requestCreateShoppinglistItem.getCalculateSystemCode() != null) {
+                logger.info("The calculate system with id {} is going to be assigned", requestCreateShoppinglistItem.getCalculateSystemCode());
                 if(shoppinglistItem.getCalculateSystems() != null) {
-                    calculateSystem = calculateSystemService.findCalculateSystemById(requestCreateShoppinglistItem.getCalculateSystemId());
+                    calculateSystem = calculateSystemService.findCalculateSystemByCode(requestCreateShoppinglistItem.getCalculateSystemCode());
                     shoppinglistItem.getCalculateSystems().add(calculateSystem);
                 } else {
                     shoppinglistItem.setCalculateSystems(new HashSet<>());
-                    calculateSystem = calculateSystemService.findCalculateSystemById(requestCreateShoppinglistItem.getCalculateSystemId());
+                    calculateSystem = calculateSystemService.findCalculateSystemByCode(requestCreateShoppinglistItem.getCalculateSystemCode());
                     shoppinglistItem.getCalculateSystems().add(calculateSystem);
                 }
             }
@@ -98,7 +99,7 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
             ShoppinglistItemDTO shoppinglistItemDTO = shoppinglistItemMapper.shoppinglistItemToShoppinglistItemDTO(shoppinglistItem);
             return shoppinglistItemDTO;
         } catch (ShoppinglistException | ProductException | CalculateSystemException e) {
-            throw new ShoppinglistItemException("ERR_CREATING_SHOPPINGLIST_ITEM");
+            throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_CREATE_ERR);
         }
     }
 }

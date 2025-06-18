@@ -24,8 +24,11 @@ import {
 } from "@/ShoppinglistItem/infrastructure/models/RequestNewShoppinglistItem";
 import { Product } from "@/Product/domain/Product";
 import { useGetAllProducts } from "@/Product/application/useGetAllProducts";
-
+import { useCreateShoppinglistItem } from "@/ShoppinglistItem/application/useCreateShoppinglistItem";
+import { useRoute } from "vue-router";
+const route = useRoute();
 const { refetch: getAllProductList } = useGetAllProducts();
+const { refetch: createShoppinglistItem } = useCreateShoppinglistItem();
 defineProps({
   openModal: {
     type: Boolean,
@@ -41,7 +44,7 @@ const emit = defineEmits(["updateModalOpenValue"]);
 const productSelectorList = ref<Product[]>([]);
 const productSelected = ref<Product | null>(null);
 
-const calculateSystemSelectorList = ref<string[]>(["Precio Unitario", "KG/€"]);
+const calculateSystemSelectorList = ref<string[]>(["UP", "WP"]);
 const calculateSystemSelected = ref<string>("");
 
 onMounted(async () => {
@@ -50,6 +53,7 @@ onMounted(async () => {
 
 watch(productSelected, (newProductSelected) => {
   if (form.value && newProductSelected) {
+    form.value.requestProduct.productId = newProductSelected.id
     form.value.requestProduct.name = newProductSelected.name;
   }
 });
@@ -64,8 +68,11 @@ function closeModal() {
   emit("updateModalOpenValue");
 }
 
-function addShoppinglistItem() {
+async function addShoppinglistItem() {
   console.log("INFO: Adding new shoppinglist item");
+  console.log(form.value);
+  form.value.shoppinglistId = Number(route.params.id)
+  await createShoppinglistItem(form.value);
 }
 
 function verifyAddItemForm(): boolean {
@@ -144,7 +151,7 @@ function verifyAddItemForm(): boolean {
       <IonCard
         v-if="
           calculateSystemSelected !== '' &&
-          calculateSystemSelected === 'Precio Unitario'
+          calculateSystemSelected === 'UP'
         "
       >
         <IonCardHeader>
