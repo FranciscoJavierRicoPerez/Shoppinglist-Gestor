@@ -1,5 +1,7 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglistitem.model;
 
+import es.franricodev.shopping_list_gestor_service.calculateSystem.model.CalculateSystem;
+import es.franricodev.shopping_list_gestor_service.itemUnit.model.ItemUnit;
 import es.franricodev.shopping_list_gestor_service.product.model.Product;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -8,6 +10,7 @@ import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -20,17 +23,21 @@ public class ShoppinglistItem implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "NAME")
+    private String name;
+
     @Column(name = "ASSIGNATION_LIST_DATE")
     private Date assignationToListDate;
+
+    @ManyToMany(mappedBy = "shoppinglistItems")
+    private Set<Product> products;
+
+    @ManyToMany(mappedBy = "shoppinglistItems")
+    private Set<CalculateSystem> calculateSystems;
 
     @Column(name = "CALCULATED_PRICE")
     private Double calculatedPrice;
 
-    @Column(name = "QUANTITY")
-    private Integer quantity;
-
-
-
-    // private Product product;
-
+    @ManyToMany(mappedBy = "shoppinglistItems")
+    private Set<ItemUnit> itemUnits;
 }

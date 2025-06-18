@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { IonHeader, IonTitle } from "@ionic/vue";
+import { IonHeader, IonTitle, IonButton, IonButtons } from "@ionic/vue";
 
 const props = defineProps({
   title: {
     type: String,
-    default: ''
-  }
-})
+    default: "",
+  },
+});
 </script>
 <template>
   <IonHeader class="custom-header">

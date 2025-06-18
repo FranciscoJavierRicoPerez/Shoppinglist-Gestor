@@ -5,5 +5,4 @@ export interface ShoppinglistItem {
   assignationToListDate: string
   calculatedPrice: number
   quantity: number
-  product: Product | null
 }

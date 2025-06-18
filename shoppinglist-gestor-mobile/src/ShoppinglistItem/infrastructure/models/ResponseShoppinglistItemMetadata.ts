@@ -1,9 +1,8 @@
 import type { ResponseProduct } from '@/Product/infrastructure/models/ResponseProduct'
 
-export interface ResponseShoppinglistItem {
+export interface ResponseShoppinglistItemMetadata {
   id: number
   assignationToListDate: string
-  calculatedPrice: number
-  quantity: number
-  product: ResponseProduct
+  name: string
+  calculateSystemCode: string
 }

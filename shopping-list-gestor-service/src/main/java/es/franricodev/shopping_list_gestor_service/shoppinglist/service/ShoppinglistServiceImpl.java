@@ -7,11 +7,13 @@ import es.franricodev.shopping_list_gestor_service.shoppinglist.message.ErrorMes
 import es.franricodev.shopping_list_gestor_service.shoppinglist.model.Shoppinglist;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.repository.ShoppinglistRepository;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.specifications.ShoppinglistSpecifications;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.ShoppinglistItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +22,9 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
 
     @Autowired
     private ShoppinglistRepository shoppinglistRepository;
+
+    @Autowired
+    private ShoppinglistMapper shoppinglistMapper;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ShoppinglistServiceImpl.class);
 
@@ -30,15 +35,15 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
         if (shoppinglistList.isEmpty()) {
             throw new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND);
         }
-        return ShoppinglistMapper.INSTANCE.toDTOList(shoppinglistList);
+        return shoppinglistMapper.toDTOList(shoppinglistList);
     }
 
     @Override
     public ShoppinglistDTO create(RequestCreateShoppinglistDTO request) {
         LOGGER.info("Creation of the new shoppinglist");
-        return ShoppinglistMapper.INSTANCE.toDTO(
+        return shoppinglistMapper.toDTO(
                 shoppinglistRepository.save(
-                        ShoppinglistMapper.INSTANCE.createShoppinglist(request)
+                        shoppinglistMapper.createShoppinglist(request)
                 )
         );
     }
@@ -61,9 +66,9 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
             throw new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND);
         }
         Shoppinglist toUpdate = shoppinglistOptional.get();
-        ShoppinglistMapper.INSTANCE.updateShoppinglist(toUpdate, request);
+        shoppinglistMapper.updateShoppinglist(toUpdate, request);
         toUpdate = shoppinglistRepository.save(toUpdate);
-        return ShoppinglistMapper.INSTANCE.toDTO(toUpdate);
+        return shoppinglistMapper.toDTO(toUpdate);
     }
 
     @Override
@@ -74,7 +79,7 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
         if (optionalShoppinglistsFiltered.isEmpty()) {
             throw new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND);
         }
-        return ShoppinglistMapper.INSTANCE.toDTOList(optionalShoppinglistsFiltered);
+        return shoppinglistMapper.toDTOList(optionalShoppinglistsFiltered);
     }
 
     @Override
@@ -84,7 +89,7 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
         if (optionalShoppinglist.isEmpty()) {
             throw new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_DETAILS);
         }
-        return ShoppinglistMapper.INSTANCE.shoppinglistToShoppinglistDetailsDTO(optionalShoppinglist.get());
+        return shoppinglistMapper.shoppinglistToShoppinglistDetailsDTO(optionalShoppinglist.get());
     }
 
     @Override
@@ -97,7 +102,23 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
         Shoppinglist shoppinglist = optionalShoppinglist.get();
         shoppinglist.setIsActive(!shoppinglist.getIsActive());
         shoppinglistRepository.save(shoppinglist);
-        return ShoppinglistMapper.INSTANCE.toDTO(shoppinglist);
+        return shoppinglistMapper.toDTO(shoppinglist);
+    }
+
+    @Override
+    public Shoppinglist findShoppinglistById(Long id) throws ShoppinglistException {
+        return shoppinglistRepository.findById(id).orElseThrow(() -> new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND));
+    }
+
+    @Override
+    public void addItemsToShoppinglist(Shoppinglist shoppinglist, ShoppinglistItem shoppinglistItem) {
+        if (shoppinglist.getItems() != null) {
+            shoppinglist.getItems().add(shoppinglistItem);
+        } else {
+            shoppinglist.setItems(new ArrayList<>());
+            shoppinglist.getItems().add(shoppinglistItem);
+        }
+        shoppinglistRepository.save(shoppinglist);
     }
 
 }

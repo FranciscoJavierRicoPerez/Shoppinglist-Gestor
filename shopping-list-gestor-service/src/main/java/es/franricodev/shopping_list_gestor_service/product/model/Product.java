@@ -1,13 +1,14 @@
 package es.franricodev.shopping_list_gestor_service.product.model;
 
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.ShoppinglistItem;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -17,24 +18,23 @@ public class Product implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
-    @Column(name = "NAME")
+    @Column(name = "NAME", unique = true)
     private String name;
-
-    @Column(name = "PRICE")
-    private Double price;
 
     @NotNull
     @Column(name = "CREATION_DATE")
     private Date creationDate;
 
-    @NotNull
-    @Column(name = "LAST_BUY_DATE")
-    private Date lastBuyDate;
-
-    @Null
-    @Column(name = "UPDATE_DATE")
-    private Date updateDate;
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST, CascadeType.MERGE
+    })
+    @JoinTable(
+            name = "product_shoppinglist_item",
+            joinColumns = {@JoinColumn(name = "product_id")},
+            inverseJoinColumns = {@JoinColumn(name = "shoppinglist_item_id")}
+    )
+    private Set<ShoppinglistItem> shoppinglistItems;
 
 }

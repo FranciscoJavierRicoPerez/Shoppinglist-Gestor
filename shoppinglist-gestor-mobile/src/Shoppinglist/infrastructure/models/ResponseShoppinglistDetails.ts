@@ -1,4 +1,4 @@
-import type { ResponseShoppinglistItem } from '@/ShoppinglistItem/infrastructure/models/ResponseShoppinglistItem'
+import { ResponseShoppinglistItemMetadata } from "@/ShoppinglistItem/infrastructure/models/ResponseShoppinglistItemMetadata"
 
 export interface ResponseShoppinglistDetails {
   id: number
@@ -7,5 +7,5 @@ export interface ResponseShoppinglistDetails {
   closeDate: string | null
   totalPrice: number
   isActive: boolean
-  items: ResponseShoppinglistItem[]
+  items: ResponseShoppinglistItemMetadata[]
 }

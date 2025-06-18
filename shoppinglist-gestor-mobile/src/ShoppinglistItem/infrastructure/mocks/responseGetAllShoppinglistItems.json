@@ -1,20 +1,23 @@
 [
   {
     "id": 1,
+    "name": "peras",
     "assignationToListDate": "05/04/2025",
     "calculatedPrice": 10,
-    "quantity": 2
+    "calculateSystemCode": "U"
   },
   {
-    "id": 2,
+    "id": 1,
+    "name": "peras",
     "assignationToListDate": "05/04/2025",
     "calculatedPrice": 10,
-    "quantity": 2
+    "calculateSystemCode": "U"
   },
   {
-    "id": 3,
+    "id": 1,
+    "name": "peras",
     "assignationToListDate": "05/04/2025",
     "calculatedPrice": 10,
-    "quantity": 2
+    "calculateSystemCode": "U"
   }
 ]

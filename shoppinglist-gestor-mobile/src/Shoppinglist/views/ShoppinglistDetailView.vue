@@ -8,10 +8,13 @@ import {
   IonCardTitle,
   IonChip,
   IonContent,
+  IonFab,
+  IonFabButton,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
   IonList,
   IonPage,
+  IonIcon,
 } from "@ionic/vue";
 import Header from "@/Shared/components/Header.vue";
 import Footer from "@/Shared/components/Footer.vue";
@@ -22,16 +25,20 @@ import {
 } from "@/Shoppinglist/domain/ShoppinglistDetails";
 import { useGetShoppinglistDetails } from "@/Shoppinglist/application/useGetShoppinglistDetails";
 import { ShoppinglistItem } from "@/ShoppinglistItem/domain/ShoppinglistItem";
-import ShoppinglistItemCard from '@/ShoppinglistItem/components/ShoppinglistItemCard.vue';
+import ShoppinglistItemCard from "@/ShoppinglistItem/components/ShoppinglistItemCard.vue";
 import { useRoute } from "vue-router";
+import ShoppinglistItemAddDialog from "@/ShoppinglistItem/components/ShoppinglistItemAddDialog.vue";
+import { ShoppinglistItemMetadata } from "@/ShoppinglistItem/domain/ShoppinglistItemMetadata";
 const { refetch: getShoppinglistDetails } = useGetShoppinglistDetails();
 
 const shoppinglistDetails = ref<ShoppinglistDetails>({
   ...defaultShoppinglistDetails,
 });
 
-const actualShoppinglistItemsVisible = ref<ShoppinglistItem[]>([]);
+const actualShoppinglistItemsVisible = ref<ShoppinglistItemMetadata[]>([]);
 const route = useRoute();
+
+const openModal = ref<boolean>(false);
 
 onMounted(async () => {
   // We have to obtain the object ShoppinglistDetails
@@ -85,30 +92,26 @@ function updateShoppinglistItemsElementsVisible() {
         </IonCardHeader>
         <IonCardContent>
           <IonList>
-            <ShoppinglistItemCard :shoppinglistItemList="shoppinglistDetails.items"></ShoppinglistItemCard>
+            <ShoppinglistItemCard
+              :shoppinglistItemList="shoppinglistDetails.items"
+            ></ShoppinglistItemCard>
           </IonList>
           <IonInfiniteScroll @ionInfinite="ionInfinite">
             <IonInfiniteScrollContent></IonInfiniteScrollContent>
           </IonInfiniteScroll>
         </IonCardContent>
       </IonCard>
+      <IonFab horizontal="end" vertical="bottom" slot="fixed">
+        <IonFabButton @click="openModal = !openModal
+        ">
+          <IonIcon name="add-outline"></IonIcon>
+        </IonFabButton>
+      </IonFab>
+      <ShoppinglistItemAddDialog
+        :open-modal="openModal"
+        @update-modal-open-value="openModal = !openModal"
+      ></ShoppinglistItemAddDialog>
     </IonContent>
   </IonPage>
 </template>
-<style lang="css">
-/* .panelHeader {
-  font-size: xx-large;
-  font-weight: bold;
-}
-.multiDate {
-  margin-left: 1rem;
-}
-.panelSeparations {
-  margin-right: 0.2rem;
-}
-
-.cardOrganization {
-  display: flex;
-  flex-wrap: wrap;
-} */
-</style>
+<style lang="css"></style>

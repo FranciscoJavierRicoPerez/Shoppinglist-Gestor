@@ -1,5 +1,5 @@
-import type { ProductDetails } from '../domain/ProductDetails'
-import { getProductDetails } from '../infrastructure/useCases/getProductDetails'
+import type { ProductDetails } from '@/Product/domain/ProductDetails'
+import { getProductDetails } from '@/Product/infrastructure/useCases/getProductDetails'
 
 export function useGetProductDetails() {
   async function refetch(): Promise<ProductDetails> {

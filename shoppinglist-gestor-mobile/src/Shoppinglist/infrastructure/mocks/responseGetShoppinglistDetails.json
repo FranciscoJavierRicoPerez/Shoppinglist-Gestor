@@ -7,48 +7,39 @@
   "isActive": true,
   "items": [
     {
-      "id": 1,
-      "assignationToListDate": "06/04/2025",
-      "quantity": 2,
-      "calculatedPrice": 5,
-      "product": {
-        "id": 1,
-        "name": "Manzanas",
-        "price": 2.5
-      }
+      "id": 50,
+      "name": "peras",
+      "assignationToListDate": "9/6/25 21:58",
+      "calculateSystemCode": "UP",
+      "calculatedPrice": null
     },
     {
-      "id": 1,
-      "assignationToListDate": "06/04/2025",
-      "quantity": 2,
-      "calculatedPrice": 5,
-      "product": {
-        "id": 1,
-        "name": "Manzanas",
-        "price": 2.5
-      }
+      "id": 51,
+      "name": "peras",
+      "assignationToListDate": "9/6/25 21:59",
+      "calculateSystemCode": "UP",
+      "calculatedPrice": null
     },
     {
-      "id": 1,
-      "assignationToListDate": "06/04/2025",
-      "quantity": 2,
-      "calculatedPrice": 5,
-      "product": {
-        "id": 1,
-        "name": "Manzanas",
-        "price": 2.5
-      }
+      "id": 52,
+      "name": "peras",
+      "assignationToListDate": "9/6/25 22:01",
+      "calculateSystemCode": "UP",
+      "calculatedPrice": 0.0
     },
     {
-      "id": 1,
-      "assignationToListDate": "06/04/2025",
-      "quantity": 2,
-      "calculatedPrice": 5,
-      "product": {
-        "id": 1,
-        "name": "Manzanas",
-        "price": 2.5
-      }
+      "id": 53,
+      "name": "peras",
+      "assignationToListDate": "10/6/25 19:47",
+      "calculateSystemCode": "UP",
+      "calculatedPrice": 0.0
+    },
+    {
+      "id": 54,
+      "name": "peras",
+      "assignationToListDate": "10/6/25 20:05",
+      "calculateSystemCode": "UP",
+      "calculatedPrice": 0.0
     }
   ]
 }
