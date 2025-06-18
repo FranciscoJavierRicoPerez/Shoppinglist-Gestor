@@ -13,10 +13,10 @@ import {
 
 import type { PropType } from "vue";
 import { RouterLink } from "vue-router";
-import type { ShoppinglistItem } from "@/ShoppinglistItem/domain/ShoppinglistItem";
+import { ShoppinglistItemMetadata } from "@/ShoppinglistItem/domain/ShoppinglistItemMetadata";
 const props = defineProps({
   shoppinglistItemList: {
-    type: Object as PropType<ShoppinglistItem[]>,
+    type: Object as PropType<ShoppinglistItemMetadata[]>,
     default: () => null,
   },
 });
@@ -24,20 +24,20 @@ const props = defineProps({
 <template>
   <IonItem v-for="shoppinglistItem in shoppinglistItemList">
     <IonLabel>
-      <IonCard>
+      <IonCard class="customCard">
         <IonCardHeader>
-          <IonCardTitle>{{ shoppinglistItem.product?.name }}</IonCardTitle>
+          <IonCardTitle>{{ shoppinglistItem.name }}</IonCardTitle>
         </IonCardHeader>
         <IonCardSubtitle style="margin-left: 3rem">
           <IonChip color="primary"
-            >Cantidad: {{ shoppinglistItem.quantity }}</IonChip
+            >Cantidad: {{ shoppinglistItem.assignationToListDate }}</IonChip
           >
           <IonChip color="success"
-            >Precio: {{ shoppinglistItem.calculatedPrice }}</IonChip
+            >Precio: {{ shoppinglistItem.calculateSystemCode }}</IonChip
           >
         </IonCardSubtitle>
         <IonCardContent style="margin-left: 3rem">
-          <RouterLink :to="`/product/${shoppinglistItem.product?.id}}`"
+          <RouterLink :to="`/product/${shoppinglistItem.id}}`"
             ><IonButton shape="round" color="tertiary"
               >Ver</IonButton
             ></RouterLink
@@ -49,12 +49,7 @@ const props = defineProps({
   </IonItem>
 </template>
 <style lang="css">
-.mainCard {
-  margin-bottom: 1rem;
-  margin-right: 1rem;
-}
-.cardOrganization {
-  display: flex;
-  flex-wrap: wrap;
+.customCard {
+  background-color: rgb(234, 250, 227)
 }
 </style>

@@ -5,7 +5,7 @@ import { createShoppinglistDetails } from '@/Shoppinglist/infrastructure/service
 import axios from 'axios'
 
 async function getShoppinglistDetails(id: number): Promise<ShoppinglistDetails> {
-  const response : ResponseShoppinglistDetails = import.meta.env.VITA_DATA_ACCESS === 'LOCAL' ? await InMemory() : await Api(id); 
+  const response : ResponseShoppinglistDetails = import.meta.env.VITE_DATA_ACCESS === 'LOCAL' ? await InMemory() : await Api(id); 
   return createShoppinglistDetails(response)
 }
 

@@ -3,7 +3,7 @@
 export interface ResponseProductDetails {
   id: number
   name: string
-  quantity: number
-  price: number
+  //quantity: number
+  //price: number
   //productUnitList: ResponseProductUnit[]
 }

@@ -1,12 +1,12 @@
-import type { ShoppinglistItem } from '@/ShoppinglistItem/domain/ShoppinglistItem'
+import { ShoppinglistItemMetadata } from '@/ShoppinglistItem/domain/ShoppinglistItemMetadata'
 import responseGetFilteredShoppinglist from '@/ShoppinglistItem/infrastructure/mocks/responseGetAllShoppinglistItems.json'
-import type { ResponseShoppinglistItem } from '@/ShoppinglistItem/infrastructure/models/ResponseShoppinglistItem'
-async function getAllShoppinglistItems(): Promise<ShoppinglistItem[]> {
+import type { ResponseShoppinglistItemMetadata } from '@/ShoppinglistItem/infrastructure/models/ResponseShoppinglistItemMetadata'
+async function getAllShoppinglistItems(): Promise<ShoppinglistItemMetadata[]> {
   return await InMemory()
 }
 
-async function InMemory(): Promise<ResponseShoppinglistItem[]> {
-  return responseGetFilteredShoppinglist as ResponseShoppinglistItem[]
+async function InMemory(): Promise<ResponseShoppinglistItemMetadata[]> {
+  return responseGetFilteredShoppinglist as ResponseShoppinglistItemMetadata[]
 }
 
 export { getAllShoppinglistItems }
