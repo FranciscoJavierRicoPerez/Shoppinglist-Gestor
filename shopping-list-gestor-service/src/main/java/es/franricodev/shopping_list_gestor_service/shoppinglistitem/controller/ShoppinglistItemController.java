@@ -2,6 +2,7 @@ package es.franricodev.shopping_list_gestor_service.shoppinglistitem.controller;
 
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseCreateShoppinglistItem;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseDeleteShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.exception.ShoppinglistItemException;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.messages.ShoppinglistItemMessagesError;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.messages.ShoppinglistItemMessagesSuccess;
@@ -23,9 +24,9 @@ public class ShoppinglistItemController {
 
     private final static Logger logger = LoggerFactory.getLogger(ShoppinglistItemController.class);
 
-    @PostMapping("/v1/{id_shoppinglist}/createItem")
+    @PostMapping("/v1/{idShoppinglist}/createItem")
     public ResponseEntity<ResponseCreateShoppinglistItem> createShoppinglistItem(
-            @PathVariable(name = "id_shoppinglist") Long idShoppinglist,
+            @PathVariable(name = "idShoppinglist") Long idShoppinglist,
             @RequestBody RequestCreateShoppinglistItem requestCreateShoppinglistItem) {
         logger.info("Create a new shoppinglist item");
         ResponseCreateShoppinglistItem response = new ResponseCreateShoppinglistItem();
@@ -39,6 +40,22 @@ public class ShoppinglistItemController {
            httpStatus = HttpStatus.BAD_REQUEST;
         }
         return new ResponseEntity<>(response, httpStatus);
+    }
+
+    @DeleteMapping("/v1/{idItem}/delete")
+    public ResponseEntity<ResponseDeleteShoppinglistItem> deleteShoppinglistItem(@PathVariable("idItem") Long idItem) {
+        logger.info("Delete the shoppinglist item with id: {}", idItem);
+        ResponseDeleteShoppinglistItem responseDeleteShoppinglistItem = new ResponseDeleteShoppinglistItem();
+        HttpStatus httpStatus = HttpStatus.OK;
+        try {
+            shoppinglistItemService.deleteShoppinglistItem(idItem);
+            responseDeleteShoppinglistItem.setDelete(true);
+            responseDeleteShoppinglistItem.setMessage(ShoppinglistItemMessagesSuccess.SHOPPINGLISTITEM_DELETED_OK);
+        } catch (ShoppinglistItemException e) {
+            responseDeleteShoppinglistItem.setDelete(false);
+            responseDeleteShoppinglistItem.setMessage(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_DELETED_ERR);
+        }
+        return new ResponseEntity<>(responseDeleteShoppinglistItem, httpStatus);
     }
 
 }

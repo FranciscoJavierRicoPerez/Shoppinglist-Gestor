@@ -14,12 +14,21 @@ import {
 import type { PropType } from "vue";
 import { RouterLink } from "vue-router";
 import { ShoppinglistItemMetadata } from "@/ShoppinglistItem/domain/ShoppinglistItemMetadata";
+import { useDeleteShoppinglistItem } from "../application/useDeleteShoppinglistItem";
+
+const { refetch: deleteShoppinglistItem } = useDeleteShoppinglistItem();
+
 const props = defineProps({
   shoppinglistItemList: {
     type: Object as PropType<ShoppinglistItemMetadata[]>,
     default: () => null,
   },
 });
+
+async function removeShoppinglistItem(idItem: number) {
+  let response = await deleteShoppinglistItem(idItem);
+}
+
 </script>
 <template>
   <IonItem v-for="shoppinglistItem in shoppinglistItemList">
@@ -42,7 +51,7 @@ const props = defineProps({
               >Ver</IonButton
             ></RouterLink
           >
-          <IonButton shape="round" color="danger">Eliminar</IonButton>
+          <IonButton shape="round" color="danger" @click="deleteShoppinglistItem(shoppinglistItem.id)">Eliminar</IonButton>
         </IonCardContent>
       </IonCard>
     </IonLabel>
