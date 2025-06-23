@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Optional;
 
 @Service
 public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
@@ -101,5 +102,15 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
         } catch (ShoppinglistException | ProductException | CalculateSystemException e) {
             throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_CREATE_ERR);
         }
+    }
+
+    @Override
+    public void deleteShoppinglistItem(Long idItem) throws ShoppinglistItemException {
+        logger.info("Deleting the shoppinglist item with id: {}", idItem);
+        Optional<ShoppinglistItem> optShoppinglistItem = shoppinglistItemRepository.findById(idItem);
+        if (optShoppinglistItem.isEmpty()) {
+            throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_NOT_FOUND_ERR);
+        }
+        shoppinglistItemRepository.delete(optShoppinglistItem.get());
     }
 }

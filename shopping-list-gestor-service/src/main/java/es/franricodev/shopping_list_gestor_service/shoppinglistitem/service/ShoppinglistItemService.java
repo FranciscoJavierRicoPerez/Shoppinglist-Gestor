@@ -9,4 +9,6 @@ public interface ShoppinglistItemService {
 
     ShoppinglistItemDTO createShoppinglistItem(RequestCreateShoppinglistItem requestCreateShoppinglistItem, Long idShoppinglist) throws ShoppinglistItemException;
 
+    void deleteShoppinglistItem(Long idItem) throws ShoppinglistItemException;
+
 }

@@ -29,15 +29,15 @@ public class ShoppinglistItem implements Serializable {
     @Column(name = "ASSIGNATION_LIST_DATE")
     private Date assignationToListDate;
 
-    @ManyToMany(mappedBy = "shoppinglistItems")
+    @ManyToMany(mappedBy = "shoppinglistItems", cascade = {CascadeType.ALL})
     private Set<Product> products;
 
-    @ManyToMany(mappedBy = "shoppinglistItems")
+    @ManyToMany(mappedBy = "shoppinglistItems", cascade = {CascadeType.ALL})
     private Set<CalculateSystem> calculateSystems;
 
     @Column(name = "CALCULATED_PRICE")
     private Double calculatedPrice;
 
-    @ManyToMany(mappedBy = "shoppinglistItems")
+    @ManyToMany(mappedBy = "shoppinglistItems", cascade = {CascadeType.ALL})
     private Set<ItemUnit> itemUnits;
 }
