@@ -13,11 +13,11 @@ defineProps({
 
 </script>
 <template>
-  <IonCard>
+  <IonCard style="background-color: rgb(51, 255, 153);">
     <IonCardHeader>
       <IonCardTitle>INFORMACIÓN - {{ title }}</IonCardTitle>
     </IonCardHeader>
-    <IonCardContent> {{ message }} </IonCardContent>
+    <IonCardContent style="font-size: medium;"> {{ message }} </IonCardContent>
   </IonCard>
 </template>
 <style lang="css"></style>
