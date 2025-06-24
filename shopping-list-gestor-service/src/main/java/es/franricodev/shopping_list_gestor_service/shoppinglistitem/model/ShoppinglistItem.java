@@ -28,7 +28,7 @@ public class ShoppinglistItem implements Serializable {
     @Column(name = "ASSIGNATION_LIST_DATE")
     private Date assignationToListDate;
 
-    @ManyToMany(mappedBy = "shoppinglistItems", cascade = {CascadeType.ALL})
+    @ManyToMany(mappedBy = "shoppinglistItems", fetch = FetchType.LAZY)
     private Set<Product> products = new HashSet<>();
 
     @Column(name = "CALCULATED_PRICE")

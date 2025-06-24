@@ -104,6 +104,13 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
         if (optShoppinglistItem.isEmpty()) {
             throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_NOT_FOUND_ERR);
         }
-        shoppinglistItemRepository.delete(optShoppinglistItem.get());
+
+        // TODO: Primero debo eliminar las relaciones existentes entre producto y shoppinglist items
+        ShoppinglistItem shoppinglistItem = optShoppinglistItem.get();
+        for(Product p : shoppinglistItem.getProducts()) {
+            p.getShoppinglistItems().remove(shoppinglistItem);
+        }
+        shoppinglistItem.getProducts().clear();
+        shoppinglistItemRepository.delete(shoppinglistItem);
     }
 }
