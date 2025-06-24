@@ -29,6 +29,7 @@ import ShoppinglistItemCard from "@/ShoppinglistItem/components/ShoppinglistItem
 import { useRoute } from "vue-router";
 import ShoppinglistItemAddDialog from "@/ShoppinglistItem/components/ShoppinglistItemAddDialog.vue";
 import { ShoppinglistItemMetadata } from "@/ShoppinglistItem/domain/ShoppinglistItemMetadata";
+import Information from "@/Shared/components/Information.vue";
 const { refetch: getShoppinglistDetails } = useGetShoppinglistDetails();
 
 const shoppinglistDetails = ref<ShoppinglistDetails>({
@@ -91,7 +92,11 @@ function updateShoppinglistItemsElementsVisible() {
           </IonCardSubtitle>
         </IonCardHeader>
         <IonCardContent>
-          <IonList>
+         <div v-if="shoppinglistDetails.items.length === 0">
+          <Information :title="'ARTICULOS'" :message="'No hay articulos en esta lista de la compra'"></Information>
+         </div>
+         <div v-else>
+           <IonList>
             <ShoppinglistItemCard
               :shoppinglistItemList="shoppinglistDetails.items"
             ></ShoppinglistItemCard>
@@ -99,6 +104,7 @@ function updateShoppinglistItemsElementsVisible() {
           <IonInfiniteScroll @ionInfinite="ionInfinite">
             <IonInfiniteScrollContent></IonInfiniteScrollContent>
           </IonInfiniteScroll>
+         </div>
         </IonCardContent>
       </IonCard>
       <IonFab horizontal="end" vertical="bottom" slot="fixed">
