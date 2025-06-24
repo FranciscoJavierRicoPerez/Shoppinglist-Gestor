@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {
+  IonCard,
   InfiniteScrollCustomEvent,
   IonContent,
   IonFab,
@@ -16,6 +17,9 @@ import {
   IonSegmentContent,
   IonSegmentView,
   SegmentChangeEventDetail,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardContent,
 } from "@ionic/vue";
 import { onMounted, watch } from "vue";
 import { ref } from "vue";
@@ -26,6 +30,7 @@ import { useCreateShoppinglistMetadata } from "../application/useCreateShoppingl
 import { useShoppinglistStore } from "../stores/shoppinglistStore";
 import Header from "@/Shared/components/Header.vue";
 import Footer from "@/Shared/components/Footer.vue";
+import Information from "@/Shared/components/Information.vue";
 const { refetch: getAllShoppinglist } = useGetAllShoppinglist();
 const shoppinglistTable = ref<Shoppinglist[]>([{ ...defaultShoppinglist }]);
 const shoppinglistActiveTable = ref<Shoppinglist[]>([
@@ -116,9 +121,8 @@ function updateShoppinglistTables(removedObject: boolean = true) {
 }
 
 function assignActualSelectedTabBySlide(data: SegmentChangeEventDetail) {
-  selectedTab.value = String(data.value)
+  selectedTab.value = String(data.value);
 }
-
 </script>
 <template>
   <IonPage>
@@ -135,23 +139,28 @@ function assignActualSelectedTabBySlide(data: SegmentChangeEventDetail) {
           <IonLabel>{{ value[1] }}</IonLabel>
         </IonSegmentButton>
       </IonSegment>
-      <IonSegmentView>
-        <IonSegmentContent v-for="value in mapSections" :id="value[0]">
-          <IonList>
-            <IonItem v-for="shoppinglist in actualShoppinglistVisible">
-              <IonLabel>
-                <ShoppinglistCardInfo
-                  :shoppinglist="shoppinglist"
-                  @updateShoppinglistTables="updateShoppinglistTables"
-                ></ShoppinglistCardInfo>
-              </IonLabel>
-            </IonItem>
-          </IonList>
-          <IonInfiniteScroll @ionInfinite="ionInfinite">
-            <IonInfiniteScrollContent></IonInfiniteScrollContent>
-          </IonInfiniteScroll>
-        </IonSegmentContent>
-      </IonSegmentView>
+      <div v-if="actualShoppinglistVisible.length === 0">
+        <Information :title="'LISTA DE LA COMPRA'" :message="'No hay listas de la compra para esta opción'"></Information>
+      </div>
+      <div v-else>
+        <IonSegmentView>
+          <IonSegmentContent v-for="value in mapSections" :id="value[0]">
+            <IonList>
+              <IonItem v-for="shoppinglist in actualShoppinglistVisible">
+                <IonLabel>
+                  <ShoppinglistCardInfo
+                    :shoppinglist="shoppinglist"
+                    @updateShoppinglistTables="updateShoppinglistTables"
+                  ></ShoppinglistCardInfo>
+                </IonLabel>
+              </IonItem>
+            </IonList>
+            <IonInfiniteScroll @ionInfinite="ionInfinite">
+              <IonInfiniteScrollContent></IonInfiniteScrollContent>
+            </IonInfiniteScroll>
+          </IonSegmentContent>
+        </IonSegmentView>
+      </div>
       <IonFab horizontal="end" vertical="bottom" slot="fixed">
         <IonFabButton @click="addNewShoppinglist">
           <IonIcon name="add-outline" />
