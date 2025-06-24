@@ -20,7 +20,7 @@ public interface ShoppinglistItemMapper {
     CalculateSystemMapper calculateSystemMapper = Mappers.getMapper(CalculateSystemMapper.class);
 
     @Mapping(target = "product", expression = "java(shoppinglistItem.getProducts().size() > 0 ? productMapper.productToProductDto(shoppinglistItem.getProducts().stream().findFirst().get()) : null)")
-    @Mapping(target = "calculateSystem", expression = "java(shoppinglistItem.getCalculateSystems().size() > 0 ? calculateSystemMapper.calculateSystemToCalculateSystemDTO(shoppinglistItem.getCalculateSystems().stream().findFirst().get()) : null)")
+    // @Mapping(target = "calculateSystem", expression = "java(shoppinglistItem.getCalculateSystems().size() > 0 ? calculateSystemMapper.calculateSystemToCalculateSystemDTO(shoppinglistItem.getCalculateSystems().stream().findFirst().get()) : null)")
     ShoppinglistItemDTO shoppinglistItemToShoppinglistItemDTO(ShoppinglistItem shoppinglistItem);
 
     ShoppinglistItem shoppinglistItemDtoToShoppinglistItem(ShoppinglistItemDTO shoppinglistItemDTO);
@@ -29,7 +29,7 @@ public interface ShoppinglistItemMapper {
 
     List<ShoppinglistItem> shoppinglistItemDtoListToShoppinglistItemList(List<ShoppinglistItemDTO> shoppinglistItemDTOS);
 
-    @Mapping(target = "calculateSystemCode", expression = "java(shoppinglistItem.getCalculateSystems().size() > 0 ? shoppinglistItem.getCalculateSystems().stream().findFirst().get().getCode() : null)")
+    // @Mapping(target = "calculateSystemCode", expression = "java(shoppinglistItem.getCalculateSystems().size() > 0 ? shoppinglistItem.getCalculateSystems().stream().findFirst().get().getCode() : null)")
     ShoppinglistItemMetadataDTO shoppinglistItemToShoppinglistItemMetadataDTO(ShoppinglistItem shoppinglistItem);
 
 }

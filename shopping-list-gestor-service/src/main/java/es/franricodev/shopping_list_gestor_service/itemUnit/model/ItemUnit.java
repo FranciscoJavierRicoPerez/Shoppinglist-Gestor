@@ -21,13 +21,7 @@ public class ItemUnit {
     @Column(name = "UNIT_PRICE")
     private Double unitPrice;
 
-    @ManyToMany(cascade = {
-            CascadeType.ALL
-    })
-    @JoinTable(
-            name = "item_unit_shoppinglist_item",
-            joinColumns = {@JoinColumn(name = "item_unit_id")},
-            inverseJoinColumns = {@JoinColumn(name = "shoppinglist_item_id")}
-    )
-    private Set<ShoppinglistItem> shoppinglistItems;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "shoppinglist_item_id")
+    private ShoppinglistItem shoppinglistItem;
 }

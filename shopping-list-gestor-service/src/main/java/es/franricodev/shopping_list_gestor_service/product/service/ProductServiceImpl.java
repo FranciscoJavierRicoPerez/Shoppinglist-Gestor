@@ -33,7 +33,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void assignShoppinglistItemToProduct(ShoppinglistItem shoppinglistItem, Product product) {
+    public void assignProductToShoppinglistItem(ShoppinglistItem shoppinglistItem, Product product) {
         if(product.getShoppinglistItems() != null) {
             product.getShoppinglistItems().add(shoppinglistItem);
         } else {

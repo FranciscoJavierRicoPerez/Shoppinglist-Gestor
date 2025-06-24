@@ -23,9 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
@@ -55,50 +53,45 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
             RequestCreateShoppinglistItem requestCreateShoppinglistItem,
             Long idShoppinglist) throws ShoppinglistItemException {
         logger.info("Creating a new shoppinglist item");
+
         try {
-            ShoppinglistItem shoppinglistItem = new ShoppinglistItem();
+            // TODO: Obtener la lista de la compra
             Shoppinglist shoppinglist = shoppinglistService.findShoppinglistById(idShoppinglist);
-            logger.info("Shoppinglist with id {} finded", shoppinglist.getId());
+            // TODO: Obtener el producto, SI NO EXISTE SE CREA (ya se crea implicitamente en el metodo findProductByName)
             Product product = null;
-            if(requestCreateShoppinglistItem.getProductId() == null) {
-                logger.info("Creating new product with name {}", requestCreateShoppinglistItem.getProductName());
-                product = productService.createProduct(requestCreateShoppinglistItem.getProductName());
+            if (requestCreateShoppinglistItem.getProductName() == null) {
+                throw new ProductException("PRODUCT_MESSAGE_ERROR_NO-SE-PUEDE-CREAR-EL-PRODUCTO");
             } else {
-                logger.info("The product with name {} already exists", requestCreateShoppinglistItem.getProductName());
                 product = productService.findProductByName(requestCreateShoppinglistItem.getProductName());
             }
-            if(product != null) {
-                shoppinglistItem.setName(product.getName());
-            }
-            shoppinglistItem.setAssignationToListDate(new Date());
-            shoppinglistItem.setProducts(new HashSet<Product>());
-            shoppinglistItem.getProducts().add(product);
+            // TODO: Obtener el calculate system;
             CalculateSystem calculateSystem = null;
-            if(requestCreateShoppinglistItem.getCalculateSystemCode() != null) {
-                logger.info("The calculate system with id {} is going to be assigned", requestCreateShoppinglistItem.getCalculateSystemCode());
-                if(shoppinglistItem.getCalculateSystems() != null) {
-                    calculateSystem = calculateSystemService.findCalculateSystemByCode(requestCreateShoppinglistItem.getCalculateSystemCode());
-                    shoppinglistItem.getCalculateSystems().add(calculateSystem);
-                } else {
-                    shoppinglistItem.setCalculateSystems(new HashSet<>());
-                    calculateSystem = calculateSystemService.findCalculateSystemByCode(requestCreateShoppinglistItem.getCalculateSystemCode());
-                    shoppinglistItem.getCalculateSystems().add(calculateSystem);
-                }
+            if(requestCreateShoppinglistItem.getCalculateSystemCode() == null) {
+                throw new CalculateSystemException("CALCULATE_MESSAGE_ERROR-NO-SE-PUEDE-OBTENER-EL-CALCULATE-SYSTEM");
+            } else {
+                calculateSystem = calculateSystemService.findCalculateSystemByCode(requestCreateShoppinglistItem.getCalculateSystemCode());
             }
-            ItemUnit itemUnit = itemUnitService.createItemUnit();
-            itemUnit.setUnitPrice(
-                    calculateSystemService.calculateProductPrice(shoppinglistItem.getCalculateSystems().stream().toList().get(0), product)
-            );
-            shoppinglistItem.setItemUnits(new HashSet<>());
-            shoppinglistItem.getItemUnits().add(itemUnit);
-            shoppinglistItem.setCalculatedPrice(itemUnit.getUnitPrice());
-            shoppinglistItem = shoppinglistItemRepository.save(shoppinglistItem);
-            itemUnitService.assignShoppinglistItemToItemUnit(shoppinglistItem, itemUnit);
-            shoppinglistService.addItemsToShoppinglist(shoppinglist, shoppinglistItem);
-            productService.assignShoppinglistItemToProduct(shoppinglistItem, product);
-            calculateSystemService.assignShoppinglistItemToCalculateSystem(shoppinglistItem, calculateSystem);
-            ShoppinglistItemDTO shoppinglistItemDTO = shoppinglistItemMapper.shoppinglistItemToShoppinglistItemDTO(shoppinglistItem);
-            return shoppinglistItemDTO;
+
+            // TODO: Creamos el shoppinglist item
+            ShoppinglistItem shoppinglistItem = new ShoppinglistItem();
+            shoppinglistItem.setName(product.getName());
+            shoppinglistItem.setCalculatedPrice(0D);
+            shoppinglistItem.setAssignationToListDate(new Date());
+
+            List<ShoppinglistItem> shoppinglistItemList = shoppinglist.getItems();
+            shoppinglistItemList.add(shoppinglistItem);
+            shoppinglist.setItems(shoppinglistItemList);
+
+            shoppinglistItem.setCalculateSystem(calculateSystem);
+
+            shoppinglistItem =  shoppinglistItemRepository.save(shoppinglistItem);
+            // TODO: Crear el item unit
+            ItemUnit itemUnit = itemUnitService.createItemUnit(shoppinglistItem);
+
+            productService.assignProductToShoppinglistItem(shoppinglistItem, product);
+
+            return shoppinglistItemMapper.shoppinglistItemToShoppinglistItemDTO(shoppinglistItem);
+
         } catch (ShoppinglistException | ProductException | CalculateSystemException e) {
             throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_CREATE_ERR);
         }
@@ -111,6 +104,13 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
         if (optShoppinglistItem.isEmpty()) {
             throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_NOT_FOUND_ERR);
         }
-        shoppinglistItemRepository.delete(optShoppinglistItem.get());
+
+        // TODO: Primero debo eliminar las relaciones existentes entre producto y shoppinglist items
+        ShoppinglistItem shoppinglistItem = optShoppinglistItem.get();
+        for(Product p : shoppinglistItem.getProducts()) {
+            p.getShoppinglistItems().remove(shoppinglistItem);
+        }
+        shoppinglistItem.getProducts().clear();
+        shoppinglistItemRepository.delete(shoppinglistItem);
     }
 }
