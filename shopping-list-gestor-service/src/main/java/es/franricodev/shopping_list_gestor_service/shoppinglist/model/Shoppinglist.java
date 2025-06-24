@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import javax.xml.stream.events.Comment;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -43,5 +44,5 @@ public class Shoppinglist implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "shoppinglist_id")
-    private List<ShoppinglistItem> items;
+    private List<ShoppinglistItem> items = new ArrayList<>();
 }

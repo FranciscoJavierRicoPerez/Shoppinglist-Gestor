@@ -5,8 +5,6 @@ import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.Shoppi
 
 public interface ItemUnitService {
 
-    ItemUnit createItemUnit();
-
-    void assignShoppinglistItemToItemUnit(ShoppinglistItem shoppinglistItem, ItemUnit itemUnit);
+    ItemUnit createItemUnit(ShoppinglistItem shoppinglistItem);
 
 }

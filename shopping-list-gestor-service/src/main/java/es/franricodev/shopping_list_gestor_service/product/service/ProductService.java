@@ -10,7 +10,7 @@ public interface ProductService {
 
     Product createProduct(String name);
 
-    void assignShoppinglistItemToProduct(ShoppinglistItem shoppinglistItem, Product product);
+    void assignProductToShoppinglistItem(ShoppinglistItem shoppinglistItem, Product product);
 
 
 }

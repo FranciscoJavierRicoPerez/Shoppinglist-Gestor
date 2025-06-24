@@ -19,21 +19,11 @@ public class ItemUnitServiceImpl implements ItemUnitService {
     private static final Logger logger = LoggerFactory.getLogger(ItemUnitServiceImpl.class);
 
     @Override
-    public ItemUnit createItemUnit() {
+    public ItemUnit createItemUnit(ShoppinglistItem shoppinglistItem) {
+        logger.info("Creating a item unit form the shoppinglist item: {}", shoppinglistItem.getId());
         ItemUnit itemUnit = new ItemUnit();
         itemUnit.setUnitPrice(0D);
-        itemUnit.setShoppinglistItems(new HashSet<>());
+        itemUnit.setShoppinglistItem(shoppinglistItem);
         return itemUnitRepository.save(itemUnit);
-    }
-
-    @Override
-    public void assignShoppinglistItemToItemUnit(ShoppinglistItem shoppinglistItem, ItemUnit itemUnit) {
-        if (itemUnit.getShoppinglistItems() != null) {
-            itemUnit.getShoppinglistItems().add(shoppinglistItem);
-        } else {
-            itemUnit.setShoppinglistItems(new HashSet<ShoppinglistItem>());
-            itemUnit.getShoppinglistItems().add(shoppinglistItem);
-        }
-        itemUnitRepository.save(itemUnit);
     }
 }

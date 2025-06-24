@@ -13,4 +13,6 @@ public interface CalculateSystemService {
 
     void assignShoppinglistItemToCalculateSystem(ShoppinglistItem shoppinglistItem,CalculateSystem calculateSystem);
 
+    // void update(CalculateSystem calculateSystem);
+
 }
