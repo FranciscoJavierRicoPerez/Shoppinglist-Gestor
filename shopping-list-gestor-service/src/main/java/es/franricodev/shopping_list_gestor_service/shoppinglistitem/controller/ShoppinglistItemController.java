@@ -1,5 +1,6 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglistitem.controller;
 
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestAddItemUnitUnitaryPrice;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseCreateShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseDeleteShoppinglistItem;
@@ -57,5 +58,18 @@ public class ShoppinglistItemController {
         }
         return new ResponseEntity<>(responseDeleteShoppinglistItem, httpStatus);
     }
+
+    @PostMapping("/v1/{idItem}/addItemUnit")
+    public ResponseEntity<?> addItemUnit(@PathVariable("idItem") Long idItem, @RequestBody RequestAddItemUnitUnitaryPrice request) throws ShoppinglistItemException {
+        logger.info("Creating a new item unit for the shoppinglist item with id: {}", idItem);
+        shoppinglistItemService.addItemUnitToShoppinglistItem(request.getShoppinglistItemId(), request.getPrice(), request.getQuantity());
+        return ResponseEntity.ok(null);
+    }
+
+    @DeleteMapping("/v1/{idItem}/removeItemUnit/{idItemUnit}")
+    public ResponseEntity<?> removeItemUnit(@PathVariable("idItem") Long idItem, @PathVariable("idItemUnit") Long idItemUnit) {
+        return ResponseEntity.ok(null);
+    }
+
 
 }

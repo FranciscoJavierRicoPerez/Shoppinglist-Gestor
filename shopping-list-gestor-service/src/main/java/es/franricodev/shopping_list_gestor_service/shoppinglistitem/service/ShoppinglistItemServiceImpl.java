@@ -86,7 +86,7 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
 
             shoppinglistItem =  shoppinglistItemRepository.save(shoppinglistItem);
             // TODO: Crear el item unit
-            ItemUnit itemUnit = itemUnitService.createItemUnit(shoppinglistItem);
+            ItemUnit itemUnit = itemUnitService.createItemUnit(shoppinglistItem, requestCreateShoppinglistItem.getUnitaryPrice());
 
             productService.assignProductToShoppinglistItem(shoppinglistItem, product);
 
@@ -112,5 +112,29 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
         }
         shoppinglistItem.getProducts().clear();
         shoppinglistItemRepository.delete(shoppinglistItem);
+    }
+
+    @Override
+    public void addItemUnitToShoppinglistItem(Long idItem, Double unitaryPrice, Integer quantity) throws ShoppinglistItemException {
+        logger.info("Add a new item unit to the shoppinglist item: {}", idItem);
+        Optional<ShoppinglistItem> optionalShoppinglistItem = shoppinglistItemRepository.findById(idItem);
+        if (optionalShoppinglistItem.isEmpty()) {
+            throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_NOT_FOUND_ERR);
+        }
+        ShoppinglistItem shoppinglistItem = optionalShoppinglistItem.get();
+        for(int i = 0; i < quantity; i++) {
+            itemUnitService.createItemUnit(shoppinglistItem, unitaryPrice);
+        }
+        // TODO: Aqui seria interesante llamar a un funcion que se encarge de recalcular el precio total de la shoppinglist
+        recalculateShoppinglistItemsTotalPrice(shoppinglistItem);
+    }
+
+    private void recalculateShoppinglistItemsTotalPrice(ShoppinglistItem shoppinglistItem) {
+        Double totalShoppinglistPrice = 0D;
+        for(ItemUnit itemUnit : shoppinglistItem.getItemUnitList()) {
+            totalShoppinglistPrice += itemUnit.getUnitPrice();
+        }
+        shoppinglistItem.setCalculatedPrice(totalShoppinglistPrice);
+        shoppinglistItemRepository.save(shoppinglistItem);
     }
 }

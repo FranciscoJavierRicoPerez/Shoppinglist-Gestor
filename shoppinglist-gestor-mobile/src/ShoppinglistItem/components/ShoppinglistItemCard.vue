@@ -15,6 +15,7 @@ import type { PropType } from "vue";
 import { RouterLink } from "vue-router";
 import { ShoppinglistItemMetadata } from "@/ShoppinglistItem/domain/ShoppinglistItemMetadata";
 import { useDeleteShoppinglistItem } from "../application/useDeleteShoppinglistItem";
+import AddItemUnitPopover from "./AddItemUnitPopover.vue";
 
 const { refetch: deleteShoppinglistItem } = useDeleteShoppinglistItem();
 
@@ -52,6 +53,7 @@ async function removeShoppinglistItem(idItem: number) {
             ></RouterLink
           >
           <IonButton shape="round" color="danger" @click="deleteShoppinglistItem(shoppinglistItem.id)">Eliminar</IonButton>
+          <AddItemUnitPopover :idShoppinglistItem="shoppinglistItem.id"></AddItemUnitPopover>
         </IonCardContent>
       </IonCard>
     </IonLabel>

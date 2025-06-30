@@ -5,6 +5,6 @@ import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.Shoppi
 
 public interface ItemUnitService {
 
-    ItemUnit createItemUnit(ShoppinglistItem shoppinglistItem);
+    ItemUnit createItemUnit(ShoppinglistItem shoppinglistItem, Double unitaryPrice);
 
 }

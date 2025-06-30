@@ -11,4 +11,6 @@ public interface ShoppinglistItemService {
 
     void deleteShoppinglistItem(Long idItem) throws ShoppinglistItemException;
 
+    void addItemUnitToShoppinglistItem(Long idItem, Double unitaryPrice, Integer quantity) throws ShoppinglistItemException;
+
 }
