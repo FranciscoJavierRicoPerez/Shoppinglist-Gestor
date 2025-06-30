@@ -34,8 +34,8 @@ function addItem() {
 }
 </script>
 <template>
-  <IonButton id="click-trigger">Añadir unidad</IonButton>
-  <IonPopover trigger="click-trigger" trigger-action="click">
+  <IonButton :id="'click-trigger' + params.idShoppinglistItem">Añadir unidad</IonButton>
+  <IonPopover :trigger="'click-trigger' + params.idShoppinglistItem" trigger-action="click">
     <IonContent class="ion-padding">
       <IonItem>
         <IonInput
