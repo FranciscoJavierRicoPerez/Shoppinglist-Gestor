@@ -7,4 +7,8 @@ public interface ItemUnitService {
 
     ItemUnit createItemUnit(ShoppinglistItem shoppinglistItem, Double unitaryPrice);
 
+    ItemUnit findItemUnitById(Long id) throws Exception;
+
+    void deleteItemUnit(ItemUnit itemUnit);
+
 }

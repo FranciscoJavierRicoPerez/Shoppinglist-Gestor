@@ -1,9 +1,13 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglistitem.service;
 
+import es.franricodev.shopping_list_gestor_service.itemUnit.dto.ItemUnitDTO;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.ShoppinglistItemDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.exception.ShoppinglistItemException;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.ShoppinglistItem;
+
+import java.util.List;
 
 public interface ShoppinglistItemService {
 
@@ -12,5 +16,9 @@ public interface ShoppinglistItemService {
     void deleteShoppinglistItem(Long idItem) throws ShoppinglistItemException;
 
     void addItemUnitToShoppinglistItem(Long idItem, Double unitaryPrice, Integer quantity) throws ShoppinglistItemException;
+
+    List<ItemUnitDTO> getAllItemUnitsFromShoppinglistItem(Long idShoppinglistItem) throws ShoppinglistItemException;
+
+    void removeItemUnitFromShoppinglistItem(Long idShoppinglistItem, Long idItemUnit) throws ShoppinglistItemException;
 
 }

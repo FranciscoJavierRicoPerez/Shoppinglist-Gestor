@@ -1,5 +1,7 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglistitem.controller;
 
+import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetAllItemsUnit;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestAddItemUnitUnitaryPrice;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseCreateShoppinglistItem;
@@ -8,6 +10,7 @@ import es.franricodev.shopping_list_gestor_service.shoppinglistitem.exception.Sh
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.messages.ShoppinglistItemMessagesError;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.messages.ShoppinglistItemMessagesSuccess;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.service.ShoppinglistItemService;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,16 +62,43 @@ public class ShoppinglistItemController {
         return new ResponseEntity<>(responseDeleteShoppinglistItem, httpStatus);
     }
 
-    @PostMapping("/v1/{idItem}/addItemUnit")
-    public ResponseEntity<?> addItemUnit(@PathVariable("idItem") Long idItem, @RequestBody RequestAddItemUnitUnitaryPrice request) throws ShoppinglistItemException {
-        logger.info("Creating a new item unit for the shoppinglist item with id: {}", idItem);
-        shoppinglistItemService.addItemUnitToShoppinglistItem(request.getShoppinglistItemId(), request.getPrice(), request.getQuantity());
-        return ResponseEntity.ok(null);
+    @PostMapping("/v1/{idShoppinglistItem}/addItemUnit")
+    public ResponseEntity<Void> addItemUnit(@PathVariable("idShoppinglistItem") Long idShoppinglistItem, @RequestBody RequestAddItemUnitUnitaryPrice request) {
+        logger.info("Creating a new item unit for the shoppinglist item with id: {}", idShoppinglistItem);
+        HttpStatus httpStatus = HttpStatus.OK;
+        try {
+            shoppinglistItemService.addItemUnitToShoppinglistItem(request.getShoppinglistItemId(), request.getPrice(), request.getQuantity());
+        } catch (ShoppinglistItemException e) {
+            httpStatus =  HttpStatus.BAD_REQUEST;
+        }
+        return new ResponseEntity<>(httpStatus);
     }
 
     @DeleteMapping("/v1/{idItem}/removeItemUnit/{idItemUnit}")
     public ResponseEntity<?> removeItemUnit(@PathVariable("idItem") Long idItem, @PathVariable("idItemUnit") Long idItemUnit) {
-        return ResponseEntity.ok(null);
+        logger.info("Removing the item unit with id: {} from the shoppinglist item with id: {}", idItem, idItemUnit);
+        HttpStatus httpStatus = HttpStatus.OK;
+        try {
+            shoppinglistItemService.removeItemUnitFromShoppinglistItem(idItem, idItemUnit);
+        } catch (ShoppinglistItemException e) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+        }
+        return new ResponseEntity<>(httpStatus);
+    }
+
+    @GetMapping("/v1/{idShoppinglistItem}/itemsUnits")
+    public ResponseEntity<ResponseGetAllItemsUnit> getAllItemUnitsFromShoppinglistItem(@PathVariable("idShoppinglistItem") Long idShoppinglistItem) {
+        logger.info("Getting all the items units with calculate system UP of shoppinglist item with id: {}", idShoppinglistItem);
+        ResponseGetAllItemsUnit responseGetAllItemsUnit = new ResponseGetAllItemsUnit();
+        HttpStatus httpStatus = HttpStatus.OK;
+        try {
+            responseGetAllItemsUnit.setItemUnitList( shoppinglistItemService.getAllItemUnitsFromShoppinglistItem(idShoppinglistItem));
+            responseGetAllItemsUnit.setMessage("ITEMS UNITS OBTENIDOS CON EXITO");
+        } catch (ShoppinglistItemException e){
+            httpStatus =  HttpStatus.BAD_REQUEST;
+            responseGetAllItemsUnit.setMessage("ERROR OBTENIENDO LOS ITEMS UNIT");
+        }
+        return new ResponseEntity<>(responseGetAllItemsUnit, httpStatus);
     }
 
 

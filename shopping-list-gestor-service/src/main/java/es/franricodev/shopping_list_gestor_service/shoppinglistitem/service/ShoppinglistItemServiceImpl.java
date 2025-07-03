@@ -3,6 +3,8 @@ package es.franricodev.shopping_list_gestor_service.shoppinglistitem.service;
 import es.franricodev.shopping_list_gestor_service.calculateSystem.exception.CalculateSystemException;
 import es.franricodev.shopping_list_gestor_service.calculateSystem.model.CalculateSystem;
 import es.franricodev.shopping_list_gestor_service.calculateSystem.service.CalculateSystemService;
+import es.franricodev.shopping_list_gestor_service.itemUnit.dto.ItemUnitDTO;
+import es.franricodev.shopping_list_gestor_service.itemUnit.mapper.ItemUnitMapper;
 import es.franricodev.shopping_list_gestor_service.itemUnit.model.ItemUnit;
 import es.franricodev.shopping_list_gestor_service.itemUnit.service.ItemUnitService;
 import es.franricodev.shopping_list_gestor_service.product.exception.ProductException;
@@ -45,6 +47,9 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
 
     @Autowired
     private ShoppinglistItemMapper shoppinglistItemMapper;
+
+    @Autowired
+    private ItemUnitMapper itemUnitMapper;
 
     private final static Logger logger = LoggerFactory.getLogger(ShoppinglistItemServiceImpl.class);
 
@@ -125,8 +130,42 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
         for(int i = 0; i < quantity; i++) {
             itemUnitService.createItemUnit(shoppinglistItem, unitaryPrice);
         }
-        // TODO: Aqui seria interesante llamar a un funcion que se encarge de recalcular el precio total de la shoppinglist
         recalculateShoppinglistItemsTotalPrice(shoppinglistItem);
+    }
+
+    @Override
+    public List<ItemUnitDTO> getAllItemUnitsFromShoppinglistItem(Long idShoppinglistItem) throws ShoppinglistItemException {
+        logger.info("Get all item units from shoppinglist item: {}", idShoppinglistItem);
+        Optional<ShoppinglistItem> optionalShoppinglistItem = shoppinglistItemRepository.findById(idShoppinglistItem);
+        if (optionalShoppinglistItem.isEmpty()) {
+            throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_NOT_FOUND_ERR);
+        }
+        ShoppinglistItem shoppinglistItem = optionalShoppinglistItem.get();
+        if(!shoppinglistItem.getCalculateSystem().getCode().equalsIgnoreCase("UP")) {
+            throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTEM_INCORRRECT_CALCULATE_SYSTEM);
+        }
+        List<ItemUnit> itemUnits = shoppinglistItem.getItemUnitList();
+        return itemUnitMapper.itemUnitListToItemUnitDtoList(itemUnits);
+    }
+
+    @Override
+    public void removeItemUnitFromShoppinglistItem(Long idShoppinglistItem, Long idItemUnit) throws ShoppinglistItemException {
+        logger.info("Removing the item unit: {} from the shoppinglist: {}", idItemUnit, idShoppinglistItem);
+        try {
+            Optional<ShoppinglistItem> optionalShoppinglistItem = shoppinglistItemRepository.findById(idShoppinglistItem);
+            if (optionalShoppinglistItem.isEmpty()) {
+                throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_NOT_FOUND_ERR);
+            }
+            ShoppinglistItem shoppinglistItem = optionalShoppinglistItem.get();
+            ItemUnit itemUnit = itemUnitService.findItemUnitById(idItemUnit);
+            if(!shoppinglistItem.getItemUnitList().remove(itemUnit)){
+                throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISITEM_DELETE_ITEM_UNIT_ERR);
+            }
+            shoppinglistItemRepository.save(shoppinglistItem);
+            itemUnitService.deleteItemUnit(itemUnit);
+        } catch (Exception e) {
+            throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_GENERIC_ERR);
+        }
     }
 
     private void recalculateShoppinglistItemsTotalPrice(ShoppinglistItem shoppinglistItem) {

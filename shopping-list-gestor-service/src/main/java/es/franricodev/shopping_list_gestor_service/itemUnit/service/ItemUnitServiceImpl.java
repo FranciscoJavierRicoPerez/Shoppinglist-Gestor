@@ -26,4 +26,14 @@ public class ItemUnitServiceImpl implements ItemUnitService {
         itemUnit.setShoppinglistItem(shoppinglistItem);
         return itemUnitRepository.save(itemUnit);
     }
+
+    @Override
+    public ItemUnit findItemUnitById(Long id) throws Exception {
+        return itemUnitRepository.findById(id).orElseThrow(Exception::new);
+    }
+
+    @Override
+    public void deleteItemUnit(ItemUnit itemUnit) {
+        itemUnitRepository.delete(itemUnit);
+    }
 }
