@@ -7,5 +7,4 @@ import lombok.Data;
 public class ItemUnitDTO {
     private Long id;
     private Double unitPrice;
-    // private List<ShoppinglistItemDTO> shoppinglistItems;
 }

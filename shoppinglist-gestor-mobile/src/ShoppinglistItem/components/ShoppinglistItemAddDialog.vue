@@ -167,7 +167,7 @@ function verifyAddItemForm(): boolean {
           ></IonInput>
         </IonCardContent>
       </IonCard>
-      <!-- ********************************************************* -->
+      <!-- ********************************************************** -->
       <!-- ION CARD PARA EL CALCULO DE LOS ITEM EN KG/€-->
       <!-- ********************************************************** -->
       <IonButton

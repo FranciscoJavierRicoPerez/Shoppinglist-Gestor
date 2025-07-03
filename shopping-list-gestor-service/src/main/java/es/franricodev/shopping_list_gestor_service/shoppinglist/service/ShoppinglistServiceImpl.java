@@ -111,14 +111,17 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
     }
 
     @Override
-    public void addItemsToShoppinglist(Shoppinglist shoppinglist, ShoppinglistItem shoppinglistItem) {
-        if (shoppinglist.getItems() != null) {
-            shoppinglist.getItems().add(shoppinglistItem);
-        } else {
-            shoppinglist.setItems(new ArrayList<>());
-            shoppinglist.getItems().add(shoppinglistItem);
+    public void calculateShoppinglistTotalPrice(Long id) throws ShoppinglistException {
+        LOGGER.info("Calculate the shoppinglist total price");
+        Shoppinglist shoppinglist = findShoppinglistById(id);
+        Double price = 0D;
+        List<ShoppinglistItem> shoppinglistItemList = shoppinglist.getItems();
+        for(ShoppinglistItem shoppinglistItem : shoppinglistItemList) {
+            price += shoppinglistItem.getCalculatedPrice();
         }
+        shoppinglist.setTotalPrice(price);
         shoppinglistRepository.save(shoppinglist);
     }
+
 
 }
