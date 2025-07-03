@@ -2,6 +2,7 @@
 import {
   IonButton,
   IonContent,
+  IonIcon,
   IonInput,
   IonItem,
   IonPopover,
@@ -34,8 +35,8 @@ function addItem() {
 }
 </script>
 <template>
-  <IonButton :id="'click-trigger' + params.idShoppinglistItem"
-    >Añadir unidad</IonButton
+  <IonButton size="small" :id="'click-trigger' + params.idShoppinglistItem"
+    > <IonIcon name="add-circle-outline"></IonIcon>Unidad</IonButton
   >
   <IonPopover
     :trigger="'click-trigger' + params.idShoppinglistItem"

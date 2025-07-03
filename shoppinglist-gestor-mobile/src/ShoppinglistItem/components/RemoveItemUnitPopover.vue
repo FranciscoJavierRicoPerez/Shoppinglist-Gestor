@@ -8,6 +8,7 @@ import {
   IonItem,
   IonList,
   IonPopover,
+  IonIcon
 } from "@ionic/vue";
 import { ref } from "vue";
 
@@ -42,8 +43,11 @@ async function deleteItemUnit(idItemUnit: number) {
   <IonButton
     @click="getAllItemUnits"
     color="warning"
+    shape="round"
     :id="'click-trigger-remove-item-' + params.idShoppinglistItem"
-    >Borrar unidad</IonButton
+    >
+    <IonIcon name="close-circle-outline"></IonIcon>
+    Unidad</IonButton
   >
   <IonPopover
     :trigger="'click-trigger-remove-item-' + params.idShoppinglistItem"
@@ -53,8 +57,8 @@ async function deleteItemUnit(idItemUnit: number) {
       <IonList>
         <IonItem v-for="itemUnit in itemsUnits">
           <p>precio unitario: {{ itemUnit.unitPrice }}</p>
-          <IonButton color="danger" @click="deleteItemUnit(itemUnit.id)"
-            >Borrar</IonButton
+          <IonButton color="danger" @click="deleteItemUnit(itemUnit.id)" shape="round"
+            ><IonIcon name="close-circle-outline"></IonIcon></IonButton
           >
         </IonItem>
       </IonList>
