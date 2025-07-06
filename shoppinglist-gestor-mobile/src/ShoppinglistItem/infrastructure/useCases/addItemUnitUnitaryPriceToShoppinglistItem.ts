@@ -1,19 +1,21 @@
 import axios from "axios";
 import { RequestAddUnitaryPriceItemUnit } from "../models/RequestAddUnitaryPriceItemUnit";
 
-async function InMemory(data: RequestAddUnitaryPriceItemUnit) {}
+async function InMemory(data: RequestAddUnitaryPriceItemUnit| null) {}
 
-async function Api(data: RequestAddUnitaryPriceItemUnit) {
-  const url =
+async function Api(data: RequestAddUnitaryPriceItemUnit | null) {
+  if (data) {
+    const url =
     import.meta.env.VITE_API_URL_COMPUTER +
     "api/shoppinglistitem/v1/" +
     data.shoppinglistItemId +
-    "/addItemUnit";
+    "/addItemUnitUP";
     await axios.post(url, data)
+  } 
 }
 
 async function addItemUnitUnitaryPriceToShoppinglistItem(
-  data: RequestAddUnitaryPriceItemUnit
+  data: RequestAddUnitaryPriceItemUnit |null
 ) {
   import.meta.env.VITE_DATA_ACCESS === "LOCAL"
     ? await InMemory(data)

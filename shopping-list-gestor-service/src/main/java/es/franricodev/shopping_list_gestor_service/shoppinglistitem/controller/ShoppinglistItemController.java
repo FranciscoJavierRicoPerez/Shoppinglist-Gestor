@@ -10,6 +10,7 @@ import es.franricodev.shopping_list_gestor_service.shoppinglistitem.exception.Sh
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.messages.ShoppinglistItemMessagesError;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.messages.ShoppinglistItemMessagesSuccess;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.service.ShoppinglistItemService;
+import es.franricodev.shopping_list_gestor_service.wpItemUnit.dto.request.RequestAddItemUnitWP;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,9 +63,9 @@ public class ShoppinglistItemController {
         return new ResponseEntity<>(responseDeleteShoppinglistItem, httpStatus);
     }
 
-    @PostMapping("/v1/{idShoppinglistItem}/addItemUnit")
+    @PostMapping("/v1/{idShoppinglistItem}/addItemUnitUP")
     public ResponseEntity<Void> addItemUnit(@PathVariable("idShoppinglistItem") Long idShoppinglistItem, @RequestBody RequestAddItemUnitUnitaryPrice request) {
-        logger.info("Creating a new item unit for the shoppinglist item with id: {}", idShoppinglistItem);
+        logger.info("Creating a new item unit UP for the shoppinglist item with id: {}", idShoppinglistItem);
         HttpStatus httpStatus = HttpStatus.OK;
         try {
             shoppinglistItemService.addItemUnitToShoppinglistItem(request.getShoppinglistItemId(), request.getPrice(), request.getQuantity());
@@ -99,6 +100,18 @@ public class ShoppinglistItemController {
             responseGetAllItemsUnit.setMessage("ERROR OBTENIENDO LOS ITEMS UNIT");
         }
         return new ResponseEntity<>(responseGetAllItemsUnit, httpStatus);
+    }
+
+    @PostMapping("/v1/{idShoppinglistItem}/addItemUnitWP")
+    public ResponseEntity<Void> addItemUnitWPToShoppinglistItem(@PathVariable("idShoppinglistItem") Long idShoppinglistItem, @RequestBody RequestAddItemUnitWP requestAddItemUnitWP) {
+        logger.info("Creating a new item unit WP for the shoppinglist item with id: {}", idShoppinglistItem);
+        HttpStatus httpStatus = HttpStatus.OK;
+        try {
+            shoppinglistItemService.addItemUnitWPToShoppinglistItem(idShoppinglistItem, requestAddItemUnitWP);
+        }catch (ShoppinglistItemException e) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+        }
+        return ResponseEntity.ok(null);
     }
 
 

@@ -30,13 +30,18 @@ const { refetch: addItemUnitToShoppinglistItem } =
 function addItem() {
   if (params.idShoppinglistItem) {
     form.value.shoppinglistItemId = params.idShoppinglistItem;
-    addItemUnitToShoppinglistItem(form.value);
+    addItemUnitToShoppinglistItem(form.value, null);
   }
 }
 </script>
 <template>
-  <IonButton size="small" :id="'click-trigger' + params.idShoppinglistItem"
-    > <IonIcon name="add-circle-outline"></IonIcon>Unidad</IonButton
+  <IonButton
+    style="margin-left: 2.5rem"
+    size="small"
+    shape="round"
+    :id="'click-trigger' + params.idShoppinglistItem"
+  >
+    <IonIcon name="add-circle-outline"></IonIcon>Unidad</IonButton
   >
   <IonPopover
     :trigger="'click-trigger' + params.idShoppinglistItem"

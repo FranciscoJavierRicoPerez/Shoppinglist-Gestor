@@ -9,7 +9,6 @@ import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.Shoppi
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 

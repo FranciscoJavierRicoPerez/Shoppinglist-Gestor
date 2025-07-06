@@ -4,6 +4,7 @@ import es.franricodev.shopping_list_gestor_service.calculateSystem.model.Calcula
 import es.franricodev.shopping_list_gestor_service.itemUnit.model.ItemUnit;
 import es.franricodev.shopping_list_gestor_service.itemUnit.repository.ItemUnitRepository;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.ShoppinglistItem;
+import es.franricodev.shopping_list_gestor_service.wpItemUnit.dto.request.RequestAddItemUnitWP;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.model.WpItemUnit;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.repository.WpItemUnitRepository;
 import org.slf4j.Logger;
@@ -44,5 +45,14 @@ public class ItemUnitServiceImpl implements ItemUnitService {
     @Override
     public void deleteItemUnit(ItemUnit itemUnit) {
         itemUnitRepository.delete(itemUnit);
+    }
+
+    @Override
+    public void updateItemUnit(ItemUnit itemUnit, RequestAddItemUnitWP requestAddItemUnitWP) {
+        WpItemUnit wpItemUnit = itemUnit.getWpItemUnit();
+        wpItemUnit.setPriceKg(requestAddItemUnitWP.getPriceKg());
+        wpItemUnit.setWeight(requestAddItemUnitWP.getWeight());
+        wpItemUnitRepository.save(wpItemUnit);
+        //itemUnit.setWpItemUnit(wpItemUnit);
     }
 }

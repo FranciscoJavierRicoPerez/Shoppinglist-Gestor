@@ -20,6 +20,7 @@ import es.franricodev.shopping_list_gestor_service.shoppinglistitem.mapper.Shopp
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.messages.ShoppinglistItemMessagesError;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.ShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.repository.ShoppinglistItemRepository;
+import es.franricodev.shopping_list_gestor_service.wpItemUnit.dto.request.RequestAddItemUnitWP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -166,6 +167,27 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
         } catch (Exception e) {
             throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_GENERIC_ERR);
         }
+    }
+
+    @Override
+    public void addItemUnitWPToShoppinglistItem(Long idShoppinglistItem, RequestAddItemUnitWP requestAddItemUnitWP) throws ShoppinglistItemException {
+        logger.info("Adding new item unit WP to the shoppinglistitem with id: {}", idShoppinglistItem);
+        Optional<ShoppinglistItem> optionalShoppinglistItem = shoppinglistItemRepository.findById(idShoppinglistItem);
+        if (optionalShoppinglistItem.isEmpty()) {
+            throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_NOT_FOUND_ERR);
+        }
+        ShoppinglistItem shoppinglistItem = optionalShoppinglistItem.get();
+        // En este caso, solo puede existir un unico item unit de tipo WP, unicamente se ira actualizando el precio o el peso.
+        // por lo tanto hay que buscar si existe un item unit previo
+        if(shoppinglistItem.getItemUnitList().isEmpty()) {
+            ItemUnit itemUnit = itemUnitService.createItemUnit(shoppinglistItem, 0D, shoppinglistItem.getCalculateSystem());
+            shoppinglistItem.setItemUnitList(Collections.singletonList(itemUnit));
+        } else {
+            logger.info("The shoppinglist item already have a item unit WP, this is gonna be updted with the new values of weight and pricekg");
+            // En este caso se tiene que actualizar el shoppinglist item
+            itemUnitService.updateItemUnit(shoppinglistItem.getItemUnitList().get(0), requestAddItemUnitWP);
+        }
+        shoppinglistItemRepository.save(shoppinglistItem);
     }
 
     private void recalculateShoppinglistItemsTotalPrice(ShoppinglistItem shoppinglistItem) {
