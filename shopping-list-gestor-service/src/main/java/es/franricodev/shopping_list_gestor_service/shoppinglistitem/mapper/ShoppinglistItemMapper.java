@@ -9,7 +9,6 @@ import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.Shoppi
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -29,7 +28,7 @@ public interface ShoppinglistItemMapper {
 
     List<ShoppinglistItem> shoppinglistItemDtoListToShoppinglistItemList(List<ShoppinglistItemDTO> shoppinglistItemDTOS);
 
-    // @Mapping(target = "calculateSystemCode", expression = "java(shoppinglistItem.getCalculateSystems().size() > 0 ? shoppinglistItem.getCalculateSystems().stream().findFirst().get().getCode() : null)")
+    @Mapping(target = "calculateSystemCode", expression = "java(shoppinglistItem.getCalculateSystem() != null ? shoppinglistItem.getCalculateSystem().getCode() : null)")
     ShoppinglistItemMetadataDTO shoppinglistItemToShoppinglistItemMetadataDTO(ShoppinglistItem shoppinglistItem);
 
 }

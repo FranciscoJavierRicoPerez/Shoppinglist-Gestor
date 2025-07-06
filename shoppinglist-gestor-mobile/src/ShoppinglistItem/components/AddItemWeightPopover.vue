@@ -7,21 +7,20 @@ import {
   IonItem,
   IonPopover,
 } from "@ionic/vue";
-import { ref } from "vue";
 import {
-  defaultRequestAddUnitaryPriceItemUnit,
-  RequestAddUnitaryPriceItemUnit,
-} from "@/ShoppinglistItem/infrastructure/models/RequestAddUnitaryPriceItemUnit";
+  defaultRequestAddWeightPriceItemUnit,
+  RequestAddWeightPriceItemUnit,
+} from "../infrastructure/models/RequestAddWeightPriceItemUnit";
+import { ref } from "vue";
 import { useAddItemUnitToShoppinglistItem } from "../application/useAddItemUnitToShoppinglistItem";
-
 const params = defineProps({
   idShoppinglistItem: {
     type: Number,
   },
 });
 
-const form = ref<RequestAddUnitaryPriceItemUnit>({
-  ...defaultRequestAddUnitaryPriceItemUnit,
+const form = ref<RequestAddWeightPriceItemUnit>({
+  ...defaultRequestAddWeightPriceItemUnit,
 });
 
 const { refetch: addItemUnitToShoppinglistItem } =
@@ -30,19 +29,19 @@ const { refetch: addItemUnitToShoppinglistItem } =
 function addItem() {
   if (params.idShoppinglistItem) {
     form.value.shoppinglistItemId = params.idShoppinglistItem;
-    addItemUnitToShoppinglistItem(form.value, null);
+    addItemUnitToShoppinglistItem(null, form.value, false);
   }
 }
 </script>
 <template>
   <IonButton
-    style="margin-left: 2.5rem"
     size="small"
     shape="round"
+    expand="block"
     :id="'click-trigger' + params.idShoppinglistItem"
   >
-    <IonIcon name="add-circle-outline"></IonIcon>Unidad</IonButton
-  >
+    <IonIcon name="add-circle-outline"></IonIcon> Kg/€
+  </IonButton>
   <IonPopover
     :trigger="'click-trigger' + params.idShoppinglistItem"
     trigger-action="click"
@@ -50,21 +49,23 @@ function addItem() {
     <IonContent class="ion-padding">
       <IonItem>
         <IonInput
-          v-model="form.quantity"
-          label="Cantidad"
+          v-model="form.weight"
+          label="Peso en Kg"
           type="number"
           placeholder="0"
         ></IonInput>
       </IonItem>
       <IonItem>
         <IonInput
-          v-model="form.price"
-          label="Precio"
+          v-model="form.priceKg"
+          label="Precio KG/€"
           type="number"
-          placeholder="0.0€"
+          placeholder="0"
         ></IonInput>
       </IonItem>
-      <IonButton color="primary" @click="addItem">Añadir</IonButton>
+      <IonButton color="primary" size="small" expand="block" @click="addItem"
+        >Añadir</IonButton
+      >
     </IonContent>
   </IonPopover>
 </template>

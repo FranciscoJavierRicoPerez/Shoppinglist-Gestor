@@ -13,7 +13,7 @@ defineProps({
 
 </script>
 <template>
-  <IonCard style="background-color: rgb(51, 255, 153);">
+  <IonCard style="background-color: rgb(224, 252, 232);">
     <IonCardHeader>
       <IonCardTitle>INFORMACIÓN - {{ title }}</IonCardTitle>
     </IonCardHeader>

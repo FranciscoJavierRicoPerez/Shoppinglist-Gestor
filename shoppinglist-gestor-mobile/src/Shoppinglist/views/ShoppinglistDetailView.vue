@@ -86,30 +86,31 @@ function updateShoppinglistItemsElementsVisible() {
           </IonCardTitle>
           <IonCardSubtitle>
             <IonChip color="warning"
-              >Lista de la compra del {{ shoppinglistDetails.creationDate }} al
-              {{ shoppinglistDetails.closeDate }}</IonChip
-            >
+              >Lista de la compra del {{ shoppinglistDetails.creationDate }}
+            </IonChip>
           </IonCardSubtitle>
         </IonCardHeader>
         <IonCardContent>
-         <div v-if="shoppinglistDetails.items.length === 0">
-          <Information :title="'ARTICULOS'" :message="'No hay articulos en esta lista de la compra'"></Information>
-         </div>
-         <div v-else>
-           <IonList>
-            <ShoppinglistItemCard
-              :shoppinglistItemList="shoppinglistDetails.items"
-            ></ShoppinglistItemCard>
-          </IonList>
-          <IonInfiniteScroll @ionInfinite="ionInfinite">
-            <IonInfiniteScrollContent></IonInfiniteScrollContent>
-          </IonInfiniteScroll>
-         </div>
+          <div v-if="shoppinglistDetails.items.length === 0">
+            <Information
+              :title="'ARTICULOS'"
+              :message="'No hay articulos en esta lista de la compra'"
+            ></Information>
+          </div>
+          <div v-else>
+            <IonList>
+              <ShoppinglistItemCard
+                :shoppinglistItemList="shoppinglistDetails.items"
+              ></ShoppinglistItemCard>
+            </IonList>
+            <IonInfiniteScroll @ionInfinite="ionInfinite">
+              <IonInfiniteScrollContent></IonInfiniteScrollContent>
+            </IonInfiniteScroll>
+          </div>
         </IonCardContent>
       </IonCard>
       <IonFab horizontal="end" vertical="bottom" slot="fixed">
-        <IonFabButton @click="openModal = !openModal
-        ">
+        <IonFabButton @click="openModal = !openModal">
           <IonIcon name="add-outline"></IonIcon>
         </IonFabButton>
       </IonFab>

@@ -1,6 +1,7 @@
 package es.franricodev.shopping_list_gestor_service.itemUnit.model;
 
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.ShoppinglistItem;
+import es.franricodev.shopping_list_gestor_service.wpItemUnit.model.WpItemUnit;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,4 +25,8 @@ public class ItemUnit {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shoppinglist_item_id")
     private ShoppinglistItem shoppinglistItem;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "wp_item_unit_id")
+    private WpItemUnit wpItemUnit;
 }

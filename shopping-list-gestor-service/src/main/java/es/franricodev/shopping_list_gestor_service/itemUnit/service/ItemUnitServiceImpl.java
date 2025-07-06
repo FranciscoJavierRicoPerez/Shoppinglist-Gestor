@@ -1,8 +1,12 @@
 package es.franricodev.shopping_list_gestor_service.itemUnit.service;
 
+import es.franricodev.shopping_list_gestor_service.calculateSystem.model.CalculateSystem;
 import es.franricodev.shopping_list_gestor_service.itemUnit.model.ItemUnit;
 import es.franricodev.shopping_list_gestor_service.itemUnit.repository.ItemUnitRepository;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.ShoppinglistItem;
+import es.franricodev.shopping_list_gestor_service.wpItemUnit.dto.request.RequestAddItemUnitWP;
+import es.franricodev.shopping_list_gestor_service.wpItemUnit.model.WpItemUnit;
+import es.franricodev.shopping_list_gestor_service.wpItemUnit.repository.WpItemUnitRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +20,20 @@ public class ItemUnitServiceImpl implements ItemUnitService {
     @Autowired
     private ItemUnitRepository itemUnitRepository;
 
+    @Autowired
+    private WpItemUnitRepository wpItemUnitRepository;
+
     private static final Logger logger = LoggerFactory.getLogger(ItemUnitServiceImpl.class);
 
     @Override
-    public ItemUnit createItemUnit(ShoppinglistItem shoppinglistItem, Double unitaryPrice) {
+    public ItemUnit createItemUnit(ShoppinglistItem shoppinglistItem, Double unitaryPrice, CalculateSystem calculateSystem) {
         logger.info("Creating a item unit form the shoppinglist item: {}", shoppinglistItem.getId());
         ItemUnit itemUnit = new ItemUnit();
         itemUnit.setUnitPrice(unitaryPrice);
         itemUnit.setShoppinglistItem(shoppinglistItem);
+        if(calculateSystem.getCode().equalsIgnoreCase("WP")) {
+            itemUnit.setWpItemUnit(wpItemUnitRepository.save(new WpItemUnit()));
+        }
         return itemUnitRepository.save(itemUnit);
     }
 
@@ -35,5 +45,14 @@ public class ItemUnitServiceImpl implements ItemUnitService {
     @Override
     public void deleteItemUnit(ItemUnit itemUnit) {
         itemUnitRepository.delete(itemUnit);
+    }
+
+    @Override
+    public void updateItemUnit(ItemUnit itemUnit, RequestAddItemUnitWP requestAddItemUnitWP) {
+        WpItemUnit wpItemUnit = itemUnit.getWpItemUnit();
+        wpItemUnit.setPriceKg(requestAddItemUnitWP.getPriceKg());
+        wpItemUnit.setWeight(requestAddItemUnitWP.getWeight());
+        wpItemUnitRepository.save(wpItemUnit);
+        //itemUnit.setWpItemUnit(wpItemUnit);
     }
 }
