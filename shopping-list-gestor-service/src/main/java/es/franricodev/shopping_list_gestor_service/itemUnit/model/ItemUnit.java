@@ -1,6 +1,7 @@
 package es.franricodev.shopping_list_gestor_service.itemUnit.model;
 
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.ShoppinglistItem;
+import es.franricodev.shopping_list_gestor_service.upItemUnit.model.UpItemUnit;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.model.WpItemUnit;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -19,8 +20,8 @@ public class ItemUnit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "UNIT_PRICE")
-    private Double unitPrice;
+    @Column(name = "TOTAL_PRICE")
+    private Double totalPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shoppinglist_item_id")
@@ -29,4 +30,8 @@ public class ItemUnit {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "wp_item_unit_id")
     private WpItemUnit wpItemUnit;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "up_item_unit_id")
+    private UpItemUnit upItemUnit;
 }

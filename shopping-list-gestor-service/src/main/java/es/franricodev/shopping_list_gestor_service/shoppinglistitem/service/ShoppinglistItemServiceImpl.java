@@ -191,9 +191,11 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
     }
 
     private void recalculateShoppinglistItemsTotalPrice(ShoppinglistItem shoppinglistItem) {
-        Double totalShoppinglistPrice = 0D;
+        double totalShoppinglistPrice = 0D;
         for(ItemUnit itemUnit : shoppinglistItem.getItemUnitList()) {
-            totalShoppinglistPrice += itemUnit.getUnitPrice();
+            if(itemUnit.getTotalPrice() != null) {
+                totalShoppinglistPrice += itemUnit.getTotalPrice();
+            }
         }
         shoppinglistItem.setCalculatedPrice(totalShoppinglistPrice);
         shoppinglistItemRepository.save(shoppinglistItem);
