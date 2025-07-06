@@ -91,7 +91,7 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
 
             shoppinglistItem =  shoppinglistItemRepository.save(shoppinglistItem);
             // TODO: Crear el item unit
-            ItemUnit itemUnit = itemUnitService.createItemUnit(shoppinglistItem, requestCreateShoppinglistItem.getUnitaryPrice());
+            ItemUnit itemUnit = itemUnitService.createItemUnit(shoppinglistItem, requestCreateShoppinglistItem.getUnitaryPrice(), calculateSystem);
 
             productService.assignProductToShoppinglistItem(shoppinglistItem, product);
 
@@ -128,7 +128,7 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
         }
         ShoppinglistItem shoppinglistItem = optionalShoppinglistItem.get();
         for(int i = 0; i < quantity; i++) {
-            itemUnitService.createItemUnit(shoppinglistItem, unitaryPrice);
+            itemUnitService.createItemUnit(shoppinglistItem, unitaryPrice, shoppinglistItem.getCalculateSystem());
         }
         recalculateShoppinglistItemsTotalPrice(shoppinglistItem);
     }
