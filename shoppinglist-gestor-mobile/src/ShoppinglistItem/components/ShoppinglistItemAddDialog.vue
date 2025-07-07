@@ -27,6 +27,7 @@ import { useGetAllProducts } from "@/Product/application/useGetAllProducts";
 import { useCreateShoppinglistItem } from "@/ShoppinglistItem/application/useCreateShoppinglistItem";
 import { useRoute } from "vue-router";
 import { useShoppinglistItemStore } from "../stores/shoppinglistItemStore";
+import { ResponseNewShoppinglistItem } from "../infrastructure/models/ResponseNewShoppinglistItem";
 const route = useRoute();
 const { refetch: getAllProductList } = useGetAllProducts();
 const { refetch: createShoppinglistItem } = useCreateShoppinglistItem();
@@ -75,23 +76,23 @@ function closeModal() {
 }
 
 async function addShoppinglistItem() {
-  console.log("INFO: Adding new shoppinglist item");
-  console.log(form.value);
   form.value.shoppinglistId = Number(route.params.id);
-  await createShoppinglistItem(form.value);
-  debugger;
-  let actualDate = new Date();
-  store.addShoppinglistItemMetadata({
-    id: -1,
-    assignationToListDate: actualDate.toString(),
-    name:
-      form.value.requestProduct.name !== undefined
-        ? form.value.requestProduct.name
-        : "",
-    calculateSystemCode: form.value.calculateSystem,
-  });
-  // LO SUYO SERIA EMITIR UN EVENTO QUE INDIQUE SE DE TIENE QUE ACTUALIZAR LA LISTA DE SHOPPINGLIST ITEMS
-  emit("updateShoppinglistItemList");
+  let response: ResponseNewShoppinglistItem = await createShoppinglistItem(
+    form.value
+  );
+  if (response.created) {
+    let actualDate = new Date();
+    store.addShoppinglistItemMetadata({
+      id: response.idItemCreated,
+      assignationToListDate: actualDate.toString(),
+      name:
+        form.value.requestProduct.name !== undefined
+          ? form.value.requestProduct.name
+          : "",
+      calculateSystemCode: form.value.calculateSystem,
+    });
+    emit("updateShoppinglistItemList");
+  }
 }
 
 function verifyAddItemForm(): boolean {
