@@ -16,7 +16,7 @@ async function InMemory(
 ): Promise<ResponseDeleteShoppinglistItem> {
   return {
     message: "",
-    delete: false,
+    delete: true,
   };
 }
 

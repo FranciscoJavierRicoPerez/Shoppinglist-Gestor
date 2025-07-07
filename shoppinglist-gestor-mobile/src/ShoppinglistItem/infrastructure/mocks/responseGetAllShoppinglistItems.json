@@ -1,23 +1,23 @@
 [
   {
     "id": 1,
-    "name": "peras",
+    "name": "peras1",
     "assignationToListDate": "05/04/2025",
     "calculatedPrice": 10,
-    "calculateSystemCode": "U"
+    "calculateSystemCode": "UP"
   },
   {
-    "id": 1,
-    "name": "peras",
+    "id": 2,
+    "name": "peras2",
     "assignationToListDate": "05/04/2025",
     "calculatedPrice": 10,
-    "calculateSystemCode": "U"
+    "calculateSystemCode": "UP"
   },
   {
-    "id": 1,
-    "name": "peras",
+    "id": 3,
+    "name": "peras3",
     "assignationToListDate": "05/04/2025",
     "calculatedPrice": 10,
-    "calculateSystemCode": "U"
+    "calculateSystemCode": "UP"
   }
 ]

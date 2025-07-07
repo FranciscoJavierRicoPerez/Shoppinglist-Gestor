@@ -26,6 +26,7 @@ import { Product } from "@/Product/domain/Product";
 import { useGetAllProducts } from "@/Product/application/useGetAllProducts";
 import { useCreateShoppinglistItem } from "@/ShoppinglistItem/application/useCreateShoppinglistItem";
 import { useRoute } from "vue-router";
+import { useShoppinglistItemStore } from "../stores/shoppinglistItemStore";
 const route = useRoute();
 const { refetch: getAllProductList } = useGetAllProducts();
 const { refetch: createShoppinglistItem } = useCreateShoppinglistItem();
@@ -35,11 +36,16 @@ defineProps({
   },
 });
 
+const store = useShoppinglistItemStore();
+
 const form = ref<ResquestNewShoppinglistItem>({
   ...defaultRequestNewShoppinglistItem,
 });
 
-const emit = defineEmits(["updateModalOpenValue"]);
+const emit = defineEmits([
+  "updateModalOpenValue",
+  "updateShoppinglistItemList",
+]);
 
 const productSelectorList = ref<Product[]>([]);
 const productSelected = ref<Product | null>(null);
@@ -53,7 +59,7 @@ onMounted(async () => {
 
 watch(productSelected, (newProductSelected) => {
   if (form.value && newProductSelected) {
-    form.value.requestProduct.productId = newProductSelected.id
+    form.value.requestProduct.productId = newProductSelected.id;
     form.value.requestProduct.name = newProductSelected.name;
   }
 });
@@ -71,8 +77,21 @@ function closeModal() {
 async function addShoppinglistItem() {
   console.log("INFO: Adding new shoppinglist item");
   console.log(form.value);
-  form.value.shoppinglistId = Number(route.params.id)
+  form.value.shoppinglistId = Number(route.params.id);
   await createShoppinglistItem(form.value);
+  debugger;
+  let actualDate = new Date();
+  store.addShoppinglistItemMetadata({
+    id: -1,
+    assignationToListDate: actualDate.toString(),
+    name:
+      form.value.requestProduct.name !== undefined
+        ? form.value.requestProduct.name
+        : "",
+    calculateSystemCode: form.value.calculateSystem,
+  });
+  // LO SUYO SERIA EMITIR UN EVENTO QUE INDIQUE SE DE TIENE QUE ACTUALIZAR LA LISTA DE SHOPPINGLIST ITEMS
+  emit("updateShoppinglistItemList");
 }
 
 function verifyAddItemForm(): boolean {
@@ -150,8 +169,7 @@ function verifyAddItemForm(): boolean {
       <!-- ION CARD PARA EL CALCULO DE LOS ITEMS EN PRECIO UNITARIO -->
       <IonCard
         v-if="
-          calculateSystemSelected !== '' &&
-          calculateSystemSelected === 'UP'
+          calculateSystemSelected !== '' && calculateSystemSelected === 'UP'
         "
       >
         <IonCardHeader>

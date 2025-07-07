@@ -12,13 +12,14 @@ import {
   IonIcon,
 } from "@ionic/vue";
 
-import type { PropType } from "vue";
+import { onMounted, ref, type PropType } from "vue";
 import { RouterLink } from "vue-router";
 import { ShoppinglistItemMetadata } from "@/ShoppinglistItem/domain/ShoppinglistItemMetadata";
 import { useDeleteShoppinglistItem } from "../application/useDeleteShoppinglistItem";
 import AddItemUnitPopover from "./AddItemUnitPopover.vue";
 import RemoveItemUnitPopover from "./RemoveItemUnitPopover.vue";
 import AddItemWeightPopover from "./AddItemWeightPopover.vue";
+import { useShoppinglistItemStore } from "../stores/shoppinglistItemStore";
 
 const { refetch: deleteShoppinglistItem } = useDeleteShoppinglistItem();
 
@@ -29,8 +30,21 @@ const props = defineProps({
   },
 });
 
+const list = ref<ShoppinglistItemMetadata[]>();
+
+const store = useShoppinglistItemStore();
+
+onMounted(() => {
+  store.setShoppinglistMetadataArray(props.shoppinglistItemList);
+  list.value = store.shoppinglistItemMetadataArray;
+});
+
 async function removeShoppinglistItem(idItem: number) {
   let response = await deleteShoppinglistItem(idItem);
+  if (response.delete) {
+    store.removeShoppinglistItemMetadata(idItem);
+    list.value = store.shoppinglistItemMetadataArray;
+  }
 }
 
 function getCalculteSystemCode(data: ShoppinglistItemMetadata | any): string {
@@ -38,7 +52,7 @@ function getCalculteSystemCode(data: ShoppinglistItemMetadata | any): string {
 }
 </script>
 <template>
-  <IonItem v-for="shoppinglistItem in shoppinglistItemList">
+  <IonItem v-for="shoppinglistItem in list">
     <IonLabel>
       <IonCard
         :class="[
@@ -89,7 +103,7 @@ function getCalculteSystemCode(data: ShoppinglistItemMetadata | any): string {
             color="danger"
             size="small"
             expand="block"
-            @click="deleteShoppinglistItem(shoppinglistItem.id)"
+            @click="removeShoppinglistItem(shoppinglistItem.id)"
             ><IonIcon name="trash-outline"></IonIcon
           ></IonButton>
         </IonCardContent>

@@ -115,6 +115,7 @@ function updateShoppinglistItemsElementsVisible() {
         </IonFabButton>
       </IonFab>
       <ShoppinglistItemAddDialog
+        @update-shoppinglist-item-list="updateShoppinglistItemsElementsVisible"
         :open-modal="openModal"
         @update-modal-open-value="openModal = !openModal"
       ></ShoppinglistItemAddDialog>
