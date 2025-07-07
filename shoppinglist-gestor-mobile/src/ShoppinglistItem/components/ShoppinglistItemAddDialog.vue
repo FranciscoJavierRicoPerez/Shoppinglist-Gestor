@@ -91,7 +91,9 @@ async function addShoppinglistItem() {
           : "",
       calculateSystemCode: form.value.calculateSystem,
     });
+    // Al lanzar la funcion closeModal al crear un shopping list item no se actualiza y aparece automaticamente :()
     emit("updateShoppinglistItemList");
+    closeModal();
   }
 }
 

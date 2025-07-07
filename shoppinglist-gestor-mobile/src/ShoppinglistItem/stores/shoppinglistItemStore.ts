@@ -14,7 +14,6 @@ export const useShoppinglistItemStore = defineStore(
     }
 
     function removeShoppinglistItemMetadata(id: number) {
-      debugger;
       setShoppinglistMetadataArray(
         shoppinglistItemMetadataArray.value.filter(
           (element) => element.id !== id
