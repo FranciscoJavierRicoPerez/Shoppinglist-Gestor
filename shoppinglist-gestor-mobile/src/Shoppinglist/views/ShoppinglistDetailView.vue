@@ -30,11 +30,14 @@ import { useRoute } from "vue-router";
 import ShoppinglistItemAddDialog from "@/ShoppinglistItem/components/ShoppinglistItemAddDialog.vue";
 import { ShoppinglistItemMetadata } from "@/ShoppinglistItem/domain/ShoppinglistItemMetadata";
 import Information from "@/Shared/components/Information.vue";
+import { useShoppinglistItemStore } from "@/ShoppinglistItem/stores/shoppinglistItemStore";
 const { refetch: getShoppinglistDetails } = useGetShoppinglistDetails();
 
 const shoppinglistDetails = ref<ShoppinglistDetails>({
   ...defaultShoppinglistDetails,
 });
+
+const store = useShoppinglistItemStore()
 
 const actualShoppinglistItemsVisible = ref<ShoppinglistItemMetadata[]>([]);
 const route = useRoute();
@@ -45,6 +48,7 @@ onMounted(async () => {
   // We have to obtain the object ShoppinglistDetails
   const param = Number(route.params.id);
   shoppinglistDetails.value = await getShoppinglistDetails(param);
+  store.setShoppinglistMetadataArray(shoppinglistDetails.value.items)
   updateShoppinglistItemsElementsVisible();
 });
 
@@ -60,10 +64,11 @@ function updateShoppinglistItemsElementsVisible() {
   const start = actualShoppinglistItemsVisible.value.length + 1;
   for (let i = 0; i < 50; i++) {
     actualShoppinglistItemsVisible.value.push(
-      shoppinglistDetails.value.items[start + i]
+      store.shoppinglistItemMetadataArray[start + i]
     );
   }
 }
+
 </script>
 <template>
   <IonPage>
@@ -91,7 +96,7 @@ function updateShoppinglistItemsElementsVisible() {
           </IonCardSubtitle>
         </IonCardHeader>
         <IonCardContent>
-          <div v-if="shoppinglistDetails.items.length === 0">
+          <div v-if="store.shoppinglistItemMetadataArray.length === 0">
             <Information
               :title="'ARTICULOS'"
               :message="'No hay articulos en esta lista de la compra'"
@@ -100,7 +105,7 @@ function updateShoppinglistItemsElementsVisible() {
           <div v-else>
             <IonList>
               <ShoppinglistItemCard
-                :shoppinglistItemList="shoppinglistDetails.items"
+                :shoppinglistItemList="store.shoppinglistItemMetadataArray"
               ></ShoppinglistItemCard>
             </IonList>
             <IonInfiniteScroll @ionInfinite="ionInfinite">
@@ -115,6 +120,7 @@ function updateShoppinglistItemsElementsVisible() {
         </IonFabButton>
       </IonFab>
       <ShoppinglistItemAddDialog
+        @update-shoppinglist-item-list="updateShoppinglistItemsElementsVisible"
         :open-modal="openModal"
         @update-modal-open-value="openModal = !openModal"
       ></ShoppinglistItemAddDialog>

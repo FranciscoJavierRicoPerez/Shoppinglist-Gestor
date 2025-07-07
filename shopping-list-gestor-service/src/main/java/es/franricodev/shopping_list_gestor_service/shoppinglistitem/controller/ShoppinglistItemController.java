@@ -37,11 +37,13 @@ public class ShoppinglistItemController {
         ResponseCreateShoppinglistItem response = new ResponseCreateShoppinglistItem();
         HttpStatus httpStatus = HttpStatus.CREATED;
         try {
-             response.setItemCreated(shoppinglistItemService.createShoppinglistItem(requestCreateShoppinglistItem, idShoppinglist));
+             response.setIdItemCreated(shoppinglistItemService.createShoppinglistItem(requestCreateShoppinglistItem, idShoppinglist).getId());
+             response.setCreated(true);
              response.setResponseMessage(ShoppinglistItemMessagesSuccess.SHOPPINGLISTITEM_CREATED_OK);
         } catch (ShoppinglistItemException e) {
-           response.setItemCreated(null);
+           response.setIdItemCreated(null);
            response.setResponseMessage(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_CREATE_ERR);
+           response.setCreated(false);
            httpStatus = HttpStatus.BAD_REQUEST;
         }
         return new ResponseEntity<>(response, httpStatus);

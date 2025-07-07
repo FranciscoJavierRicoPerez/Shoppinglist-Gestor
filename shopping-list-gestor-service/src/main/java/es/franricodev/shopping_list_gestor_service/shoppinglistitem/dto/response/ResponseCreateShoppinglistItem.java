@@ -11,6 +11,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResponseCreateShoppinglistItem {
-    private ShoppinglistItemDTO itemCreated;
+    // private ShoppinglistItemDTO itemCreated;
+    private Long idItemCreated;
+    private boolean created;
     private String responseMessage;
 }
