@@ -4,7 +4,7 @@ import { IonFooter, IonTitle } from '@ionic/vue';
 </script>
 <template>
     <IonFooter class="custom-footer">
-      <IonTitle class="custom-text">Francisco Javier Rico Pérez - 2025/2026 v0.0.1</IonTitle>
+      <IonTitle class="custom-text">v0.0.0</IonTitle>
     </IonFooter>
 </template>
 <style lang="css">

@@ -25,6 +25,6 @@ public interface ShoppinglistService {
 
     Shoppinglist findShoppinglistById(Long id) throws ShoppinglistException;
 
-    void addItemsToShoppinglist(Shoppinglist shoppinglist, ShoppinglistItem shoppinglistItem);
+    void calculateShoppinglistTotalPrice(Long id) throws ShoppinglistException;
 
 }

@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
+import java.util.*;
 
 @Service
 public class CalculateSystemServicelmpl implements CalculateSystemService{
@@ -34,12 +34,16 @@ public class CalculateSystemServicelmpl implements CalculateSystemService{
 
     @Override
     public void assignShoppinglistItemToCalculateSystem(ShoppinglistItem shoppinglistItem, CalculateSystem calculateSystem) {
-        if(calculateSystem.getShoppinglistItems() != null) {
-            calculateSystem.getShoppinglistItems().add(shoppinglistItem);
-        } else {
-            calculateSystem.setShoppinglistItems(new HashSet<>());
-            calculateSystem.getShoppinglistItems().add(shoppinglistItem);
+        List<ShoppinglistItem> shoppinglistItemList = calculateSystem.getItems();
+        if (shoppinglistItemList == null) {
+            shoppinglistItemList = new ArrayList<>();
+            calculateSystem.setItems(shoppinglistItemList);
         }
+
+        shoppinglistItem.setCalculateSystem(calculateSystem);
+        shoppinglistItemList.add(shoppinglistItem);
+
         calculateSystemRepository.save(calculateSystem);
+
     }
 }
