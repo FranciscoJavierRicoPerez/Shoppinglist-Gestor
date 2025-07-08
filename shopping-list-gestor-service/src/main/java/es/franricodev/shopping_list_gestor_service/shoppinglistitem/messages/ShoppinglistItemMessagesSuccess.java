@@ -5,4 +5,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ShoppinglistItemMessagesSuccess {
     public static final String SHOPPINGLISTITEM_CREATED_OK = "El item se ha creado correctamente";
+    public static final String SHOPPINGLISTITEM_DELETED_OK = "El item ha sido borrado correctamente";
 }

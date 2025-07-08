@@ -29,11 +29,15 @@ import ShoppinglistItemCard from "@/ShoppinglistItem/components/ShoppinglistItem
 import { useRoute } from "vue-router";
 import ShoppinglistItemAddDialog from "@/ShoppinglistItem/components/ShoppinglistItemAddDialog.vue";
 import { ShoppinglistItemMetadata } from "@/ShoppinglistItem/domain/ShoppinglistItemMetadata";
+import Information from "@/Shared/components/Information.vue";
+import { useShoppinglistItemStore } from "@/ShoppinglistItem/stores/shoppinglistItemStore";
 const { refetch: getShoppinglistDetails } = useGetShoppinglistDetails();
 
 const shoppinglistDetails = ref<ShoppinglistDetails>({
   ...defaultShoppinglistDetails,
 });
+
+const store = useShoppinglistItemStore()
 
 const actualShoppinglistItemsVisible = ref<ShoppinglistItemMetadata[]>([]);
 const route = useRoute();
@@ -44,6 +48,7 @@ onMounted(async () => {
   // We have to obtain the object ShoppinglistDetails
   const param = Number(route.params.id);
   shoppinglistDetails.value = await getShoppinglistDetails(param);
+  store.setShoppinglistMetadataArray(shoppinglistDetails.value.items)
   updateShoppinglistItemsElementsVisible();
 });
 
@@ -59,10 +64,11 @@ function updateShoppinglistItemsElementsVisible() {
   const start = actualShoppinglistItemsVisible.value.length + 1;
   for (let i = 0; i < 50; i++) {
     actualShoppinglistItemsVisible.value.push(
-      shoppinglistDetails.value.items[start + i]
+      store.shoppinglistItemMetadataArray[start + i]
     );
   }
 }
+
 </script>
 <template>
   <IonPage>
@@ -85,29 +91,36 @@ function updateShoppinglistItemsElementsVisible() {
           </IonCardTitle>
           <IonCardSubtitle>
             <IonChip color="warning"
-              >Lista de la compra del {{ shoppinglistDetails.creationDate }} al
-              {{ shoppinglistDetails.closeDate }}</IonChip
-            >
+              >Lista de la compra del {{ shoppinglistDetails.creationDate }}
+            </IonChip>
           </IonCardSubtitle>
         </IonCardHeader>
         <IonCardContent>
-          <IonList>
-            <ShoppinglistItemCard
-              :shoppinglistItemList="shoppinglistDetails.items"
-            ></ShoppinglistItemCard>
-          </IonList>
-          <IonInfiniteScroll @ionInfinite="ionInfinite">
-            <IonInfiniteScrollContent></IonInfiniteScrollContent>
-          </IonInfiniteScroll>
+          <div v-if="store.shoppinglistItemMetadataArray.length === 0">
+            <Information
+              :title="'ARTICULOS'"
+              :message="'No hay articulos en esta lista de la compra'"
+            ></Information>
+          </div>
+          <div v-else>
+            <IonList>
+              <ShoppinglistItemCard
+                :shoppinglistItemList="store.shoppinglistItemMetadataArray"
+              ></ShoppinglistItemCard>
+            </IonList>
+            <IonInfiniteScroll @ionInfinite="ionInfinite">
+              <IonInfiniteScrollContent></IonInfiniteScrollContent>
+            </IonInfiniteScroll>
+          </div>
         </IonCardContent>
       </IonCard>
       <IonFab horizontal="end" vertical="bottom" slot="fixed">
-        <IonFabButton @click="openModal = !openModal
-        ">
+        <IonFabButton @click="openModal = !openModal">
           <IonIcon name="add-outline"></IonIcon>
         </IonFabButton>
       </IonFab>
       <ShoppinglistItemAddDialog
+        @update-shoppinglist-item-list="updateShoppinglistItemsElementsVisible"
         :open-modal="openModal"
         @update-modal-open-value="openModal = !openModal"
       ></ShoppinglistItemAddDialog>

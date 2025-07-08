@@ -9,8 +9,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -29,15 +28,16 @@ public class ShoppinglistItem implements Serializable {
     @Column(name = "ASSIGNATION_LIST_DATE")
     private Date assignationToListDate;
 
-    @ManyToMany(mappedBy = "shoppinglistItems")
-    private Set<Product> products;
-
-    @ManyToMany(mappedBy = "shoppinglistItems")
-    private Set<CalculateSystem> calculateSystems;
+    @ManyToMany(mappedBy = "shoppinglistItems", fetch = FetchType.LAZY)
+    private Set<Product> products = new HashSet<>();
 
     @Column(name = "CALCULATED_PRICE")
     private Double calculatedPrice;
 
-    @ManyToMany(mappedBy = "shoppinglistItems")
-    private Set<ItemUnit> itemUnits;
+    @OneToMany(mappedBy = "shoppinglistItem", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ItemUnit> itemUnitList = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "calculate_system_id")
+    private CalculateSystem calculateSystem;
 }

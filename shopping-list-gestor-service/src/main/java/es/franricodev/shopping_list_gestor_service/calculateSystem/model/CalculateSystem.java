@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Setter
@@ -22,13 +24,7 @@ public class CalculateSystem {
     @Column(name = "CODE")
     private String code;
 
-    @ManyToMany(cascade = {
-            CascadeType.ALL
-    })
-    @JoinTable(
-            name = "calculate_system_shoppinglist_item",
-            joinColumns = {@JoinColumn(name = "calculate_system_id")},
-            inverseJoinColumns = {@JoinColumn(name = "shoppinglist_item_id")}
-    )
-    private Set<ShoppinglistItem> shoppinglistItems;
+    @OneToMany(mappedBy = "calculateSystem", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ShoppinglistItem> items = new ArrayList<>();
+
 }
