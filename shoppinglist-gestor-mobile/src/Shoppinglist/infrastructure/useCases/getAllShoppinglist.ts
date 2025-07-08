@@ -20,7 +20,12 @@ async function Api(): Promise<ResponseShoppinglist[]> {
   return response.data;
 }
 
+function wait(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 async function InMemory(): Promise<ResponseShoppinglist[]> {
+  await wait(5000);
   return responseGetShoppinglist as ResponseShoppinglist[];
 }
 

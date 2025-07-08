@@ -1,9 +1,14 @@
-import type { Shoppinglist } from '@/Shoppinglist/domain/Shoppinglist'
-import { createShoppinglistMetadata } from '@/Shoppinglist/infrastructure/useCases/createShoppinglistMetadata'
+import type { Shoppinglist } from "@/Shoppinglist/domain/Shoppinglist";
+import { createShoppinglistMetadata } from "@/Shoppinglist/infrastructure/useCases/createShoppinglistMetadata";
 
 export function useCreateShoppinglistMetadata() {
+  let loading: boolean = false;
+
   async function refetch(): Promise<Shoppinglist> {
-    return await createShoppinglistMetadata()
+    loading = true;
+    let response = await createShoppinglistMetadata();
+    loading = false;
+    return response;
   }
-  return { refetch }
+  return { refetch, loading };
 }

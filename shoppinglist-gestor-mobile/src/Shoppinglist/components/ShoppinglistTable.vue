@@ -31,7 +31,8 @@ import { useShoppinglistStore } from "../stores/shoppinglistStore";
 import Header from "@/Shared/components/Header.vue";
 import Footer from "@/Shared/components/Footer.vue";
 import Information from "@/Shared/components/Information.vue";
-const { refetch: getAllShoppinglist } = useGetAllShoppinglist();
+import Loading from "@/Shared/components/Loading.vue";
+const { refetch: getAllShoppinglist, loading: load } = useGetAllShoppinglist();
 const shoppinglistTable = ref<Shoppinglist[]>([{ ...defaultShoppinglist }]);
 const shoppinglistActiveTable = ref<Shoppinglist[]>([
   { ...defaultShoppinglist },
@@ -41,6 +42,8 @@ const shoppinglistNoActiveTable = ref<Shoppinglist[]>([
 ]);
 const { refetch: createShoppinglistMetadata } = useCreateShoppinglistMetadata();
 const store = useShoppinglistStore();
+
+const loadPage = ref<boolean>(false);
 
 // Map con las secciones
 const mapSections = ref(
@@ -61,6 +64,10 @@ onMounted(async () => {
   console.log(shoppinglistTable.value);
   store.setShoppinglistArray(shoppinglistTable.value);
   updateShoppinglistTables(false);
+});
+
+watch(load, (newLoading) => {
+  loadPage.value = newLoading;
 });
 
 watch(selectedTab, (newSelectedTab) => {
@@ -129,37 +136,43 @@ function assignActualSelectedTabBySlide(data: SegmentChangeEventDetail) {
     <Header :title="'Listas de la compra'"></Header>
     <Footer></Footer>
     <IonContent>
-      <IonSegment @ion-change="assignActualSelectedTabBySlide($event.detail)">
-        <IonSegmentButton
-          v-for="value in mapSections"
-          :value="value[0]"
-          :content-id="value[0]"
-          @click="selectedTab = value[0]"
-        >
-          <IonLabel>{{ value[1] }}</IonLabel>
-        </IonSegmentButton>
-      </IonSegment>
-      <div v-if="actualShoppinglistVisible.length === 0">
-        <Information :title="'LISTA DE LA COMPRA'" :message="'No hay listas de la compra para esta opción'"></Information>
-      </div>
-      <div v-else>
-        <IonSegmentView>
-          <IonSegmentContent v-for="value in mapSections" :id="value[0]">
-            <IonList>
-              <IonItem v-for="shoppinglist in actualShoppinglistVisible">
-                <IonLabel>
-                  <ShoppinglistCardInfo
-                    :shoppinglist="shoppinglist"
-                    @updateShoppinglistTables="updateShoppinglistTables"
-                  ></ShoppinglistCardInfo>
-                </IonLabel>
-              </IonItem>
-            </IonList>
-            <IonInfiniteScroll @ionInfinite="ionInfinite">
-              <IonInfiniteScrollContent></IonInfiniteScrollContent>
-            </IonInfiniteScroll>
-          </IonSegmentContent>
-        </IonSegmentView>
+      <Loading :loading="loadPage"></Loading>
+      <div v-if="!loadPage">
+        <IonSegment @ion-change="assignActualSelectedTabBySlide($event.detail)">
+          <IonSegmentButton
+            v-for="value in mapSections"
+            :value="value[0]"
+            :content-id="value[0]"
+            @click="selectedTab = value[0]"
+          >
+            <IonLabel>{{ value[1] }}</IonLabel>
+          </IonSegmentButton>
+        </IonSegment>
+        <div v-if="actualShoppinglistVisible.length === 0 && !loadPage">
+          <Information
+            :title="'LISTA DE LA COMPRA'"
+            :message="'No hay listas de la compra para esta opción'"
+          ></Information>
+        </div>
+        <div v-else>
+          <IonSegmentView>
+            <IonSegmentContent v-for="value in mapSections" :id="value[0]">
+              <IonList>
+                <IonItem v-for="shoppinglist in actualShoppinglistVisible">
+                  <IonLabel>
+                    <ShoppinglistCardInfo
+                      :shoppinglist="shoppinglist"
+                      @updateShoppinglistTables="updateShoppinglistTables"
+                    ></ShoppinglistCardInfo>
+                  </IonLabel>
+                </IonItem>
+              </IonList>
+              <IonInfiniteScroll @ionInfinite="ionInfinite">
+                <IonInfiniteScrollContent></IonInfiniteScrollContent>
+              </IonInfiniteScroll>
+            </IonSegmentContent>
+          </IonSegmentView>
+        </div>
       </div>
       <IonFab horizontal="end" vertical="bottom" slot="fixed">
         <IonFabButton @click="addNewShoppinglist">
