@@ -145,6 +145,13 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
             itemUnitService.createItemUnit(shoppinglistItem, unitaryPrice, shoppinglistItem.getCalculateSystem());
         }
         recalculateShoppinglistItemsTotalPrice(shoppinglistItem);
+        Shoppinglist shoppinglist = shoppinglistService.findShoppinglistByShoppinglistItemId(shoppinglistItem.getId());
+        try {
+            shoppinglist = shoppinglistService.calculateShoppinglistTotalPrice(shoppinglist.getId());
+        } catch (ShoppinglistException e) {
+            throw new RuntimeException(e);
+        }
+        shoppinglistService.updateShoppinglist(shoppinglist);
     }
 
     @Override
@@ -213,9 +220,10 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
     private void recalculateShoppinglistItemsTotalPrice(ShoppinglistItem shoppinglistItem) {
         double totalShoppinglistPrice = 0D;
         for(ItemUnit itemUnit : shoppinglistItem.getItemUnitList()) {
-            if(itemUnit.getTotalPrice() != null) {
+            /* if(itemUnit.getTotalPrice() != null) {
                 totalShoppinglistPrice += itemUnitService.calculateItemUnitTotalPrice(itemUnit);
-            }
+            } */
+            totalShoppinglistPrice += itemUnitService.calculateItemUnitTotalPrice(itemUnit);
         }
         shoppinglistItem.setCalculatedPrice(totalShoppinglistPrice);
         shoppinglistItemRepository.save(shoppinglistItem);
