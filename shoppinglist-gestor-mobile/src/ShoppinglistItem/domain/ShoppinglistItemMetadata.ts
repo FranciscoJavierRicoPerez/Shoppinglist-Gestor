@@ -3,4 +3,5 @@ export interface ShoppinglistItemMetadata {
   assignationToListDate: string
   name: string
   calculateSystemCode: string
+  calculatedPrice: number
 }

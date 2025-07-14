@@ -61,6 +61,20 @@ public class ItemUnitServiceImpl implements ItemUnitService {
         WpItemUnit wpItemUnit = itemUnit.getWpItemUnit();
         wpItemUnit.setPriceKg(requestAddItemUnitWP.getPriceKg());
         wpItemUnit.setWeight(requestAddItemUnitWP.getWeight());
+        calculateItemUnitTotalPrice(itemUnit);
         wpItemUnitRepository.save(wpItemUnit);
+    }
+
+    @Override
+    public Double calculateItemUnitTotalPrice(ItemUnit itemUnit) {
+        double totalPriceCalculated = 0.0;
+        if(itemUnit.getUpItemUnit() != null) {
+            totalPriceCalculated = itemUnit.getUpItemUnit().getUnityPrice() * itemUnit.getUpItemUnit().getQuantity();
+        } else {
+            totalPriceCalculated = itemUnit.getWpItemUnit().getPriceKg() * itemUnit.getWpItemUnit().getWeight();
+        }
+        itemUnit.setTotalPrice(totalPriceCalculated);
+        itemUnitRepository.save(itemUnit);
+        return totalPriceCalculated;
     }
 }

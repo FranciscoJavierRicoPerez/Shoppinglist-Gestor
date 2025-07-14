@@ -77,7 +77,7 @@ function getCalculteSystemCode(data: ShoppinglistItemMetadata | any): string {
             >Sistema de calculo:
             {{ shoppinglistItem.calculateSystemCode }}</IonChip
           >
-          <IonChip color="tertiary"> Precio: 1.5€ </IonChip>
+          <IonChip color="tertiary"> Precio: {{ shoppinglistItem.calculatedPrice }} </IonChip>
         </IonCardSubtitle>
         <IonCardContent>
           <!-- <RouterLink :to="`/product/${shoppinglistItem.id}}`"

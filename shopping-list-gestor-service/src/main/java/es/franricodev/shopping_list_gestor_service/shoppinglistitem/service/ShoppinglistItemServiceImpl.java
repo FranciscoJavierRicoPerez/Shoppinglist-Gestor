@@ -87,14 +87,18 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
             List<ShoppinglistItem> shoppinglistItemList = shoppinglist.getItems();
             shoppinglistItemList.add(shoppinglistItem);
             shoppinglist.setItems(shoppinglistItemList);
-
             shoppinglistItem.setCalculateSystem(calculateSystem);
 
+            recalculateShoppinglistItemsTotalPrice(shoppinglistItem);
             shoppinglistItem =  shoppinglistItemRepository.save(shoppinglistItem);
             // TODO: Crear el item unit
             ItemUnit itemUnit = itemUnitService.createItemUnit(shoppinglistItem, requestCreateShoppinglistItem.getUnitaryPrice(), calculateSystem);
 
             productService.assignProductToShoppinglistItem(shoppinglistItem, product);
+
+            shoppinglist = shoppinglistService.calculateShoppinglistTotalPrice(shoppinglist.getId());
+
+            shoppinglistService.updateShoppinglist(shoppinglist);
 
             return shoppinglistItemMapper.shoppinglistItemToShoppinglistItemDTO(shoppinglistItem);
 
@@ -117,7 +121,16 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
             p.getShoppinglistItems().remove(shoppinglistItem);
         }
         shoppinglistItem.getProducts().clear();
+        Shoppinglist shoppinglist = shoppinglistService.findShoppinglistByShoppinglistItemId(shoppinglistItem.getId());
+        try {
+            List<ShoppinglistItem> shoppinglistItemList = shoppinglistService.removeShoppinglistItemFromShoppinglist(shoppinglist.getId(), shoppinglistItem.getId());
+            shoppinglist.setItems(shoppinglistItemList);
+            shoppinglistService.calculateShoppinglistTotalPrice(shoppinglist.getId());
+        } catch (ShoppinglistException e) {
+           throw new ShoppinglistItemException("ERROR-RECALCULANDO-EL-PRECIO-TOTA-DE-LA-LISTA");
+        }
         shoppinglistItemRepository.delete(shoppinglistItem);
+        shoppinglistService.updateShoppinglist(shoppinglist);
     }
 
     @Override
@@ -187,14 +200,21 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
             // En este caso se tiene que actualizar el shoppinglist item
             itemUnitService.updateItemUnit(shoppinglistItem.getItemUnitList().get(0), requestAddItemUnitWP);
         }
-        shoppinglistItemRepository.save(shoppinglistItem);
+        recalculateShoppinglistItemsTotalPrice(shoppinglistItem);
+        Shoppinglist shoppinglist = shoppinglistService.findShoppinglistByShoppinglistItemId(shoppinglistItem.getId());
+        try {
+            shoppinglist = shoppinglistService.calculateShoppinglistTotalPrice(shoppinglist.getId());
+        } catch (ShoppinglistException e) {
+            throw new RuntimeException(e);
+        }
+        shoppinglistService.updateShoppinglist(shoppinglist);
     }
 
     private void recalculateShoppinglistItemsTotalPrice(ShoppinglistItem shoppinglistItem) {
         double totalShoppinglistPrice = 0D;
         for(ItemUnit itemUnit : shoppinglistItem.getItemUnitList()) {
             if(itemUnit.getTotalPrice() != null) {
-                totalShoppinglistPrice += itemUnit.getTotalPrice();
+                totalShoppinglistPrice += itemUnitService.calculateItemUnitTotalPrice(itemUnit);
             }
         }
         shoppinglistItem.setCalculatedPrice(totalShoppinglistPrice);
