@@ -43,6 +43,8 @@ public class ItemUnitServiceImpl implements ItemUnitService {
             upItemUnit.setUnityPrice(unitaryPrice);
             itemUnit.setUpItemUnit(upItemUnitRepository.save(upItemUnit));
         }
+        // TODO: REFACTOR -> DOBLE SAVE!!
+        calculateItemUnitTotalPrice(itemUnit);
         return itemUnitRepository.save(itemUnit);
     }
 
@@ -65,6 +67,7 @@ public class ItemUnitServiceImpl implements ItemUnitService {
         wpItemUnitRepository.save(wpItemUnit);
     }
 
+    // TODO: REFACTORIZAR -> MODIFICAR METODO POR UNO QUE NO HAGA ESTE SAVE QUE SENCILLAMENTE CALCULE EL TOTAL PRICE Y LO DEVUELVA
     @Override
     public Double calculateItemUnitTotalPrice(ItemUnit itemUnit) {
         double totalPriceCalculated = 0.0;

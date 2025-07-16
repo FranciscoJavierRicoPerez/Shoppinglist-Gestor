@@ -84,15 +84,20 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
             shoppinglistItem.setCalculatedPrice(0D);
             shoppinglistItem.setAssignationToListDate(new Date());
 
-            List<ShoppinglistItem> shoppinglistItemList = shoppinglist.getItems();
-            shoppinglistItemList.add(shoppinglistItem);
-            shoppinglist.setItems(shoppinglistItemList);
+            if(shoppinglist.getItems().isEmpty()) {
+                shoppinglist.setItems(List.of(shoppinglistItem));
+            } else {
+                shoppinglist.getItems().add(shoppinglistItem);
+            }
             shoppinglistItem.setCalculateSystem(calculateSystem);
 
-            recalculateShoppinglistItemsTotalPrice(shoppinglistItem);
             shoppinglistItem =  shoppinglistItemRepository.save(shoppinglistItem);
             // TODO: Crear el item unit
             ItemUnit itemUnit = itemUnitService.createItemUnit(shoppinglistItem, requestCreateShoppinglistItem.getUnitaryPrice(), calculateSystem);
+
+            shoppinglistItem.setItemUnitList(List.of(itemUnit));
+
+            recalculateShoppinglistItemsTotalPrice(shoppinglistItem);
 
             productService.assignProductToShoppinglistItem(shoppinglistItem, product);
 
