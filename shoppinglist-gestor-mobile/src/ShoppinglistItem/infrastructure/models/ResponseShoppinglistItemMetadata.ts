@@ -5,5 +5,4 @@ export interface ResponseShoppinglistItemMetadata {
   assignationToListDate: string
   name: string
   calculateSystemCode: string
-  calculatedPrice: number
 }

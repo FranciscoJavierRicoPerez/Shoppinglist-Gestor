@@ -84,26 +84,17 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
             shoppinglistItem.setCalculatedPrice(0D);
             shoppinglistItem.setAssignationToListDate(new Date());
 
-            if(shoppinglist.getItems().isEmpty()) {
-                shoppinglist.setItems(List.of(shoppinglistItem));
-            } else {
-                shoppinglist.getItems().add(shoppinglistItem);
-            }
+            List<ShoppinglistItem> shoppinglistItemList = shoppinglist.getItems();
+            shoppinglistItemList.add(shoppinglistItem);
+            shoppinglist.setItems(shoppinglistItemList);
+
             shoppinglistItem.setCalculateSystem(calculateSystem);
 
             shoppinglistItem =  shoppinglistItemRepository.save(shoppinglistItem);
             // TODO: Crear el item unit
             ItemUnit itemUnit = itemUnitService.createItemUnit(shoppinglistItem, requestCreateShoppinglistItem.getUnitaryPrice(), calculateSystem);
 
-            shoppinglistItem.setItemUnitList(List.of(itemUnit));
-
-            recalculateShoppinglistItemsTotalPrice(shoppinglistItem);
-
             productService.assignProductToShoppinglistItem(shoppinglistItem, product);
-
-            shoppinglist = shoppinglistService.calculateShoppinglistTotalPrice(shoppinglist.getId());
-
-            shoppinglistService.updateShoppinglist(shoppinglist);
 
             return shoppinglistItemMapper.shoppinglistItemToShoppinglistItemDTO(shoppinglistItem);
 
@@ -126,16 +117,7 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
             p.getShoppinglistItems().remove(shoppinglistItem);
         }
         shoppinglistItem.getProducts().clear();
-        Shoppinglist shoppinglist = shoppinglistService.findShoppinglistByShoppinglistItemId(shoppinglistItem.getId());
-        try {
-            List<ShoppinglistItem> shoppinglistItemList = shoppinglistService.removeShoppinglistItemFromShoppinglist(shoppinglist.getId(), shoppinglistItem.getId());
-            shoppinglist.setItems(shoppinglistItemList);
-            shoppinglistService.calculateShoppinglistTotalPrice(shoppinglist.getId());
-        } catch (ShoppinglistException e) {
-           throw new ShoppinglistItemException("ERROR-RECALCULANDO-EL-PRECIO-TOTA-DE-LA-LISTA");
-        }
         shoppinglistItemRepository.delete(shoppinglistItem);
-        shoppinglistService.updateShoppinglist(shoppinglist);
     }
 
     @Override
@@ -150,13 +132,6 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
             itemUnitService.createItemUnit(shoppinglistItem, unitaryPrice, shoppinglistItem.getCalculateSystem());
         }
         recalculateShoppinglistItemsTotalPrice(shoppinglistItem);
-        Shoppinglist shoppinglist = shoppinglistService.findShoppinglistByShoppinglistItemId(shoppinglistItem.getId());
-        try {
-            shoppinglist = shoppinglistService.calculateShoppinglistTotalPrice(shoppinglist.getId());
-        } catch (ShoppinglistException e) {
-            throw new RuntimeException(e);
-        }
-        shoppinglistService.updateShoppinglist(shoppinglist);
     }
 
     @Override
@@ -212,23 +187,15 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
             // En este caso se tiene que actualizar el shoppinglist item
             itemUnitService.updateItemUnit(shoppinglistItem.getItemUnitList().get(0), requestAddItemUnitWP);
         }
-        recalculateShoppinglistItemsTotalPrice(shoppinglistItem);
-        Shoppinglist shoppinglist = shoppinglistService.findShoppinglistByShoppinglistItemId(shoppinglistItem.getId());
-        try {
-            shoppinglist = shoppinglistService.calculateShoppinglistTotalPrice(shoppinglist.getId());
-        } catch (ShoppinglistException e) {
-            throw new RuntimeException(e);
-        }
-        shoppinglistService.updateShoppinglist(shoppinglist);
+        shoppinglistItemRepository.save(shoppinglistItem);
     }
 
     private void recalculateShoppinglistItemsTotalPrice(ShoppinglistItem shoppinglistItem) {
         double totalShoppinglistPrice = 0D;
         for(ItemUnit itemUnit : shoppinglistItem.getItemUnitList()) {
-            /* if(itemUnit.getTotalPrice() != null) {
-                totalShoppinglistPrice += itemUnitService.calculateItemUnitTotalPrice(itemUnit);
-            } */
-            totalShoppinglistPrice += itemUnitService.calculateItemUnitTotalPrice(itemUnit);
+            if(itemUnit.getTotalPrice() != null) {
+                totalShoppinglistPrice += itemUnit.getTotalPrice();
+            }
         }
         shoppinglistItem.setCalculatedPrice(totalShoppinglistPrice);
         shoppinglistItemRepository.save(shoppinglistItem);

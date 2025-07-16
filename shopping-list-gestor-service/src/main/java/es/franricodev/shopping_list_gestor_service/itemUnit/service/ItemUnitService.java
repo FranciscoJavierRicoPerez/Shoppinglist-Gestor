@@ -15,6 +15,4 @@ public interface ItemUnitService {
 
     void updateItemUnit(ItemUnit itemUnit, RequestAddItemUnitWP requestAddItemUnitWP);
 
-    Double calculateItemUnitTotalPrice(ItemUnit itemUnit);
-
 }

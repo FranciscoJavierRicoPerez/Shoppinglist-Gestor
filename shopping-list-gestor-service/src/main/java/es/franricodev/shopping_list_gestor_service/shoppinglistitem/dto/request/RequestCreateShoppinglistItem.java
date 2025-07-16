@@ -9,6 +9,5 @@ public class RequestCreateShoppinglistItem {
     private String productName;
     private String calculateSystemCode;
     private Double unitaryPrice;
-    private Integer quantity;
 
 }

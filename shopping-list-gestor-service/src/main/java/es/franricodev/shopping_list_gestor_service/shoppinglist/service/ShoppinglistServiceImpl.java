@@ -13,8 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -111,7 +111,7 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
     }
 
     @Override
-    public Shoppinglist calculateShoppinglistTotalPrice(Long id) throws ShoppinglistException {
+    public void calculateShoppinglistTotalPrice(Long id) throws ShoppinglistException {
         LOGGER.info("Calculate the shoppinglist total price");
         Shoppinglist shoppinglist = findShoppinglistById(id);
         Double price = 0D;
@@ -120,37 +120,8 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
             price += shoppinglistItem.getCalculatedPrice();
         }
         shoppinglist.setTotalPrice(price);
-        return shoppinglist;
+        shoppinglistRepository.save(shoppinglist);
     }
 
-    // TODO: REFACTORIZAR A PROGRAMACION FUNCIONAL O QUERY QUE DEVUELVA ESTO CONCRETAMENTE
-    @Override
-    public Shoppinglist findShoppinglistByShoppinglistItemId(Long idItem) {
-        List<Shoppinglist> shoppinglistList = shoppinglistRepository.findAll();
-        for(Shoppinglist shoppinglist : shoppinglistList) {
-            for (ShoppinglistItem shoppinglistItem : shoppinglist.getItems()) {
-                if (shoppinglistItem.getId().equals(idItem)) {
-                    return shoppinglist;
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public List<ShoppinglistItem> removeShoppinglistItemFromShoppinglist(Long idShoppinglist, Long idShoppinglistItem) throws ShoppinglistException {
-        Optional<Shoppinglist> optionalShoppinglist = shoppinglistRepository.findById(idShoppinglist);
-        if (optionalShoppinglist.isEmpty()) {
-            throw new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND);
-        }
-        Shoppinglist shoppinglist = optionalShoppinglist.get();
-        List<ShoppinglistItem> shoppinglistItemList = shoppinglist.getItems().stream().filter(shoppinglistItem -> !Objects.equals(shoppinglistItem.getId(), idShoppinglistItem)).toList();
-        return shoppinglistItemList;
-    }
-
-    @Override
-    public Shoppinglist updateShoppinglist(Shoppinglist shoppinglist) {
-        return shoppinglistRepository.save(shoppinglist);
-    }
 
 }

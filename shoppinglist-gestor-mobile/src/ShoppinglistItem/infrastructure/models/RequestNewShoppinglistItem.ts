@@ -5,7 +5,6 @@ export interface ResquestNewShoppinglistItem {
   requestProduct: RequestProduct;
   calculateSystem: string;
   unitaryPrice: number | null;
-  quantity: number
 }
 
 export const defaultRequestNewShoppinglistItem = {
@@ -16,5 +15,4 @@ export const defaultRequestNewShoppinglistItem = {
   },
   calculateSystem: "",
   unitaryPrice: null,
-  quantity: -1
 };

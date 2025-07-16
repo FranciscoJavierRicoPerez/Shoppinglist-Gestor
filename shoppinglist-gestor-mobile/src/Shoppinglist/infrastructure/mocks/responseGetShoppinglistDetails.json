@@ -11,35 +11,35 @@
       "name": "peras",
       "assignationToListDate": "9/6/25 21:58",
       "calculateSystemCode": "UP",
-      "calculatedPrice": 2.5
+      "calculatedPrice": null
     },
     {
       "id": 51,
       "name": "peras",
       "assignationToListDate": "9/6/25 21:59",
       "calculateSystemCode": "UP",
-      "calculatedPrice": 2.5
+      "calculatedPrice": null
     },
     {
       "id": 52,
       "name": "peras",
       "assignationToListDate": "9/6/25 22:01",
       "calculateSystemCode": "UP",
-      "calculatedPrice": 2.5
+      "calculatedPrice": 0.0
     },
     {
       "id": 53,
       "name": "peras",
       "assignationToListDate": "10/6/25 19:47",
       "calculateSystemCode": "UP",
-      "calculatedPrice": 2.5
+      "calculatedPrice": 0.0
     },
     {
       "id": 54,
       "name": "peras",
       "assignationToListDate": "10/6/25 20:05",
       "calculateSystemCode": "UP",
-      "calculatedPrice": 2.5
+      "calculatedPrice": 0.0
     }
   ]
 }
