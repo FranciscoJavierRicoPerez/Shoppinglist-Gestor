@@ -77,6 +77,9 @@ function closeModal() {
 
 async function addShoppinglistItem() {
   form.value.shoppinglistId = Number(route.params.id);
+  form.value.quantity = 1; // HARE QUE POR DEFECTO LA PRIMERA VEZ QUE SE CREA UN UP ITEM TENGA LA CANTIDAD DE 1
+  debugger;
+  console.log(form.value.unitaryPrice);
   let response: ResponseNewShoppinglistItem = await createShoppinglistItem(
     form.value
   );
@@ -90,6 +93,7 @@ async function addShoppinglistItem() {
           ? form.value.requestProduct.name
           : "",
       calculateSystemCode: form.value.calculateSystem,
+      calculatedPrice: form.value.unitaryPrice,
     });
     // Al lanzar la funcion closeModal al crear un shopping list item no se actualiza y aparece automaticamente :()
     emit("updateShoppinglistItemList");

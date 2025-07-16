@@ -25,6 +25,11 @@ public interface ShoppinglistService {
 
     Shoppinglist findShoppinglistById(Long id) throws ShoppinglistException;
 
-    void calculateShoppinglistTotalPrice(Long id) throws ShoppinglistException;
+    Shoppinglist calculateShoppinglistTotalPrice(Long id) throws ShoppinglistException;
 
+    Shoppinglist findShoppinglistByShoppinglistItemId(Long id);
+
+    List<ShoppinglistItem> removeShoppinglistItemFromShoppinglist(Long idShoppinglist, Long idShoppinglistItem) throws ShoppinglistException;
+
+    Shoppinglist updateShoppinglist(Shoppinglist shoppinglist);
 }
