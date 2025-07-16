@@ -14,6 +14,7 @@ export function createShoppinglistItemMetadata(data: ResponseShoppinglistItemMet
     id: data.id,
     assignationToListDate: data.assignationToListDate,
     name: data.name,
-    calculateSystemCode: data.calculateSystemCode
+    calculateSystemCode: data.calculateSystemCode,
+    calculatedPrice: data.calculatedPrice
   }
 }

@@ -12,6 +12,8 @@ async function Api(data: ResquestNewShoppinglistItem) : Promise<ResponseNewShopp
     productId: data.requestProduct.productId,
     productName: data.requestProduct.name,
     calculateSystemCode: data.calculateSystem,
+    unitaryPrice: data.unitaryPrice,
+    quantity: data.quantity
   });
   return response.data
 }
