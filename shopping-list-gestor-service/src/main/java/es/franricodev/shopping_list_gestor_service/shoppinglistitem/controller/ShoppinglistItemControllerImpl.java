@@ -3,6 +3,7 @@ package es.franricodev.shopping_list_gestor_service.shoppinglistitem.controller;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetAllItemsUnit;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestAddItemUnitUnitaryPrice;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItem;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItemV2;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseCreateShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseDeleteShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.exception.ShoppinglistItemException;
@@ -11,6 +12,7 @@ import es.franricodev.shopping_list_gestor_service.shoppinglistitem.messages.Sho
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.service.ShoppinglistItemService;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.dto.request.RequestAddItemUnitWP;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @CrossOrigin(origins = {"http://localhost:8100/", "http://192.168.18.7:9000/", "*"})
 @RestController
 @RequestMapping("/api/shoppinglistitem")
@@ -26,13 +29,11 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
     @Autowired
     private ShoppinglistItemService shoppinglistItemService;
 
-    private final static Logger logger = LoggerFactory.getLogger(ShoppinglistItemControllerImpl.class);
-
     @PostMapping("/v1/{idShoppinglist}/createItem")
     public ResponseEntity<ResponseCreateShoppinglistItem> createShoppinglistItem(
             @PathVariable(name = "idShoppinglist") Long idShoppinglist,
             @RequestBody RequestCreateShoppinglistItem requestCreateShoppinglistItem) {
-        logger.info("Create a new shoppinglist item");
+        log.info("Create a new shoppinglist item");
         ResponseCreateShoppinglistItem response = new ResponseCreateShoppinglistItem();
         HttpStatus httpStatus = HttpStatus.CREATED;
         try {
@@ -50,7 +51,7 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
 
     @DeleteMapping("/v1/{idItem}/delete")
     public ResponseEntity<ResponseDeleteShoppinglistItem> deleteShoppinglistItem(@PathVariable("idItem") Long idItem) {
-        logger.info("Delete the shoppinglist item with id: {}", idItem);
+        log.info("Delete the shoppinglist item with id: {}", idItem);
         ResponseDeleteShoppinglistItem responseDeleteShoppinglistItem = new ResponseDeleteShoppinglistItem();
         HttpStatus httpStatus = HttpStatus.OK;
         try {
@@ -66,7 +67,7 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
 
     @PostMapping("/v1/{idShoppinglistItem}/addItemUnitUP")
     public ResponseEntity<Void> addItemUnit(@PathVariable("idShoppinglistItem") Long idShoppinglistItem, @RequestBody RequestAddItemUnitUnitaryPrice request) {
-        logger.info("Creating a new item unit UP for the shoppinglist item with id: {}", idShoppinglistItem);
+        log.info("Creating a new item unit UP for the shoppinglist item with id: {}", idShoppinglistItem);
         HttpStatus httpStatus = HttpStatus.OK;
         try {
             shoppinglistItemService.addItemUnitToShoppinglistItem(request.getShoppinglistItemId(), request.getPrice(), request.getQuantity());
@@ -78,7 +79,7 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
 
     @DeleteMapping("/v1/{idItem}/removeItemUnit/{idItemUnit}")
     public ResponseEntity<?> removeItemUnit(@PathVariable("idItem") Long idItem, @PathVariable("idItemUnit") Long idItemUnit) {
-        logger.info("Removing the item unit with id: {} from the shoppinglist item with id: {}", idItem, idItemUnit);
+        log.info("Removing the item unit with id: {} from the shoppinglist item with id: {}", idItem, idItemUnit);
         HttpStatus httpStatus = HttpStatus.OK;
         try {
             shoppinglistItemService.removeItemUnitFromShoppinglistItem(idItem, idItemUnit);
@@ -90,7 +91,7 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
 
     @GetMapping("/v1/{idShoppinglistItem}/itemsUnits")
     public ResponseEntity<ResponseGetAllItemsUnit> getAllItemUnitsFromShoppinglistItem(@PathVariable("idShoppinglistItem") Long idShoppinglistItem) {
-        logger.info("Getting all the items units with calculate system UP of shoppinglist item with id: {}", idShoppinglistItem);
+        log.info("Getting all the items units with calculate system UP of shoppinglist item with id: {}", idShoppinglistItem);
         ResponseGetAllItemsUnit responseGetAllItemsUnit = new ResponseGetAllItemsUnit();
         HttpStatus httpStatus = HttpStatus.OK;
         try {
@@ -106,7 +107,7 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
 
     @PostMapping("/v1/{idShoppinglistItem}/addItemUnitWP")
     public ResponseEntity<Void> addItemUnitWPToShoppinglistItem(@PathVariable("idShoppinglistItem") Long idShoppinglistItem, @RequestBody RequestAddItemUnitWP requestAddItemUnitWP) {
-        logger.info("Creating a new item unit WP for the shoppinglist item with id: {}", idShoppinglistItem);
+        log.info("Creating a new item unit WP for the shoppinglist item with id: {}", idShoppinglistItem);
         HttpStatus httpStatus = HttpStatus.OK;
         try {
             shoppinglistItemService.addItemUnitWPToShoppinglistItem(idShoppinglistItem, requestAddItemUnitWP);
@@ -116,5 +117,15 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
         return ResponseEntity.ok(null);
     }
 
+    @Override
+    @PostMapping("/v2/{idShoppinglist}/createItem")
+    public void createItemV2(Long idShoppinglist, RequestCreateShoppinglistItemV2 requestCreateShoppinglistItem) {
+        log.info("Creating a new shoppinglist item in the shoppinglist with id: {}", idShoppinglist);
+        try {
+            shoppinglistItemService.createShoppinglistItemV2(idShoppinglist, requestCreateShoppinglistItem);
+        } catch (ShoppinglistItemException e) {
+            log.error(e.getMessage());
+        }
+    }
 
 }

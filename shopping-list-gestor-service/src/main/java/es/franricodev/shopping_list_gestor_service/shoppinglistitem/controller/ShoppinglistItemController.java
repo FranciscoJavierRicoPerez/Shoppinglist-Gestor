@@ -3,6 +3,7 @@ package es.franricodev.shopping_list_gestor_service.shoppinglistitem.controller;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetAllItemsUnit;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestAddItemUnitUnitaryPrice;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItem;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItemV2;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseCreateShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseDeleteShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.dto.request.RequestAddItemUnitWP;
@@ -59,4 +60,9 @@ public interface ShoppinglistItemController {
     })
     @PostMapping("/v1/{idShoppinglistItem}/addItemUnitWP")
     ResponseEntity<Void> addItemUnitWPToShoppinglistItem(@PathVariable("idShoppinglistItem") Long idShoppinglistItem, @RequestBody RequestAddItemUnitWP requestAddItemUnitWP);
+
+    @Operation(summary = "Create a new shoppinglist item in a shoppinglist ", description = "This is a V2 endpoint")
+    @PostMapping("/v2/{idShoppinglist}/createItem")
+    void createItemV2(@PathVariable(name = "idShoppinglist") Long idShoppinglist, @RequestBody RequestCreateShoppinglistItemV2 requestCreateShoppinglistItem);
+
 }

@@ -1,5 +1,6 @@
 package es.franricodev.shopping_list_gestor_service.product.service;
 
+import es.franricodev.shopping_list_gestor_service.product.dto.request.CreateProductInfo;
 import es.franricodev.shopping_list_gestor_service.product.exception.ProductException;
 import es.franricodev.shopping_list_gestor_service.product.model.Product;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.ShoppinglistItem;
@@ -13,4 +14,6 @@ public interface ProductService {
     void assignProductToShoppinglistItem(ShoppinglistItem shoppinglistItem, Product product);
 
 
+    // ********************* VERSION 2 **********************
+    Product createProductV2(CreateProductInfo createProductInfo) throws ProductException;
 }
