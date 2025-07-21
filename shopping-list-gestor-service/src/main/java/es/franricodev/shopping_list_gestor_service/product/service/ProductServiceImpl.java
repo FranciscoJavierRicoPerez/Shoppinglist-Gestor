@@ -22,7 +22,7 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
 
     @Override
-    public Product findProductByName(String name) throws ProductException {
+    public Product findProductByName(String name) {
         Optional<Product> productOpt = productRepository.findByName(name);
         return productOpt.orElseGet(() -> createProduct(name));
     }
@@ -48,7 +48,7 @@ public class ProductServiceImpl implements ProductService {
 
     // ********************* VERSION 2 **********************
     @Override
-    public Product createProductV2(CreateProductInfo createProductInfo) throws ProductException {
+    public Product createProductV2(CreateProductInfo createProductInfo)  {
         log.info("V2: Creating a new product service method");
         Product product = null;
         if (createProductInfo.isAlreadyExists()) {

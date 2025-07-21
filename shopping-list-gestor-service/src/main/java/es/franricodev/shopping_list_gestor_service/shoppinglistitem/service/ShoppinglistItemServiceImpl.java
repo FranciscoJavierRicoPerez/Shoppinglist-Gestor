@@ -274,7 +274,7 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
                 shoppinglistItemRepository.save(shoppinglistItem);
             }
             shoppinglistService.updateShoppinglistTotalPrice(shoppinglist);
-        } catch (ShoppinglistException | ProductException | CalculateSystemException | ItemUnitException e) {
+        } catch (ShoppinglistException | CalculateSystemException | ItemUnitException e) {
             throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_CREATE_ERR);
         }
     }

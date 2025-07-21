@@ -15,5 +15,5 @@ public interface ProductService {
 
 
     // ********************* VERSION 2 **********************
-    Product createProductV2(CreateProductInfo createProductInfo) throws ProductException;
+    Product createProductV2(CreateProductInfo createProductInfo);
 }

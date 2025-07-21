@@ -111,7 +111,7 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
         HttpStatus httpStatus = HttpStatus.OK;
         try {
             shoppinglistItemService.addItemUnitWPToShoppinglistItem(idShoppinglistItem, requestAddItemUnitWP);
-        }catch (ShoppinglistItemException e) {
+        } catch (ShoppinglistItemException e) {
             httpStatus = HttpStatus.BAD_REQUEST;
         }
         return ResponseEntity.ok(null);
