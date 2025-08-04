@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ResponseCreateShoppinglistItemV2 {
+public class ResponseCreateShoppinglistItem {
     private Long idShoppinglistItemCreated; // Id of the new item created
     private boolean created; // Indicates if the item has been created correctly
     private Double shoppinglistItemCalculatedPrice; // SLI calculated price

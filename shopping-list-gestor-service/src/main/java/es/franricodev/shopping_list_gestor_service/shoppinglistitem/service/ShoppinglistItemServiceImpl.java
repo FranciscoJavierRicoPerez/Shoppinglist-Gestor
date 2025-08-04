@@ -8,16 +8,13 @@ import es.franricodev.shopping_list_gestor_service.itemUnit.exception.ItemUnitEx
 import es.franricodev.shopping_list_gestor_service.itemUnit.mapper.ItemUnitMapper;
 import es.franricodev.shopping_list_gestor_service.itemUnit.model.ItemUnit;
 import es.franricodev.shopping_list_gestor_service.itemUnit.service.ItemUnitService;
-import es.franricodev.shopping_list_gestor_service.product.exception.ProductException;
 import es.franricodev.shopping_list_gestor_service.product.model.Product;
 import es.franricodev.shopping_list_gestor_service.product.service.ProductService;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
-import es.franricodev.shopping_list_gestor_service.shoppinglist.message.ErrorMessages;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.model.Shoppinglist;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.service.ShoppinglistService;
-import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.ShoppinglistItemDTO;
-import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItemV2;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseCreateShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.exception.ShoppinglistItemException;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.mapper.ShoppinglistItemMapper;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.messages.ShoppinglistItemMessagesError;
@@ -57,64 +54,6 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
     private ItemUnitMapper itemUnitMapper;
 
     private final static Logger logger = LoggerFactory.getLogger(ShoppinglistItemServiceImpl.class);
-
-    @Override
-    public ShoppinglistItemDTO createShoppinglistItem(
-            RequestCreateShoppinglistItem requestCreateShoppinglistItem,
-            Long idShoppinglist) throws ShoppinglistItemException {
-        logger.info("Creating a new shoppinglist item");
-
-        try {
-            // TODO: Obtener la lista de la compra
-            Shoppinglist shoppinglist = shoppinglistService.findShoppinglistById(idShoppinglist);
-            // TODO: Obtener el producto, SI NO EXISTE SE CREA (ya se crea implicitamente en el metodo findProductByName)
-            Product product = null;
-            if (requestCreateShoppinglistItem.getProductName() == null) {
-                throw new ProductException("PRODUCT_MESSAGE_ERROR_NO-SE-PUEDE-CREAR-EL-PRODUCTO");
-            } else {
-                product = productService.findProductByName(requestCreateShoppinglistItem.getProductName());
-            }
-            // TODO: Obtener el calculate system;
-            CalculateSystem calculateSystem = null;
-            if(requestCreateShoppinglistItem.getCalculateSystemCode() == null) {
-                throw new CalculateSystemException("CALCULATE_MESSAGE_ERROR-NO-SE-PUEDE-OBTENER-EL-CALCULATE-SYSTEM");
-            } else {
-                calculateSystem = calculateSystemService.findCalculateSystemByCode(requestCreateShoppinglistItem.getCalculateSystemCode());
-            }
-
-            // TODO: Creamos el shoppinglist item
-            ShoppinglistItem shoppinglistItem = new ShoppinglistItem();
-            shoppinglistItem.setName(product.getName());
-            shoppinglistItem.setCalculatedPrice(0D);
-            shoppinglistItem.setAssignationToListDate(new Date());
-
-            if(shoppinglist.getItems().isEmpty()) {
-                shoppinglist.setItems(List.of(shoppinglistItem));
-            } else {
-                shoppinglist.getItems().add(shoppinglistItem);
-            }
-            shoppinglistItem.setCalculateSystem(calculateSystem);
-
-            shoppinglistItem =  shoppinglistItemRepository.save(shoppinglistItem);
-            // TODO: Crear el item unit
-            ItemUnit itemUnit = itemUnitService.createItemUnit(shoppinglistItem, requestCreateShoppinglistItem.getUnitaryPrice(), calculateSystem);
-
-            shoppinglistItem.setItemUnitList(List.of(itemUnit));
-
-            recalculateShoppinglistItemsTotalPrice(shoppinglistItem);
-
-            productService.assignProductToShoppinglistItem(shoppinglistItem, product);
-
-            shoppinglist = shoppinglistService.calculateShoppinglistTotalPrice(shoppinglist.getId());
-
-            shoppinglistService.updateShoppinglist(shoppinglist);
-
-            return shoppinglistItemMapper.shoppinglistItemToShoppinglistItemDTO(shoppinglistItem);
-
-        } catch (ShoppinglistException | ProductException | CalculateSystemException e) {
-            throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_CREATE_ERR);
-        }
-    }
 
     @Override
     public void deleteShoppinglistItem(Long idItem) throws ShoppinglistItemException {
@@ -241,7 +180,7 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
     // **************************** VERSION 2 ENPOINTS ***************************************ç
     @Transactional
     @Override
-    public void createShoppinglistItemV2(Long idShoppinglist, RequestCreateShoppinglistItemV2 requestData) throws ShoppinglistItemException {
+    public ResponseCreateShoppinglistItem createShoppinglistItem(Long idShoppinglist, RequestCreateShoppinglistItemV2 requestData) throws ShoppinglistItemException {
         logger.info("V2: Creating a new shoppinglist item for the shoppinglist with id: {}", idShoppinglist);
         try {
             Shoppinglist shoppinglist = shoppinglistService.findShoppinglistById(idShoppinglist);
@@ -274,6 +213,12 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
                 shoppinglistItemRepository.save(shoppinglistItem);
             }
             shoppinglistService.updateShoppinglistTotalPrice(shoppinglist);
+            return ResponseCreateShoppinglistItem.builder()
+                    .idShoppinglistItemCreated(shoppinglistItem.getId())
+                    .created(true)
+                    .shoppinglistItemCalculatedPrice(shoppinglistItem.getCalculatedPrice())
+                    .totalPrice(shoppinglist.getTotalPrice())
+                    .build();
         } catch (ShoppinglistException | CalculateSystemException | ItemUnitException e) {
             throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_CREATE_ERR);
         }

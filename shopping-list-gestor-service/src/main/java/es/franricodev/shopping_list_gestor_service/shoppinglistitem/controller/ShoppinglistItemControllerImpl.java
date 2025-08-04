@@ -2,7 +2,6 @@ package es.franricodev.shopping_list_gestor_service.shoppinglistitem.controller;
 
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetAllItemsUnit;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestAddItemUnitUnitaryPrice;
-import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItemV2;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseCreateShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseDeleteShoppinglistItem;
@@ -11,10 +10,7 @@ import es.franricodev.shopping_list_gestor_service.shoppinglistitem.messages.Sho
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.messages.ShoppinglistItemMessagesSuccess;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.service.ShoppinglistItemService;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.dto.request.RequestAddItemUnitWP;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,26 +24,6 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
 
     @Autowired
     private ShoppinglistItemService shoppinglistItemService;
-
-    @PostMapping("/v1/{idShoppinglist}/createItem")
-    public ResponseEntity<ResponseCreateShoppinglistItem> createShoppinglistItem(
-            @PathVariable(name = "idShoppinglist") Long idShoppinglist,
-            @RequestBody RequestCreateShoppinglistItem requestCreateShoppinglistItem) {
-        log.info("Create a new shoppinglist item");
-        ResponseCreateShoppinglistItem response = new ResponseCreateShoppinglistItem();
-        HttpStatus httpStatus = HttpStatus.CREATED;
-        try {
-             response.setIdItemCreated(shoppinglistItemService.createShoppinglistItem(requestCreateShoppinglistItem, idShoppinglist).getId());
-             response.setCreated(true);
-             response.setResponseMessage(ShoppinglistItemMessagesSuccess.SHOPPINGLISTITEM_CREATED_OK);
-        } catch (ShoppinglistItemException e) {
-           response.setIdItemCreated(null);
-           response.setResponseMessage(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_CREATE_ERR);
-           response.setCreated(false);
-           httpStatus = HttpStatus.BAD_REQUEST;
-        }
-        return new ResponseEntity<>(response, httpStatus);
-    }
 
     @DeleteMapping("/v1/{idItem}/delete")
     public ResponseEntity<ResponseDeleteShoppinglistItem> deleteShoppinglistItem(@PathVariable("idItem") Long idItem) {
@@ -119,13 +95,16 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
 
     @Override
     @PostMapping("/v2/{idShoppinglist}/createItem")
-    public void createItemV2(Long idShoppinglist, RequestCreateShoppinglistItemV2 requestCreateShoppinglistItem) {
+    public ResponseEntity<ResponseCreateShoppinglistItem> createItem(Long idShoppinglist, RequestCreateShoppinglistItemV2 requestCreateShoppinglistItem) {
         log.info("Creating a new shoppinglist item in the shoppinglist with id: {}", idShoppinglist);
+        ResponseCreateShoppinglistItem response = null;
+        HttpStatus httpStatus = HttpStatus.CREATED;
         try {
-            shoppinglistItemService.createShoppinglistItemV2(idShoppinglist, requestCreateShoppinglistItem);
+            response = shoppinglistItemService.createShoppinglistItem(idShoppinglist, requestCreateShoppinglistItem);
         } catch (ShoppinglistItemException e) {
             log.error(e.getMessage());
+            httpStatus = HttpStatus.BAD_REQUEST;
         }
+        return new ResponseEntity<>(response, httpStatus);
     }
-
 }
