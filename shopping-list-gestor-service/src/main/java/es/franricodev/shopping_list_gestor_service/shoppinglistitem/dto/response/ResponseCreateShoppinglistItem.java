@@ -1,18 +1,14 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response;
 
-import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.ShoppinglistItemDTO;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Builder;
+import lombok.Data;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class ResponseCreateShoppinglistItem {
-    // private ShoppinglistItemDTO itemCreated;
-    private Long idItemCreated;
-    private boolean created;
-    private String responseMessage;
+@Data
+@Builder
+public class ResponseCreateShoppinglistItemV2 {
+    private Long idShoppinglistItemCreated; // Id of the new item created
+    private boolean created; // Indicates if the item has been created correctly
+    private Double shoppinglistItemCalculatedPrice; // SLI calculated price
+    private Double totalPrice; // New shoppinglist price value
+
 }
