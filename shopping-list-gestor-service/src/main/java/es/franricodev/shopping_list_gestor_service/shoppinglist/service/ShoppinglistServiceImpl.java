@@ -153,4 +153,31 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
         return shoppinglistRepository.save(shoppinglist);
     }
 
+    @Override
+    public void addShoppinglistItemToShoppinglist(ShoppinglistItem shoppinglistItem, Shoppinglist shoppinglist) {
+        if(shoppinglistItem != null && shoppinglist != null) {
+            if(shoppinglist.getItems().isEmpty()){
+                shoppinglist.setItems(List.of(shoppinglistItem));
+            } else {
+                shoppinglist.getItems().add(shoppinglistItem);
+            }
+        }
+    }
+
+    @Override
+    public void updateShoppinglistTotalPrice(Shoppinglist shoppinglist) {
+        shoppinglist.setTotalPrice(calculateShoppinglistTotalPrice(shoppinglist));
+        updateShoppinglist(shoppinglist);
+    }
+
+    private double calculateShoppinglistTotalPrice(Shoppinglist shoppinglist) {
+        double totalPriceCalculated = 0.0;
+        if(!shoppinglist.getItems().isEmpty()) {
+            for(ShoppinglistItem shoppinglistItem : shoppinglist.getItems()) {
+                totalPriceCalculated += shoppinglistItem.getCalculatedPrice();
+            }
+        }
+        return totalPriceCalculated;
+    }
+
 }

@@ -32,4 +32,10 @@ public interface ShoppinglistService {
     List<ShoppinglistItem> removeShoppinglistItemFromShoppinglist(Long idShoppinglist, Long idShoppinglistItem) throws ShoppinglistException;
 
     Shoppinglist updateShoppinglist(Shoppinglist shoppinglist);
+
+    void addShoppinglistItemToShoppinglist(ShoppinglistItem shoppinglistItem, Shoppinglist shoppinglist);
+
+    void updateShoppinglistTotalPrice(Shoppinglist shoppinglist);
 }
+
+

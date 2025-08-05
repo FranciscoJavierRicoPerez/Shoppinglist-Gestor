@@ -1,38 +1,52 @@
 package es.franricodev.shopping_list_gestor_service.itemUnit.service;
 
 import es.franricodev.shopping_list_gestor_service.calculateSystem.model.CalculateSystem;
+import es.franricodev.shopping_list_gestor_service.itemUnit.dto.request.CreateItemUnitData;
+import es.franricodev.shopping_list_gestor_service.itemUnit.exception.ItemUnitException;
+import es.franricodev.shopping_list_gestor_service.itemUnit.messages.ItemUnitMessagesError;
 import es.franricodev.shopping_list_gestor_service.itemUnit.model.ItemUnit;
 import es.franricodev.shopping_list_gestor_service.itemUnit.repository.ItemUnitRepository;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.ShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.upItemUnit.model.UpItemUnit;
 import es.franricodev.shopping_list_gestor_service.upItemUnit.repository.UpItemUnitRepository;
+import es.franricodev.shopping_list_gestor_service.upItemUnit.service.UpItemUnitService;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.dto.request.RequestAddItemUnitWP;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.model.WpItemUnit;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.repository.WpItemUnitRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import es.franricodev.shopping_list_gestor_service.wpItemUnit.service.WpItemUnitService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 
+@Slf4j
 @Service
 public class ItemUnitServiceImpl implements ItemUnitService {
 
     @Autowired
     private ItemUnitRepository itemUnitRepository;
 
+    @Lazy
     @Autowired
     private WpItemUnitRepository wpItemUnitRepository;
 
+    @Lazy
     @Autowired
     private UpItemUnitRepository upItemUnitRepository;
 
-    private static final Logger logger = LoggerFactory.getLogger(ItemUnitServiceImpl.class);
+    @Autowired
+    private WpItemUnitService wpItemUnitService;
+
+    @Autowired
+    private UpItemUnitService upItemUnitService;
+
 
     @Override
     public ItemUnit createItemUnit(ShoppinglistItem shoppinglistItem, Double unitaryPrice, CalculateSystem calculateSystem) {
-        logger.info("Creating a item unit form the shoppinglist item: {}", shoppinglistItem.getId());
+        log.info("Creating a item unit form the shoppinglist item: {}", shoppinglistItem.getId());
         ItemUnit itemUnit = new ItemUnit();
         itemUnit.setShoppinglistItem(shoppinglistItem);
         if(calculateSystem.getCode().equalsIgnoreCase("WP")) {
@@ -80,4 +94,52 @@ public class ItemUnitServiceImpl implements ItemUnitService {
         itemUnitRepository.save(itemUnit);
         return totalPriceCalculated;
     }
+
+    @Override
+    public ItemUnit createItemUnitV2(CreateItemUnitData createItemUnitData, boolean isWpItemUnit, ShoppinglistItem shoppinglistItem) throws ItemUnitException {
+        if(!createItemUnitData.isCreateItemUnit()) {
+            return null;
+        }
+        if(createItemUnitData.getCreateUpItemUnitData() == null && createItemUnitData.getCreateWpItemUnitData() == null) {
+            throw new ItemUnitException(ItemUnitMessagesError.ITEMUNIT_NO_WP_OR_UP_ITEM_DATA);
+        }
+        WpItemUnit wpItemUnitCreated = null;
+        UpItemUnit upItemUnitCreated = null;
+        if(isWpItemUnit && createItemUnitData.getCreateWpItemUnitData() != null) {
+            wpItemUnitCreated = wpItemUnitService.createWpItemUnit(createItemUnitData.getCreateWpItemUnitData());
+        }
+        if(!isWpItemUnit && createItemUnitData.getCreateUpItemUnitData() != null) {
+            upItemUnitCreated = upItemUnitService.createUpItemUnit(createItemUnitData.getCreateUpItemUnitData());
+        }
+
+        ItemUnit itemUnit = new ItemUnit();
+        itemUnit.setWpItemUnit(wpItemUnitCreated);
+        itemUnit.setUpItemUnit(upItemUnitCreated);
+        itemUnit.setTotalPrice(calculateItemUnitTotalPriceV2(itemUnit));
+        addItemUnitToShoppinglistItem(itemUnit, shoppinglistItem);
+        return itemUnitRepository.save(itemUnit);
+    }
+
+    private double calculateItemUnitTotalPriceV2(ItemUnit itemUnit){
+        double totalPriceCalculated = 0.0;
+        if(itemUnit.getUpItemUnit() != null) {
+            totalPriceCalculated = itemUnit.getUpItemUnit().getUnityPrice() * itemUnit.getUpItemUnit().getQuantity();
+        }
+        if(itemUnit.getWpItemUnit() != null) {
+            totalPriceCalculated = itemUnit.getWpItemUnit().getPriceKg() * itemUnit.getWpItemUnit().getWeight();
+        }
+        return totalPriceCalculated;
+    }
+
+    private void addItemUnitToShoppinglistItem(ItemUnit itemUnit, ShoppinglistItem shoppinglistItem) {
+        if(itemUnit != null && shoppinglistItem != null) {
+            if(shoppinglistItem.getItemUnitList().isEmpty()) {
+                shoppinglistItem.setItemUnitList(List.of(itemUnit));
+            } else {
+                shoppinglistItem.getItemUnitList().add(itemUnit);
+            }
+        }
+    }
+
+
 }

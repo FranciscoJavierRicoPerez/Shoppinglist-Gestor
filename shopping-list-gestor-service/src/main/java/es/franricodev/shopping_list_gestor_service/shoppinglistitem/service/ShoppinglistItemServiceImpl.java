@@ -4,17 +4,17 @@ import es.franricodev.shopping_list_gestor_service.calculateSystem.exception.Cal
 import es.franricodev.shopping_list_gestor_service.calculateSystem.model.CalculateSystem;
 import es.franricodev.shopping_list_gestor_service.calculateSystem.service.CalculateSystemService;
 import es.franricodev.shopping_list_gestor_service.itemUnit.dto.ItemUnitDTO;
+import es.franricodev.shopping_list_gestor_service.itemUnit.exception.ItemUnitException;
 import es.franricodev.shopping_list_gestor_service.itemUnit.mapper.ItemUnitMapper;
 import es.franricodev.shopping_list_gestor_service.itemUnit.model.ItemUnit;
 import es.franricodev.shopping_list_gestor_service.itemUnit.service.ItemUnitService;
-import es.franricodev.shopping_list_gestor_service.product.exception.ProductException;
 import es.franricodev.shopping_list_gestor_service.product.model.Product;
 import es.franricodev.shopping_list_gestor_service.product.service.ProductService;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.model.Shoppinglist;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.service.ShoppinglistService;
-import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.ShoppinglistItemDTO;
-import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItem;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItemV2;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseCreateShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.exception.ShoppinglistItemException;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.mapper.ShoppinglistItemMapper;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.messages.ShoppinglistItemMessagesError;
@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -53,64 +54,6 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
     private ItemUnitMapper itemUnitMapper;
 
     private final static Logger logger = LoggerFactory.getLogger(ShoppinglistItemServiceImpl.class);
-
-    @Override
-    public ShoppinglistItemDTO createShoppinglistItem(
-            RequestCreateShoppinglistItem requestCreateShoppinglistItem,
-            Long idShoppinglist) throws ShoppinglistItemException {
-        logger.info("Creating a new shoppinglist item");
-
-        try {
-            // TODO: Obtener la lista de la compra
-            Shoppinglist shoppinglist = shoppinglistService.findShoppinglistById(idShoppinglist);
-            // TODO: Obtener el producto, SI NO EXISTE SE CREA (ya se crea implicitamente en el metodo findProductByName)
-            Product product = null;
-            if (requestCreateShoppinglistItem.getProductName() == null) {
-                throw new ProductException("PRODUCT_MESSAGE_ERROR_NO-SE-PUEDE-CREAR-EL-PRODUCTO");
-            } else {
-                product = productService.findProductByName(requestCreateShoppinglistItem.getProductName());
-            }
-            // TODO: Obtener el calculate system;
-            CalculateSystem calculateSystem = null;
-            if(requestCreateShoppinglistItem.getCalculateSystemCode() == null) {
-                throw new CalculateSystemException("CALCULATE_MESSAGE_ERROR-NO-SE-PUEDE-OBTENER-EL-CALCULATE-SYSTEM");
-            } else {
-                calculateSystem = calculateSystemService.findCalculateSystemByCode(requestCreateShoppinglistItem.getCalculateSystemCode());
-            }
-
-            // TODO: Creamos el shoppinglist item
-            ShoppinglistItem shoppinglistItem = new ShoppinglistItem();
-            shoppinglistItem.setName(product.getName());
-            shoppinglistItem.setCalculatedPrice(0D);
-            shoppinglistItem.setAssignationToListDate(new Date());
-
-            if(shoppinglist.getItems().isEmpty()) {
-                shoppinglist.setItems(List.of(shoppinglistItem));
-            } else {
-                shoppinglist.getItems().add(shoppinglistItem);
-            }
-            shoppinglistItem.setCalculateSystem(calculateSystem);
-
-            shoppinglistItem =  shoppinglistItemRepository.save(shoppinglistItem);
-            // TODO: Crear el item unit
-            ItemUnit itemUnit = itemUnitService.createItemUnit(shoppinglistItem, requestCreateShoppinglistItem.getUnitaryPrice(), calculateSystem);
-
-            shoppinglistItem.setItemUnitList(List.of(itemUnit));
-
-            recalculateShoppinglistItemsTotalPrice(shoppinglistItem);
-
-            productService.assignProductToShoppinglistItem(shoppinglistItem, product);
-
-            shoppinglist = shoppinglistService.calculateShoppinglistTotalPrice(shoppinglist.getId());
-
-            shoppinglistService.updateShoppinglist(shoppinglist);
-
-            return shoppinglistItemMapper.shoppinglistItemToShoppinglistItemDTO(shoppinglistItem);
-
-        } catch (ShoppinglistException | ProductException | CalculateSystemException e) {
-            throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_CREATE_ERR);
-        }
-    }
 
     @Override
     public void deleteShoppinglistItem(Long idItem) throws ShoppinglistItemException {
@@ -233,4 +176,62 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
         shoppinglistItem.setCalculatedPrice(totalShoppinglistPrice);
         shoppinglistItemRepository.save(shoppinglistItem);
     }
+
+    // **************************** VERSION 2 ENPOINTS ***************************************ç
+    @Transactional
+    @Override
+    public ResponseCreateShoppinglistItem createShoppinglistItem(Long idShoppinglist, RequestCreateShoppinglistItemV2 requestData) throws ShoppinglistItemException {
+        logger.info("V2: Creating a new shoppinglist item for the shoppinglist with id: {}", idShoppinglist);
+        try {
+            Shoppinglist shoppinglist = shoppinglistService.findShoppinglistById(idShoppinglist);
+            // TODO: Revisamos que el producto que se va a asignar en la SLI existe y si no lo creamos
+            Product product = productService.createProductV2(requestData.getProductInfo());
+            // TODO: Obtenemos el calculate system asociado
+            CalculateSystem calculateSystem = calculateSystemService.findCalculateSystemById(requestData.getSelectedCalculateSystem());
+            // TODO: Procedemos a la creacion del shoppinglist item (SLI)
+            ShoppinglistItem shoppinglistItem = new ShoppinglistItem();
+            shoppinglistItem.setName(product.getName());
+            shoppinglistItem.setAssignationToListDate(new Date());
+            shoppinglistItem.setCalculateSystem(calculateSystem);
+            shoppinglistItem.setCalculatedPrice(getShoppinglistItemCalculatedPrice(shoppinglistItem));
+            shoppinglistService.addShoppinglistItemToShoppinglist(shoppinglistItem, shoppinglist);
+            shoppinglistItem = shoppinglistItemRepository.save(shoppinglistItem);
+            productService.assignProductToShoppinglistItem(shoppinglistItem, product);
+            // TODO: Creamos el ItemUnit y su WP O UP item asociado
+            ItemUnit itemUnitCreated = null;
+            if (requestData.getCreateItemUnitData() != null) {
+                // TODO: Se procede a la creación del item unit
+                itemUnitCreated = itemUnitService.createItemUnitV2(
+                        requestData.getCreateItemUnitData(),
+                        calculateSystem.getCode().equalsIgnoreCase("WP"),
+                        shoppinglistItem
+                );
+            }
+            if(itemUnitCreated != null) {
+                shoppinglistItem.setItemUnitList(new ArrayList<>(List.of(itemUnitCreated)));
+                shoppinglistItem.setCalculatedPrice(shoppinglistItem.getCalculatedPrice() + itemUnitCreated.getTotalPrice());
+                shoppinglistItemRepository.save(shoppinglistItem);
+            }
+            shoppinglistService.updateShoppinglistTotalPrice(shoppinglist);
+            return ResponseCreateShoppinglistItem.builder()
+                    .idShoppinglistItemCreated(shoppinglistItem.getId())
+                    .created(true)
+                    .shoppinglistItemCalculatedPrice(shoppinglistItem.getCalculatedPrice())
+                    .totalPrice(shoppinglist.getTotalPrice())
+                    .build();
+        } catch (ShoppinglistException | CalculateSystemException | ItemUnitException e) {
+            throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_CREATE_ERR);
+        }
+    }
+    private double getShoppinglistItemCalculatedPrice(ShoppinglistItem shoppinglistItem) {
+        double calculatedPrice = 0.0;
+        if(!shoppinglistItem.getItemUnitList().isEmpty()) {
+           for(ItemUnit itemUnit : shoppinglistItem.getItemUnitList()) {
+               calculatedPrice += itemUnit.getTotalPrice();
+           }
+        }
+        return calculatedPrice;
+    }
+
+
 }
