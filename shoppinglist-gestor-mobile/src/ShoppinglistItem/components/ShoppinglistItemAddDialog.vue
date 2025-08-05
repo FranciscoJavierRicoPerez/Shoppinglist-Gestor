@@ -78,8 +78,6 @@ function closeModal() {
 async function addShoppinglistItem() {
   form.value.shoppinglistId = Number(route.params.id);
   form.value.quantity = 1; // HARE QUE POR DEFECTO LA PRIMERA VEZ QUE SE CREA UN UP ITEM TENGA LA CANTIDAD DE 1
-  debugger;
-  console.log(form.value.unitaryPrice);
   let response: ResponseNewShoppinglistItem = await createShoppinglistItem(
     form.value
   );
@@ -109,6 +107,80 @@ function verifyAddItemForm(): boolean {
 <template>
   <IonModal :is-open="openModal">
     <IonHeader>
+      <IonToolbar>
+        <IonTitle class="custom-text-header">Nuevo Item</IonTitle>
+        <IonButtons slot="end">
+          <IonButton
+            @click="closeModal"
+            style="font-style: italic; font-size: large"
+            >Cerrar</IonButton
+          >
+        </IonButtons>
+      </IonToolbar>
+    </IonHeader>
+    <IonContent>
+      <IonCard>
+        <IonCardHeader>
+          <IonCardTitle>Creación del item</IonCardTitle>
+        </IonCardHeader>
+        <IonCardContent>
+          <!-- SELECTOR DE PRODUCTO -->
+          <IonList>
+            <IonItem>
+              <IonSelect
+                v-model="productSelected"
+                aria-label="Productos"
+                placeholder="Selecciona un producto"
+              >
+                <IonSelectOption
+                  v-for="element in productSelectorList"
+                  :key="element.id"
+                  :value="element"
+                >
+                  {{ element.name }}</IonSelectOption
+                >
+              </IonSelect>
+            </IonItem>
+          </IonList>
+          <IonInput
+            label="Nombre"
+            label-placement="floating"
+            placeholder="Nombre producto"
+            v-model="form.requestProduct.name"
+            :disabled="
+              form.requestProduct.name !== '' && productSelected !== null
+            "
+          ></IonInput>
+          <!-- SELECTOR DE CALCULATE SYSTEM -->
+          <IonList>
+            <IonItem>
+              <IonSelect
+                v-model="calculateSystemSelected"
+                aria-label="Calculo de precio"
+                placeholder="Selecciona el sistema de calculo"
+              >
+                <IonSelectOption
+                  v-for="(element, index) in calculateSystemSelectorList"
+                  :key="index"
+                  :value="element"
+                  >{{ element }}</IonSelectOption
+                >
+              </IonSelect>
+            </IonItem>
+          </IonList>
+
+          <!-- PRECIO UNITARIO -->
+          <!-- PRECIO WEIGHT -->
+        </IonCardContent>
+      </IonCard>
+      <IonCard>
+        <IonCardHeader>
+          <IonCardTitle>Resumen</IonCardTitle>
+        </IonCardHeader>
+        <IonCardContent> </IonCardContent>
+      </IonCard>
+    </IonContent>
+    <!-- <IonHeader>
       <IonToolbar>
         <IonTitle class="custom-text-header">Añadir Item</IonTitle>
         <IonButtons slot="end">
@@ -173,7 +245,6 @@ function verifyAddItemForm(): boolean {
           </IonList>
         </IonCardContent>
       </IonCard>
-      <!-- ION CARD PARA EL CALCULO DE LOS ITEMS EN PRECIO UNITARIO -->
       <IonCard
         v-if="
           calculateSystemSelected !== '' && calculateSystemSelected === 'UP'
@@ -192,9 +263,6 @@ function verifyAddItemForm(): boolean {
           ></IonInput>
         </IonCardContent>
       </IonCard>
-      <!-- ********************************************************** -->
-      <!-- ION CARD PARA EL CALCULO DE LOS ITEM EN KG/€-->
-      <!-- ********************************************************** -->
       <IonButton
         style="margin-left: 10px; margin-right: 10px"
         expand="block"
@@ -202,7 +270,7 @@ function verifyAddItemForm(): boolean {
         :disabled="verifyAddItemForm()"
         >Añadir</IonButton
       >
-    </IonContent>
+    </IonContent> -->
   </IonModal>
 </template>
 <style lang="css">
