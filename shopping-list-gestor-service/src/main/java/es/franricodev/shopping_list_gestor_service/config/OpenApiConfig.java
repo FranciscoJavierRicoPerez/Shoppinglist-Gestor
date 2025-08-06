@@ -51,4 +51,13 @@ public class OpenApiConfig {
                 .build();
     }
 
+    @Bean
+    public GroupedOpenApi apiProduct() {
+        return GroupedOpenApi.builder()
+                .group("api-product")
+                .pathsToMatch("/api/product/**")
+                .pathsToExclude("/dto/**", "/exception/**", "/mapper/**", "/messages/**", "/model", "/repository/**", "/service/**")
+                .build();
+    }
+
 }

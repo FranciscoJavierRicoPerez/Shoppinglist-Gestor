@@ -18,10 +18,7 @@ public interface CalculateSystemService {
 
     List<CalculateSystemDTO> findAll();
 
-    // *********************** V2 **************************
     CalculateSystem findCalculateSystemById(Long id) throws CalculateSystemException;
-
-    // void update(CalculateSystem calculateSystem);
 
 
 }

@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "SHOPPINGLIST_CONTROLLER", description = "Management of the operations related with the shoppinglist")
+@Tag(
+        name = "Shoppinglist Controller API Documentation",
+        description = "Management of the operations related with the shoppinglist"
+)
 public interface ShoppinglistController {
 
     @Operation(summary = "Get all shoppinglist in the database")

@@ -28,6 +28,11 @@ import { useCreateShoppinglistItem } from "@/ShoppinglistItem/application/useCre
 import { useRoute } from "vue-router";
 import { useShoppinglistItemStore } from "../stores/shoppinglistItemStore";
 import { ResponseNewShoppinglistItem } from "../infrastructure/models/ResponseNewShoppinglistItem";
+import { useGetAllCalculateSystems } from "@/CalculateSystem/application/useGetAllCalculateSystems";
+import {
+  CalculateSystem,
+  defaultCalculateSystem,
+} from "@/CalculateSystem/domain/CalculateSystem";
 const route = useRoute();
 const { refetch: getAllProductList } = useGetAllProducts();
 const { refetch: createShoppinglistItem } = useCreateShoppinglistItem();
@@ -36,6 +41,8 @@ defineProps({
     type: Boolean,
   },
 });
+
+const { refetch: getAllCalculateSystems } = useGetAllCalculateSystems();
 
 const store = useShoppinglistItemStore();
 
@@ -51,11 +58,14 @@ const emit = defineEmits([
 const productSelectorList = ref<Product[]>([]);
 const productSelected = ref<Product | null>(null);
 
-const calculateSystemSelectorList = ref<string[]>(["UP", "WP"]);
+const calculateSystemSelectorList = ref<CalculateSystem[]>([
+  { ...defaultCalculateSystem },
+]);
 const calculateSystemSelected = ref<string>("");
 
 onMounted(async () => {
   productSelectorList.value = await getAllProductList();
+  calculateSystemSelectorList.value = await getAllCalculateSystems();
 });
 
 watch(productSelected, (newProductSelected) => {
@@ -163,7 +173,7 @@ function verifyAddItemForm(): boolean {
                   v-for="(element, index) in calculateSystemSelectorList"
                   :key="index"
                   :value="element"
-                  >{{ element }}</IonSelectOption
+                  >{{ element.name }}</IonSelectOption
                 >
               </IonSelect>
             </IonItem>
