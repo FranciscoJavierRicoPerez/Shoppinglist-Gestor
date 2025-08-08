@@ -16,6 +16,7 @@ import {
   IonList,
   IonSelect,
   IonSelectOption,
+  IonChip,
 } from "@ionic/vue";
 import { onMounted, ref, watch } from "vue";
 import {
@@ -61,23 +62,37 @@ const productSelected = ref<Product | null>(null);
 const calculateSystemSelectorList = ref<CalculateSystem[]>([
   { ...defaultCalculateSystem },
 ]);
-const calculateSystemSelected = ref<string>("");
+const calculateSystemSelected = ref<number>(-1);
+
+const unitaryPriceResume = ref<number>(-1);
+const quantityPriceResume = ref<number>(-1);
+const weightResume = ref<number>(-1);
+const priceKgResume = ref<number>(-1);
 
 onMounted(async () => {
   productSelectorList.value = await getAllProductList();
   calculateSystemSelectorList.value = await getAllCalculateSystems();
 });
 
+watch(form.value.createItemUnitData.createWpItemUnitData, (newWp) => {
+  weightResume.value = newWp.weight;
+  priceKgResume.value = newWp.priceKg;
+});
+
+watch(form.value.createItemUnitData.createUpItemUnitData, (newUp) => {
+  unitaryPriceResume.value = newUp.unitaryPrice;
+  quantityPriceResume.value = newUp.quantity;
+});
+
 watch(productSelected, (newProductSelected) => {
   if (form.value && newProductSelected) {
-    form.value.requestProduct.productId = newProductSelected.id;
-    form.value.requestProduct.name = newProductSelected.name;
+    form.value.productInfo.productName = newProductSelected.name;
   }
 });
 
 watch(calculateSystemSelected, (newCalculateSystemSelected) => {
   if (form.value && newCalculateSystemSelected) {
-    form.value.calculateSystem = newCalculateSystemSelected;
+    form.value.selectedCalculateSystem = newCalculateSystemSelected;
   }
 });
 
@@ -86,22 +101,22 @@ function closeModal() {
 }
 
 async function addShoppinglistItem() {
-  form.value.shoppinglistId = Number(route.params.id);
-  form.value.quantity = 1; // HARE QUE POR DEFECTO LA PRIMERA VEZ QUE SE CREA UN UP ITEM TENGA LA CANTIDAD DE 1
   let response: ResponseNewShoppinglistItem = await createShoppinglistItem(
-    form.value
+    form.value,
+    Number(route.params.id)
   );
   if (response.created) {
     let actualDate = new Date();
     store.addShoppinglistItemMetadata({
-      id: response.idItemCreated,
+      id: response.idShoppinglistItemCreated,
       assignationToListDate: actualDate.toString(),
       name:
-        form.value.requestProduct.name !== undefined
-          ? form.value.requestProduct.name
+        form.value.productInfo.productName !== undefined
+          ? form.value.productInfo.productName
           : "",
-      calculateSystemCode: form.value.calculateSystem,
-      calculatedPrice: form.value.unitaryPrice,
+      calculateSystemCode:
+        form.value.selectedCalculateSystem === 1 ? "UP" : "WP",
+      calculatedPrice: response.shoppinglistItemCalculatedPrice,
     });
     // Al lanzar la funcion closeModal al crear un shopping list item no se actualiza y aparece automaticamente :()
     emit("updateShoppinglistItemList");
@@ -112,6 +127,36 @@ async function addShoppinglistItem() {
 function verifyAddItemForm(): boolean {
   // TODO: Añadir verificaciones para el formulario
   return false;
+}
+
+function calculatePrice(
+  calculateSystemSelected: number,
+  priceKg: number,
+  weight: number,
+  unitaryPrice: number,
+  quantity: number
+): number {
+  if (calculateSystemSelected === -1) {
+    return 0;
+  } else {
+    return calculateSystemSelected === 1
+      ? calculateShoppinglistItemUpPrice(unitaryPrice, quantity)
+      : calculateShoppinglistItemWpPrice(priceKg, weight);
+  }
+}
+
+function calculateShoppinglistItemWpPrice(
+  priceKg: number,
+  weight: number
+): number {
+  return priceKg * weight;
+}
+
+function calculateShoppinglistItemUpPrice(
+  unitaryPrice: number,
+  quantity: number
+): number {
+  return unitaryPrice * quantity;
 }
 </script>
 <template>
@@ -156,9 +201,9 @@ function verifyAddItemForm(): boolean {
             label="Nombre"
             label-placement="floating"
             placeholder="Nombre producto"
-            v-model="form.requestProduct.name"
+            v-model="form.productInfo.productName"
             :disabled="
-              form.requestProduct.name !== '' && productSelected !== null
+              form.productInfo.productName !== '' && productSelected !== null
             "
           ></IonInput>
           <!-- SELECTOR DE CALCULATE SYSTEM -->
@@ -172,115 +217,106 @@ function verifyAddItemForm(): boolean {
                 <IonSelectOption
                   v-for="(element, index) in calculateSystemSelectorList"
                   :key="index"
-                  :value="element"
+                  :value="element.id"
                   >{{ element.name }}</IonSelectOption
                 >
               </IonSelect>
             </IonItem>
           </IonList>
-
           <!-- PRECIO UNITARIO -->
+          <div v-if="calculateSystemSelected === 1">
+            <IonInput
+              label="Precio Unitario"
+              label-placement="floating"
+              placeholder="Precio unitario"
+              v-model="
+                form.createItemUnitData.createUpItemUnitData.unitaryPrice
+              "
+              type="number"
+            ></IonInput>
+            <IonInput
+              label="Cantidad"
+              label-placement="floating"
+              placeholder="Cantidad"
+              v-model="form.createItemUnitData.createUpItemUnitData.quantity"
+              type="number"
+            ></IonInput>
+          </div>
           <!-- PRECIO WEIGHT -->
+          <div v-if="calculateSystemSelected === 2">
+            <IonInput
+              label="Peso"
+              label-placement="floating"
+              placeholder="Peso"
+              v-model="form.createItemUnitData.createWpItemUnitData.weight"
+              type="number"
+            ></IonInput>
+            <IonInput
+              label="Precio Kg"
+              label-placement="floating"
+              placeholder="Precio Kg"
+              v-model="form.createItemUnitData.createWpItemUnitData.priceKg"
+              type="number"
+            ></IonInput>
+          </div>
         </IonCardContent>
       </IonCard>
-      <IonCard>
+      <IonCard style="background-color: rgb(242, 252, 230)">
         <IonCardHeader>
           <IonCardTitle>Resumen</IonCardTitle>
         </IonCardHeader>
-        <IonCardContent> </IonCardContent>
+        <IonCardContent>
+          <div v-if="form.productInfo.productName !== ''">
+            <IonChip color="primary"
+              >Producto: {{ form.productInfo.productName }}</IonChip
+            >
+          </div>
+          <div v-if="form.selectedCalculateSystem !== -1">
+            <IonChip color="warning"
+              >Sistema de calculo:
+              {{ form.selectedCalculateSystem === 1 ? "UP" : "WP" }}</IonChip
+            >
+            <div v-if="form.selectedCalculateSystem === 1">
+              <IonChip color="tertiary"
+                >Precio Unitario: {{ unitaryPriceResume }}</IonChip
+              >
+              <IonChip color="tertiary"
+                >Cantidad: {{ quantityPriceResume }}</IonChip
+              >
+            </div>
+            <div v-if="form.selectedCalculateSystem === 2">
+              <IonChip color="tertiary"
+                >Peso:
+                {{ weightResume }}
+                Kg</IonChip
+              >
+              <IonChip color="tertiary">Kg/€: {{ priceKgResume }}</IonChip>
+            </div>
+          </div>
+          <div>
+            <IonChip color="danger"
+              >Precio del item:
+              {{
+                calculatePrice(
+                  form.selectedCalculateSystem,
+                  priceKgResume,
+                  weightResume,
+                  unitaryPriceResume,
+                  quantityPriceResume
+                )
+              }}</IonChip
+            >
+          </div>
+          <IonButton
+            style="margin-left: 10px; margin-right: 10px"
+            expand="block"
+            @click="addShoppinglistItem()"
+            :disabled="verifyAddItemForm()"
+            >Añadir</IonButton
+          >
+        </IonCardContent>
       </IonCard>
     </IonContent>
-    <!-- <IonHeader>
-      <IonToolbar>
-        <IonTitle class="custom-text-header">Añadir Item</IonTitle>
-        <IonButtons slot="end">
-          <IonButton @click="closeModal()">Cerrar</IonButton>
-        </IonButtons>
-      </IonToolbar>
-    </IonHeader>
-    <IonContent>
-      <IonCard>
-        <IonCardHeader>
-          <IonCardTitle>Producto</IonCardTitle>
-        </IonCardHeader>
-        <IonCardContent>
-          <IonList>
-            <IonItem>
-              <IonSelect
-                v-model="productSelected"
-                aria-label="Productos"
-                placeholder="Selecciona un producto"
-              >
-                <IonSelectOption
-                  v-for="element in productSelectorList"
-                  :key="element.id"
-                  :value="element"
-                >
-                  {{ element.name }}</IonSelectOption
-                >
-              </IonSelect>
-            </IonItem>
-          </IonList>
-          <IonInput
-            label="Nombre"
-            label-placement="floating"
-            placeholder="Nombre producto"
-            v-model="form.requestProduct.name"
-            :disabled="
-              form.requestProduct.name !== '' && productSelected !== null
-            "
-          ></IonInput>
-        </IonCardContent>
-      </IonCard>
-      <IonCard>
-        <IonCardHeader>
-          <IonCardTitle>Item</IonCardTitle>
-        </IonCardHeader>
-        <IonCardContent>
-          <IonList>
-            <IonItem>
-              <IonSelect
-                v-model="calculateSystemSelected"
-                aria-label="Calculo de precio"
-                placeholder="Selecciona el sistema de calculo"
-              >
-                <IonSelectOption
-                  v-for="(element, index) in calculateSystemSelectorList"
-                  :key="index"
-                  :value="element"
-                  >{{ element }}</IonSelectOption
-                >
-              </IonSelect>
-            </IonItem>
-          </IonList>
-        </IonCardContent>
-      </IonCard>
-      <IonCard
-        v-if="
-          calculateSystemSelected !== '' && calculateSystemSelected === 'UP'
-        "
-      >
-        <IonCardHeader>
-          <IonCardTitle>Precio Unitario</IonCardTitle>
-        </IonCardHeader>
-        <IonCardContent>
-          <IonInput
-            label="Precio"
-            label-placement="floating"
-            placeholder="Precio del producto"
-            v-model="form.unitaryPrice"
-            type="number"
-          ></IonInput>
-        </IonCardContent>
-      </IonCard>
-      <IonButton
-        style="margin-left: 10px; margin-right: 10px"
-        expand="block"
-        @click="addShoppinglistItem()"
-        :disabled="verifyAddItemForm()"
-        >Añadir</IonButton
-      >
-    </IonContent> -->
   </IonModal>
 </template>
 <style lang="css">
