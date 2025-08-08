@@ -2,34 +2,29 @@ import { ResquestNewShoppinglistItem } from "@/ShoppinglistItem/infrastructure/m
 import axios from "axios";
 import { ResponseNewShoppinglistItem } from "@/ShoppinglistItem/infrastructure/models/ResponseNewShoppinglistItem";
 
-async function Api(data: ResquestNewShoppinglistItem) : Promise<ResponseNewShoppinglistItem>{
+async function Api(data: ResquestNewShoppinglistItem, idShoppinglist: number) : Promise<ResponseNewShoppinglistItem>{
   const url =
     import.meta.env.VITE_API_URL_COMPUTER +
-    "api/shoppinglistitem/v1/" +
-    data.shoppinglistId +
+    "api/shoppinglistitem/v2/" +
+    idShoppinglist +
     "/createItem";
-  const response = await axios.post(url, {
-    productId: data.requestProduct.productId,
-    productName: data.requestProduct.name,
-    calculateSystemCode: data.calculateSystem,
-    unitaryPrice: data.unitaryPrice,
-    quantity: data.quantity
-  });
+  const response = await axios.post(url, data);
   return response.data
 }
 
 async function InMemory() : Promise<ResponseNewShoppinglistItem> {
   return {
-    idItemCreated: 1,
+    idShoppinglistItemCreated: 1,
     created: true,
-    responseMessage: 'CREADO'
+    shoppinglistItemCalculatedPrice: 1,
+    totalPrice: 1
   }
 }
 
-async function createShoppinglistItem(data: ResquestNewShoppinglistItem) : Promise<ResponseNewShoppinglistItem> {
+async function createShoppinglistItem(data: ResquestNewShoppinglistItem, idShoppinglist: number) : Promise<ResponseNewShoppinglistItem> {
   return import.meta.env.VITE_DATA_ACCESS === "LOCAL"
     ? await InMemory()
-    : await Api(data);
+    : await Api(data, idShoppinglist);
 }
 
 export { createShoppinglistItem };

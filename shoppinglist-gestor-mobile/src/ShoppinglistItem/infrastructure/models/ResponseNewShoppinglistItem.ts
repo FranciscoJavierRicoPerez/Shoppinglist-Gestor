@@ -1,5 +1,6 @@
 export interface ResponseNewShoppinglistItem {
-    idItemCreated: number,
-    created: boolean,
-    responseMessage: string
+    idShoppinglistItemCreated: number
+    created: boolean
+    shoppinglistItemCalculatedPrice: number
+    totalPrice: number
 }

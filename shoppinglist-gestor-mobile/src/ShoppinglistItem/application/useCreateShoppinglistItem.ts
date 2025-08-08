@@ -3,8 +3,8 @@ import { ResquestNewShoppinglistItem } from "@/ShoppinglistItem/infrastructure/m
 import { ResponseNewShoppinglistItem } from "@/ShoppinglistItem/infrastructure/models/ResponseNewShoppinglistItem";
 
 export function useCreateShoppinglistItem() {
-  async function refetch(data: ResquestNewShoppinglistItem) : Promise<ResponseNewShoppinglistItem> {
-    return await createShoppinglistItem(data);
+  async function refetch(data: ResquestNewShoppinglistItem, idShoppinglist: number) : Promise<ResponseNewShoppinglistItem> {
+    return await createShoppinglistItem(data, idShoppinglist);
   }
 
   return { refetch };

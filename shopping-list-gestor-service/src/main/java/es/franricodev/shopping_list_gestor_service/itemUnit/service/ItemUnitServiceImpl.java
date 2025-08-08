@@ -97,6 +97,7 @@ public class ItemUnitServiceImpl implements ItemUnitService {
 
     @Override
     public ItemUnit createItemUnitV2(CreateItemUnitData createItemUnitData, boolean isWpItemUnit, ShoppinglistItem shoppinglistItem) throws ItemUnitException {
+        validateCorrectItemUnitCreationData(createItemUnitData, isWpItemUnit);
         if(!createItemUnitData.isCreateItemUnit()) {
             return null;
         }
@@ -138,6 +139,17 @@ public class ItemUnitServiceImpl implements ItemUnitService {
             } else {
                 shoppinglistItem.getItemUnitList().add(itemUnit);
             }
+        }
+    }
+
+    private void validateCorrectItemUnitCreationData(CreateItemUnitData createItemUnitData, boolean isWpItemUnit) throws ItemUnitException {
+        if(isWpItemUnit && (createItemUnitData.getCreateWpItemUnitData().getPriceKg() == -1 || createItemUnitData.getCreateWpItemUnitData().getWeight() == -1)) {
+            log.error(ItemUnitMessagesError.ITEMUNIT_CREATION_DATA_WITH_ERRORS);
+            throw new ItemUnitException(ItemUnitMessagesError.ITEMUNIT_CREATION_DATA_WITH_ERRORS);
+        }
+        if(!isWpItemUnit && (createItemUnitData.getCreateUpItemUnitData().getQuantity() == -1 || createItemUnitData.getCreateUpItemUnitData().getUnitaryPrice() == -1)) {
+            log.error(ItemUnitMessagesError.ITEMUNIT_CREATION_DATA_WITH_ERRORS);
+            throw new ItemUnitException(ItemUnitMessagesError.ITEMUNIT_CREATION_DATA_WITH_ERRORS);
         }
     }
 

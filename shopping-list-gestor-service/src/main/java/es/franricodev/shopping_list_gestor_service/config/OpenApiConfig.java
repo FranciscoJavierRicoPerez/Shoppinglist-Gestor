@@ -42,4 +42,22 @@ public class OpenApiConfig {
                 .build();
     }
 
+    @Bean
+    public GroupedOpenApi apiCalculateSystem() {
+        return GroupedOpenApi.builder()
+                .group("api-calculateSystem")
+                .pathsToMatch("/api/calculateSystem/**")
+                .pathsToExclude("/dto/**", "/exception/**", "/mapper/**", "/messages/**", "/model", "/repository/**", "/service/**")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi apiProduct() {
+        return GroupedOpenApi.builder()
+                .group("api-product")
+                .pathsToMatch("/api/product/**")
+                .pathsToExclude("/dto/**", "/exception/**", "/mapper/**", "/messages/**", "/model", "/repository/**", "/service/**")
+                .build();
+    }
+
 }
