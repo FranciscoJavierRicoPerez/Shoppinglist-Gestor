@@ -101,6 +101,14 @@ function closeModal() {
 }
 
 async function addShoppinglistItem() {
+  /* let createItemUnit : boolean = ((form.value.selectedCalculateSystem === 1 &&
+      form.value.createItemUnitData.createUpItemUnitData.quantity !== -1 &&
+      form.value.createItemUnitData.createUpItemUnitData.unitaryPrice) ||
+    (form.value.selectedCalculateSystem === 2 &&
+      form.value.createItemUnitData.createWpItemUnitData.priceKg !== -1 &&
+      form.value.createItemUnitData.createWpItemUnitData.weight !== -1)); */
+  let createItemUnit : boolean = true; // TODO: ASIGNAR LOGICA DE ARRIBA
+  form.value.createItemUnitData.createItemUnit = createItemUnit;
   let response: ResponseNewShoppinglistItem = await createShoppinglistItem(
     form.value,
     Number(route.params.id)

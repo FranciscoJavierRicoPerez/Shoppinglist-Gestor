@@ -10,6 +10,7 @@ import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.Shoppi
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.Date;
@@ -33,6 +34,7 @@ public class ProductServiceImpl implements ProductService {
         return productOpt.orElseGet(() -> createProduct(name));
     }
 
+    @Transactional
     @Override
     public Product createProduct(String name) {
         Product product = new Product();
@@ -53,6 +55,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     // ********************* VERSION 2 **********************
+    @Transactional
     @Override
     public Product createProductV2(CreateProductInfo createProductInfo)  {
         log.info("V2: Creating a new product service method");
