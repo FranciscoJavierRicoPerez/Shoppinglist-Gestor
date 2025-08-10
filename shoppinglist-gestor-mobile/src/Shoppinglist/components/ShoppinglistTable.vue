@@ -129,20 +129,23 @@ function assignActualSelectedTabBySlide(data: SegmentChangeEventDetail) {
     <Header :title="'Listas de la compra'"></Header>
     <Footer></Footer>
     <IonContent>
-      <IonSegment @ion-change="assignActualSelectedTabBySlide($event.detail)">
-        <IonSegmentButton
-          v-for="value in mapSections"
-          :value="value[0]"
-          :content-id="value[0]"
-          @click="selectedTab = value[0]"
-        >
-          <IonLabel>{{ value[1] }}</IonLabel>
-        </IonSegmentButton>
-      </IonSegment>
       <div v-if="actualShoppinglistVisible.length === 0">
-        <Information :title="'LISTA DE LA COMPRA'" :message="'No hay listas de la compra para esta opción'"></Information>
+        <Information
+          :title="'LISTA DE LA COMPRA'"
+          :message="'No hay listas de la compra para esta opción'"
+        ></Information>
       </div>
       <div v-else>
+        <IonSegment @ion-change="assignActualSelectedTabBySlide($event.detail)">
+          <IonSegmentButton
+            v-for="value in mapSections"
+            :value="value[0]"
+            :content-id="value[0]"
+            @click="selectedTab = value[0]"
+          >
+            <IonLabel>{{ value[1] }}</IonLabel>
+          </IonSegmentButton>
+        </IonSegment>
         <IonSegmentView>
           <IonSegmentContent v-for="value in mapSections" :id="value[0]">
             <IonList>
