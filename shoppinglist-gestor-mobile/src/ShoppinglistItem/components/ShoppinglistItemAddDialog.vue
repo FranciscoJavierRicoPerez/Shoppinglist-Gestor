@@ -27,8 +27,8 @@ import { Product } from "@/Product/domain/Product";
 import { useGetAllProducts } from "@/Product/application/useGetAllProducts";
 import { useCreateShoppinglistItem } from "@/ShoppinglistItem/application/useCreateShoppinglistItem";
 import { useRoute } from "vue-router";
-import { useShoppinglistItemStore } from "../stores/shoppinglistItemStore";
-import { ResponseNewShoppinglistItem } from "../infrastructure/models/ResponseNewShoppinglistItem";
+import { useShoppinglistItemStore } from "@/ShoppinglistItem/stores/shoppinglistItemStore";
+import { ResponseNewShoppinglistItem } from "@/ShoppinglistItem/infrastructure/models/ResponseNewShoppinglistItem";
 import { useGetAllCalculateSystems } from "@/CalculateSystem/application/useGetAllCalculateSystems";
 import {
   CalculateSystem,

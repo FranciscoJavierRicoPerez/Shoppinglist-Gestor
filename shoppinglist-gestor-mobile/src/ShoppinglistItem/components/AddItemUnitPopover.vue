@@ -12,7 +12,7 @@ import {
   defaultRequestAddUnitaryPriceItemUnit,
   RequestAddUnitaryPriceItemUnit,
 } from "@/ShoppinglistItem/infrastructure/models/RequestAddUnitaryPriceItemUnit";
-import { useAddItemUnitToShoppinglistItem } from "../application/useAddItemUnitToShoppinglistItem";
+import { useAddItemUnitToShoppinglistItem } from "@/ShoppinglistItem/application/useAddItemUnitToShoppinglistItem";
 
 const params = defineProps({
   idShoppinglistItem: {

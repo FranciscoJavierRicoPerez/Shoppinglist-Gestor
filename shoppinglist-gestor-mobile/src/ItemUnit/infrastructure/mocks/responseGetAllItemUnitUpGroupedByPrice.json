@@ -1,0 +1,25 @@
+{
+  "totalPrice": 7,
+  "itemsUpGrouped": [
+    {
+      "price": 1,
+      "quantity": 3,
+      "calculatedPrice": 3
+    },
+    {
+      "price": 2,
+      "quantity": 2,
+      "calculatedPrice": 4
+    },
+    {
+      "price": 2,
+      "quantity": 2,
+      "calculatedPrice": 4
+    },
+    {
+      "price": 2,
+      "quantity": 2,
+      "calculatedPrice": 4
+    }
+  ]
+}

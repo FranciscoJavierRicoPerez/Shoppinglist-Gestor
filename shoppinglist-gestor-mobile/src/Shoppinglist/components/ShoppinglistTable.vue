@@ -24,10 +24,10 @@ import {
 import { onMounted, watch } from "vue";
 import { ref } from "vue";
 import ShoppinglistCardInfo from "./ShoppinglistCardInfo.vue";
-import { defaultShoppinglist, Shoppinglist } from "../domain/Shoppinglist";
-import { useGetAllShoppinglist } from "../application/useGetAllShoppinglist";
-import { useCreateShoppinglistMetadata } from "../application/useCreateShoppinglistMetadata";
-import { useShoppinglistStore } from "../stores/shoppinglistStore";
+import { defaultShoppinglist, Shoppinglist } from "@/Shoppinglist/domain/Shoppinglist";
+import { useGetAllShoppinglist } from "@/Shoppinglist/application/useGetAllShoppinglist";
+import { useCreateShoppinglistMetadata } from "@/Shoppinglist/application/useCreateShoppinglistMetadata";
+import { useShoppinglistStore } from "@/Shoppinglist/stores/shoppinglistStore";
 import Header from "@/Shared/components/Header.vue";
 import Footer from "@/Shared/components/Footer.vue";
 import Information from "@/Shared/components/Information.vue";
