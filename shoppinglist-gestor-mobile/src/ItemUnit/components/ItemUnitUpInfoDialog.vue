@@ -10,6 +10,11 @@ import {
   IonCardContent,
   IonItem,
   IonInput,
+  InfiniteScrollCustomEvent,
+  IonContent,
+  IonList,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
 } from "@ionic/vue";
 import { useGetAllItemUnitUpGroupedByPrice } from "@/ItemUnit/application/useGetAllItemUnitUpGroupedByPrice";
 import { onMounted, ref } from "vue";
@@ -42,9 +47,35 @@ const form = ref<RequestAddUnitaryPriceItemUnit>({
 const { refetch: addItemUnitToShoppinglistItem } =
   useAddItemUnitToShoppinglistItem();
 
+const actualElementsVisible = ref<ItemUnitUpGrouped[]>([]);
+
 onMounted(async () => {
   itemsUnitsGrouped.value = await getAllItemUnitUpGroupedByPrice();
+  generateItems();
 });
+
+function generateItems() {
+  if (itemsUnitsGrouped.value?.itemsUpGrouped !== undefined) {
+    const start = itemsUnitsGrouped.value?.itemsUpGrouped.length + 1;
+    const aux_array = itemsUnitsGrouped.value.itemsUpGrouped;
+    console.log(aux_array);
+    for (let i = 0; i < 5; i++) {
+      let addeable = aux_array[start + i] !== undefined;
+      // EL ERROR VIENE DE QUE TODOS LOS itemsUpGrouped son UNDEFINED
+      if (addeable) {
+        console.log("El elemento se puede añadir");
+        actualElementsVisible.value.push(aux_array[start + i]);
+      }
+    }
+  }
+}
+
+const ionInfinite = (event: InfiniteScrollCustomEvent) => {
+  generateItems();
+  setTimeout(() => {
+    event.target.complete();
+  }, 500);
+};
 
 async function addItem() {
   if (params.idShoppinglistItem) {
@@ -109,31 +140,38 @@ async function reduceQuantity(idShoppinglistItem: number, itemPrice: number) {
             >
           </h1>
           <!-- TODO: TENGO QUE HACER QUE ESTO SEA UNA LISTA SCROLLEABLE -->
-          <div v-for="itemUnitUp in itemsUnitsGrouped?.itemsUpGrouped">
-            <IonCard style="background-color: rgb(237, 255, 224)">
-              <IonCardHeader>
-                <IonCardTitle
-                  >Coste unitario por precio:{{
-                    itemUnitUp.calculatedPrice
-                  }}</IonCardTitle
-                >
-              </IonCardHeader>
-              <IonCardContent>
-                <IonChip color="primary"
-                  >Cantidad: {{ itemUnitUp.quantity }} unidades</IonChip
-                >
-                <IonChip color="primary"
-                  >Precio Unitario: {{ itemUnitUp.price }} €</IonChip
-                >
-              </IonCardContent>
-              <div style="margin-left: 2.5rem; margin-bottom: 1rem">
-                <IonButton @click="addQuantity">+ Cantidad</IonButton>
-                <IonButton @click="reduceQuantity" color="danger"
-                  >- Cantidad</IonButton
-                >
-              </div>
-            </IonCard>
-          </div>
+          <IonContent>
+            <IonList>
+              <IonItem v-for="itemUnitUp in actualElementsVisible">
+                <IonCard style="background-color: rgb(237, 255, 224)">
+                  <IonCardHeader>
+                    <IonCardTitle
+                      >Coste unitario por precio:{{
+                        itemUnitUp.calculatedPrice
+                      }}</IonCardTitle
+                    >
+                  </IonCardHeader>
+                  <IonCardContent>
+                    <IonChip color="primary"
+                      >Cantidad: {{ itemUnitUp.quantity }} unidades</IonChip
+                    >
+                    <IonChip color="primary"
+                      >Precio Unitario: {{ itemUnitUp.price }} €</IonChip
+                    >
+                  </IonCardContent>
+                  <div style="margin-left: 2.5rem; margin-bottom: 1rem">
+                    <IonButton @click="addQuantity">+ Cantidad</IonButton>
+                    <IonButton @click="reduceQuantity" color="danger"
+                      >- Cantidad</IonButton
+                    >
+                  </div>
+                </IonCard>
+              </IonItem>
+            </IonList>
+            <IonInfiniteScroll @ion-infinite="ionInfinite">
+              <IonInfiniteScrollContent></IonInfiniteScrollContent>
+            </IonInfiniteScroll>
+          </IonContent>
         </IonCardContent>
       </IonCard>
     </div>
