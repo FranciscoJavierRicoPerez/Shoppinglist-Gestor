@@ -56,13 +56,15 @@ onMounted(async () => {
 
 function generateItems() {
   if (itemsUnitsGrouped.value?.itemsUpGrouped !== undefined) {
-    const start = itemsUnitsGrouped.value?.itemsUpGrouped.length + 1;
-    const aux_array = itemsUnitsGrouped.value.itemsUpGrouped;
-    console.log(aux_array);
-    for (let i = 0; i < 5; i++) {
-      let addeable = aux_array[start + i] !== undefined;
+    const start = actualElementsVisible.value.length;
+    console.log("START VALUE => " + start);
+    const aux_array: ItemUnitUpGrouped[] =
+      itemsUnitsGrouped.value.itemsUpGrouped;
+    console.log("AUX_ARRAY ELEMENTS VALUE => " + aux_array);
+    for (let i = 0; i < 50; i++) {
+      let element = aux_array[start + i];
       // EL ERROR VIENE DE QUE TODOS LOS itemsUpGrouped son UNDEFINED
-      if (addeable) {
+      if (element !== undefined) {
         console.log("El elemento se puede añadir");
         actualElementsVisible.value.push(aux_array[start + i]);
       }
@@ -128,19 +130,18 @@ async function reduceQuantity(idShoppinglistItem: number, itemPrice: number) {
           </IonCardContent>
         </IonCard>
       </div>
-
-      <IonCard>
-        <IonCardHeader>
-          <IonCardTitle>Detalle</IonCardTitle>
-        </IonCardHeader>
-        <IonCardContent>
-          <h1>
-            <IonChip color="warning"
-              >Coste total: {{ itemsUnitsGrouped?.totalPrice }} €</IonChip
-            >
-          </h1>
-          <!-- TODO: TENGO QUE HACER QUE ESTO SEA UNA LISTA SCROLLEABLE -->
-          <IonContent>
+      <IonContent>
+        <IonCard>
+          <IonCardHeader>
+            <IonCardTitle>Detalle</IonCardTitle>
+          </IonCardHeader>
+          <IonCardContent>
+            <!-- TODO: TENGO QUE HACER QUE ESTO SEA UNA LISTA SCROLLEABLE -->
+            <h1>
+              <IonChip color="warning"
+                >Coste total: {{ itemsUnitsGrouped?.totalPrice }} €</IonChip
+              >
+            </h1>
             <IonList>
               <IonItem v-for="itemUnitUp in actualElementsVisible">
                 <IonCard style="background-color: rgb(237, 255, 224)">
@@ -171,9 +172,9 @@ async function reduceQuantity(idShoppinglistItem: number, itemPrice: number) {
             <IonInfiniteScroll @ion-infinite="ionInfinite">
               <IonInfiniteScrollContent></IonInfiniteScrollContent>
             </IonInfiniteScroll>
-          </IonContent>
-        </IonCardContent>
-      </IonCard>
+          </IonCardContent>
+        </IonCard>
+      </IonContent>
     </div>
   </IonModal>
 </template>
