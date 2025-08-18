@@ -208,16 +208,21 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
                 );
             }
             if(itemUnitCreated != null) {
-                shoppinglistItem.setItemUnitList(new ArrayList<>(List.of(itemUnitCreated)));
+                ArrayList<ItemUnit> itemsUnitCreated = new ArrayList<>();
+                itemsUnitCreated.add(itemUnitCreated);
+                shoppinglistItem.setItemUnitList(itemsUnitCreated);
                 shoppinglistItem.setCalculatedPrice(shoppinglistItem.getCalculatedPrice() + itemUnitCreated.getTotalPrice());
                 shoppinglistItemRepository.save(shoppinglistItem);
             }
-            shoppinglistService.updateShoppinglistTotalPrice(shoppinglist);
+            if(shoppinglist != null) {
+                log.info("Updating the total price of the shoppinglist with the data of the new shoppinglist item");
+                shoppinglistService.updateShoppinglistTotalPrice(shoppinglistService.findShoppinglistById(shoppinglist.getId()));
+            }
             return ResponseCreateShoppinglistItem.builder()
                     .idShoppinglistItemCreated(shoppinglistItem.getId())
                     .created(true)
                     .shoppinglistItemCalculatedPrice(shoppinglistItem.getCalculatedPrice())
-                    .totalPrice(shoppinglist.getTotalPrice())
+                    .totalPrice(shoppinglist!= null ? shoppinglist.getTotalPrice() : -1)
                     .build();
         } catch (ShoppinglistException | CalculateSystemException | ItemUnitException e) {
             log.info(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_CREATE_ERR);

@@ -136,7 +136,7 @@ async function reduceQuantity(idShoppinglistItem: number, itemPrice: number) {
             <IonCardTitle>Detalle</IonCardTitle>
           </IonCardHeader>
           <IonCardContent>
-            <!-- TODO: TENGO QUE HACER QUE ESTO SEA UNA LISTA SCROLLEABLE -->
+            <!-- TODO: EXTRAER A UN COMPONENTE INDEPENDIENTE -->
             <h1>
               <IonChip color="warning"
                 >Coste total: {{ itemsUnitsGrouped?.totalPrice }} €</IonChip

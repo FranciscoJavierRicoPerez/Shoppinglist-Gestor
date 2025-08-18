@@ -19,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
@@ -135,7 +137,9 @@ public class ItemUnitServiceImpl implements ItemUnitService {
     private void addItemUnitToShoppinglistItem(ItemUnit itemUnit, ShoppinglistItem shoppinglistItem) {
         if(itemUnit != null && shoppinglistItem != null) {
             if(shoppinglistItem.getItemUnitList().isEmpty()) {
-                shoppinglistItem.setItemUnitList(List.of(itemUnit));
+                ArrayList<ItemUnit> itemList = new ArrayList<>();
+                itemList.add(itemUnit);
+                shoppinglistItem.setItemUnitList(itemList);
             } else {
                 shoppinglistItem.getItemUnitList().add(itemUnit);
             }
