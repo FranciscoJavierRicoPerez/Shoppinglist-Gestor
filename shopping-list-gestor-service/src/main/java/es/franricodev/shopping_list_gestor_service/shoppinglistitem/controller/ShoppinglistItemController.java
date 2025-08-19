@@ -1,10 +1,12 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglistitem.controller;
 
+import es.franricodev.shopping_list_gestor_service.itemUnit.dto.request.CreateItemUnitData;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetAllItemsUnit;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestAddItemUnitUnitaryPrice;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItemV2;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseCreateShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseDeleteShoppinglistItem;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseGetAllItemUnitUpGroupedByPrice;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.dto.request.RequestAddItemUnitWP;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -43,7 +45,7 @@ public interface ShoppinglistItemController {
     @PostMapping("/v1/{idShoppinglistItem}/addItemUnitUP")
     ResponseEntity<Void> addItemUnit(
             @PathVariable("idShoppinglistItem") Long idShoppinglistItem,
-            @RequestBody RequestAddItemUnitUnitaryPrice request
+            @RequestBody CreateItemUnitData request
     );
 
     @Operation(summary = "Remove a item unit in the shoppinglist item from the shoppinglist")
@@ -100,4 +102,20 @@ public interface ShoppinglistItemController {
             @PathVariable(name = "idShoppinglist") Long idShoppinglist,
             @RequestBody RequestCreateShoppinglistItemV2 requestCreateShoppinglistItem
     );
+
+    @Operation(
+            summary = "Returns all the items units of the shoppinglist item type UP grouped by price"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    content = {
+                            @Content(schema = @Schema(implementation = ResponseGetAllItemUnitUpGroupedByPrice.class), mediaType = "application/json")
+                    }
+            )
+    })
+    @GetMapping("/v1/{idShoppinglistItem}/itemsUnitsUpGroupedByPrice")
+    ResponseEntity<ResponseGetAllItemUnitUpGroupedByPrice> getItemsUnitsUpGroupedByPrice(@PathVariable(name = "idShoppinglistItem") Long idShoppinglistItem);
+
+
 }

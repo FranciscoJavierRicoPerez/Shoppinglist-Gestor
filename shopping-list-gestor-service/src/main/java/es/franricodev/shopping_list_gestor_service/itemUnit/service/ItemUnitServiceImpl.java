@@ -6,13 +6,16 @@ import es.franricodev.shopping_list_gestor_service.itemUnit.exception.ItemUnitEx
 import es.franricodev.shopping_list_gestor_service.itemUnit.messages.ItemUnitMessagesError;
 import es.franricodev.shopping_list_gestor_service.itemUnit.model.ItemUnit;
 import es.franricodev.shopping_list_gestor_service.itemUnit.repository.ItemUnitRepository;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.service.ShoppinglistService;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseGetAllItemUnitUpGroupedByPrice;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseItemUnitUpGrouped;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.ShoppinglistItem;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.service.ShoppinglistItemService;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.service.ShoppinglistItemServiceImpl;
 import es.franricodev.shopping_list_gestor_service.upItemUnit.model.UpItemUnit;
-import es.franricodev.shopping_list_gestor_service.upItemUnit.repository.UpItemUnitRepository;
 import es.franricodev.shopping_list_gestor_service.upItemUnit.service.UpItemUnitService;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.dto.request.RequestAddItemUnitWP;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.model.WpItemUnit;
-import es.franricodev.shopping_list_gestor_service.wpItemUnit.repository.WpItemUnitRepository;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.service.WpItemUnitService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,24 +23,18 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 
 @Slf4j
 @Service
 public class ItemUnitServiceImpl implements ItemUnitService {
 
+    @Lazy
+    @Autowired
+    private ShoppinglistItemService shoppinglistItemService;
+
     @Autowired
     private ItemUnitRepository itemUnitRepository;
-
-    @Lazy
-    @Autowired
-    private WpItemUnitRepository wpItemUnitRepository;
-
-    @Lazy
-    @Autowired
-    private UpItemUnitRepository upItemUnitRepository;
 
     @Autowired
     private WpItemUnitService wpItemUnitService;
@@ -45,19 +42,18 @@ public class ItemUnitServiceImpl implements ItemUnitService {
     @Autowired
     private UpItemUnitService upItemUnitService;
 
-
     @Override
     public ItemUnit createItemUnit(ShoppinglistItem shoppinglistItem, Double unitaryPrice, CalculateSystem calculateSystem) {
         log.info("Creating a item unit form the shoppinglist item: {}", shoppinglistItem.getId());
         ItemUnit itemUnit = new ItemUnit();
         itemUnit.setShoppinglistItem(shoppinglistItem);
         if(calculateSystem.getCode().equalsIgnoreCase("WP")) {
-            itemUnit.setWpItemUnit(wpItemUnitRepository.save(new WpItemUnit()));
+            itemUnit.setWpItemUnit(wpItemUnitService.updateWpItemUnit(new WpItemUnit()));
         } else {
             UpItemUnit upItemUnit = new UpItemUnit();
             upItemUnit.setQuantity(1);
             upItemUnit.setUnityPrice(unitaryPrice);
-            itemUnit.setUpItemUnit(upItemUnitRepository.save(upItemUnit));
+            itemUnit.setUpItemUnit(upItemUnitService.updateUpItemUnit(upItemUnit));
         }
         // TODO: REFACTOR -> DOBLE SAVE!!
         calculateItemUnitTotalPrice(itemUnit);
@@ -80,7 +76,7 @@ public class ItemUnitServiceImpl implements ItemUnitService {
         wpItemUnit.setPriceKg(requestAddItemUnitWP.getPriceKg());
         wpItemUnit.setWeight(requestAddItemUnitWP.getWeight());
         calculateItemUnitTotalPrice(itemUnit);
-        wpItemUnitRepository.save(wpItemUnit);
+        wpItemUnitService.updateWpItemUnit(wpItemUnit);
     }
 
     // TODO: REFACTORIZAR -> MODIFICAR METODO POR UNO QUE NO HAGA ESTE SAVE QUE SENCILLAMENTE CALCULE EL TOTAL PRICE Y LO DEVUELVA
@@ -119,8 +115,30 @@ public class ItemUnitServiceImpl implements ItemUnitService {
         itemUnit.setWpItemUnit(wpItemUnitCreated);
         itemUnit.setUpItemUnit(upItemUnitCreated);
         itemUnit.setTotalPrice(calculateItemUnitTotalPriceV2(itemUnit));
+        itemUnit = itemUnitRepository.save(itemUnit);
         addItemUnitToShoppinglistItem(itemUnit, shoppinglistItem);
-        return itemUnitRepository.save(itemUnit);
+        return itemUnit;
+    }
+
+    @Override
+    public ResponseGetAllItemUnitUpGroupedByPrice getAllItemsUnitUpGroupedByPrice(ShoppinglistItem shoppinglistItem) {
+        log.info("Getting all the items units from the shoppinglist item with id {} grouped by quantity and unitary price", shoppinglistItem.getId());
+        List<ResponseItemUnitUpGrouped> responseItemUnitUpGroupedList = new ArrayList<>();
+        boolean isUPItem = shoppinglistItem.getCalculateSystem().getCode().equalsIgnoreCase("UP");
+        if (isUPItem) {
+            List<ItemUnit> itemUnits = shoppinglistItem.getItemUnitList();
+            for(ItemUnit itemUnit : itemUnits) {
+                ResponseItemUnitUpGrouped responseItemUnitUpGrouped = new ResponseItemUnitUpGrouped();
+                responseItemUnitUpGrouped.setQuantity(itemUnit.getUpItemUnit().getQuantity());
+                responseItemUnitUpGrouped.setPrice(itemUnit.getUpItemUnit().getUnityPrice());
+                responseItemUnitUpGrouped.setCalculatedPrice(itemUnit.getTotalPrice());
+                responseItemUnitUpGroupedList.add(responseItemUnitUpGrouped);
+            }
+        }
+        return ResponseGetAllItemUnitUpGroupedByPrice.builder()
+                .itemsUpGrouped(responseItemUnitUpGroupedList)
+                .totalPrice(shoppinglistItem.getCalculatedPrice())
+                .build();
     }
 
     private double calculateItemUnitTotalPriceV2(ItemUnit itemUnit){
@@ -134,7 +152,7 @@ public class ItemUnitServiceImpl implements ItemUnitService {
         return totalPriceCalculated;
     }
 
-    private void addItemUnitToShoppinglistItem(ItemUnit itemUnit, ShoppinglistItem shoppinglistItem) {
+    private ItemUnit addItemUnitToShoppinglistItem(ItemUnit itemUnit, ShoppinglistItem shoppinglistItem) {
         if(itemUnit != null && shoppinglistItem != null) {
             if(shoppinglistItem.getItemUnitList().isEmpty()) {
                 ArrayList<ItemUnit> itemList = new ArrayList<>();
@@ -143,7 +161,11 @@ public class ItemUnitServiceImpl implements ItemUnitService {
             } else {
                 shoppinglistItem.getItemUnitList().add(itemUnit);
             }
+            shoppinglistItem = shoppinglistItemService.updateShoppinglistItem(shoppinglistItem);
+            itemUnit.setShoppinglistItem(shoppinglistItem);
+            itemUnit = itemUnitRepository.save(itemUnit);
         }
+        return itemUnit;
     }
 
     private void validateCorrectItemUnitCreationData(CreateItemUnitData createItemUnitData, boolean isWpItemUnit) throws ItemUnitException {

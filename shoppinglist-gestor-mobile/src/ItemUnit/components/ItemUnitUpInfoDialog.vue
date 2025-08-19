@@ -63,7 +63,6 @@ function generateItems() {
     console.log("AUX_ARRAY ELEMENTS VALUE => " + aux_array);
     for (let i = 0; i < 50; i++) {
       let element = aux_array[start + i];
-      // EL ERROR VIENE DE QUE TODOS LOS itemsUpGrouped son UNDEFINED
       if (element !== undefined) {
         console.log("El elemento se puede añadir");
         actualElementsVisible.value.push(aux_array[start + i]);

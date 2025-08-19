@@ -1,10 +1,14 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglistitem.controller;
 
+import es.franricodev.shopping_list_gestor_service.itemUnit.dto.request.CreateItemUnitData;
+import es.franricodev.shopping_list_gestor_service.itemUnit.exception.ItemUnitException;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetAllItemsUnit;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestAddItemUnitUnitaryPrice;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItemV2;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseCreateShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseDeleteShoppinglistItem;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseGetAllItemUnitUpGroupedByPrice;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.exception.ShoppinglistItemException;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.messages.ShoppinglistItemMessagesError;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.messages.ShoppinglistItemMessagesSuccess;
@@ -42,12 +46,12 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
     }
 
     @PostMapping("/v1/{idShoppinglistItem}/addItemUnitUP")
-    public ResponseEntity<Void> addItemUnit(@PathVariable("idShoppinglistItem") Long idShoppinglistItem, @RequestBody RequestAddItemUnitUnitaryPrice request) {
+    public ResponseEntity<Void> addItemUnit(@PathVariable("idShoppinglistItem") Long idShoppinglistItem, @RequestBody CreateItemUnitData request) {
         log.info("Creating a new item unit UP for the shoppinglist item with id: {}", idShoppinglistItem);
         HttpStatus httpStatus = HttpStatus.OK;
         try {
-            shoppinglistItemService.addItemUnitToShoppinglistItem(request.getShoppinglistItemId(), request.getPrice(), request.getQuantity());
-        } catch (ShoppinglistItemException e) {
+            shoppinglistItemService.addItemUnitToShoppinglistItem(request, idShoppinglistItem);
+        } catch (ShoppinglistItemException |ItemUnitException | ShoppinglistException e) {
             httpStatus =  HttpStatus.BAD_REQUEST;
         }
         return new ResponseEntity<>(httpStatus);
@@ -101,6 +105,21 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
         HttpStatus httpStatus = HttpStatus.CREATED;
         try {
             response = shoppinglistItemService.createShoppinglistItem(idShoppinglist, requestCreateShoppinglistItem);
+        } catch (ShoppinglistItemException e) {
+            log.error(e.getMessage());
+            httpStatus = HttpStatus.BAD_REQUEST;
+        }
+        return new ResponseEntity<>(response, httpStatus);
+    }
+
+    // TODO: ERROR AL EJECUTAR ESTE ENDPOINT
+    @Override
+    public ResponseEntity<ResponseGetAllItemUnitUpGroupedByPrice> getItemsUnitsUpGroupedByPrice(Long idShoppinglistItem) {
+        log.info("Getting the information of all items units of the shoppinglist item with id {} grouped by his price", idShoppinglistItem);
+        ResponseGetAllItemUnitUpGroupedByPrice response = null;
+        HttpStatus httpStatus = HttpStatus.OK;
+        try {
+            response = shoppinglistItemService.getItemsUnitsUpGroupedByPrice(idShoppinglistItem);
         } catch (ShoppinglistItemException e) {
             log.error(e.getMessage());
             httpStatus = HttpStatus.BAD_REQUEST;

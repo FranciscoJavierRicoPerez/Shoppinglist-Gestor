@@ -5,4 +5,7 @@ import es.franricodev.shopping_list_gestor_service.wpItemUnit.model.WpItemUnit;
 
 public interface WpItemUnitService {
     WpItemUnit createWpItemUnit(RequestCreateWpItemUnitData requestCreateWpItemUnitData);
+
+    WpItemUnit updateWpItemUnit(WpItemUnit wpItemUnit);
+
 }

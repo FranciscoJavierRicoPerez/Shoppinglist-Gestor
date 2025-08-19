@@ -4,6 +4,7 @@ import es.franricodev.shopping_list_gestor_service.calculateSystem.exception.Cal
 import es.franricodev.shopping_list_gestor_service.calculateSystem.model.CalculateSystem;
 import es.franricodev.shopping_list_gestor_service.calculateSystem.service.CalculateSystemService;
 import es.franricodev.shopping_list_gestor_service.itemUnit.dto.ItemUnitDTO;
+import es.franricodev.shopping_list_gestor_service.itemUnit.dto.request.CreateItemUnitData;
 import es.franricodev.shopping_list_gestor_service.itemUnit.exception.ItemUnitException;
 import es.franricodev.shopping_list_gestor_service.itemUnit.mapper.ItemUnitMapper;
 import es.franricodev.shopping_list_gestor_service.itemUnit.model.ItemUnit;
@@ -15,6 +16,7 @@ import es.franricodev.shopping_list_gestor_service.shoppinglist.model.Shoppingli
 import es.franricodev.shopping_list_gestor_service.shoppinglist.service.ShoppinglistService;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItemV2;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseCreateShoppinglistItem;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseGetAllItemUnitUpGroupedByPrice;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.exception.ShoppinglistItemException;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.mapper.ShoppinglistItemMapper;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.messages.ShoppinglistItemMessagesError;
@@ -22,8 +24,6 @@ import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.Shoppi
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.repository.ShoppinglistItemRepository;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.dto.request.RequestAddItemUnitWP;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -82,24 +82,17 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
     }
 
     @Override
-    public void addItemUnitToShoppinglistItem(Long idItem, Double unitaryPrice, Integer quantity) throws ShoppinglistItemException {
-        log.info("Add a new item unit to the shoppinglist item: {}", idItem);
-        Optional<ShoppinglistItem> optionalShoppinglistItem = shoppinglistItemRepository.findById(idItem);
+    public void addItemUnitToShoppinglistItem(CreateItemUnitData createItemUnitData, Long idShoppinglistItem) throws ShoppinglistItemException, ItemUnitException, ShoppinglistException {
+        log.info("Add a new item unit to the shoppinglist item: {}", idShoppinglistItem);
+        Optional<ShoppinglistItem> optionalShoppinglistItem = shoppinglistItemRepository.findById(idShoppinglistItem);
         if (optionalShoppinglistItem.isEmpty()) {
             throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_NOT_FOUND_ERR);
         }
         ShoppinglistItem shoppinglistItem = optionalShoppinglistItem.get();
-        for(int i = 0; i < quantity; i++) {
-            itemUnitService.createItemUnit(shoppinglistItem, unitaryPrice, shoppinglistItem.getCalculateSystem());
-        }
+        itemUnitService.createItemUnitV2(createItemUnitData, false, shoppinglistItem);
         recalculateShoppinglistItemsTotalPrice(shoppinglistItem);
         Shoppinglist shoppinglist = shoppinglistService.findShoppinglistByShoppinglistItemId(shoppinglistItem.getId());
-        try {
-            shoppinglist = shoppinglistService.calculateShoppinglistTotalPrice(shoppinglist.getId());
-        } catch (ShoppinglistException e) {
-            throw new RuntimeException(e);
-        }
-        shoppinglistService.updateShoppinglist(shoppinglist);
+        shoppinglistService.updateShoppinglistTotalPrice(shoppinglist);
     }
 
     @Override
@@ -229,6 +222,25 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
             throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_CREATE_ERR);
         }
     }
+
+    // TODO: ERROR AL EJECUTAR ESO
+    @Override
+    public ResponseGetAllItemUnitUpGroupedByPrice getItemsUnitsUpGroupedByPrice(Long idShoppinglistItem) throws ShoppinglistItemException {
+        log.info("Getting all the items units UP type of the shoppinglist item with id {}", idShoppinglistItem);
+        ShoppinglistItem shoppinglistItem = shoppinglistItemRepository.findById(idShoppinglistItem)
+                .orElseThrow(() -> new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_NOT_FOUND_ERR));
+
+        return itemUnitService.getAllItemsUnitUpGroupedByPrice(shoppinglistItem);
+
+    }
+
+    @Transactional
+    @Override
+    public ShoppinglistItem updateShoppinglistItem(ShoppinglistItem shoppinglistItem) {
+        log.info("Update the information of the shoppinglist item with id: {}", shoppinglistItem.getId());
+        return shoppinglistItemRepository.save(shoppinglistItem);
+    }
+
     private double getShoppinglistItemCalculatedPrice(ShoppinglistItem shoppinglistItem) {
         double calculatedPrice = 0.0;
         if(!shoppinglistItem.getItemUnitList().isEmpty()) {

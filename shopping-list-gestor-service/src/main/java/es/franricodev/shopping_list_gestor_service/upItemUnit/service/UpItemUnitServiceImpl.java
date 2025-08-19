@@ -23,4 +23,9 @@ public class UpItemUnitServiceImpl implements UpItemUnitService{
         return upItemUnitRepository.save(upItemUnit);
     }
 
+    @Override
+    public UpItemUnit updateUpItemUnit(UpItemUnit upItemUnit) {
+        return upItemUnitRepository.save(upItemUnit);
+    }
+
 }
