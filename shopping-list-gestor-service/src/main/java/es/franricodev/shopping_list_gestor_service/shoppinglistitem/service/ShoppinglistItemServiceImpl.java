@@ -89,8 +89,14 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
             throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_NOT_FOUND_ERR);
         }
         ShoppinglistItem shoppinglistItem = optionalShoppinglistItem.get();
-        itemUnitService.createItemUnitV2(createItemUnitData, false, shoppinglistItem);
-        recalculateShoppinglistItemsTotalPrice(shoppinglistItem);
+        ItemUnit itemUnitCreated = itemUnitService.createItemUnitV2(createItemUnitData, false, shoppinglistItem);
+        if(itemUnitCreated != null) {
+            ArrayList<ItemUnit> itemsUnitCreated = new ArrayList<>();
+            itemsUnitCreated.add(itemUnitCreated);
+            shoppinglistItem.setItemUnitList(itemsUnitCreated);
+            shoppinglistItem.setCalculatedPrice(shoppinglistItem.getCalculatedPrice() + itemUnitCreated.getTotalPrice());
+            shoppinglistItemRepository.save(shoppinglistItem);
+        }
         Shoppinglist shoppinglist = shoppinglistService.findShoppinglistByShoppinglistItemId(shoppinglistItem.getId());
         shoppinglistService.updateShoppinglistTotalPrice(shoppinglist);
     }
@@ -160,11 +166,11 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
 
     private void recalculateShoppinglistItemsTotalPrice(ShoppinglistItem shoppinglistItem) {
         double totalShoppinglistPrice = 0D;
-        for(ItemUnit itemUnit : shoppinglistItem.getItemUnitList()) {
-            /* if(itemUnit.getTotalPrice() != null) {
+        List<ItemUnit> itemUnitList = shoppinglistItem.getItemUnitList();
+        for(ItemUnit itemUnit : itemUnitList) {
+            if(itemUnit != null) {
                 totalShoppinglistPrice += itemUnitService.calculateItemUnitTotalPrice(itemUnit);
-            } */
-            totalShoppinglistPrice += itemUnitService.calculateItemUnitTotalPrice(itemUnit);
+            }
         }
         shoppinglistItem.setCalculatedPrice(totalShoppinglistPrice);
         shoppinglistItemRepository.save(shoppinglistItem);
