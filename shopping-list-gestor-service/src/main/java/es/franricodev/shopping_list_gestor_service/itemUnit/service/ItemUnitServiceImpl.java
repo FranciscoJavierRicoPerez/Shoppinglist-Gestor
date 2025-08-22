@@ -11,7 +11,6 @@ import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseItemUnitUpGrouped;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.ShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.service.ShoppinglistItemService;
-import es.franricodev.shopping_list_gestor_service.shoppinglistitem.service.ShoppinglistItemServiceImpl;
 import es.franricodev.shopping_list_gestor_service.upItemUnit.model.UpItemUnit;
 import es.franricodev.shopping_list_gestor_service.upItemUnit.service.UpItemUnitService;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.dto.request.RequestAddItemUnitWP;
@@ -120,25 +119,62 @@ public class ItemUnitServiceImpl implements ItemUnitService {
         return itemUnit;
     }
 
+    // TODO: CREAR ALGORIDMO QUE HAGA ESTO
     @Override
     public ResponseGetAllItemUnitUpGroupedByPrice getAllItemsUnitUpGroupedByPrice(ShoppinglistItem shoppinglistItem) {
         log.info("Getting all the items units from the shoppinglist item with id {} grouped by quantity and unitary price", shoppinglistItem.getId());
         List<ResponseItemUnitUpGrouped> responseItemUnitUpGroupedList = new ArrayList<>();
         boolean isUPItem = shoppinglistItem.getCalculateSystem().getCode().equalsIgnoreCase("UP");
+        Double totalPriceCalculated = 0D;
         if (isUPItem) {
             List<ItemUnit> itemUnits = shoppinglistItem.getItemUnitList();
-            for(ItemUnit itemUnit : itemUnits) {
-                ResponseItemUnitUpGrouped responseItemUnitUpGrouped = new ResponseItemUnitUpGrouped();
-                responseItemUnitUpGrouped.setQuantity(itemUnit.getUpItemUnit().getQuantity());
-                responseItemUnitUpGrouped.setPrice(itemUnit.getUpItemUnit().getUnityPrice());
-                responseItemUnitUpGrouped.setCalculatedPrice(itemUnit.getTotalPrice());
+            List<Double> unitaryPrices = getAllUnitaryPrices(itemUnits);
+            for (Double unitaryPrice : unitaryPrices) {
+                ResponseItemUnitUpGrouped responseItemUnitUpGrouped = createResponseItemUnitUpGrouped(itemUnits, unitaryPrice);
+                totalPriceCalculated += responseItemUnitUpGrouped.getCalculatedPrice();
                 responseItemUnitUpGroupedList.add(responseItemUnitUpGrouped);
             }
         }
         return ResponseGetAllItemUnitUpGroupedByPrice.builder()
                 .itemsUpGrouped(responseItemUnitUpGroupedList)
-                .totalPrice(shoppinglistItem.getCalculatedPrice())
+                .totalPrice(totalPriceCalculated)
                 .build();
+    }
+
+    private ResponseItemUnitUpGrouped createResponseItemUnitUpGrouped(List<ItemUnit> itemUnits, Double unitaryPrice) {
+        ResponseItemUnitUpGrouped responseItemUnitUpGrouped = new ResponseItemUnitUpGrouped();
+        int quantity = 0;
+        for(ItemUnit itemUnit : itemUnits) {
+            if(itemUnit.getUpItemUnit().getUnityPrice().doubleValue() == unitaryPrice.doubleValue()) {
+                quantity += itemUnit.getUpItemUnit().getQuantity();
+            }
+        }
+        responseItemUnitUpGrouped.setPrice(unitaryPrice);
+        responseItemUnitUpGrouped.setQuantity(quantity);
+        responseItemUnitUpGrouped.setCalculatedPrice(unitaryPrice * quantity);
+        return responseItemUnitUpGrouped;
+    }
+
+    private List<Double> getAllUnitaryPrices(List<ItemUnit> itemUnits) {
+        List<Double> unitaryPrices = new ArrayList<>();
+        for (ItemUnit itemUnit : itemUnits) {
+            double unitaryPriceToCheck = itemUnit.getUpItemUnit().getUnityPrice();
+            if(!checkUnitaryPriceAlreadyExistsInList(unitaryPriceToCheck, unitaryPrices)) {
+                unitaryPrices.add(unitaryPriceToCheck);
+            }
+        }
+        return unitaryPrices;
+    }
+
+    private boolean checkUnitaryPriceAlreadyExistsInList(double actualUnitaryPrice, List<Double> unitaryPrices) {
+        boolean alreadyExists = false;
+        for (Double unitaryPrice : unitaryPrices) {
+            if (unitaryPrice == actualUnitaryPrice) {
+                alreadyExists = true;
+                break;
+            }
+        }
+        return alreadyExists;
     }
 
     private double calculateItemUnitTotalPriceV2(ItemUnit itemUnit){

@@ -58,7 +58,6 @@ const actualShoppinglistVisible = ref<Shoppinglist[]>([]);
 
 onMounted(async () => {
   shoppinglistTable.value = await getAllShoppinglist();
-  console.log(shoppinglistTable.value);
   store.setShoppinglistArray(shoppinglistTable.value);
   updateShoppinglistTables(false);
 });
@@ -105,7 +104,6 @@ const ionInfinite = (event: InfiniteScrollCustomEvent) => {
 };
 
 async function addNewShoppinglist() {
-  console.log("INFO: Añadiendo una nueva lista de la compra");
   let shoppinglistMetadata: Shoppinglist = await createShoppinglistMetadata();
   if (shoppinglistMetadata) {
     store.addShoppinglist(shoppinglistMetadata);
@@ -114,7 +112,6 @@ async function addNewShoppinglist() {
 }
 
 function updateShoppinglistTables(removedObject: boolean = true) {
-  console.log("INFO: Actualizando las listas de la compra");
   shoppinglistActiveTable.value = store.getActiveShoppinglist();
   shoppinglistNoActiveTable.value = store.getNoActiveShoppinglist();
   updateShoppinglistElementsVisible(removedObject);

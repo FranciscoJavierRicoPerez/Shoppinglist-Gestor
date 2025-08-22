@@ -50,21 +50,22 @@ const { refetch: addItemUnitToShoppinglistItem } =
 const actualElementsVisible = ref<ItemUnitUpGrouped[]>([]);
 
 onMounted(async () => {
-  itemsUnitsGrouped.value = await getAllItemUnitUpGroupedByPrice();
+  if (params.idShoppinglistItem) {
+    itemsUnitsGrouped.value = await getAllItemUnitUpGroupedByPrice(
+      params.idShoppinglistItem
+    );
+  }
   generateItems();
 });
 
 function generateItems() {
   if (itemsUnitsGrouped.value?.itemsUpGrouped !== undefined) {
     const start = actualElementsVisible.value.length;
-    console.log("START VALUE => " + start);
     const aux_array: ItemUnitUpGrouped[] =
       itemsUnitsGrouped.value.itemsUpGrouped;
-    console.log("AUX_ARRAY ELEMENTS VALUE => " + aux_array);
     for (let i = 0; i < 50; i++) {
       let element = aux_array[start + i];
       if (element !== undefined) {
-        console.log("El elemento se puede añadir");
         actualElementsVisible.value.push(aux_array[start + i]);
       }
     }
