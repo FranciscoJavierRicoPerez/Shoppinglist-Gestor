@@ -33,9 +33,6 @@ async function archiveShoppinglist() {
 }
 
 async function removeShoppinglist() {
-  console.log(
-    "INFO: Borrando la lista de la compra con id: " + props.shoppinglist?.id
-  );
   let response: boolean = await deleteShoppinglist(props.shoppinglist.id);
   if (response) {
     store.removeShoppinglist(props.shoppinglist.id);

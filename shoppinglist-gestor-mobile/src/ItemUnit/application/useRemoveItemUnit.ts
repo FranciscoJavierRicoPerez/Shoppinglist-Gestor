@@ -5,7 +5,7 @@ export function useRemoveItemUnit() {
     idItemUnit: number,
     idShoppinglistItem: number
   ): Promise<void> {
-    removeItem(idItemUnit, idShoppinglistItem);
+    await removeItem(idItemUnit, idShoppinglistItem);
   }
   return { refetch };
 }

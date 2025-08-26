@@ -8,16 +8,17 @@ import es.franricodev.shopping_list_gestor_service.shoppinglist.model.Shoppingli
 import es.franricodev.shopping_list_gestor_service.shoppinglist.repository.ShoppinglistRepository;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.specifications.ShoppinglistSpecifications;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.ShoppinglistItem;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class ShoppinglistServiceImpl implements ShoppinglistService {
 
@@ -27,11 +28,9 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
     @Autowired
     private ShoppinglistMapper shoppinglistMapper;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ShoppinglistServiceImpl.class);
-
     @Override
     public List<ShoppinglistDTO> findAllShoppinglists() throws ShoppinglistException {
-        LOGGER.info("Find all the shoppinglists actives");
+        log.info("Find all the shoppinglists actives");
         List<Shoppinglist> shoppinglistList = shoppinglistRepository.findAll();
         if (shoppinglistList.isEmpty()) {
             throw new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND);
@@ -41,7 +40,7 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
 
     @Override
     public ShoppinglistDTO create(RequestCreateShoppinglistDTO request) {
-        LOGGER.info("Creation of the new shoppinglist");
+        log.info("Creation of the new shoppinglist");
         return shoppinglistMapper.toDTO(
                 shoppinglistRepository.save(
                         shoppinglistMapper.createShoppinglist(request)
@@ -51,7 +50,7 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
 
     @Override
     public void deleteShoppinglist(Long id) throws ShoppinglistException {
-        LOGGER.info("Delete the shoppinglist with id: {}", id);
+        log.info("Delete the shoppinglist with id: {}", id);
         Optional<Shoppinglist> shoppinglistOptional = shoppinglistRepository.findById(id);
         if (shoppinglistOptional.isEmpty()) {
             throw new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND);
@@ -61,7 +60,7 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
 
     @Override
     public ShoppinglistDTO updateShoppinglist(RequestUpdateShoppinglistDTO request) throws ShoppinglistException {
-        LOGGER.info("Update the shoppinglist with id: {}", request.getId());
+        log.info("Update the shoppinglist with id: {}", request.getId());
         Optional<Shoppinglist> shoppinglistOptional = shoppinglistRepository.findById(request.getId());
         if (shoppinglistOptional.isEmpty()) {
             throw new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND);
@@ -74,7 +73,7 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
 
     @Override
     public List<ShoppinglistDTO> filterShoppinglist(RequestFilterShoppinglistDTO request) throws ShoppinglistException {
-        LOGGER.info("Filter shoppinglist");
+        log.info("Filter shoppinglist");
         List<Shoppinglist> optionalShoppinglistsFiltered =
                 shoppinglistRepository.findAll(ShoppinglistSpecifications.withFilter(request));
         if (optionalShoppinglistsFiltered.isEmpty()) {
@@ -85,7 +84,7 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
 
     @Override
     public ShoppinglistDetailsDTO getShoppinglistDetails(Long id) throws ShoppinglistException {
-        LOGGER.info("Getting the shoppinglist details");
+        log.info("Getting the shoppinglist details");
         Optional<Shoppinglist> optionalShoppinglist = shoppinglistRepository.findById(id);
         if (optionalShoppinglist.isEmpty()) {
             throw new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_DETAILS);
@@ -95,7 +94,7 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
 
     @Override
     public ShoppinglistDTO updateShoppinglistIsActive(Long idShoppinglist) throws ShoppinglistException {
-        LOGGER.info("Updating the isActive value from the shoppinglist with id: {}", idShoppinglist);
+        log.info("Updating the isActive value from the shoppinglist with id: {}", idShoppinglist);
         Optional<Shoppinglist> optionalShoppinglist = shoppinglistRepository.findById(idShoppinglist);
         if (optionalShoppinglist.isEmpty()) {
             throw new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND);
@@ -113,7 +112,7 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
 
     @Override
     public Shoppinglist calculateShoppinglistTotalPrice(Long id) throws ShoppinglistException {
-        LOGGER.info("Calculate the shoppinglist total price");
+        log.info("Calculate the shoppinglist total price");
         Shoppinglist shoppinglist = findShoppinglistById(id);
         Double price = 0D;
         List<ShoppinglistItem> shoppinglistItemList = shoppinglist.getItems();
@@ -152,6 +151,8 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
     @Transactional
     @Override
     public Shoppinglist updateShoppinglist(Shoppinglist shoppinglist) {
+        System.out.println(shoppinglist.toString());
+        log.info("Updating the values of the shoppinglist with id: {}", shoppinglist.getId());
         return shoppinglistRepository.save(shoppinglist);
     }
 
@@ -159,7 +160,9 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
     public void addShoppinglistItemToShoppinglist(ShoppinglistItem shoppinglistItem, Shoppinglist shoppinglist) {
         if(shoppinglistItem != null && shoppinglist != null) {
             if(shoppinglist.getItems().isEmpty()){
-                shoppinglist.setItems(List.of(shoppinglistItem));
+                ArrayList<ShoppinglistItem> shoppinglistItemArrayList = new ArrayList<>();
+                shoppinglistItemArrayList.add(shoppinglistItem);
+                shoppinglist.setItems(shoppinglistItemArrayList);
             } else {
                 shoppinglist.getItems().add(shoppinglistItem);
             }
@@ -168,16 +171,22 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
 
     @Override
     public void updateShoppinglistTotalPrice(Shoppinglist shoppinglist) {
-        shoppinglist.setTotalPrice(calculateShoppinglistTotalPrice(shoppinglist));
-        updateShoppinglist(shoppinglist);
+        if(shoppinglist != null) {
+            log.info("Updating shoppinglist total price");
+            shoppinglist.setTotalPrice(calculateShoppinglistTotalPrice(shoppinglist));
+            updateShoppinglist(shoppinglist);
+        }
     }
 
     private double calculateShoppinglistTotalPrice(Shoppinglist shoppinglist) {
+        log.info("Calculate the new total cost of the shoppinglist with id {}, the actual value is: {}"
+                , shoppinglist.getId(), shoppinglist.getTotalPrice());
         double totalPriceCalculated = 0.0;
         if(!shoppinglist.getItems().isEmpty()) {
             for(ShoppinglistItem shoppinglistItem : shoppinglist.getItems()) {
                 totalPriceCalculated += shoppinglistItem.getCalculatedPrice();
             }
+            log.info("The new total cost will be {}", totalPriceCalculated);
         }
         return totalPriceCalculated;
     }

@@ -23,4 +23,9 @@ public class WpItemUnitServiceImpl implements WpItemUnitService {
         return repository.save(wpItemUnit);
     }
 
+    @Override
+    public WpItemUnit updateWpItemUnit(WpItemUnit wpItemUnit) {
+        return repository.save(wpItemUnit);
+    }
+
 }
