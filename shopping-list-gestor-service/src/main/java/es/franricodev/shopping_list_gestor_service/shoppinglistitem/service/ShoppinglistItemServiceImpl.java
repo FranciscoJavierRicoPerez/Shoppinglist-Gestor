@@ -75,7 +75,7 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
             shoppinglist.setItems(shoppinglistItemList);
             shoppinglistService.calculateShoppinglistTotalPrice(shoppinglist.getId());
         } catch (ShoppinglistException e) {
-           throw new ShoppinglistItemException("ERROR-RECALCULANDO-EL-PRECIO-TOTA-DE-LA-LISTA");
+           throw new ShoppinglistItemException("ERROR-RECALCULANDO-EL-PRECIO-TOTAL-DE-LA-LISTA");
         }
         shoppinglistItemRepository.delete(shoppinglistItem);
         shoppinglistService.updateShoppinglist(shoppinglist);
