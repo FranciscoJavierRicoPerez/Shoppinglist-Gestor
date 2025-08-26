@@ -10,9 +10,9 @@ import {
 import {
   defaultRequestAddWeightPriceItemUnit,
   RequestAddWeightPriceItemUnit,
-} from "../infrastructure/models/RequestAddWeightPriceItemUnit";
+} from "@/ShoppinglistItem/infrastructure/models/RequestAddWeightPriceItemUnit";
 import { ref } from "vue";
-import { useAddItemUnitToShoppinglistItem } from "../application/useAddItemUnitToShoppinglistItem";
+import { useAddItemUnitToShoppinglistItem } from "@/ShoppinglistItem/application/useAddItemUnitToShoppinglistItem";
 const params = defineProps({
   idShoppinglistItem: {
     type: Number,

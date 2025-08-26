@@ -1,6 +1,5 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglist.controller;
 
-import com.mysql.cj.xdevapi.Collection;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.*;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.service.ShoppinglistService;
@@ -17,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 @ExtendWith(MockitoExtension.class)
 public class ShoppinglistControllerTest {
@@ -26,7 +24,7 @@ public class ShoppinglistControllerTest {
     private ShoppinglistService shoppinglistService;
 
     @InjectMocks
-    private ShoppinglistController shoppinglistController;
+    private ShoppinglistControllerImpl shoppinglistController;
 
     private ShoppinglistDTO shoppinglistDTO;
 

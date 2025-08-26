@@ -5,6 +5,7 @@ import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestUpdat
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.ShoppinglistDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.ShoppinglistDetailsDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.mapper.ShoppinglistMapper;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.model.Shoppinglist;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.repository.ShoppinglistRepository;
 import org.junit.jupiter.api.Assertions;
@@ -23,6 +24,9 @@ public class ShoppinglistServiceTest {
 
     @Mock
     private ShoppinglistRepository shoppinglistRepository;
+
+    @Mock
+    private ShoppinglistMapper shoppinglistMapper;
 
     @InjectMocks
     private ShoppinglistServiceImpl shoppinglistService;
@@ -79,6 +83,7 @@ public class ShoppinglistServiceTest {
     @Test
     void findActiveShoppinglistsTest() throws ShoppinglistException {
         List<ShoppinglistDTO> expected = Collections.singletonList(shoppinglistDTO);
+        Mockito.when(shoppinglistMapper.toDTOList(Mockito.any())).thenReturn(expected);
         Mockito.when(shoppinglistRepository.findAll()).thenReturn(List.of(shoppinglist));
         List<ShoppinglistDTO> real = shoppinglistService.findAllShoppinglists();
         Assertions.assertEquals(expected.size(), real.size());
@@ -87,7 +92,9 @@ public class ShoppinglistServiceTest {
     @Test
     void createShoppinglistTest(){
         ShoppinglistDTO expected = shoppinglistDTO;
+        Mockito.when(shoppinglistMapper.createShoppinglist(Mockito.any())).thenReturn(shoppinglist);
         Mockito.when(shoppinglistRepository.save(Mockito.any())).thenReturn(shoppinglist);
+        Mockito.when(shoppinglistMapper.toDTO(Mockito.any())).thenReturn(expected);
         ShoppinglistDTO real = shoppinglistService.create(requestCreateShoppinglistDTO);
         Assertions.assertEquals(expected.getId(), real.getId());
     }
@@ -103,7 +110,9 @@ public class ShoppinglistServiceTest {
     void updateShoppinglistTest() throws ShoppinglistException {
         ShoppinglistDTO expected = shoppinglistDTO;
         Mockito.when(shoppinglistRepository.findById(1L)).thenReturn(Optional.of(shoppinglist));
+        Mockito.doNothing().when(shoppinglistMapper).updateShoppinglist(shoppinglist, requestUpdateShoppinglistDTO);
         Mockito.when(shoppinglistRepository.save(Mockito.any())).thenReturn(shoppinglist);
+        Mockito.when(shoppinglistMapper.toDTO(Mockito.any())).thenReturn(expected);
         ShoppinglistDTO real = shoppinglistService.updateShoppinglist(requestUpdateShoppinglistDTO);
         Assertions.assertEquals(expected.getId(), real.getId());
     }
@@ -112,6 +121,7 @@ public class ShoppinglistServiceTest {
     void getShoppinglistDetailsTest() throws ShoppinglistException {
         ShoppinglistDetailsDTO expected = shoppinglistDetailsDTO;
         Mockito.when(shoppinglistRepository.findById(Mockito.any())).thenReturn(Optional.of(shoppinglist));
+        Mockito.when(shoppinglistMapper.shoppinglistToShoppinglistDetailsDTO(Mockito.any())).thenReturn(expected);
         ShoppinglistDetailsDTO real = shoppinglistService.getShoppinglistDetails(1L);
         Assertions.assertEquals(expected.getId(), real.getId());
     }
@@ -122,6 +132,7 @@ public class ShoppinglistServiceTest {
         ShoppinglistDTO expected = shoppinglistDTO;
         Mockito.when(shoppinglistRepository.findById(Mockito.any())).thenReturn(Optional.of(shoppinglist));
         Mockito.when(shoppinglistRepository.save(Mockito.any())).thenReturn(shoppinglist);
+        Mockito.when(shoppinglistMapper.toDTO(Mockito.any())).thenReturn(expected);
         ShoppinglistDTO real = shoppinglistService.updateShoppinglistIsActive(1L);
         Assertions.assertEquals(expected.getIsActive(), real.getIsActive());
     }

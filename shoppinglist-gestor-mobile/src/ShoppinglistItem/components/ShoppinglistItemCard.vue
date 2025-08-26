@@ -13,13 +13,11 @@ import {
 } from "@ionic/vue";
 
 import { onMounted, ref, type PropType } from "vue";
-import { RouterLink } from "vue-router";
 import { ShoppinglistItemMetadata } from "@/ShoppinglistItem/domain/ShoppinglistItemMetadata";
-import { useDeleteShoppinglistItem } from "../application/useDeleteShoppinglistItem";
-import AddItemUnitPopover from "./AddItemUnitPopover.vue";
-import RemoveItemUnitPopover from "./RemoveItemUnitPopover.vue";
+import { useDeleteShoppinglistItem } from "@/ShoppinglistItem/application/useDeleteShoppinglistItem";
 import AddItemWeightPopover from "./AddItemWeightPopover.vue";
-import { useShoppinglistItemStore } from "../stores/shoppinglistItemStore";
+import { useShoppinglistItemStore } from "@/ShoppinglistItem/stores/shoppinglistItemStore";
+import ItemUnitUpInfoDialog from "@/ItemUnit/components/ItemUnitUpInfoDialog.vue";
 
 const { refetch: deleteShoppinglistItem } = useDeleteShoppinglistItem();
 
@@ -77,21 +75,15 @@ function getCalculteSystemCode(data: ShoppinglistItemMetadata | any): string {
             >Sistema de calculo:
             {{ shoppinglistItem.calculateSystemCode }}</IonChip
           >
-          <IonChip color="tertiary"> Precio: 1.5€ </IonChip>
+          <IonChip color="tertiary">
+            Precio: {{ shoppinglistItem.calculatedPrice }}
+          </IonChip>
         </IonCardSubtitle>
         <IonCardContent>
-          <!-- <RouterLink :to="`/product/${shoppinglistItem.id}}`"
-            ><IonButton shape="round" color="tertiary"
-              >Ver</IonButton
-            ></RouterLink
-          > -->
           <div v-if="shoppinglistItem.calculateSystemCode === 'UP'">
-            <AddItemUnitPopover
+            <ItemUnitUpInfoDialog
               :idShoppinglistItem="shoppinglistItem.id"
-            ></AddItemUnitPopover>
-            <RemoveItemUnitPopover
-              :idShoppinglistItem="shoppinglistItem.id"
-            ></RemoveItemUnitPopover>
+            ></ItemUnitUpInfoDialog>
           </div>
           <div v-else>
             <AddItemWeightPopover

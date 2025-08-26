@@ -24,7 +24,6 @@ import {
   type ShoppinglistDetails,
 } from "@/Shoppinglist/domain/ShoppinglistDetails";
 import { useGetShoppinglistDetails } from "@/Shoppinglist/application/useGetShoppinglistDetails";
-import { ShoppinglistItem } from "@/ShoppinglistItem/domain/ShoppinglistItem";
 import ShoppinglistItemCard from "@/ShoppinglistItem/components/ShoppinglistItemCard.vue";
 import { useRoute } from "vue-router";
 import ShoppinglistItemAddDialog from "@/ShoppinglistItem/components/ShoppinglistItemAddDialog.vue";

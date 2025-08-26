@@ -1,18 +1,46 @@
-import { RequestProduct } from "@/Product/infrastructure/models/RequestProduct";
-
 export interface ResquestNewShoppinglistItem {
-  shoppinglistId: number;
-  requestProduct: RequestProduct;
-  calculateSystem: string;
-  unitaryPrice: number | null;
+  productInfo: ProductInfo;
+  selectedCalculateSystem: number;
+  createItemUnitData: CreateItemUnitData;
 }
 
 export const defaultRequestNewShoppinglistItem = {
-  shoppinglistId: -1,
-  requestProduct: {
-    productId: -1,
-    name: "",
+  productInfo: {
+    alreadyExists: true,
+    productName: "",
   },
-  calculateSystem: "",
-  unitaryPrice: null,
+  selectedCalculateSystem: -1,
+  createItemUnitData: {
+    createItemUnit: false,
+    createUpItemUnitData: {
+      quantity: -1,
+      unitaryPrice: -1,
+    },
+    createWpItemUnitData: {
+      priceKg: -1,
+      weight: -1,
+    },
+  },
 };
+
+// ----------------
+interface ProductInfo {
+  alreadyExists: boolean;
+  productName: string;
+}
+
+interface CreateItemUnitData {
+  createItemUnit: boolean;
+  createUpItemUnitData: CreateUpItemUnitData;
+  createWpItemUnitData: CreateWpItemUnitData;
+}
+
+interface CreateUpItemUnitData {
+  quantity: number;
+  unitaryPrice: number;
+}
+
+interface CreateWpItemUnitData {
+  priceKg: number;
+  weight: number;
+}

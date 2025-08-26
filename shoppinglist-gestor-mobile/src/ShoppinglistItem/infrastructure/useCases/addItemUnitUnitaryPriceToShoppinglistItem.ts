@@ -10,7 +10,14 @@ async function Api(data: RequestAddUnitaryPriceItemUnit | null) {
     "api/shoppinglistitem/v1/" +
     data.shoppinglistItemId +
     "/addItemUnitUP";
-    await axios.post(url, data)
+    await axios.post(url, {
+      createItemUnit: true,
+      createUpItemUnitData: {
+        quantity: data.quantity,
+        unitaryPrice: data.price
+      },
+      createWpItemUnitData: null
+    })
   } 
 }
 

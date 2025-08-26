@@ -27,7 +27,7 @@ public class Product implements Serializable {
     @Column(name = "CREATION_DATE")
     private Date creationDate;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "product_shoppinglist_item",
             joinColumns = {@JoinColumn(name = "product_id")},
