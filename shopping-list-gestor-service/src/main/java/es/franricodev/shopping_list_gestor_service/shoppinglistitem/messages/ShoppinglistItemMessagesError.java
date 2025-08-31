@@ -11,4 +11,5 @@ public class ShoppinglistItemMessagesError {
     public static final String SHOPPINGLISTEM_INCORRRECT_CALCULATE_SYSTEM = "El sistema de calculo no es el esperado";
     public static final String SHOPPINGLISITEM_DELETE_ITEM_UNIT_ERR = "Error borrando un item unit de la lista de items";
     public static final String SHOPPINGLISTITEM_GENERIC_ERR = "Error generico en proceso";
+    public static final String SHOPPINGLISTITEM_WITHOUT_ITEM_UNITS = "El item no tiene asociado nigun item unit";
 }

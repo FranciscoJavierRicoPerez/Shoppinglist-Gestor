@@ -18,6 +18,7 @@ import { useDeleteShoppinglistItem } from "@/ShoppinglistItem/application/useDel
 import AddItemWeightPopover from "./AddItemWeightPopover.vue";
 import { useShoppinglistItemStore } from "@/ShoppinglistItem/stores/shoppinglistItemStore";
 import ItemUnitUpInfoDialog from "@/ItemUnit/components/ItemUnitUpInfoDialog.vue";
+import ItemUnitWpInfoDialog from "@/ItemUnit/components/ItemUnitWpInfoDialog.vue";
 
 const { refetch: deleteShoppinglistItem } = useDeleteShoppinglistItem();
 
@@ -86,9 +87,12 @@ function getCalculteSystemCode(data: ShoppinglistItemMetadata | any): string {
             ></ItemUnitUpInfoDialog>
           </div>
           <div v-else>
-            <AddItemWeightPopover
+            <!-- <AddItemWeightPopover
               :idShoppinglistItem="shoppinglistItem.id"
-            ></AddItemWeightPopover>
+            ></AddItemWeightPopover> -->
+            <ItemUnitWpInfoDialog
+              :idShoppinglistItem="shoppinglistItem.id"
+            ></ItemUnitWpInfoDialog>
           </div>
           <IonButton
             shape="round"
