@@ -34,4 +34,15 @@ public class ItemUnit {
     @OneToOne(fetch = FetchType.LAZY,  cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "up_item_unit_id")
     private UpItemUnit upItemUnit;
+
+    private boolean isWpItem;
+    public boolean isWpItem() {
+        return wpItemUnit != null;
+    }
+
+    private boolean isUpItem;
+    public boolean isUpItem() {
+        return upItemUnit != null;
+    }
+
 }

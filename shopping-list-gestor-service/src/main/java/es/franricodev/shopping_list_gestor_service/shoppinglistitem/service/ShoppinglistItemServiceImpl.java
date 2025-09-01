@@ -17,12 +17,14 @@ import es.franricodev.shopping_list_gestor_service.shoppinglist.service.Shopping
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItemV2;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseCreateShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseGetAllItemUnitUpGroupedByPrice;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseItemUnitWpMetadata;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.exception.ShoppinglistItemException;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.mapper.ShoppinglistItemMapper;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.messages.ShoppinglistItemMessagesError;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.ShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.repository.ShoppinglistItemRepository;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.dto.request.RequestAddItemUnitWP;
+import es.franricodev.shopping_list_gestor_service.wpItemUnit.model.WpItemUnit;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -245,6 +247,28 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
     public ShoppinglistItem updateShoppinglistItem(ShoppinglistItem shoppinglistItem) {
         log.info("Update the information of the shoppinglist item with id: {}", shoppinglistItem.getId());
         return shoppinglistItemRepository.save(shoppinglistItem);
+    }
+
+    @Override
+    public ResponseItemUnitWpMetadata getItemUnitWpMetadata(Long idShoppinglistItem) throws ShoppinglistItemException {
+        log.info("Getting the metadata of one item unit wp from the shoppinglistItem with id: {}", idShoppinglistItem);
+        ResponseItemUnitWpMetadata response = null;
+        ShoppinglistItem shoppinglistItem = shoppinglistItemRepository.findById(idShoppinglistItem).orElseThrow(
+                () -> new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_NOT_FOUND_ERR));
+        if(shoppinglistItem.getItemUnitList().isEmpty()) {
+            throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_WITHOUT_ITEM_UNITS);
+        }
+        log.info("The shoppinglist with id: {}, have one item unit", idShoppinglistItem);
+        ItemUnit itemUnit = shoppinglistItem.getItemUnitList().get(0);
+        if (itemUnit.isWpItem()) {
+            log.info("The item unit with id: {} is a WP item", itemUnit.getId());
+            WpItemUnit wpItemUnit = itemUnit.getWpItemUnit();
+            response = ResponseItemUnitWpMetadata.builder()
+                    .weight(wpItemUnit.getWeight())
+                    .priceKg(wpItemUnit.getPriceKg())
+                    .calculatedPrice(wpItemUnit.getPriceKg() * wpItemUnit.getWeight()).build();
+        }
+        return response;
     }
 
     private double getShoppinglistItemCalculatedPrice(ShoppinglistItem shoppinglistItem) {

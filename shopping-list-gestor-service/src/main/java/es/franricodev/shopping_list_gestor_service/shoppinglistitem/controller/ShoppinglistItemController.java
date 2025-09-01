@@ -7,6 +7,7 @@ import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseCreateShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseDeleteShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseGetAllItemUnitUpGroupedByPrice;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseItemUnitWpMetadata;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.dto.request.RequestAddItemUnitWP;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -117,5 +118,7 @@ public interface ShoppinglistItemController {
     @GetMapping("/v1/{idShoppinglistItem}/itemsUnitsUpGroupedByPrice")
     ResponseEntity<ResponseGetAllItemUnitUpGroupedByPrice> getItemsUnitsUpGroupedByPrice(@PathVariable(name = "idShoppinglistItem") Long idShoppinglistItem);
 
+    @GetMapping("/v1/{idShoppinglistItem}/itemsUnitsWpInfo")
+    ResponseEntity<ResponseItemUnitWpMetadata> getItemsUnitsWpMetadata(@PathVariable(name = "idShoppinglistItem") Long idShoppinglistItem);
 
 }

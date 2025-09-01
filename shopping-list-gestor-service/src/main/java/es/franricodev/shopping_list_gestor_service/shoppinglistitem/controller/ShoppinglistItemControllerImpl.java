@@ -9,6 +9,7 @@ import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseCreateShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseDeleteShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseGetAllItemUnitUpGroupedByPrice;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseItemUnitWpMetadata;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.exception.ShoppinglistItemException;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.messages.ShoppinglistItemMessagesError;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.messages.ShoppinglistItemMessagesSuccess;
@@ -122,6 +123,20 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
             response = shoppinglistItemService.getItemsUnitsUpGroupedByPrice(idShoppinglistItem);
         } catch (ShoppinglistItemException e) {
             log.error(e.getMessage());
+            httpStatus = HttpStatus.BAD_REQUEST;
+        }
+        return new ResponseEntity<>(response, httpStatus);
+    }
+
+    @Override
+    @GetMapping("/v1/{idShoppinglistItem}/itemsUnitsWpInfo")
+    public ResponseEntity<ResponseItemUnitWpMetadata> getItemsUnitsWpMetadata(Long idShoppinglistItem) {
+        log.info("Getting the information of a item unit wp from the shoppinglist item with id: {}", idShoppinglistItem);
+        ResponseItemUnitWpMetadata response = null;
+        HttpStatus httpStatus = HttpStatus.OK;
+        try {
+            response = shoppinglistItemService.getItemUnitWpMetadata(idShoppinglistItem);
+        } catch (ShoppinglistItemException e) {
             httpStatus = HttpStatus.BAD_REQUEST;
         }
         return new ResponseEntity<>(response, httpStatus);
