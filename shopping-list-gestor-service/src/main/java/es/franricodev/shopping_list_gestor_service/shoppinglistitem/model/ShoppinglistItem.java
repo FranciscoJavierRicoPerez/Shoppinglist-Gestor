@@ -28,13 +28,13 @@ public class ShoppinglistItem implements Serializable {
     @Column(name = "ASSIGNATION_LIST_DATE")
     private Date assignationToListDate;
 
-    @ManyToMany(mappedBy = "shoppinglistItems", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "shoppinglistItems", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Set<Product> products = new HashSet<>();
 
     @Column(name = "CALCULATED_PRICE")
     private Double calculatedPrice;
 
-    @OneToMany(mappedBy = "shoppinglistItem", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "shoppinglistItem", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<ItemUnit> itemUnitList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)

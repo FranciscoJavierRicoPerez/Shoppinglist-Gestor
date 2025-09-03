@@ -18,6 +18,6 @@ public class UpItemUnit {
     @Column(name = "UNITY_PRICE")
     private Double unityPrice;
 
-    @OneToOne(mappedBy = "upItemUnit", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "upItemUnit", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private ItemUnit itemUnit;
 }
