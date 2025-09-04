@@ -23,24 +23,21 @@ public class ItemUnit {
     @Column(name = "TOTAL_PRICE")
     private Double totalPrice;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "shoppinglist_item_id")
     private ShoppinglistItem shoppinglistItem;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JoinColumn(name = "wp_item_unit_id")
     private WpItemUnit wpItemUnit;
 
-    @OneToOne(fetch = FetchType.LAZY,  cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY,  cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JoinColumn(name = "up_item_unit_id")
     private UpItemUnit upItemUnit;
 
-    private boolean isWpItem;
     public boolean isWpItem() {
         return wpItemUnit != null;
     }
-
-    private boolean isUpItem;
     public boolean isUpItem() {
         return upItemUnit != null;
     }
