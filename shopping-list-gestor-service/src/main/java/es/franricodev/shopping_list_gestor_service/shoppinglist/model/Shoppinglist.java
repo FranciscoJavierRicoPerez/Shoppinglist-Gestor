@@ -42,6 +42,10 @@ public class Shoppinglist implements Serializable {
     @Column(name = "IS_ACTIVE")
     private Boolean isActive;
 
+    @NotNull
+    @Column(name = "INFO_BLOCK")
+    private Boolean infoBlock;
+
     @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @JoinColumn(name = "shoppinglist_id")
     private List<ShoppinglistItem> items = new ArrayList<>();

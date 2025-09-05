@@ -2,6 +2,7 @@ package es.franricodev.shopping_list_gestor_service.upItemUnit.model;
 
 import es.franricodev.shopping_list_gestor_service.itemUnit.model.ItemUnit;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data

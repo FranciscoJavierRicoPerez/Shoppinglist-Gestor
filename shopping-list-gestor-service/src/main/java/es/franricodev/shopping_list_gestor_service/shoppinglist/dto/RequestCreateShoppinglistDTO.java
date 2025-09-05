@@ -9,4 +9,5 @@ public class RequestCreateShoppinglistDTO {
     private String code;
     private Double totalPrice;
     private Boolean isActive;
+    private Boolean infoBlock;
 }

@@ -31,10 +31,8 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
     @Override
     public List<ShoppinglistDTO> findAllShoppinglists() throws ShoppinglistException {
         log.info("Find all the shoppinglists actives");
-        List<Shoppinglist> shoppinglistList = shoppinglistRepository.findAll();
-        if (shoppinglistList.isEmpty()) {
-            throw new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND);
-        }
+        List<Shoppinglist> shoppinglistList = shoppinglistRepository.findAllByInfoBlockFalse().orElseThrow(
+                () -> new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND));
         return shoppinglistMapper.toDTOList(shoppinglistList);
     }
 

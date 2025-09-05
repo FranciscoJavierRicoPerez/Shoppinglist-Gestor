@@ -2,7 +2,9 @@ package es.franricodev.shopping_list_gestor_service.wpItemUnit.model;
 
 import es.franricodev.shopping_list_gestor_service.itemUnit.model.ItemUnit;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
 
 @Data
 @Entity
@@ -21,6 +23,4 @@ public class WpItemUnit {
 
     @OneToOne(mappedBy = "wpItemUnit", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private ItemUnit itemUnit;
-
-
 }
