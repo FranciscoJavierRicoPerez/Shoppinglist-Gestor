@@ -33,15 +33,12 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
     @DeleteMapping("/v1/{idItem}/delete")
     public ResponseEntity<ResponseDeleteShoppinglistItem> deleteShoppinglistItem(@PathVariable("idItem") Long idItem) {
         log.info("Delete the shoppinglist item with id: {}", idItem);
-        ResponseDeleteShoppinglistItem responseDeleteShoppinglistItem = new ResponseDeleteShoppinglistItem();
+        ResponseDeleteShoppinglistItem responseDeleteShoppinglistItem = null;
         HttpStatus httpStatus = HttpStatus.OK;
         try {
-            shoppinglistItemService.deleteShoppinglistItem(idItem);
-            responseDeleteShoppinglistItem.setDelete(true);
-            responseDeleteShoppinglistItem.setMessage(ShoppinglistItemMessagesSuccess.SHOPPINGLISTITEM_DELETED_OK);
-        } catch (ShoppinglistItemException e) {
-            responseDeleteShoppinglistItem.setDelete(false);
-            responseDeleteShoppinglistItem.setMessage(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_DELETED_ERR);
+            responseDeleteShoppinglistItem = shoppinglistItemService.deleteLogicShoppinglistItemById(idItem);
+        } catch (ShoppinglistItemException shoppinglistItemException) {
+            httpStatus = HttpStatus.BAD_REQUEST;
         }
         return new ResponseEntity<>(responseDeleteShoppinglistItem, httpStatus);
     }
@@ -140,5 +137,10 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
             httpStatus = HttpStatus.BAD_REQUEST;
         }
         return new ResponseEntity<>(response, httpStatus);
+    }
+
+    @Override
+    public void createShoppinglistItemMetadata(RequestCreateShoppinglistItemV2 requestCreateShoppinglistItem) {
+        shoppinglistItemService.createShoppinglistItemMetadata(requestCreateShoppinglistItem);
     }
 }

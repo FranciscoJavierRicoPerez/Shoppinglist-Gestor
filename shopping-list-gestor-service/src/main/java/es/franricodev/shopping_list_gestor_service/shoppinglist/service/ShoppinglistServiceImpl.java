@@ -7,7 +7,9 @@ import es.franricodev.shopping_list_gestor_service.shoppinglist.message.ErrorMes
 import es.franricodev.shopping_list_gestor_service.shoppinglist.model.Shoppinglist;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.repository.ShoppinglistRepository;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.specifications.ShoppinglistSpecifications;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.exception.ShoppinglistItemException;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.ShoppinglistItem;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.service.ShoppinglistItemService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,9 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
 
     @Autowired
     private ShoppinglistRepository shoppinglistRepository;
+
+    @Autowired
+    private ShoppinglistItemService shoppinglistItemService;
 
     @Autowired
     private ShoppinglistMapper shoppinglistMapper;
@@ -164,6 +169,7 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
             } else {
                 shoppinglist.getItems().add(shoppinglistItem);
             }
+            shoppinglistRepository.save(shoppinglist);
         }
     }
 
@@ -174,6 +180,28 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
             shoppinglist.setTotalPrice(calculateShoppinglistTotalPrice(shoppinglist));
             updateShoppinglist(shoppinglist);
         }
+    }
+
+    @Override
+    public void deleteLogicShoppinglist(Long id) throws ShoppinglistException {
+        log.info("Logic deletion of the shoppinglist with id: {}", id);
+        Shoppinglist shoppinglist = shoppinglistRepository.findById(id).orElseThrow(
+                () -> new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND)
+        );
+        shoppinglist.setInfoBlock(true);
+        log.info("Logic deletion of all shoppinglist items from the shoppinglist with id: {}", id);
+        shoppinglistItemService.deleteLogicAllShoppinglistItem(shoppinglist.getItems());
+        updateShoppinglist(shoppinglist);
+    }
+
+    @Override
+    public void addShoppinglistItem(Long idShoppinglistItem, Long idShoppinglist) throws ShoppinglistException, ShoppinglistItemException {
+        log.info("Add shoppinglist item with id: {} to the shoppinglist with id: {}", idShoppinglistItem, idShoppinglist);
+        ShoppinglistItem shoppinglistItem = shoppinglistItemService.findShoppinglistItemById(idShoppinglistItem);
+        Shoppinglist shoppinglist = shoppinglistRepository
+                .findById(idShoppinglist)
+                .orElseThrow(() -> new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND));
+        addShoppinglistItemToShoppinglist(shoppinglistItem, shoppinglist);
     }
 
     private double calculateShoppinglistTotalPrice(Shoppinglist shoppinglist) {

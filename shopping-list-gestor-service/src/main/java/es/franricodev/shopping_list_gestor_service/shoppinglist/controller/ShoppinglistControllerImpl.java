@@ -3,6 +3,7 @@ package es.franricodev.shopping_list_gestor_service.shoppinglist.controller;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.*;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.service.ShoppinglistService;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.exception.ShoppinglistItemException;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
@@ -124,5 +125,29 @@ public class ShoppinglistControllerImpl implements ShoppinglistController{
             log.error(e.getMessage());
         }
         return new ResponseEntity<>(shoppinglistDTO != null, httpStatus);
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteLogicShoppinglist(Long idShoppinglist) {
+        log.info("Logic deletion of the entity shoppinglist with id: {}", idShoppinglist);
+        HttpStatus httpStatus = HttpStatus.OK;
+        try {
+            shoppinglistService.deleteLogicShoppinglist(idShoppinglist);
+        } catch (ShoppinglistException e) {
+            throw new RuntimeException(e);
+        }
+        return new ResponseEntity<>(httpStatus);
+    }
+
+    @Override
+    public ResponseEntity<Void> addShoppinglistItemToShoppinglist(Long idShoppinglist, Long idShoppinglistItem) {
+        log.info("Add shoppinglist item with id: {}, in the shoppinglist with id: {}", idShoppinglistItem, idShoppinglist);
+        HttpStatus httpStatus = HttpStatus.OK;
+        try {
+            shoppinglistService.addShoppinglistItem(idShoppinglistItem, idShoppinglist);
+        } catch (ShoppinglistException | ShoppinglistItemException e) {
+            throw new RuntimeException(e);
+        }
+        return new ResponseEntity<>(httpStatus);
     }
 }

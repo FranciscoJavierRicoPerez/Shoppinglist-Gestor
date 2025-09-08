@@ -41,4 +41,8 @@ public class ShoppinglistItem implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "calculate_system_id")
     private CalculateSystem calculateSystem;
+
+    @NotNull
+    @Column(name = "INFO_BLOCK")
+    private Boolean infoBlock;
 }

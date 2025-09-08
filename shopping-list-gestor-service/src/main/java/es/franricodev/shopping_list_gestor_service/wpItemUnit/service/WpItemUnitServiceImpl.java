@@ -28,4 +28,10 @@ public class WpItemUnitServiceImpl implements WpItemUnitService {
         return repository.save(wpItemUnit);
     }
 
+    @Override
+    public void deleteLogicWpItemUnit(WpItemUnit wpItemUnit) {
+        wpItemUnit.setInfoBlock(true);
+        repository.save(wpItemUnit);
+    }
+
 }

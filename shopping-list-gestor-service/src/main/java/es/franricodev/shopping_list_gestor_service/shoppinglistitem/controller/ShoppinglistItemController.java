@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -120,5 +121,8 @@ public interface ShoppinglistItemController {
 
     @GetMapping("/v1/{idShoppinglistItem}/itemsUnitsWpInfo")
     ResponseEntity<ResponseItemUnitWpMetadata> getItemsUnitsWpMetadata(@PathVariable(name = "idShoppinglistItem") Long idShoppinglistItem);
+
+    @PostMapping("/v1/createShoppinglistItemMetadata")
+    void createShoppinglistItemMetadata(@RequestBody RequestCreateShoppinglistItemV2 requestCreateShoppinglistItem);
 
 }

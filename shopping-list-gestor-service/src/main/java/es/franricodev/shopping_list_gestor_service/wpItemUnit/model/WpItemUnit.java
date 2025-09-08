@@ -21,6 +21,10 @@ public class WpItemUnit {
     @Column(name = "WEIGHT")
     private Double weight;
 
+    @NotNull
+    @Column(name = "INFO_BLOCK")
+    private Boolean infoBlock;
+
     @OneToOne(mappedBy = "wpItemUnit", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private ItemUnit itemUnit;
 }

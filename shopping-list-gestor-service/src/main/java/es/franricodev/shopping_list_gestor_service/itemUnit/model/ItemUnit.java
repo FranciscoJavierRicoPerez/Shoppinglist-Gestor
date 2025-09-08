@@ -43,4 +43,8 @@ public class ItemUnit {
         return upItemUnit != null;
     }
 
+    @NotNull
+    @Column(name = "INFO_BLOCK")
+    private Boolean infoBlock;
+
 }

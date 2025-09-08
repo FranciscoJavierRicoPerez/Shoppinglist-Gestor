@@ -51,4 +51,14 @@ public interface ShoppinglistController {
     @PutMapping("/v1/{id}/update/isActive")
     ResponseEntity<Boolean> updateShoppinglistIsActiveValue(@PathVariable(name = "id") Long idShoppinglist);
 
+    @Operation(summary = "Logic deletion of the shoppinglist entity")
+    @DeleteMapping("/v1/{id}/delete")
+    ResponseEntity<Void> deleteLogicShoppinglist(@PathVariable(name = "id") Long idShoppinglist);
+
+    @Operation(summary = "Add a new ShoppinglistItem to the Shoppinglist")
+    @PostMapping("/v1/{idShoppinglist}/addShoppinglistItem")
+    ResponseEntity<Void> addShoppinglistItemToShoppinglist(
+            @PathVariable(name = "idShoppinglist") Long idShoppinglist,
+            @RequestParam(name = "idShoppinglistItem") Long idShoppinglistItem);
+    
 }

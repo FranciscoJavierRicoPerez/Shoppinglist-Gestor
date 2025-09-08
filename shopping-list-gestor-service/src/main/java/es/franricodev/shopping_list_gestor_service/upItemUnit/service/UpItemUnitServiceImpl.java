@@ -42,4 +42,10 @@ public class UpItemUnitServiceImpl implements UpItemUnitService{
         upItemUnitRepository.deleteAll(upItemUnitList);
     }
 
+    @Override
+    public void deleteLogicUpItemUnit(UpItemUnit upItemUnit) {
+        upItemUnit.setInfoBlock(true);
+        upItemUnitRepository.save(upItemUnit);
+    }
+
 }

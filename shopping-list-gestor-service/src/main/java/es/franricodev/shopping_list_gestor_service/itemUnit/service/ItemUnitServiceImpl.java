@@ -141,6 +141,20 @@ public class ItemUnitServiceImpl implements ItemUnitService {
                 .build();
     }
 
+    @Override
+    public void deleteLogicItemUnitList(List<ItemUnit> itemUnitList) {
+        log.info("Logic deletion of the items unit from the list");
+        for (ItemUnit itemUnit : itemUnitList) {
+            itemUnit.setInfoBlock(true);
+            if (itemUnit.isWpItem()) {
+                wpItemUnitService.deleteLogicWpItemUnit(itemUnit.getWpItemUnit());
+            } else {
+                upItemUnitService.deleteLogicUpItemUnit(itemUnit.getUpItemUnit());
+            }
+            itemUnitRepository.save(itemUnit);
+        }
+    }
+
     private ResponseItemUnitUpGrouped createResponseItemUnitUpGrouped(List<ItemUnit> itemUnits, Double unitaryPrice) {
         ResponseItemUnitUpGrouped responseItemUnitUpGrouped = new ResponseItemUnitUpGrouped();
         int quantity = 0;
