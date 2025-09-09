@@ -111,6 +111,7 @@ public class ItemUnitServiceImpl implements ItemUnitService {
         }
 
         ItemUnit itemUnit = new ItemUnit();
+        itemUnit.setInfoBlock(false);
         itemUnit.setWpItemUnit(wpItemUnitCreated);
         itemUnit.setUpItemUnit(upItemUnitCreated);
         itemUnit.setTotalPrice(calculateItemUnitTotalPriceV2(itemUnit));

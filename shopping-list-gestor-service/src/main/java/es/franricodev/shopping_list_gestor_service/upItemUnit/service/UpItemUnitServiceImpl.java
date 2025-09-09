@@ -22,6 +22,7 @@ public class UpItemUnitServiceImpl implements UpItemUnitService{
     public UpItemUnit createUpItemUnit(RequestCreateUpItemUnitData requestCreateUpItemUnitData) {
         log.info("Creating a new up item unit");
         UpItemUnit upItemUnit = new UpItemUnit();
+        upItemUnit.setInfoBlock(false);
         upItemUnit.setQuantity(requestCreateUpItemUnitData.getQuantity());
         upItemUnit.setUnityPrice(requestCreateUpItemUnitData.getUnitaryPrice());
         return upItemUnitRepository.save(upItemUnit);

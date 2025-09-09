@@ -18,6 +18,7 @@ public class WpItemUnitServiceImpl implements WpItemUnitService {
     public WpItemUnit createWpItemUnit(RequestCreateWpItemUnitData requestCreateWpItemUnitData) {
         log.info("Creating a new wp item unit");
         WpItemUnit wpItemUnit = new WpItemUnit();
+        wpItemUnit.setInfoBlock(false);
         wpItemUnit.setPriceKg(requestCreateWpItemUnitData.getPriceKg());
         wpItemUnit.setWeight(requestCreateWpItemUnitData.getWeight());
         return repository.save(wpItemUnit);

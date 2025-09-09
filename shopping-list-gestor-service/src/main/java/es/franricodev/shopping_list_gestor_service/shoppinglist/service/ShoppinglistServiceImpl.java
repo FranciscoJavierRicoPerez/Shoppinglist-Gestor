@@ -147,8 +147,7 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
             throw new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND);
         }
         Shoppinglist shoppinglist = optionalShoppinglist.get();
-        List<ShoppinglistItem> shoppinglistItemList = shoppinglist.getItems().stream().filter(shoppinglistItem -> !Objects.equals(shoppinglistItem.getId(), idShoppinglistItem)).toList();
-        return shoppinglistItemList;
+        return shoppinglist.getItems().stream().filter(shoppinglistItem -> !Objects.equals(shoppinglistItem.getId(), idShoppinglistItem)).toList();
     }
 
     @Transactional
