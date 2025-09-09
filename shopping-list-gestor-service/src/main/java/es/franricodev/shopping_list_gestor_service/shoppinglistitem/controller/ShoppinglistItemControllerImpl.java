@@ -140,7 +140,15 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
     }
 
     @Override
-    public void createShoppinglistItemMetadata(RequestCreateShoppinglistItemV2 requestCreateShoppinglistItem) {
-        shoppinglistItemService.createShoppinglistItemMetadata(requestCreateShoppinglistItem);
+    public ResponseEntity<ResponseCreateShoppinglistItem> createShoppinglistItemMetadata(RequestCreateShoppinglistItemV2 requestCreateShoppinglistItem) {
+        log.info("Creation of the shoppinglist item metadata");
+        ResponseCreateShoppinglistItem response = null;
+        HttpStatus httpStatus = HttpStatus.CREATED;
+        try {
+            response = shoppinglistItemService.createShoppinglistItemMetadata(requestCreateShoppinglistItem);
+        } catch (ShoppinglistItemException e) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+        }
+        return new ResponseEntity<>(response, httpStatus);
     }
 }

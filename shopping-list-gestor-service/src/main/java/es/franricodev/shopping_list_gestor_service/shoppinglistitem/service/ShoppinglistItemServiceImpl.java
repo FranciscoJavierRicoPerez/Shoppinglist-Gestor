@@ -309,18 +309,45 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
     }
 
     @Override
-    public void createShoppinglistItemMetadata(RequestCreateShoppinglistItemV2 requestCreateShoppinglistItem) {
+    public ResponseCreateShoppinglistItem createShoppinglistItemMetadata(RequestCreateShoppinglistItemV2 requestCreateShoppinglistItem) throws ShoppinglistItemException {
+        log.info("Creation of the shoppinglist item metadata");
         try {
             ShoppinglistItem shoppinglistItem = new ShoppinglistItem();
-            shoppinglistItem.setInfoBlock(false);
             Product product = productService.createProductV2(requestCreateShoppinglistItem.getProductInfo());
-            shoppinglistItem = shoppinglistItemRepository.save(shoppinglistItem);
-            productService.assignProductToShoppinglistItem(shoppinglistItem, product);
             CalculateSystem calculateSystem = calculateSystemService.findCalculateSystemById(requestCreateShoppinglistItem.getSelectedCalculateSystem());
             shoppinglistItem.setCalculateSystem(calculateSystem);
-            shoppinglistItemRepository.save(shoppinglistItem);
-        } catch (CalculateSystemException e) {
-            throw new RuntimeException(e);
+            shoppinglistItem.setInfoBlock(false);
+            // TODO: Procedemos a la creacion del shoppinglist item (SLI)
+            shoppinglistItem.setName(product.getName());
+            shoppinglistItem.setAssignationToListDate(new Date());
+            shoppinglistItem.setCalculateSystem(calculateSystem);
+            shoppinglistItem.setCalculatedPrice(getShoppinglistItemCalculatedPrice(shoppinglistItem));
+            shoppinglistItem = shoppinglistItemRepository.save(shoppinglistItem);
+            productService.assignProductToShoppinglistItem(shoppinglistItem, product);
+            // TODO: Creamos el ItemUnit y su WP O UP item asociado
+            ItemUnit itemUnitCreated = null;
+            if (requestCreateShoppinglistItem.getCreateItemUnitData() != null && requestCreateShoppinglistItem.getCreateItemUnitData().isCreateItemUnit()) {
+                // TODO: Se procede a la creación del item unit
+                itemUnitCreated = itemUnitService.createItemUnitV2(
+                        requestCreateShoppinglistItem.getCreateItemUnitData(),
+                        calculateSystem.getCode().equalsIgnoreCase("WP"),
+                        shoppinglistItem
+                );
+            }
+            if(itemUnitCreated != null) {
+                ArrayList<ItemUnit> itemsUnitCreated = new ArrayList<>();
+                itemsUnitCreated.add(itemUnitCreated);
+                shoppinglistItem.setItemUnitList(itemsUnitCreated);
+                shoppinglistItem.setCalculatedPrice(shoppinglistItem.getCalculatedPrice() + itemUnitCreated.getTotalPrice());
+                shoppinglistItemRepository.save(shoppinglistItem);
+            }
+            return ResponseCreateShoppinglistItem.builder()
+                    .created(true)
+                    .idShoppinglistItemCreated(shoppinglistItem.getId())
+                    .shoppinglistItemCalculatedPrice(shoppinglistItem.getCalculatedPrice())
+                    .build();
+        } catch (CalculateSystemException | ItemUnitException e) {
+            throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_CREATE_ERR);
         }
     }
 

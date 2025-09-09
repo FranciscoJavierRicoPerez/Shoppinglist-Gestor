@@ -119,10 +119,12 @@ public interface ShoppinglistItemController {
     @GetMapping("/v1/{idShoppinglistItem}/itemsUnitsUpGroupedByPrice")
     ResponseEntity<ResponseGetAllItemUnitUpGroupedByPrice> getItemsUnitsUpGroupedByPrice(@PathVariable(name = "idShoppinglistItem") Long idShoppinglistItem);
 
+    @Operation(summary = "Returns the metadata of the items units wp")
     @GetMapping("/v1/{idShoppinglistItem}/itemsUnitsWpInfo")
     ResponseEntity<ResponseItemUnitWpMetadata> getItemsUnitsWpMetadata(@PathVariable(name = "idShoppinglistItem") Long idShoppinglistItem);
 
+    @Operation(summary = "Creation of the shoppinglist item metadata")
     @PostMapping("/v1/createShoppinglistItemMetadata")
-    void createShoppinglistItemMetadata(@RequestBody RequestCreateShoppinglistItemV2 requestCreateShoppinglistItem);
+    ResponseEntity<ResponseCreateShoppinglistItem> createShoppinglistItemMetadata(@RequestBody RequestCreateShoppinglistItemV2 requestCreateShoppinglistItem);
 
 }

@@ -150,4 +150,16 @@ public class ShoppinglistControllerImpl implements ShoppinglistController{
         }
         return new ResponseEntity<>(httpStatus);
     }
+
+    @Override
+    public ResponseEntity<Void> updateTotalPrice(Long idShoppinglist) {
+        log.info("Update the total cost of the shoppinglist with id: {}", idShoppinglist);
+        HttpStatus httpStatus = HttpStatus.OK;
+        try {
+            shoppinglistService.updateShoppinglistTotalPrice(shoppinglistService.findShoppinglistById(idShoppinglist));
+        } catch (ShoppinglistException e) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+        }
+        return new ResponseEntity<>(httpStatus);
+    }
 }

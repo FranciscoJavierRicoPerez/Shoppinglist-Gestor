@@ -46,7 +46,7 @@ public interface ShoppinglistItemService {
 
     ShoppinglistItem findShoppinglistItemById(Long idShoppinglistItem) throws ShoppinglistItemException;
 
-    void createShoppinglistItemMetadata(RequestCreateShoppinglistItemV2 requestCreateShoppinglistItem);
+    ResponseCreateShoppinglistItem createShoppinglistItemMetadata(RequestCreateShoppinglistItemV2 requestCreateShoppinglistItem) throws ShoppinglistItemException;
 
 }
 
