@@ -5,9 +5,7 @@ import { ResponseNewShoppinglistItem } from "@/ShoppinglistItem/infrastructure/m
 async function Api(data: ResquestNewShoppinglistItem, idShoppinglist: number) : Promise<ResponseNewShoppinglistItem>{
   const url =
     import.meta.env.VITE_API_URL_COMPUTER +
-    "api/shoppinglistitem/v2/" +
-    idShoppinglist +
-    "/createItem";
+    "api/shoppinglistitem/v1/createShoppinglistItemMetadata"
   const response = await axios.post(url, data);
   return response.data
 }

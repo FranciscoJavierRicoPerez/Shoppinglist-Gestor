@@ -61,7 +61,7 @@ public interface ShoppinglistController {
             @PathVariable(name = "idShoppinglist") Long idShoppinglist,
             @RequestParam(name = "idShoppinglistItem") Long idShoppinglistItem);
 
-    @Operation(summary = "")
+    @Operation(summary = "Update the total price of the shoppinglist")
     @PutMapping("/v1/{id}/updateTotalPrice")
     ResponseEntity<Void> updateTotalPrice(@PathVariable(name = "id") Long idShoppinglist);
     
