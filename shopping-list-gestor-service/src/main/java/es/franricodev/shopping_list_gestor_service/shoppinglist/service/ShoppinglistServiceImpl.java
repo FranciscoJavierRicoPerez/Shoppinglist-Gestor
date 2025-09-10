@@ -88,11 +88,9 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
     @Override
     public ShoppinglistDetailsDTO getShoppinglistDetails(Long id) throws ShoppinglistException {
         log.info("Getting the shoppinglist details");
-        Optional<Shoppinglist> optionalShoppinglist = shoppinglistRepository.findById(id);
-        if (optionalShoppinglist.isEmpty()) {
-            throw new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_DETAILS);
-        }
-        return shoppinglistMapper.shoppinglistToShoppinglistDetailsDTO(optionalShoppinglist.get());
+        Shoppinglist shoppinglist = shoppinglistRepository.findById(id).orElseThrow(() -> new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_DETAILS));
+        shoppinglist.setItems(shoppinglist.getItems().stream().filter(shoppinglistItem -> !shoppinglistItem.getInfoBlock()).toList());
+        return shoppinglistMapper.shoppinglistToShoppinglistDetailsDTO(shoppinglist);
     }
 
     @Override
@@ -209,7 +207,9 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
         double totalPriceCalculated = 0.0;
         if(!shoppinglist.getItems().isEmpty()) {
             for(ShoppinglistItem shoppinglistItem : shoppinglist.getItems()) {
-                totalPriceCalculated += shoppinglistItem.getCalculatedPrice();
+                if (!shoppinglistItem.getInfoBlock()) {
+                    totalPriceCalculated += shoppinglistItem.getCalculatedPrice();
+                }
             }
             log.info("The new total cost will be {}", totalPriceCalculated);
         }

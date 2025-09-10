@@ -17,6 +17,12 @@ import {
 } from "@ionic/vue";
 import { onMounted, ref } from "vue";
 import { useGetItemWpDetails } from "../application/useGetItemWpDetails";
+import { useRoute } from "vue-router";
+import { useUpdateShoppinglistTotalPrice } from "@/Shoppinglist/application/useUpdateShoppinglistTotalPrice";
+
+const { refetch: updateShoppinglistTotalPrice } = useUpdateShoppinglistTotalPrice();
+
+const route = useRoute();
 
 const params = defineProps({
   idShoppinglistItem: {
@@ -41,10 +47,11 @@ onMounted(async () => {
   }
 });
 
-function addItem() {
+async function addItem() {
   if (params.idShoppinglistItem) {
     form.value.shoppinglistItemId = params.idShoppinglistItem;
-    addItemUnitToShoppinglistItem(null, form.value, false);
+    await addItemUnitToShoppinglistItem(null, form.value, false);
+    await updateShoppinglistTotalPrice(Number(route.params.id))
   }
 }
 </script>

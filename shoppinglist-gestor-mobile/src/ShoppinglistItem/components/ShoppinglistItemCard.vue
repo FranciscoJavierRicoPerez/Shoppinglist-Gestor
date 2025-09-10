@@ -15,12 +15,16 @@ import {
 import { onMounted, ref, type PropType } from "vue";
 import { ShoppinglistItemMetadata } from "@/ShoppinglistItem/domain/ShoppinglistItemMetadata";
 import { useDeleteShoppinglistItem } from "@/ShoppinglistItem/application/useDeleteShoppinglistItem";
-import AddItemWeightPopover from "./AddItemWeightPopover.vue";
 import { useShoppinglistItemStore } from "@/ShoppinglistItem/stores/shoppinglistItemStore";
 import ItemUnitUpInfoDialog from "@/ItemUnit/components/ItemUnitUpInfoDialog.vue";
 import ItemUnitWpInfoDialog from "@/ItemUnit/components/ItemUnitWpInfoDialog.vue";
+import { useUpdateShoppinglistTotalPrice } from "@/Shoppinglist/application/useUpdateShoppinglistTotalPrice";
+import { useRoute } from "vue-router";
 
 const { refetch: deleteShoppinglistItem } = useDeleteShoppinglistItem();
+const { refetch: updateShoppinglistTotalPrice } = useUpdateShoppinglistTotalPrice();
+
+const route = useRoute();
 
 const props = defineProps({
   shoppinglistItemList: {
@@ -41,6 +45,7 @@ onMounted(() => {
 async function removeShoppinglistItem(idItem: number) {
   let response = await deleteShoppinglistItem(idItem);
   if (response.delete) {
+    await updateShoppinglistTotalPrice(Number(route.params.id))
     store.removeShoppinglistItemMetadata(idItem);
     list.value = store.shoppinglistItemMetadataArray;
   }
