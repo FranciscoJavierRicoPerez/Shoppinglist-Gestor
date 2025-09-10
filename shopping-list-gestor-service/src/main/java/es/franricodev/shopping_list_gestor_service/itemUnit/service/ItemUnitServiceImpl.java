@@ -120,7 +120,6 @@ public class ItemUnitServiceImpl implements ItemUnitService {
         return itemUnit;
     }
 
-    // TODO: CREAR ALGORIDMO QUE HAGA ESTO
     @Override
     public ResponseGetAllItemUnitUpGroupedByPrice getAllItemsUnitUpGroupedByPrice(ShoppinglistItem shoppinglistItem) {
         log.info("Getting all the items units from the shoppinglist item with id {} grouped by quantity and unitary price", shoppinglistItem.getId());
@@ -203,7 +202,7 @@ public class ItemUnitServiceImpl implements ItemUnitService {
         return totalPriceCalculated;
     }
 
-    private ItemUnit addItemUnitToShoppinglistItem(ItemUnit itemUnit, ShoppinglistItem shoppinglistItem) {
+    private void addItemUnitToShoppinglistItem(ItemUnit itemUnit, ShoppinglistItem shoppinglistItem) {
         if(itemUnit != null && shoppinglistItem != null) {
             if(shoppinglistItem.getItemUnitList().isEmpty()) {
                 ArrayList<ItemUnit> itemList = new ArrayList<>();
@@ -214,9 +213,8 @@ public class ItemUnitServiceImpl implements ItemUnitService {
             }
             shoppinglistItem = shoppinglistItemService.updateShoppinglistItem(shoppinglistItem);
             itemUnit.setShoppinglistItem(shoppinglistItem);
-            itemUnit = itemUnitRepository.save(itemUnit);
+            itemUnitRepository.save(itemUnit);
         }
-        return itemUnit;
     }
 
     private void validateCorrectItemUnitCreationData(CreateItemUnitData createItemUnitData, boolean isWpItemUnit) throws ItemUnitException {

@@ -86,26 +86,6 @@ public interface ShoppinglistItemController {
     );
 
     @Operation(
-            summary = "Create a new shoppinglist item in a shoppinglist ",
-            description = "This is the second version endpoint"
-    )
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    content = {
-                            @Content(
-                                    schema = @Schema(implementation = ResponseCreateShoppinglistItem.class),
-                                    mediaType = "application/json")
-                    }
-            )
-    })
-    @PostMapping("/v2/{idShoppinglist}/createItem")
-    ResponseEntity<ResponseCreateShoppinglistItem> createItem(
-            @PathVariable(name = "idShoppinglist") Long idShoppinglist,
-            @RequestBody RequestCreateShoppinglistItemV2 requestCreateShoppinglistItem
-    );
-
-    @Operation(
             summary = "Returns all the items units of the shoppinglist item type UP grouped by price"
     )
     @ApiResponses({

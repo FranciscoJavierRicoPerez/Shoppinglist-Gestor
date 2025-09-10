@@ -53,7 +53,7 @@ public interface ShoppinglistController {
 
     @Operation(summary = "Logic deletion of the shoppinglist entity")
     @DeleteMapping("/v1/{id}/delete")
-    ResponseEntity<Void> deleteLogicShoppinglist(@PathVariable(name = "id") Long idShoppinglist);
+    ResponseEntity<Boolean> deleteLogicShoppinglist(@PathVariable(name = "id") Long idShoppinglist);
 
     @Operation(summary = "Add a new ShoppinglistItem to the Shoppinglist")
     @PostMapping("/v1/{idShoppinglist}/addShoppinglistItem")

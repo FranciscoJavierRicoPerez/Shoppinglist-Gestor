@@ -25,6 +25,7 @@ public class ShoppinglistControllerImpl implements ShoppinglistController{
 
     @Autowired
     private ShoppinglistService shoppinglistService;
+
     @GetMapping("/v1")
     public ResponseEntity<List<ShoppinglistDTO>> getAllShoppinglist() {
         log.info("Getting all actives shoppinglists");
@@ -128,15 +129,17 @@ public class ShoppinglistControllerImpl implements ShoppinglistController{
     }
 
     @Override
-    public ResponseEntity<Void> deleteLogicShoppinglist(Long idShoppinglist) {
+    public ResponseEntity<Boolean> deleteLogicShoppinglist(Long idShoppinglist) {
         log.info("Logic deletion of the entity shoppinglist with id: {}", idShoppinglist);
         HttpStatus httpStatus = HttpStatus.OK;
+        boolean deleted = true;
         try {
             shoppinglistService.deleteLogicShoppinglist(idShoppinglist);
         } catch (ShoppinglistException e) {
-            throw new RuntimeException(e);
+            httpStatus = HttpStatus.BAD_REQUEST;
+            deleted = false;
         }
-        return new ResponseEntity<>(httpStatus);
+        return new ResponseEntity<>(deleted, httpStatus);
     }
 
     @Override

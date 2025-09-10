@@ -17,10 +17,6 @@ import java.util.List;
 
 public interface ShoppinglistItemService {
 
-    // ShoppinglistItemDTO createShoppinglistItem(RequestCreateShoppinglistItem requestCreateShoppinglistItem, Long idShoppinglist) throws ShoppinglistItemException;
-
-    // void deleteShoppinglistItem(Long idItem) throws ShoppinglistItemException;
-
     void addItemUnitToShoppinglistItem(CreateItemUnitData createItemUnitData, Long idShoppinglistItem) throws ShoppinglistItemException, ItemUnitException, ShoppinglistException;
 
     List<ItemUnitDTO> getAllItemUnitsFromShoppinglistItem(Long idShoppinglistItem) throws ShoppinglistItemException;
@@ -28,9 +24,6 @@ public interface ShoppinglistItemService {
     void removeItemUnitFromShoppinglistItem(Long idShoppinglistItem, Long idItemUnit) throws ShoppinglistItemException;
 
     void addItemUnitWPToShoppinglistItem(Long idShoppinglistItem, RequestAddItemUnitWP requestAddItemUnitWP) throws ShoppinglistItemException;
-
-    // **************************** VERSION 2 ENPOINTS ***************************************
-    ResponseCreateShoppinglistItem createShoppinglistItem(Long idShoppinglist, RequestCreateShoppinglistItemV2 requestCreateShoppinglistItemV2) throws ShoppinglistItemException;
 
     ResponseGetAllItemUnitUpGroupedByPrice getItemsUnitsUpGroupedByPrice(Long idShoppinglistItem) throws ShoppinglistItemException;
 

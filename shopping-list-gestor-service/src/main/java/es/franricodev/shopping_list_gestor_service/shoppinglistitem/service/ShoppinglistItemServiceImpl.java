@@ -45,9 +45,6 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
     @Autowired
     private ProductService productService;
 
-    //@Autowired
-    //private ShoppinglistService shoppinglistService;
-
     @Autowired
     private ShoppinglistItemRepository shoppinglistItemRepository;
 
@@ -56,32 +53,6 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
 
     @Autowired
     private ItemUnitMapper itemUnitMapper;
-
-    /* @Override
-    public void deleteShoppinglistItem(Long idItem) throws ShoppinglistItemException {
-        log.info("Deleting the shoppinglist item with id: {}", idItem);
-        Optional<ShoppinglistItem> optShoppinglistItem = shoppinglistItemRepository.findById(idItem);
-        if (optShoppinglistItem.isEmpty()) {
-            throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_NOT_FOUND_ERR);
-        }
-
-        // TODO: Primero debo eliminar las relaciones existentes entre producto y shoppinglist items
-        ShoppinglistItem shoppinglistItem = optShoppinglistItem.get();
-        for(Product p : shoppinglistItem.getProducts()) {
-            p.getShoppinglistItems().remove(shoppinglistItem);
-        }
-        shoppinglistItem.getProducts().clear();
-        Shoppinglist shoppinglist = shoppinglistService.findShoppinglistByShoppinglistItemId(shoppinglistItem.getId());
-        try {
-            List<ShoppinglistItem> shoppinglistItemList = shoppinglistService.removeShoppinglistItemFromShoppinglist(shoppinglist.getId(), shoppinglistItem.getId());
-            shoppinglist.setItems(shoppinglistItemList);
-            shoppinglistService.calculateShoppinglistTotalPrice(shoppinglist.getId());
-        } catch (ShoppinglistException e) {
-           throw new ShoppinglistItemException("ERROR-RECALCULANDO-EL-PRECIO-TOTAL-DE-LA-LISTA");
-        }
-        shoppinglistItemRepository.delete(shoppinglistItem);
-        shoppinglistService.updateShoppinglist(shoppinglist);
-    } */
 
     @Override
     public void addItemUnitToShoppinglistItem(CreateItemUnitData createItemUnitData, Long idShoppinglistItem) throws ShoppinglistItemException, ItemUnitException, ShoppinglistException {
@@ -99,9 +70,6 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
             shoppinglistItem.setCalculatedPrice(shoppinglistItem.getCalculatedPrice() + itemUnitCreated.getTotalPrice());
             shoppinglistItemRepository.save(shoppinglistItem);
         }
-        // TODO: INGENIERA OTRA FORMA DE QUE SE ACTUALIZE EL PRECIO DE LA SHOPPINGLIST -> (¿OTRA PETICION A LA API SI ESTA ES CORRECTA?)
-        // Shoppinglist shoppinglist = shoppinglistService.findShoppinglistByShoppinglistItemId(shoppinglistItem.getId());
-        // shoppinglistService.updateShoppinglistTotalPrice(shoppinglist);
     }
 
     @Override
@@ -158,14 +126,6 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
             itemUnitService.updateItemUnit(shoppinglistItem.getItemUnitList().get(0), requestAddItemUnitWP);
         }
         recalculateShoppinglistItemsTotalPrice(shoppinglistItem);
-        // TODO: REFACTORIZACION -> MIRAR COMO HACER QUE SE ACTUALIE EL TOTAL PRICE, ¿NUEVA PETICION A LA API?
-        /* Shoppinglist shoppinglist = shoppinglistService.findShoppinglistByShoppinglistItemId(shoppinglistItem.getId());
-        try {
-            shoppinglist = shoppinglistService.calculateShoppinglistTotalPrice(shoppinglist.getId());
-        } catch (ShoppinglistException e) {
-            throw new RuntimeException(e);
-        }
-        shoppinglistService.updateShoppinglist(shoppinglist); */
     }
 
     private void recalculateShoppinglistItemsTotalPrice(ShoppinglistItem shoppinglistItem) {
@@ -180,61 +140,6 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
         shoppinglistItemRepository.save(shoppinglistItem);
     }
 
-    // **************************** VERSION 2 ENPOINTS ***************************************ç
-    @Transactional
-    @Override
-    public ResponseCreateShoppinglistItem createShoppinglistItem(Long idShoppinglist, RequestCreateShoppinglistItemV2 requestData) throws ShoppinglistItemException {
-        // TODO: HACER QUE LA CREACIÓN DEL SHOPPINGLIST ITEM VENGA DESDE UN ENDPOINT DE LA CAPA DE SHOPPINGLIST CONTROLLER - SERVIRCE
-        log.info("V2: Creating a new shoppinglist item for the shoppinglist with id: {}", idShoppinglist);
-        try {
-            // Shoppinglist shoppinglist = shoppinglistService.findShoppinglistById(idShoppinglist);
-            // TODO: Revisamos que el producto que se va a asignar en la SLI existe y si no lo creamos
-            Product product = productService.createProductV2(requestData.getProductInfo());
-            // TODO: Obtenemos el calculate system asociado
-            CalculateSystem calculateSystem = calculateSystemService.findCalculateSystemById(requestData.getSelectedCalculateSystem());
-            // TODO: Procedemos a la creacion del shoppinglist item (SLI)
-            ShoppinglistItem shoppinglistItem = new ShoppinglistItem();
-            shoppinglistItem.setName(product.getName());
-            shoppinglistItem.setAssignationToListDate(new Date());
-            shoppinglistItem.setCalculateSystem(calculateSystem);
-            shoppinglistItem.setCalculatedPrice(getShoppinglistItemCalculatedPrice(shoppinglistItem));
-            // todo: shoppinglistService.addShoppinglistItemToShoppinglist(shoppinglistItem, shoppinglist);
-            shoppinglistItem = shoppinglistItemRepository.save(shoppinglistItem);
-            productService.assignProductToShoppinglistItem(shoppinglistItem, product);
-            // TODO: Creamos el ItemUnit y su WP O UP item asociado
-            ItemUnit itemUnitCreated = null;
-            if (requestData.getCreateItemUnitData() != null && requestData.getCreateItemUnitData().isCreateItemUnit()) {
-                // TODO: Se procede a la creación del item unit
-                itemUnitCreated = itemUnitService.createItemUnitV2(
-                        requestData.getCreateItemUnitData(),
-                        calculateSystem.getCode().equalsIgnoreCase("WP"),
-                        shoppinglistItem
-                );
-            }
-            if(itemUnitCreated != null) {
-                ArrayList<ItemUnit> itemsUnitCreated = new ArrayList<>();
-                itemsUnitCreated.add(itemUnitCreated);
-                shoppinglistItem.setItemUnitList(itemsUnitCreated);
-                shoppinglistItem.setCalculatedPrice(shoppinglistItem.getCalculatedPrice() + itemUnitCreated.getTotalPrice());
-                shoppinglistItemRepository.save(shoppinglistItem);
-            }
-            /* if(shoppinglist != null) {
-                log.info("Updating the total price of the shoppinglist with the data of the new shoppinglist item");
-                // todo: shoppinglistService.updateShoppinglistTotalPrice(shoppinglistService.findShoppinglistById(shoppinglist.getId()));
-            } */
-            return ResponseCreateShoppinglistItem.builder()
-                    .idShoppinglistItemCreated(shoppinglistItem.getId())
-                    .created(true)
-                    .shoppinglistItemCalculatedPrice(shoppinglistItem.getCalculatedPrice())
-                    // .totalPrice(shoppinglist!= null ? shoppinglist.getTotalPrice() : -1)
-                    .build();
-        } catch ( CalculateSystemException | ItemUnitException e) {
-            log.info(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_CREATE_ERR);
-            throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_CREATE_ERR);
-        }
-    }
-
-    // TODO: ERROR AL EJECUTAR ESO
     @Override
     public ResponseGetAllItemUnitUpGroupedByPrice getItemsUnitsUpGroupedByPrice(Long idShoppinglistItem) throws ShoppinglistItemException {
         log.info("Getting all the items units UP type of the shoppinglist item with id {}", idShoppinglistItem);
@@ -284,7 +189,7 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
 
     @Override
     public void deleteLogicShoppinglistItem(ShoppinglistItem shoppinglistItem) {
-        log.info("Logic deletion of the shoppinglist item with id: {}", shoppinglistItem.getId());
+        log.info("Logic deletion of the entity shoppinglist item with id: {}", shoppinglistItem.getId());
         shoppinglistItem.setInfoBlock(true);
         itemUnitService.deleteLogicItemUnitList(shoppinglistItem.getItemUnitList());
         shoppinglistItemRepository.save(shoppinglistItem);

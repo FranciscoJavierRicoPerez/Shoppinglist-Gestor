@@ -95,21 +95,6 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
         return ResponseEntity.ok(null);
     }
 
-    @Override
-    @PostMapping("/v2/{idShoppinglist}/createItem")
-    public ResponseEntity<ResponseCreateShoppinglistItem> createItem(Long idShoppinglist, RequestCreateShoppinglistItemV2 requestCreateShoppinglistItem) {
-        log.info("Creating a new shoppinglist item in the shoppinglist with id: {}", idShoppinglist);
-        ResponseCreateShoppinglistItem response = null;
-        HttpStatus httpStatus = HttpStatus.CREATED;
-        try {
-            response = shoppinglistItemService.createShoppinglistItem(idShoppinglist, requestCreateShoppinglistItem);
-        } catch (ShoppinglistItemException e) {
-            log.error(e.getMessage());
-            httpStatus = HttpStatus.BAD_REQUEST;
-        }
-        return new ResponseEntity<>(response, httpStatus);
-    }
-
     // TODO: ERROR AL EJECUTAR ESTE ENDPOINT
     @Override
     public ResponseEntity<ResponseGetAllItemUnitUpGroupedByPrice> getItemsUnitsUpGroupedByPrice(Long idShoppinglistItem) {

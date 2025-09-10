@@ -190,7 +190,7 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
         shoppinglist.setInfoBlock(true);
         log.info("Logic deletion of all shoppinglist items from the shoppinglist with id: {}", id);
         shoppinglistItemService.deleteLogicAllShoppinglistItem(shoppinglist.getItems());
-        updateShoppinglist(shoppinglist);
+        updateShoppinglistTotalPrice(shoppinglist);
     }
 
     @Override
