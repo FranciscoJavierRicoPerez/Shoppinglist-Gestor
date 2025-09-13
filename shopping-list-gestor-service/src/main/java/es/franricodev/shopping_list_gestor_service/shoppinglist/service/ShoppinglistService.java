@@ -3,6 +3,7 @@ package es.franricodev.shopping_list_gestor_service.shoppinglist.service;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.*;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.model.Shoppinglist;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.exception.ShoppinglistItemException;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.ShoppinglistItem;
 
 import java.util.List;
@@ -36,6 +37,10 @@ public interface ShoppinglistService {
     void addShoppinglistItemToShoppinglist(ShoppinglistItem shoppinglistItem, Shoppinglist shoppinglist);
 
     void updateShoppinglistTotalPrice(Shoppinglist shoppinglist);
+
+    void deleteLogicShoppinglist(Long id) throws ShoppinglistException;
+
+    void addShoppinglistItem(Long idShoppinglistItem, Long idShoppinglist) throws ShoppinglistException, ShoppinglistItemException;
 }
 
 

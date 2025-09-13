@@ -18,6 +18,7 @@ public class WpItemUnitServiceImpl implements WpItemUnitService {
     public WpItemUnit createWpItemUnit(RequestCreateWpItemUnitData requestCreateWpItemUnitData) {
         log.info("Creating a new wp item unit");
         WpItemUnit wpItemUnit = new WpItemUnit();
+        wpItemUnit.setInfoBlock(false);
         wpItemUnit.setPriceKg(requestCreateWpItemUnitData.getPriceKg());
         wpItemUnit.setWeight(requestCreateWpItemUnitData.getWeight());
         return repository.save(wpItemUnit);
@@ -26,6 +27,12 @@ public class WpItemUnitServiceImpl implements WpItemUnitService {
     @Override
     public WpItemUnit updateWpItemUnit(WpItemUnit wpItemUnit) {
         return repository.save(wpItemUnit);
+    }
+
+    @Override
+    public void deleteLogicWpItemUnit(WpItemUnit wpItemUnit) {
+        wpItemUnit.setInfoBlock(true);
+        repository.save(wpItemUnit);
     }
 
 }

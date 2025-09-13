@@ -30,6 +30,7 @@ public interface ShoppinglistMapper {
 
     @Mapping(target = "creationDate", expression = "java(new java.util.Date())")
     @Mapping(target = "code", expression = "java(request.getCode().toString() + new java.util.Date().toString())")
+    @Mapping(target = "infoBlock", defaultValue = "false")
     Shoppinglist createShoppinglist(RequestCreateShoppinglistDTO request);
 
     void updateShoppinglist(@MappingTarget Shoppinglist shoppinglist, RequestUpdateShoppinglistDTO request);

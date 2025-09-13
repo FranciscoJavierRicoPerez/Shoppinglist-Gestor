@@ -7,7 +7,9 @@ import es.franricodev.shopping_list_gestor_service.shoppinglist.message.ErrorMes
 import es.franricodev.shopping_list_gestor_service.shoppinglist.model.Shoppinglist;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.repository.ShoppinglistRepository;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.specifications.ShoppinglistSpecifications;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.exception.ShoppinglistItemException;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.ShoppinglistItem;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.service.ShoppinglistItemService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,15 +28,16 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
     private ShoppinglistRepository shoppinglistRepository;
 
     @Autowired
+    private ShoppinglistItemService shoppinglistItemService;
+
+    @Autowired
     private ShoppinglistMapper shoppinglistMapper;
 
     @Override
     public List<ShoppinglistDTO> findAllShoppinglists() throws ShoppinglistException {
         log.info("Find all the shoppinglists actives");
-        List<Shoppinglist> shoppinglistList = shoppinglistRepository.findAll();
-        if (shoppinglistList.isEmpty()) {
-            throw new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND);
-        }
+        List<Shoppinglist> shoppinglistList = shoppinglistRepository.findAllByInfoBlockFalse().orElseThrow(
+                () -> new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND));
         return shoppinglistMapper.toDTOList(shoppinglistList);
     }
 
@@ -85,11 +88,9 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
     @Override
     public ShoppinglistDetailsDTO getShoppinglistDetails(Long id) throws ShoppinglistException {
         log.info("Getting the shoppinglist details");
-        Optional<Shoppinglist> optionalShoppinglist = shoppinglistRepository.findById(id);
-        if (optionalShoppinglist.isEmpty()) {
-            throw new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_DETAILS);
-        }
-        return shoppinglistMapper.shoppinglistToShoppinglistDetailsDTO(optionalShoppinglist.get());
+        Shoppinglist shoppinglist = shoppinglistRepository.findById(id).orElseThrow(() -> new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_DETAILS));
+        shoppinglist.setItems(shoppinglist.getItems().stream().filter(shoppinglistItem -> !shoppinglistItem.getInfoBlock()).toList());
+        return shoppinglistMapper.shoppinglistToShoppinglistDetailsDTO(shoppinglist);
     }
 
     @Override
@@ -144,8 +145,7 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
             throw new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND);
         }
         Shoppinglist shoppinglist = optionalShoppinglist.get();
-        List<ShoppinglistItem> shoppinglistItemList = shoppinglist.getItems().stream().filter(shoppinglistItem -> !Objects.equals(shoppinglistItem.getId(), idShoppinglistItem)).toList();
-        return shoppinglistItemList;
+        return shoppinglist.getItems().stream().filter(shoppinglistItem -> !Objects.equals(shoppinglistItem.getId(), idShoppinglistItem)).toList();
     }
 
     @Transactional
@@ -166,6 +166,7 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
             } else {
                 shoppinglist.getItems().add(shoppinglistItem);
             }
+            shoppinglistRepository.save(shoppinglist);
         }
     }
 
@@ -178,13 +179,37 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
         }
     }
 
+    @Override
+    public void deleteLogicShoppinglist(Long id) throws ShoppinglistException {
+        log.info("Logic deletion of the shoppinglist with id: {}", id);
+        Shoppinglist shoppinglist = shoppinglistRepository.findById(id).orElseThrow(
+                () -> new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND)
+        );
+        shoppinglist.setInfoBlock(true);
+        log.info("Logic deletion of all shoppinglist items from the shoppinglist with id: {}", id);
+        shoppinglistItemService.deleteLogicAllShoppinglistItem(shoppinglist.getItems());
+        updateShoppinglistTotalPrice(shoppinglist);
+    }
+
+    @Override
+    public void addShoppinglistItem(Long idShoppinglistItem, Long idShoppinglist) throws ShoppinglistException, ShoppinglistItemException {
+        log.info("Add shoppinglist item with id: {} to the shoppinglist with id: {}", idShoppinglistItem, idShoppinglist);
+        ShoppinglistItem shoppinglistItem = shoppinglistItemService.findShoppinglistItemById(idShoppinglistItem);
+        Shoppinglist shoppinglist = shoppinglistRepository
+                .findById(idShoppinglist)
+                .orElseThrow(() -> new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND));
+        addShoppinglistItemToShoppinglist(shoppinglistItem, shoppinglist);
+    }
+
     private double calculateShoppinglistTotalPrice(Shoppinglist shoppinglist) {
         log.info("Calculate the new total cost of the shoppinglist with id {}, the actual value is: {}"
                 , shoppinglist.getId(), shoppinglist.getTotalPrice());
         double totalPriceCalculated = 0.0;
         if(!shoppinglist.getItems().isEmpty()) {
             for(ShoppinglistItem shoppinglistItem : shoppinglist.getItems()) {
-                totalPriceCalculated += shoppinglistItem.getCalculatedPrice();
+                if (!shoppinglistItem.getInfoBlock()) {
+                    totalPriceCalculated += shoppinglistItem.getCalculatedPrice();
+                }
             }
             log.info("The new total cost will be {}", totalPriceCalculated);
         }

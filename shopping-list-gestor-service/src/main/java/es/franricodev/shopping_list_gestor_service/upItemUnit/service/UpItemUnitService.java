@@ -10,4 +10,6 @@ public interface UpItemUnitService {
     UpItemUnit updateUpItemUnit(UpItemUnit upItemUnit);
 
     void deleteUpItemUnitGroupeByPrice(Double price) throws UpItemUnitException;
+
+    void deleteLogicUpItemUnit(UpItemUnit upItemUnit);
 }

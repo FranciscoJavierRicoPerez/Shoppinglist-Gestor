@@ -4,6 +4,7 @@ import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.Shoppi
 import es.franricodev.shopping_list_gestor_service.upItemUnit.model.UpItemUnit;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.model.WpItemUnit;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -41,5 +42,9 @@ public class ItemUnit {
     public boolean isUpItem() {
         return upItemUnit != null;
     }
+
+    @NotNull
+    @Column(name = "INFO_BLOCK")
+    private Boolean infoBlock;
 
 }

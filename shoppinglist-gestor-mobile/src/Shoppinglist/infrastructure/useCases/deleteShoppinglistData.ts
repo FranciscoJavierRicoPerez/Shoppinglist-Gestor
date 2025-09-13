@@ -10,7 +10,7 @@ async function InMemory(): Promise<boolean> {
 }
 
 async function Api(shoppinglistId: number): Promise<boolean> {
-  const url = import.meta.env.VITE_API_URL_COMPUTER + 'api/shoppinglist/v1/delete/' + shoppinglistId
+  const url = import.meta.env.VITE_API_URL_COMPUTER + 'api/shoppinglist/v1/' + shoppinglistId + '/delete'
   const response = await axios.delete(url);
   return response.data
 }

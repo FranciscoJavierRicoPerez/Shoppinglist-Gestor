@@ -25,12 +25,18 @@ import {
   RequestAddUnitaryPriceItemUnit,
 } from "@/ShoppinglistItem/infrastructure/models/RequestAddUnitaryPriceItemUnit";
 import { useAddItemUnitToShoppinglistItem } from "@/ShoppinglistItem/application/useAddItemUnitToShoppinglistItem";
+import { useRoute } from "vue-router";
+import { useUpdateShoppinglistTotalPrice } from "@/Shoppinglist/application/useUpdateShoppinglistTotalPrice";
 
 const { refetch: getAllItemUnitUpGroupedByPrice } =
   useGetAllItemUnitUpGroupedByPrice();
 
 const { refetch: addQuantityItemUp } = useAddQuantityToItemUp();
 const { refetch: reduceQuantityItemUp } = useReduceQuantityToItemUp();
+
+const { refetch: updateShoppinglistTotalPrice } = useUpdateShoppinglistTotalPrice();
+
+const route = useRoute();
 
 const itemsUnitsGrouped = ref<ItemUnitUpGroupedByPriceList>();
 
@@ -83,6 +89,7 @@ async function addItem() {
   if (params.idShoppinglistItem) {
     form.value.shoppinglistItemId = params.idShoppinglistItem;
     await addItemUnitToShoppinglistItem(form.value, null);
+    await updateShoppinglistTotalPrice(Number(route.params.id))
   }
 }
 
@@ -160,12 +167,12 @@ async function reduceQuantity(idShoppinglistItem: number, itemPrice: number) {
                       >Precio Unitario: {{ itemUnitUp.price }} €</IonChip
                     >
                   </IonCardContent>
-                  <div style="margin-left: 2.5rem; margin-bottom: 1rem">
+                  <!-- <div style="margin-left: 2.5rem; margin-bottom: 1rem">
                     <IonButton @click="addQuantity">+ Cantidad</IonButton>
                     <IonButton @click="reduceQuantity" color="danger"
                       >- Cantidad</IonButton
                     >
-                  </div>
+                  </div> -->
                 </IonCard>
               </IonItem>
             </IonList>

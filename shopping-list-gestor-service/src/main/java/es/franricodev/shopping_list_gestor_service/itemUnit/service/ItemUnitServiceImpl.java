@@ -111,6 +111,7 @@ public class ItemUnitServiceImpl implements ItemUnitService {
         }
 
         ItemUnit itemUnit = new ItemUnit();
+        itemUnit.setInfoBlock(false);
         itemUnit.setWpItemUnit(wpItemUnitCreated);
         itemUnit.setUpItemUnit(upItemUnitCreated);
         itemUnit.setTotalPrice(calculateItemUnitTotalPriceV2(itemUnit));
@@ -119,7 +120,6 @@ public class ItemUnitServiceImpl implements ItemUnitService {
         return itemUnit;
     }
 
-    // TODO: CREAR ALGORIDMO QUE HAGA ESTO
     @Override
     public ResponseGetAllItemUnitUpGroupedByPrice getAllItemsUnitUpGroupedByPrice(ShoppinglistItem shoppinglistItem) {
         log.info("Getting all the items units from the shoppinglist item with id {} grouped by quantity and unitary price", shoppinglistItem.getId());
@@ -139,6 +139,20 @@ public class ItemUnitServiceImpl implements ItemUnitService {
                 .itemsUpGrouped(responseItemUnitUpGroupedList)
                 .totalPrice(totalPriceCalculated)
                 .build();
+    }
+
+    @Override
+    public void deleteLogicItemUnitList(List<ItemUnit> itemUnitList) {
+        log.info("Logic deletion of the items unit from the list");
+        for (ItemUnit itemUnit : itemUnitList) {
+            itemUnit.setInfoBlock(true);
+            if (itemUnit.isWpItem()) {
+                wpItemUnitService.deleteLogicWpItemUnit(itemUnit.getWpItemUnit());
+            } else {
+                upItemUnitService.deleteLogicUpItemUnit(itemUnit.getUpItemUnit());
+            }
+            itemUnitRepository.save(itemUnit);
+        }
     }
 
     private ResponseItemUnitUpGrouped createResponseItemUnitUpGrouped(List<ItemUnit> itemUnits, Double unitaryPrice) {
@@ -188,7 +202,7 @@ public class ItemUnitServiceImpl implements ItemUnitService {
         return totalPriceCalculated;
     }
 
-    private ItemUnit addItemUnitToShoppinglistItem(ItemUnit itemUnit, ShoppinglistItem shoppinglistItem) {
+    private void addItemUnitToShoppinglistItem(ItemUnit itemUnit, ShoppinglistItem shoppinglistItem) {
         if(itemUnit != null && shoppinglistItem != null) {
             if(shoppinglistItem.getItemUnitList().isEmpty()) {
                 ArrayList<ItemUnit> itemList = new ArrayList<>();
@@ -199,9 +213,8 @@ public class ItemUnitServiceImpl implements ItemUnitService {
             }
             shoppinglistItem = shoppinglistItemService.updateShoppinglistItem(shoppinglistItem);
             itemUnit.setShoppinglistItem(shoppinglistItem);
-            itemUnit = itemUnitRepository.save(itemUnit);
+            itemUnitRepository.save(itemUnit);
         }
-        return itemUnit;
     }
 
     private void validateCorrectItemUnitCreationData(CreateItemUnitData createItemUnitData, boolean isWpItemUnit) throws ItemUnitException {
