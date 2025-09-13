@@ -2,7 +2,6 @@ package es.franricodev.shopping_list_gestor_service.shoppinglistitem.controller;
 
 import es.franricodev.shopping_list_gestor_service.itemUnit.dto.request.CreateItemUnitData;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetAllItemsUnit;
-import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestAddItemUnitUnitaryPrice;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItemV2;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseCreateShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseDeleteShoppinglistItem;
@@ -15,7 +14,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,7 +40,10 @@ public interface ShoppinglistItemController {
 
     @Operation(summary = "Add new item unit of UP type in the shoppinglist item")
     @ApiResponses({
-            @ApiResponse(responseCode = "200")
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "No Content"
+            )
     })
     @PostMapping("/v1/{idShoppinglistItem}/addItemUnitUP")
     ResponseEntity<Void> addItemUnit(
@@ -52,7 +53,10 @@ public interface ShoppinglistItemController {
 
     @Operation(summary = "Remove a item unit in the shoppinglist item from the shoppinglist")
     @ApiResponses({
-            @ApiResponse(responseCode = "200")
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "No Content"
+            )
     })
     @DeleteMapping("/v1/{idItem}/removeItemUnit/{idItemUnit}")
     ResponseEntity<?> removeItemUnit(
@@ -65,7 +69,10 @@ public interface ShoppinglistItemController {
             @ApiResponse(
                     responseCode = "200",
                     content = {
-                            @Content(schema = @Schema(implementation = ResponseGetAllItemsUnit.class), mediaType = "application/json")
+                            @Content(
+                                    schema = @Schema(implementation = ResponseGetAllItemsUnit.class),
+                                    mediaType = "application/json"
+                            )
                     })
     })
     @GetMapping("/v1/{idShoppinglistItem}/itemsUnits")
@@ -76,7 +83,8 @@ public interface ShoppinglistItemController {
     @Operation(summary = "Add new item unit of WP type in the shoppinglist item")
     @ApiResponses({
             @ApiResponse(
-                    responseCode = "200"
+                    responseCode = "204",
+                    description = "No Content"
             )
     })
     @PostMapping("/v1/{idShoppinglistItem}/addItemUnitWP")
@@ -92,19 +100,46 @@ public interface ShoppinglistItemController {
             @ApiResponse(
                     responseCode = "200",
                     content = {
-                            @Content(schema = @Schema(implementation = ResponseGetAllItemUnitUpGroupedByPrice.class), mediaType = "application/json")
+                            @Content(
+                                    schema = @Schema(implementation = ResponseGetAllItemUnitUpGroupedByPrice.class),
+                                    mediaType = "application/json"
+                            )
                     }
             )
     })
     @GetMapping("/v1/{idShoppinglistItem}/itemsUnitsUpGroupedByPrice")
-    ResponseEntity<ResponseGetAllItemUnitUpGroupedByPrice> getItemsUnitsUpGroupedByPrice(@PathVariable(name = "idShoppinglistItem") Long idShoppinglistItem);
+    ResponseEntity<ResponseGetAllItemUnitUpGroupedByPrice> getItemsUnitsUpGroupedByPrice(
+            @PathVariable(name = "idShoppinglistItem") Long idShoppinglistItem);
 
     @Operation(summary = "Returns the metadata of the items units wp")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    content = {
+                            @Content(
+                                    schema = @Schema(implementation = ResponseItemUnitWpMetadata.class),
+                                    mediaType = "application/json"
+                            )
+                    }
+            )
+    })
     @GetMapping("/v1/{idShoppinglistItem}/itemsUnitsWpInfo")
-    ResponseEntity<ResponseItemUnitWpMetadata> getItemsUnitsWpMetadata(@PathVariable(name = "idShoppinglistItem") Long idShoppinglistItem);
+    ResponseEntity<ResponseItemUnitWpMetadata> getItemsUnitsWpMetadata(
+            @PathVariable(name = "idShoppinglistItem") Long idShoppinglistItem);
 
     @Operation(summary = "Creation of the shoppinglist item metadata")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    content = {
+                            @Content(
+                                    schema = @Schema(implementation = ResponseCreateShoppinglistItem.class)
+                            )
+                    }
+            )
+    })
     @PostMapping("/v1/createShoppinglistItemMetadata")
-    ResponseEntity<ResponseCreateShoppinglistItem> createShoppinglistItemMetadata(@RequestBody RequestCreateShoppinglistItemV2 requestCreateShoppinglistItem);
+    ResponseEntity<ResponseCreateShoppinglistItem> createShoppinglistItemMetadata(
+            @RequestBody RequestCreateShoppinglistItemV2 requestCreateShoppinglistItem);
 
 }

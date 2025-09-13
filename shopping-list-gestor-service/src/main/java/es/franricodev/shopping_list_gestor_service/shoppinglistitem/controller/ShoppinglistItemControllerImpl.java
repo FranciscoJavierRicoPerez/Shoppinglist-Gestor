@@ -30,8 +30,8 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
     @Autowired
     private ShoppinglistItemService shoppinglistItemService;
 
-    @DeleteMapping("/v1/{idItem}/delete")
-    public ResponseEntity<ResponseDeleteShoppinglistItem> deleteShoppinglistItem(@PathVariable("idItem") Long idItem) {
+    @Override
+    public ResponseEntity<ResponseDeleteShoppinglistItem> deleteShoppinglistItem(Long idItem) {
         log.info("Delete the shoppinglist item with id: {}", idItem);
         ResponseDeleteShoppinglistItem responseDeleteShoppinglistItem = null;
         HttpStatus httpStatus = HttpStatus.OK;
@@ -43,8 +43,8 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
         return new ResponseEntity<>(responseDeleteShoppinglistItem, httpStatus);
     }
 
-    @PostMapping("/v1/{idShoppinglistItem}/addItemUnitUP")
-    public ResponseEntity<Void> addItemUnit(@PathVariable("idShoppinglistItem") Long idShoppinglistItem, @RequestBody CreateItemUnitData request) {
+    @Override
+    public ResponseEntity<Void> addItemUnit(Long idShoppinglistItem, CreateItemUnitData request) {
         log.info("Creating a new item unit UP for the shoppinglist item with id: {}", idShoppinglistItem);
         HttpStatus httpStatus = HttpStatus.OK;
         try {
@@ -55,8 +55,8 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
         return new ResponseEntity<>(httpStatus);
     }
 
-    @DeleteMapping("/v1/{idItem}/removeItemUnit/{idItemUnit}")
-    public ResponseEntity<?> removeItemUnit(@PathVariable("idItem") Long idItem, @PathVariable("idItemUnit") Long idItemUnit) {
+    @Override
+    public ResponseEntity<Void> removeItemUnit(@PathVariable("idItem") Long idItem, @PathVariable("idItemUnit") Long idItemUnit) {
         log.info("Removing the item unit with id: {} from the shoppinglist item with id: {}", idItem, idItemUnit);
         HttpStatus httpStatus = HttpStatus.OK;
         try {
@@ -67,7 +67,7 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
         return new ResponseEntity<>(httpStatus);
     }
 
-    @GetMapping("/v1/{idShoppinglistItem}/itemsUnits")
+    @Override
     public ResponseEntity<ResponseGetAllItemsUnit> getAllItemUnitsFromShoppinglistItem(@PathVariable("idShoppinglistItem") Long idShoppinglistItem) {
         log.info("Getting all the items units with calculate system UP of shoppinglist item with id: {}", idShoppinglistItem);
         ResponseGetAllItemsUnit responseGetAllItemsUnit = new ResponseGetAllItemsUnit();
@@ -83,7 +83,7 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
     }
 
 
-    @PostMapping("/v1/{idShoppinglistItem}/addItemUnitWP")
+    @Override
     public ResponseEntity<Void> addItemUnitWPToShoppinglistItem(@PathVariable("idShoppinglistItem") Long idShoppinglistItem, @RequestBody RequestAddItemUnitWP requestAddItemUnitWP) {
         log.info("Creating a new item unit WP for the shoppinglist item with id: {}", idShoppinglistItem);
         HttpStatus httpStatus = HttpStatus.OK;
@@ -111,7 +111,6 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
     }
 
     @Override
-    @GetMapping("/v1/{idShoppinglistItem}/itemsUnitsWpInfo")
     public ResponseEntity<ResponseItemUnitWpMetadata> getItemsUnitsWpMetadata(Long idShoppinglistItem) {
         log.info("Getting the information of a item unit wp from the shoppinglist item with id: {}", idShoppinglistItem);
         ResponseItemUnitWpMetadata response = null;
