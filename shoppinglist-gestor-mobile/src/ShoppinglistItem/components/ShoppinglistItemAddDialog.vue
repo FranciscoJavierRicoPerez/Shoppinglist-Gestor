@@ -34,10 +34,14 @@ import {
   CalculateSystem,
   defaultCalculateSystem,
 } from "@/CalculateSystem/domain/CalculateSystem";
+import { useAddShoppinglistItemToShoppinglist } from "@/Shoppinglist/application/useAddShoppinglistItemToShoppinglist";
+import { useUpdateShoppinglistTotalPrice } from "@/Shoppinglist/application/useUpdateShoppinglistTotalPrice";
 const route = useRoute();
 const { refetch: getAllProductList } = useGetAllProducts();
 const { refetch: createShoppinglistItem } = useCreateShoppinglistItem();
-defineProps({
+const { refetch: addShoppinglistItemToShoppinglist } = useAddShoppinglistItemToShoppinglist();
+const { refetch: updateShoppinglistTotalPrice } = useUpdateShoppinglistTotalPrice();
+const props = defineProps({
   openModal: {
     type: Boolean,
   },
@@ -126,6 +130,11 @@ async function addShoppinglistItem() {
         form.value.selectedCalculateSystem === 1 ? "UP" : "WP",
       calculatedPrice: response.shoppinglistItemCalculatedPrice,
     });
+    // EN ESTE PUNTO SE DEBEN DE LANZAR LOS 2 NUEVOS ENDPOINTS
+    // -> addShoppinglistItem
+    // -> updateTotalPrice
+    await addShoppinglistItemToShoppinglist(Number(route.params.id), response.idShoppinglistItemCreated)
+    await updateShoppinglistTotalPrice(Number(route.params.id))
     // Al lanzar la funcion closeModal al crear un shopping list item no se actualiza y aparece automaticamente :()
     emit("updateShoppinglistItemList");
     closeModal();

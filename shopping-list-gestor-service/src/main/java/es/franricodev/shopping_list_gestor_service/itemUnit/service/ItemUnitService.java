@@ -8,6 +8,8 @@ import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.ShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.dto.request.RequestAddItemUnitWP;
 
+import java.util.List;
+
 public interface ItemUnitService {
 
     ItemUnit createItemUnit(ShoppinglistItem shoppinglistItem, Double unitaryPrice, CalculateSystem calculateSystem);
@@ -25,4 +27,5 @@ public interface ItemUnitService {
 
     ResponseGetAllItemUnitUpGroupedByPrice getAllItemsUnitUpGroupedByPrice(ShoppinglistItem shoppinglistItem);
 
+    void deleteLogicItemUnitList(List<ItemUnit> itemUnitList);
 }

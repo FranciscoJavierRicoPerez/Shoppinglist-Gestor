@@ -4,6 +4,7 @@ import es.franricodev.shopping_list_gestor_service.calculateSystem.model.Calcula
 import es.franricodev.shopping_list_gestor_service.itemUnit.model.ItemUnit;
 import es.franricodev.shopping_list_gestor_service.product.model.Product;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -28,16 +29,20 @@ public class ShoppinglistItem implements Serializable {
     @Column(name = "ASSIGNATION_LIST_DATE")
     private Date assignationToListDate;
 
-    @ManyToMany(mappedBy = "shoppinglistItems", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "shoppinglistItems", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Set<Product> products = new HashSet<>();
 
     @Column(name = "CALCULATED_PRICE")
     private Double calculatedPrice;
 
-    @OneToMany(mappedBy = "shoppinglistItem", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "shoppinglistItem", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<ItemUnit> itemUnitList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "calculate_system_id")
     private CalculateSystem calculateSystem;
+
+    @NotNull
+    @Column(name = "INFO_BLOCK")
+    private Boolean infoBlock;
 }

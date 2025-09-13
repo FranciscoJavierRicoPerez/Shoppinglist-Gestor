@@ -2,6 +2,7 @@ package es.franricodev.shopping_list_gestor_service.upItemUnit.model;
 
 import es.franricodev.shopping_list_gestor_service.itemUnit.model.ItemUnit;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
@@ -18,6 +19,10 @@ public class UpItemUnit {
     @Column(name = "UNITY_PRICE")
     private Double unityPrice;
 
-    @OneToOne(mappedBy = "upItemUnit", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @NotNull
+    @Column(name = "INFO_BLOCK")
+    private Boolean infoBlock;
+
+    @OneToOne(mappedBy = "upItemUnit", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private ItemUnit itemUnit;
 }

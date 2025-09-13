@@ -15,4 +15,6 @@ public interface ShoppinglistRepository extends JpaRepository<Shoppinglist, Long
 
     List<Shoppinglist> findAll(Specification<Shoppinglist> shoppinglistSpecification);
 
+    Optional<List<Shoppinglist>> findAllByInfoBlockFalse();
+
 }

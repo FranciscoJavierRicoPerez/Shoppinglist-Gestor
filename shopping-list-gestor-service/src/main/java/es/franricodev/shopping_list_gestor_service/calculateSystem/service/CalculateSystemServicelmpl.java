@@ -56,7 +56,6 @@ public class CalculateSystemServicelmpl implements CalculateSystemService{
         return calculateSystemMapper.calculateSystemListToCalculateSystemDTOList(calculateSystemRepository.findAll());
     }
 
-    // *********************** V2 **************************
     @Override
     public CalculateSystem findCalculateSystemById(Long id) throws CalculateSystemException {
         return calculateSystemRepository.findById(id).orElseThrow(() -> new CalculateSystemException(CalculateSystemError.CALCULATE_SYSTEM_NOT_FOUND));

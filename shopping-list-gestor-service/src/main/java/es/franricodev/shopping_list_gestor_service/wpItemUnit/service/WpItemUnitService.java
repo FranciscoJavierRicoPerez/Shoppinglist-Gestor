@@ -8,4 +8,5 @@ public interface WpItemUnitService {
 
     WpItemUnit updateWpItemUnit(WpItemUnit wpItemUnit);
 
+    void deleteLogicWpItemUnit(WpItemUnit wpItemUnit);
 }
