@@ -18,7 +18,7 @@ import {
 } from "@ionic/vue";
 import Header from "@/Shared/components/Header.vue";
 import Footer from "@/Shared/components/Footer.vue";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import {
   defaultShoppinglistDetails,
   type ShoppinglistDetails,
@@ -30,14 +30,15 @@ import ShoppinglistItemAddDialog from "@/ShoppinglistItem/components/Shoppinglis
 import { ShoppinglistItemMetadata } from "@/ShoppinglistItem/domain/ShoppinglistItemMetadata";
 import Information from "@/Shared/components/Information.vue";
 import { useShoppinglistItemStore } from "@/ShoppinglistItem/stores/shoppinglistItemStore";
+import { useShoppinglistDetailsStore } from "@/Shoppinglist/stores/shoppinglistDetailsStore";
 const { refetch: getShoppinglistDetails } = useGetShoppinglistDetails();
 
 const shoppinglistDetails = ref<ShoppinglistDetails>({
   ...defaultShoppinglistDetails,
 });
 
-const store = useShoppinglistItemStore()
-
+const store = useShoppinglistItemStore();
+const shoppinglistDetailsStore = useShoppinglistDetailsStore();
 const actualShoppinglistItemsVisible = ref<ShoppinglistItemMetadata[]>([]);
 const route = useRoute();
 
@@ -47,7 +48,8 @@ onMounted(async () => {
   // We have to obtain the object ShoppinglistDetails
   const param = Number(route.params.id);
   shoppinglistDetails.value = await getShoppinglistDetails(param);
-  store.setShoppinglistMetadataArray(shoppinglistDetails.value.items)
+  shoppinglistDetailsStore.setShoppinglistDetails(shoppinglistDetails.value);
+  store.setShoppinglistMetadataArray(shoppinglistDetails.value.items);
   updateShoppinglistItemsElementsVisible();
 });
 
@@ -59,6 +61,10 @@ const ionInfinite = (event: InfiniteScrollCustomEvent) => {
   }, 500);
 };
 
+function updateTotalPrice() {
+  shoppinglistDetailsStore.updateTotalPrice();
+}
+
 function updateShoppinglistItemsElementsVisible() {
   const start = actualShoppinglistItemsVisible.value.length + 1;
   for (let i = 0; i < 50; i++) {
@@ -67,7 +73,6 @@ function updateShoppinglistItemsElementsVisible() {
     );
   }
 }
-
 </script>
 <template>
   <IonPage>
@@ -85,7 +90,7 @@ function updateShoppinglistItemsElementsVisible() {
               <IonChip color="success">Archivado</IonChip>
             </div>
             <IonChip color="danger"
-              >Precio total: {{ shoppinglistDetails.totalPrice }}</IonChip
+              >Precio total: {{ shoppinglistDetailsStore.totalPrice }}</IonChip
             >
           </IonCardTitle>
           <IonCardSubtitle>
@@ -119,9 +124,10 @@ function updateShoppinglistItemsElementsVisible() {
         </IonFabButton>
       </IonFab>
       <ShoppinglistItemAddDialog
-        @update-shoppinglist-item-list="updateShoppinglistItemsElementsVisible"
         :open-modal="openModal"
+        @update-shoppinglist-item-list="updateShoppinglistItemsElementsVisible"
         @update-modal-open-value="openModal = !openModal"
+        @update-total-price="updateTotalPrice"
       ></ShoppinglistItemAddDialog>
     </IonContent>
   </IonPage>

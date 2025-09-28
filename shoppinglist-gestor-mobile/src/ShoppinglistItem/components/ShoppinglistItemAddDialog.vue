@@ -39,8 +39,10 @@ import { useUpdateShoppinglistTotalPrice } from "@/Shoppinglist/application/useU
 const route = useRoute();
 const { refetch: getAllProductList } = useGetAllProducts();
 const { refetch: createShoppinglistItem } = useCreateShoppinglistItem();
-const { refetch: addShoppinglistItemToShoppinglist } = useAddShoppinglistItemToShoppinglist();
-const { refetch: updateShoppinglistTotalPrice } = useUpdateShoppinglistTotalPrice();
+const { refetch: addShoppinglistItemToShoppinglist } =
+  useAddShoppinglistItemToShoppinglist();
+const { refetch: updateShoppinglistTotalPrice } =
+  useUpdateShoppinglistTotalPrice();
 const props = defineProps({
   openModal: {
     type: Boolean,
@@ -58,6 +60,7 @@ const form = ref<ResquestNewShoppinglistItem>({
 const emit = defineEmits([
   "updateModalOpenValue",
   "updateShoppinglistItemList",
+  "updateTotalPrice",
 ]);
 
 const productSelectorList = ref<Product[]>([]);
@@ -111,7 +114,7 @@ async function addShoppinglistItem() {
     (form.value.selectedCalculateSystem === 2 &&
       form.value.createItemUnitData.createWpItemUnitData.priceKg !== -1 &&
       form.value.createItemUnitData.createWpItemUnitData.weight !== -1)); */
-  let createItemUnit : boolean = true; // TODO: ASIGNAR LOGICA DE ARRIBA
+  let createItemUnit: boolean = true; // TODO: ASIGNAR LOGICA DE ARRIBA
   form.value.createItemUnitData.createItemUnit = createItemUnit;
   let response: ResponseNewShoppinglistItem = await createShoppinglistItem(
     form.value,
@@ -133,10 +136,14 @@ async function addShoppinglistItem() {
     // EN ESTE PUNTO SE DEBEN DE LANZAR LOS 2 NUEVOS ENDPOINTS
     // -> addShoppinglistItem
     // -> updateTotalPrice
-    await addShoppinglistItemToShoppinglist(Number(route.params.id), response.idShoppinglistItemCreated)
-    await updateShoppinglistTotalPrice(Number(route.params.id))
+    await addShoppinglistItemToShoppinglist(
+      Number(route.params.id),
+      response.idShoppinglistItemCreated
+    );
+    await updateShoppinglistTotalPrice(Number(route.params.id));
     // Al lanzar la funcion closeModal al crear un shopping list item no se actualiza y aparece automaticamente :()
     emit("updateShoppinglistItemList");
+    emit("updateTotalPrice"); // El problema viene de esta llamada
     closeModal();
   }
 }

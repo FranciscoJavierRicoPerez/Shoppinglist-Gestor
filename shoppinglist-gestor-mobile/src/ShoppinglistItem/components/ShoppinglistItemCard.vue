@@ -22,7 +22,8 @@ import { useUpdateShoppinglistTotalPrice } from "@/Shoppinglist/application/useU
 import { useRoute } from "vue-router";
 
 const { refetch: deleteShoppinglistItem } = useDeleteShoppinglistItem();
-const { refetch: updateShoppinglistTotalPrice } = useUpdateShoppinglistTotalPrice();
+const { refetch: updateShoppinglistTotalPrice } =
+  useUpdateShoppinglistTotalPrice();
 
 const route = useRoute();
 
@@ -45,7 +46,7 @@ onMounted(() => {
 async function removeShoppinglistItem(idItem: number) {
   let response = await deleteShoppinglistItem(idItem);
   if (response.delete) {
-    await updateShoppinglistTotalPrice(Number(route.params.id))
+    await updateShoppinglistTotalPrice(Number(route.params.id));
     store.removeShoppinglistItemMetadata(idItem);
     list.value = store.shoppinglistItemMetadataArray;
   }
@@ -92,9 +93,6 @@ function getCalculteSystemCode(data: ShoppinglistItemMetadata | any): string {
             ></ItemUnitUpInfoDialog>
           </div>
           <div v-else>
-            <!-- <AddItemWeightPopover
-              :idShoppinglistItem="shoppinglistItem.id"
-            ></AddItemWeightPopover> -->
             <ItemUnitWpInfoDialog
               :idShoppinglistItem="shoppinglistItem.id"
             ></ItemUnitWpInfoDialog>

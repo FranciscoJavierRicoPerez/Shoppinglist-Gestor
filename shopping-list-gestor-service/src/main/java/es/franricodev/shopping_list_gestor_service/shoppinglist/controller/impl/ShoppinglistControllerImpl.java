@@ -1,14 +1,12 @@
-package es.franricodev.shopping_list_gestor_service.shoppinglist.controller;
+package es.franricodev.shopping_list_gestor_service.shoppinglist.controller.impl;
 
+import es.franricodev.shopping_list_gestor_service.shoppinglist.controller.ShoppinglistController;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.*;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.service.ShoppinglistService;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.exception.ShoppinglistItemException;
-import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +19,7 @@ import java.util.List;
 @CrossOrigin(origins = {"http://localhost:8100/", "http://192.168.18.7:9000/", "*"})
 @RestController
 @RequestMapping("/api/shoppinglist")
-public class ShoppinglistControllerImpl implements ShoppinglistController{
+public class ShoppinglistControllerImpl implements ShoppinglistController {
 
     @Autowired
     private ShoppinglistService shoppinglistService;
