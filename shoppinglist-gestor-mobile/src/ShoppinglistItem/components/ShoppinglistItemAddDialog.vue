@@ -36,11 +36,14 @@ import {
 } from "@/CalculateSystem/domain/CalculateSystem";
 import { useAddShoppinglistItemToShoppinglist } from "@/Shoppinglist/application/useAddShoppinglistItemToShoppinglist";
 import { useUpdateShoppinglistTotalPrice } from "@/Shoppinglist/application/useUpdateShoppinglistTotalPrice";
+import { useShoppinglistDetailsViewStore } from "@/Shoppinglist/stores/shoppinglistDetailsViewStore";
 const route = useRoute();
 const { refetch: getAllProductList } = useGetAllProducts();
 const { refetch: createShoppinglistItem } = useCreateShoppinglistItem();
-const { refetch: addShoppinglistItemToShoppinglist } = useAddShoppinglistItemToShoppinglist();
-const { refetch: updateShoppinglistTotalPrice } = useUpdateShoppinglistTotalPrice();
+const { refetch: addShoppinglistItemToShoppinglist } =
+  useAddShoppinglistItemToShoppinglist();
+const { refetch: updateShoppinglistTotalPrice } =
+  useUpdateShoppinglistTotalPrice();
 const props = defineProps({
   openModal: {
     type: Boolean,
@@ -49,7 +52,9 @@ const props = defineProps({
 
 const { refetch: getAllCalculateSystems } = useGetAllCalculateSystems();
 
-const store = useShoppinglistItemStore();
+// const store = useShoppinglistItemStore();
+
+const store = useShoppinglistDetailsViewStore();
 
 const form = ref<ResquestNewShoppinglistItem>({
   ...defaultRequestNewShoppinglistItem,
@@ -58,6 +63,7 @@ const form = ref<ResquestNewShoppinglistItem>({
 const emit = defineEmits([
   "updateModalOpenValue",
   "updateShoppinglistItemList",
+  "updateTotalPrice",
 ]);
 
 const productSelectorList = ref<Product[]>([]);
@@ -111,21 +117,21 @@ async function addShoppinglistItem() {
     (form.value.selectedCalculateSystem === 2 &&
       form.value.createItemUnitData.createWpItemUnitData.priceKg !== -1 &&
       form.value.createItemUnitData.createWpItemUnitData.weight !== -1)); */
-  let createItemUnit : boolean = true; // TODO: ASIGNAR LOGICA DE ARRIBA
+  let createItemUnit: boolean = true; // TODO: ASIGNAR LOGICA DE ARRIBA
   form.value.createItemUnitData.createItemUnit = createItemUnit;
   let response: ResponseNewShoppinglistItem = await createShoppinglistItem(
     form.value,
     Number(route.params.id)
   );
   if (response.created) {
-    let actualDate = new Date();
     store.addShoppinglistItemMetadata({
       id: response.idShoppinglistItemCreated,
-      assignationToListDate: actualDate.toString(),
+      assignationToListDate: response.creationDate,
       name:
-        form.value.productInfo.productName !== undefined
+        form.value.productInfo.productName !== undefined ||
+        form.value.productInfo.productName === ""
           ? form.value.productInfo.productName
-          : "",
+          : "Macarrones",
       calculateSystemCode:
         form.value.selectedCalculateSystem === 1 ? "UP" : "WP",
       calculatedPrice: response.shoppinglistItemCalculatedPrice,
@@ -133,10 +139,15 @@ async function addShoppinglistItem() {
     // EN ESTE PUNTO SE DEBEN DE LANZAR LOS 2 NUEVOS ENDPOINTS
     // -> addShoppinglistItem
     // -> updateTotalPrice
-    await addShoppinglistItemToShoppinglist(Number(route.params.id), response.idShoppinglistItemCreated)
-    await updateShoppinglistTotalPrice(Number(route.params.id))
+    await addShoppinglistItemToShoppinglist(
+      Number(route.params.id),
+      response.idShoppinglistItemCreated
+    );
+    await updateShoppinglistTotalPrice(Number(route.params.id));
     // Al lanzar la funcion closeModal al crear un shopping list item no se actualiza y aparece automaticamente :()
-    emit("updateShoppinglistItemList");
+    // emit("updateShoppinglistItemList");
+    // emit("updateTotalPrice"); // El problema viene de esta llamada
+    store.setTotalPrice(store.shoppinglistDetailsViewItems);
     closeModal();
   }
 }

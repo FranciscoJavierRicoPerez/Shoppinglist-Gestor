@@ -12,6 +12,7 @@ import es.franricodev.shopping_list_gestor_service.itemUnit.service.ItemUnitServ
 import es.franricodev.shopping_list_gestor_service.product.model.Product;
 import es.franricodev.shopping_list_gestor_service.product.service.ProductService;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.ShoppinglistItemMetadataDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItemV2;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseCreateShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseDeleteShoppinglistItem;
@@ -22,6 +23,7 @@ import es.franricodev.shopping_list_gestor_service.shoppinglistitem.mapper.Shopp
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.messages.ShoppinglistItemMessagesError;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.ShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.repository.ShoppinglistItemRepository;
+import es.franricodev.shopping_list_gestor_service.utils.DateUtils;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.dto.request.RequestAddItemUnitWP;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.model.WpItemUnit;
 import lombok.extern.slf4j.Slf4j;
@@ -250,10 +252,31 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
                     .created(true)
                     .idShoppinglistItemCreated(shoppinglistItem.getId())
                     .shoppinglistItemCalculatedPrice(shoppinglistItem.getCalculatedPrice())
+                    .creationDate(DateUtils.formatDate(shoppinglistItem.getAssignationToListDate()))
                     .build();
         } catch (CalculateSystemException | ItemUnitException e) {
             throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_CREATE_ERR);
         }
+    }
+
+    @Override
+    public List<ShoppinglistItemMetadataDTO> getShoppinglistItemMetadataDTO(Long idShoppinglist) throws ShoppinglistItemException {
+        log.info("Building a list with the metainformation of the shoppinglist items of the shoppinglist with id: {}", idShoppinglist);
+        List<ShoppinglistItem> shoppinglistItems =
+                shoppinglistItemRepository.findAllShoppinglistItemByShoppinglistIdAndInfoBlockFalse(idShoppinglist).orElseThrow(
+                        () -> new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_NOT_FOUND_ERR)
+                );
+        return shoppinglistItems.stream().map(this::buildShoppinglistItemMetadataDTO).toList();
+    }
+
+    private ShoppinglistItemMetadataDTO buildShoppinglistItemMetadataDTO(ShoppinglistItem shoppinglistItem) {
+        return ShoppinglistItemMetadataDTO.builder()
+                .id(shoppinglistItem.getId())
+                .name(shoppinglistItem.getName())
+                .assignationToListDate(DateUtils.formatDate(shoppinglistItem.getAssignationToListDate()))
+                .calculatedPrice(shoppinglistItem.getCalculatedPrice())
+                .calculateSystemCode(shoppinglistItem.getCalculateSystem().getCode())
+                .build();
     }
 
     private double getShoppinglistItemCalculatedPrice(ShoppinglistItem shoppinglistItem) {

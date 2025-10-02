@@ -2,6 +2,7 @@ import { CalculateSystem } from "@/CalculateSystem/domain/CalculateSystem";
 import { ResponseCalculateSystems } from "../models/ResponseCalculateSystems";
 import axios from "axios";
 import { createCalculateSystemArray } from "@/CalculateSystem/infrastructure/services/calculateSystemService";
+import responseGetAllCalculateSystems from '@/CalculateSystem/infrastructure/mocks/responsegGetAllCalculateSystems.json'
 
 async function getAllCalculateSystems(): Promise<CalculateSystem[]> {
   const response: ResponseCalculateSystems[] =
@@ -19,7 +20,7 @@ async function Api(): Promise<ResponseCalculateSystems[]> {
 }
 
 async function InMemory(): Promise<ResponseCalculateSystems[]> {
-  return [];
+  return responseGetAllCalculateSystems as ResponseCalculateSystems[];
 }
 
 export { getAllCalculateSystems };
