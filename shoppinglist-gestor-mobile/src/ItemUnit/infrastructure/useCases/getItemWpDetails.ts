@@ -11,10 +11,20 @@ async function Api(
   return (await axios.get(url)).data;
 }
 
-async function InMemory() {}
+async function InMemory() {
+  return {
+    priceKg: 1,
+    weight: 1,
+    calculatedPrice: 1,
+  };
+}
 
-async function getItemWpDetails(idShoppinglistItem: number) {
-  return await Api(idShoppinglistItem);
+async function getItemWpDetails(
+  idShoppinglistItem: number
+): Promise<ResponseItemUnitWpMetadata> {
+  return import.meta.env.VITE_DATA_ACCESS === "LOCAL"
+    ? await InMemory()
+    : await Api(idShoppinglistItem);
 }
 
 export { getItemWpDetails };

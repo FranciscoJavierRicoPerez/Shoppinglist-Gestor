@@ -10,5 +10,6 @@ public class ResponseCreateShoppinglistItem {
     private boolean created; // Indicates if the item has been created correctly
     private Double shoppinglistItemCalculatedPrice; // SLI calculated price
     private Double totalPrice; // New shoppinglist price value
+    private String creationDate;
 
 }

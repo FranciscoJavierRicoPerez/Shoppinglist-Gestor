@@ -1,5 +1,6 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglist.controller;
 
+import es.franricodev.shopping_list_gestor_service.shoppinglist.controller.impl.ShoppinglistControllerImpl;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.*;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.service.ShoppinglistService;
