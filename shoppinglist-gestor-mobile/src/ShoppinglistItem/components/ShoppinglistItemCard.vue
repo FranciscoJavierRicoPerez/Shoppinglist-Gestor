@@ -37,11 +37,9 @@ const props = defineProps({
 
 const list = ref<ShoppinglistItemMetadata[]>();
 
-// const store = useShoppinglistItemStore();
 const store = useShoppinglistDetailsViewStore();
 
 onMounted(() => {
-  // store.setShoppinglistMetadataArray(props.shoppinglistItemList);
   list.value = store.shoppinglistDetailsViewItems;
   console.log(list.value)
 });
