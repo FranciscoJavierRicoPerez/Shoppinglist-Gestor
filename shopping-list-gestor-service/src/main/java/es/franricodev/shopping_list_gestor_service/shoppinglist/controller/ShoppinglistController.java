@@ -14,10 +14,11 @@ import java.util.List;
 
 @Tag(
         name = "Shoppinglist Controller API Documentation",
-        description = "Management of the operations related with the shoppinglist"
+        description = "Management of the database modifications operations (Create, Update, Delete) related with the shoppinglist entity"
 )
 public interface ShoppinglistController {
 
+    @Deprecated
     @Operation(summary = "Get all shoppinglist in the database")
     @GetMapping("/v1")
     ResponseEntity<List<ShoppinglistDTO>> getAllShoppinglist();
@@ -34,6 +35,7 @@ public interface ShoppinglistController {
     @PutMapping("/v1/update")
     ResponseEntity<ShoppinglistDTO> updateShoppinglist(@RequestBody RequestUpdateShoppinglistDTO request);
 
+    @Deprecated
     @Operation(summary = "Provides the information on all shoppinglists whose data is consistent with the filters")
     @GetMapping("/v1/filter")
     ResponseEntity<List<ShoppinglistDTO>> filterShoppinglist(

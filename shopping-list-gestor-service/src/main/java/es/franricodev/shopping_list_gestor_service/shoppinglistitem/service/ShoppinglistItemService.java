@@ -4,6 +4,7 @@ import es.franricodev.shopping_list_gestor_service.itemUnit.dto.ItemUnitDTO;
 import es.franricodev.shopping_list_gestor_service.itemUnit.dto.request.CreateItemUnitData;
 import es.franricodev.shopping_list_gestor_service.itemUnit.exception.ItemUnitException;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.ShoppinglistItemMetadataDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItemV2;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseCreateShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseDeleteShoppinglistItem;
@@ -40,6 +41,8 @@ public interface ShoppinglistItemService {
     ShoppinglistItem findShoppinglistItemById(Long idShoppinglistItem) throws ShoppinglistItemException;
 
     ResponseCreateShoppinglistItem createShoppinglistItemMetadata(RequestCreateShoppinglistItemV2 requestCreateShoppinglistItem) throws ShoppinglistItemException;
+
+    List<ShoppinglistItemMetadataDTO> getShoppinglistItemMetadataDTO(Long idShoppinglist) throws ShoppinglistItemException;
 
 }
 
