@@ -15,7 +15,8 @@ async function InMemory() : Promise<ResponseNewShoppinglistItem> {
     idShoppinglistItemCreated: 1,
     created: true,
     shoppinglistItemCalculatedPrice: 1,
-    totalPrice: 1
+    totalPrice: 1,
+    creationDate: "02/10/2025"
   }
 }
 

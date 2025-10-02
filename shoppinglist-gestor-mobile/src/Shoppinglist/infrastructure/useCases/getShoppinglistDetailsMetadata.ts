@@ -9,7 +9,7 @@ async function Api(
 ): Promise<ResponseGetShoppinglistDetailsMetadata> {
   const url =
     import.meta.env.VITE_API_URL_COMPUTER +
-    "api/shoppinglist/v1/" +
+    "api/shoppinglistview/v1/" +
     idShoppinglist +
     "/details";
   const response = await axios.get(url);

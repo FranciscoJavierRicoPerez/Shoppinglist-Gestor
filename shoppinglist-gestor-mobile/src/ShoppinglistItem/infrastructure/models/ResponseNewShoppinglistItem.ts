@@ -3,4 +3,5 @@ export interface ResponseNewShoppinglistItem {
     created: boolean
     shoppinglistItemCalculatedPrice: number
     totalPrice: number
+    creationDate: string
 }

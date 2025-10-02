@@ -252,6 +252,7 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
                     .created(true)
                     .idShoppinglistItemCreated(shoppinglistItem.getId())
                     .shoppinglistItemCalculatedPrice(shoppinglistItem.getCalculatedPrice())
+                    .creationDate(DateUtils.formatDate(shoppinglistItem.getAssignationToListDate()))
                     .build();
         } catch (CalculateSystemException | ItemUnitException e) {
             throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_CREATE_ERR);

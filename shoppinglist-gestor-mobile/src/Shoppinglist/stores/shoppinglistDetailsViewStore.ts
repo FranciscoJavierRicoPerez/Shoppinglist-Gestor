@@ -37,6 +37,10 @@ export const useShoppinglistDetailsViewStore = defineStore(
       );
     }
 
+    function addShoppinglistItemMetadata(data: ShoppinglistItemMetadata) {
+      shoppinglistDetailsViewItems.value.push(data);
+    }
+
     return {
       shoppinglistDetailsView,
       shoppinglistDetailsViewItems,
@@ -44,7 +48,8 @@ export const useShoppinglistDetailsViewStore = defineStore(
       setShoppinglistDetailsView,
       setShoppinglistDetailsViewItems,
       removeShoppinglistItemMetadata,
-      setTotalPrice
+      setTotalPrice,
+      addShoppinglistItemMetadata
     };
   }
 );

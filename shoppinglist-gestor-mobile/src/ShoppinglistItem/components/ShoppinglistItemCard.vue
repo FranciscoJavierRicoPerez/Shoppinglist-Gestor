@@ -41,7 +41,7 @@ const store = useShoppinglistDetailsViewStore();
 
 onMounted(() => {
   list.value = store.shoppinglistDetailsViewItems;
-  console.log(list.value)
+  console.log(list.value);
 });
 
 async function removeShoppinglistItem(idItem: number) {
@@ -49,7 +49,7 @@ async function removeShoppinglistItem(idItem: number) {
   if (response.delete) {
     await updateShoppinglistTotalPrice(Number(route.params.id));
     store.removeShoppinglistItemMetadata(idItem);
-    store.setTotalPrice(store.shoppinglistDetailsViewItems)
+    store.setTotalPrice(store.shoppinglistDetailsViewItems);
     list.value = store.shoppinglistDetailsViewItems;
   }
 }

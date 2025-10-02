@@ -36,6 +36,7 @@ import {
 } from "@/CalculateSystem/domain/CalculateSystem";
 import { useAddShoppinglistItemToShoppinglist } from "@/Shoppinglist/application/useAddShoppinglistItemToShoppinglist";
 import { useUpdateShoppinglistTotalPrice } from "@/Shoppinglist/application/useUpdateShoppinglistTotalPrice";
+import { useShoppinglistDetailsViewStore } from "@/Shoppinglist/stores/shoppinglistDetailsViewStore";
 const route = useRoute();
 const { refetch: getAllProductList } = useGetAllProducts();
 const { refetch: createShoppinglistItem } = useCreateShoppinglistItem();
@@ -51,7 +52,9 @@ const props = defineProps({
 
 const { refetch: getAllCalculateSystems } = useGetAllCalculateSystems();
 
-const store = useShoppinglistItemStore();
+// const store = useShoppinglistItemStore();
+
+const store = useShoppinglistDetailsViewStore();
 
 const form = ref<ResquestNewShoppinglistItem>({
   ...defaultRequestNewShoppinglistItem,
@@ -121,14 +124,14 @@ async function addShoppinglistItem() {
     Number(route.params.id)
   );
   if (response.created) {
-    let actualDate = new Date();
     store.addShoppinglistItemMetadata({
       id: response.idShoppinglistItemCreated,
-      assignationToListDate: actualDate.toString(),
+      assignationToListDate: response.creationDate,
       name:
-        form.value.productInfo.productName !== undefined
+        form.value.productInfo.productName !== undefined ||
+        form.value.productInfo.productName === ""
           ? form.value.productInfo.productName
-          : "",
+          : "Macarrones",
       calculateSystemCode:
         form.value.selectedCalculateSystem === 1 ? "UP" : "WP",
       calculatedPrice: response.shoppinglistItemCalculatedPrice,
@@ -142,8 +145,9 @@ async function addShoppinglistItem() {
     );
     await updateShoppinglistTotalPrice(Number(route.params.id));
     // Al lanzar la funcion closeModal al crear un shopping list item no se actualiza y aparece automaticamente :()
-    emit("updateShoppinglistItemList");
-    emit("updateTotalPrice"); // El problema viene de esta llamada
+    // emit("updateShoppinglistItemList");
+    // emit("updateTotalPrice"); // El problema viene de esta llamada
+    store.setTotalPrice(store.shoppinglistDetailsViewItems);
     closeModal();
   }
 }
