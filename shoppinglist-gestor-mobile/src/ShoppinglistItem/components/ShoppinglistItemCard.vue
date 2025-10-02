@@ -20,6 +20,7 @@ import ItemUnitUpInfoDialog from "@/ItemUnit/components/ItemUnitUpInfoDialog.vue
 import ItemUnitWpInfoDialog from "@/ItemUnit/components/ItemUnitWpInfoDialog.vue";
 import { useUpdateShoppinglistTotalPrice } from "@/Shoppinglist/application/useUpdateShoppinglistTotalPrice";
 import { useRoute } from "vue-router";
+import { useShoppinglistDetailsViewStore } from "@/Shoppinglist/stores/shoppinglistDetailsViewStore";
 
 const { refetch: deleteShoppinglistItem } = useDeleteShoppinglistItem();
 const { refetch: updateShoppinglistTotalPrice } =
@@ -36,11 +37,13 @@ const props = defineProps({
 
 const list = ref<ShoppinglistItemMetadata[]>();
 
-const store = useShoppinglistItemStore();
+// const store = useShoppinglistItemStore();
+const store = useShoppinglistDetailsViewStore();
 
 onMounted(() => {
-  store.setShoppinglistMetadataArray(props.shoppinglistItemList);
-  list.value = store.shoppinglistItemMetadataArray;
+  // store.setShoppinglistMetadataArray(props.shoppinglistItemList);
+  list.value = store.shoppinglistDetailsViewItems;
+  console.log(list.value)
 });
 
 async function removeShoppinglistItem(idItem: number) {
@@ -48,7 +51,8 @@ async function removeShoppinglistItem(idItem: number) {
   if (response.delete) {
     await updateShoppinglistTotalPrice(Number(route.params.id));
     store.removeShoppinglistItemMetadata(idItem);
-    list.value = store.shoppinglistItemMetadataArray;
+    store.setTotalPrice(store.shoppinglistDetailsViewItems)
+    list.value = store.shoppinglistDetailsViewItems;
   }
 }
 

@@ -48,6 +48,6 @@ public interface ShoppinglistViewController {
                     )
             }
     )
-    @GetMapping("v1/{id}")
+    @GetMapping("v1/{id}/details")
     ResponseEntity<ResponseGetShoppinglistDetailsMetadata> getShoppinglistDetailsMetadata(@PathVariable("id") Long idShoppinglist);
 }

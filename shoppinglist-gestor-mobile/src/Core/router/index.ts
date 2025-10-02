@@ -24,7 +24,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/shoppinglist/:id',
     name: 'ShoppinglistDetailsView',
-    component: () => import('@/Shoppinglist/views/ShoppinglistDetailView.vue')
+    component: () => import('@/Shoppinglist/views/ShoppinglistDetailViewV2.vue')
   }
 ]
 

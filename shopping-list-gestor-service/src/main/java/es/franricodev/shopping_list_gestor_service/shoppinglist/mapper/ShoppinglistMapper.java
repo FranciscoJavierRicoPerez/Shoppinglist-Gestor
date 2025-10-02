@@ -6,6 +6,8 @@ import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.Shoppinglist
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.ShoppinglistDetailsDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.model.Shoppinglist;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.mapper.ShoppinglistItemMapper;
+import es.franricodev.shopping_list_gestor_service.utils.DateUtils;
+import jdk.jfr.Name;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -29,7 +31,7 @@ public interface ShoppinglistMapper {
     List<Shoppinglist> toEntityList(List<ShoppinglistDTO> shoppinglistDTOS);
 
     @Mapping(target = "creationDate", expression = "java(new java.util.Date())")
-    @Mapping(target = "code", expression = "java(request.getCode().toString() + new java.util.Date().toString())")
+    @Mapping(target = "code", qualifiedByName = "generateShoppinglistCode")
     @Mapping(target = "infoBlock", defaultValue = "false")
     Shoppinglist createShoppinglist(RequestCreateShoppinglistDTO request);
 
@@ -37,9 +39,10 @@ public interface ShoppinglistMapper {
 
     ShoppinglistDetailsDTO shoppinglistToShoppinglistDetailsDTO(Shoppinglist shoppinglist);
 
-    /* @Named("generateShoppinglistCode")
-    public static String generateShoppinglistCode(String code, Integer shoppinglistCount) {
-        return code + new Date().getTime() + shoppinglistCount;
-    } */
+    @Named("generateShoppinglistCode")
+    static String generateShoppinglistCode(String code) {
+        StringBuilder stringBuilder = new StringBuilder();
+        return stringBuilder.append("SL-").append(code).append(DateUtils.formatDate(new Date())).toString();
+    }
 
 }

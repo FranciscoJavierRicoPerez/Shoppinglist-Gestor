@@ -14,7 +14,9 @@ async function Api(
 async function InMemory() {}
 
 async function getItemWpDetails(idShoppinglistItem: number) {
-  return await Api(idShoppinglistItem);
+  import.meta.env.VITE_DATA_ACCESS === "LOCAL"
+      ? await InMemory()
+      : await Api(idShoppinglistItem);
 }
 
 export { getItemWpDetails };
