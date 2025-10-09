@@ -19,9 +19,12 @@ import { onMounted, ref, watch } from "vue";
 import { useGetItemWpDetails } from "../application/useGetItemWpDetails";
 import { useRoute } from "vue-router";
 import { useUpdateShoppinglistTotalPrice } from "@/Shoppinglist/application/useUpdateShoppinglistTotalPrice";
+import { useShoppinglistDetailsViewStore } from "@/Shoppinglist/stores/shoppinglistDetailsViewStore";
 
 const { refetch: updateShoppinglistTotalPrice } =
   useUpdateShoppinglistTotalPrice();
+
+const store = useShoppinglistDetailsViewStore();
 
 const route = useRoute();
 
@@ -64,6 +67,10 @@ watch(form.value, (newForm) => {
 async function addItem() {
   if (params.idShoppinglistItem) {
     form.value.shoppinglistItemId = params.idShoppinglistItem;
+    store.updateTotalPriceWithWPItemValue(
+      itemWpMetadata.value?.calculatedPrice,
+      calculatedPriceResume.value
+    );
     await addItemUnitToShoppinglistItem(null, form.value, false);
     await updateShoppinglistTotalPrice(Number(route.params.id));
   }
@@ -82,7 +89,7 @@ async function addItem() {
       <div id="addNewItemWpForm">
         <IonCard>
           <IonCardHeader>
-            <IonCardTitle>Nuevo Item Unit Wp</IonCardTitle>
+            <IonCardTitle>Precio Kg/€</IonCardTitle>
           </IonCardHeader>
           <IonCardContent>
             <IonItem>
@@ -115,11 +122,10 @@ async function addItem() {
             <IonCardTitle>Detalle</IonCardTitle>
           </IonCardHeader>
           <IonCardContent>
+            <IonChip>Precio Total: {{ store.totalPrice }}</IonChip>
             <IonChip>Peso: {{ weightResume }} Kg</IonChip>
             <IonChip>Precio: {{ priceKgResume }} Kg/€</IonChip>
-            <IonChip
-              >Precio calculado: {{ calculatedPriceResume }}</IonChip
-            >
+            <IonChip>Precio calculado: {{ calculatedPriceResume }} €</IonChip>
           </IonCardContent>
         </IonCard>
       </div>

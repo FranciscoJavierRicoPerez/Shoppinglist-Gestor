@@ -37,6 +37,16 @@ export const useShoppinglistDetailsViewStore = defineStore(
       );
     }
 
+    function updateTotalPriceWithWPItemValue(
+      oldItemWpCalculatedPrice: number | undefined,
+      newItemWpCalculatedPrice: number
+    ) {
+      if (oldItemWpCalculatedPrice) {
+        totalPrice.value = totalPrice.value - oldItemWpCalculatedPrice;
+        totalPrice.value = totalPrice.value + newItemWpCalculatedPrice;
+      }
+    }
+
     function addShoppinglistItemMetadata(data: ShoppinglistItemMetadata) {
       shoppinglistDetailsViewItems.value.push(data);
     }
@@ -49,7 +59,8 @@ export const useShoppinglistDetailsViewStore = defineStore(
       setShoppinglistDetailsViewItems,
       removeShoppinglistItemMetadata,
       setTotalPrice,
-      addShoppinglistItemMetadata
+      addShoppinglistItemMetadata,
+      updateTotalPriceWithWPItemValue,
     };
   }
 );
