@@ -210,6 +210,18 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
         Shoppinglist shoppinglist =
                 shoppinglistRepository.findByIdAndInfoBlockFalse(idShoppinglist)
                         .orElseThrow( () -> new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND));
+        return createShoppinglistMetadataFromShoppinglist(shoppinglist);
+    }
+
+    @Override
+    public List<ShoppinglistMetadata> getAllShoppinglistMetadata() throws ShoppinglistException {
+        log.info("Building a list of ShoppinglistMetadata with all the shoppinglist in the database");
+        List<Shoppinglist> shoppinglistList = shoppinglistRepository.findAllByInfoBlockFalse()
+                .orElseThrow(() -> new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND));
+        return shoppinglistList.stream().map(this::createShoppinglistMetadataFromShoppinglist).toList();
+    }
+
+    private ShoppinglistMetadata createShoppinglistMetadataFromShoppinglist(Shoppinglist shoppinglist) {
         return ShoppinglistMetadata.builder()
                 .code(shoppinglist.getCode())
                 .creationDate(DateUtils.formatDate(shoppinglist.getCreationDate()))

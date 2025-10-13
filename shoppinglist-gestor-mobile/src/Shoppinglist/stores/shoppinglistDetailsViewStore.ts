@@ -2,7 +2,6 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { ShoppinglistViewDetails } from "../domain/ShoppinglistViewDetails";
 import { ShoppinglistItemMetadata } from "@/ShoppinglistItem/domain/ShoppinglistItemMetadata";
-import { c } from "vitest/dist/reporters-5f784f42";
 
 export const useShoppinglistDetailsViewStore = defineStore(
   "shoppinglistDetailsViewStore",
@@ -47,6 +46,16 @@ export const useShoppinglistDetailsViewStore = defineStore(
       }
     }
 
+    function updateTotalPriceWithUpItemValue(
+      oldItemUpCalculatedPrice: number | undefined,
+      newItemUpCalculatedPrice: number
+    ) {
+      if (oldItemUpCalculatedPrice) {
+        totalPrice.value = totalPrice.value - oldItemUpCalculatedPrice;
+        totalPrice.value = totalPrice.value + newItemUpCalculatedPrice;
+      }
+    }
+
     function addShoppinglistItemMetadata(data: ShoppinglistItemMetadata) {
       shoppinglistDetailsViewItems.value.push(data);
     }
@@ -61,6 +70,7 @@ export const useShoppinglistDetailsViewStore = defineStore(
       setTotalPrice,
       addShoppinglistItemMetadata,
       updateTotalPriceWithWPItemValue,
+      updateTotalPriceWithUpItemValue,
     };
   }
 );
