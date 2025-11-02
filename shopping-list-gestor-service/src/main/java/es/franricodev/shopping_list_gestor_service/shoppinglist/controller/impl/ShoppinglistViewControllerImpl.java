@@ -14,7 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
-@CrossOrigin(origins = {"http://localhost:8100/", "http://192.168.18.7:9000/", "*"})
+@CrossOrigin(origins = {
+        "http://localhost:8100/",
+        "http://192.168.18.7:9000/",
+        "*"}
+)
 @RestController
 @RequestMapping("/api/shoppinglistview/")
 public class ShoppinglistViewControllerImpl implements ShoppinglistViewController {
@@ -24,7 +28,16 @@ public class ShoppinglistViewControllerImpl implements ShoppinglistViewControlle
 
     @Override
     public ResponseEntity<ResponseGetShoppinglistTableMetadata> getShoppinglistTableMetadata() {
-        return null;
+        log.info("Getting the meta information necessary for the build of the shoppinglist table view");
+        HttpStatus httpStatus = HttpStatus.OK;
+        ResponseGetShoppinglistTableMetadata responseGetShoppinglistTableMetadata = ResponseGetShoppinglistTableMetadata.builder().build();
+        try {
+            responseGetShoppinglistTableMetadata = shoppinglistViewService.getShoppinglistTableMetadata();
+        } catch (ShoppinglistViewException e) {
+            log.error("The ResponseGetShoppinglistTableMetadata can't be created because there are some errors in the data");
+            httpStatus = HttpStatus.BAD_REQUEST;
+        }
+        return new ResponseEntity<>(responseGetShoppinglistTableMetadata, httpStatus);
     }
 
     @Override

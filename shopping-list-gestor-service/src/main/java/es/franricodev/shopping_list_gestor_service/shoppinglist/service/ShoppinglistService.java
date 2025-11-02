@@ -46,6 +46,8 @@ public interface ShoppinglistService {
 
     ShoppinglistMetadata getShoppinglistMetadata(Long idShoppinglist) throws ShoppinglistException;
 
+    List<ShoppinglistMetadata> getAllShoppinglistMetadata() throws ShoppinglistException;
+
 }
 
 

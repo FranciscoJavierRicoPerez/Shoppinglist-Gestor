@@ -1,6 +1,7 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglist.service.impl;
 
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetShoppinglistDetailsMetadata;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetShoppinglistTableMetadata;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistViewException;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.message.ErrorMessages;
@@ -21,6 +22,16 @@ public class ShoppinglistViewServiceImpl implements ShoppinglistViewService {
 
     @Autowired
     private ShoppinglistItemService shoppinglistItemService;
+
+    @Override
+    public ResponseGetShoppinglistTableMetadata getShoppinglistTableMetadata() throws ShoppinglistViewException {
+        log.info("Build of the ResponseGetShoppinglistTableMetadata");
+        try {
+            return ResponseGetShoppinglistTableMetadata.builder().shoppinglistTableMetadataList(shoppinglistService.getAllShoppinglistMetadata()).build();
+        } catch (ShoppinglistException e) {
+            throw new ShoppinglistViewException(ErrorMessages.ERR_SHOPPINGLIST_TABLE_NO_BUILD);
+        }
+    }
 
     @Override
     public ResponseGetShoppinglistDetailsMetadata getShoopinglistDetailsMetadata(Long idShoppinglist) throws ShoppinglistViewException {

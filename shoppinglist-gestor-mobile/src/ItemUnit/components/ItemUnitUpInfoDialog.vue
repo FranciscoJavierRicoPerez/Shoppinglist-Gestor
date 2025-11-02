@@ -18,8 +18,6 @@ import {
 } from "@ionic/vue";
 import { useGetAllItemUnitUpGroupedByPrice } from "@/ItemUnit/application/useGetAllItemUnitUpGroupedByPrice";
 import { onMounted, ref } from "vue";
-import { useAddQuantityToItemUp } from "@/ItemUnit/application/useAddQuantityToItemUp";
-import { useReduceQuantityToItemUp } from "@/ItemUnit/application/useReduceQuantityToItemUp";
 import {
   defaultRequestAddUnitaryPriceItemUnit,
   RequestAddUnitaryPriceItemUnit,
@@ -27,14 +25,13 @@ import {
 import { useAddItemUnitToShoppinglistItem } from "@/ShoppinglistItem/application/useAddItemUnitToShoppinglistItem";
 import { useRoute } from "vue-router";
 import { useUpdateShoppinglistTotalPrice } from "@/Shoppinglist/application/useUpdateShoppinglistTotalPrice";
+import { useShoppinglistDetailsViewStore } from "@/Shoppinglist/stores/shoppinglistDetailsViewStore";
 
 const { refetch: getAllItemUnitUpGroupedByPrice } =
   useGetAllItemUnitUpGroupedByPrice();
 
-const { refetch: addQuantityItemUp } = useAddQuantityToItemUp();
-const { refetch: reduceQuantityItemUp } = useReduceQuantityToItemUp();
-
-const { refetch: updateShoppinglistTotalPrice } = useUpdateShoppinglistTotalPrice();
+const { refetch: updateShoppinglistTotalPrice } =
+  useUpdateShoppinglistTotalPrice();
 
 const route = useRoute();
 
@@ -46,6 +43,8 @@ const params = defineProps({
   },
 });
 
+const store = useShoppinglistDetailsViewStore();
+
 const form = ref<RequestAddUnitaryPriceItemUnit>({
   ...defaultRequestAddUnitaryPriceItemUnit,
 });
@@ -54,6 +53,13 @@ const { refetch: addItemUnitToShoppinglistItem } =
   useAddItemUnitToShoppinglistItem();
 
 const actualElementsVisible = ref<ItemUnitUpGrouped[]>([]);
+
+const ionInfinite = (event: InfiniteScrollCustomEvent) => {
+  generateItems();
+  setTimeout(() => {
+    event.target.complete();
+  }, 500);
+};
 
 onMounted(async () => {
   if (params.idShoppinglistItem) {
@@ -78,28 +84,18 @@ function generateItems() {
   }
 }
 
-const ionInfinite = (event: InfiniteScrollCustomEvent) => {
-  generateItems();
-  setTimeout(() => {
-    event.target.complete();
-  }, 500);
-};
-
 async function addItem() {
   if (params.idShoppinglistItem) {
     form.value.shoppinglistItemId = params.idShoppinglistItem;
+    store.updateTotalPriceWithUpItemValue(
+      itemsUnitsGrouped.value?.totalPrice,
+      form.value.price * form.value.quantity
+    );
     await addItemUnitToShoppinglistItem(form.value, null);
-    await updateShoppinglistTotalPrice(Number(route.params.id))
+    await updateShoppinglistTotalPrice(Number(route.params.id));
   }
 }
 
-async function addQuantity(idShoppinglistItem: number, itemPrice: number) {
-  await addQuantityItemUp(idShoppinglistItem, itemPrice);
-}
-
-async function reduceQuantity(idShoppinglistItem: number, itemPrice: number) {
-  await reduceQuantityItemUp(idShoppinglistItem, itemPrice);
-}
 </script>
 <template>
   <IonButton :id="'open-modal' + params.idShoppinglistItem" expand="block">
@@ -145,8 +141,12 @@ async function reduceQuantity(idShoppinglistItem: number, itemPrice: number) {
           <IonCardContent>
             <!-- TODO: EXTRAER A UN COMPONENTE INDEPENDIENTE -->
             <h1>
+              <IonChip color="danger">
+                Precio total de la lista: {{ store.totalPrice }}
+              </IonChip>
               <IonChip color="warning"
-                >Coste total: {{ itemsUnitsGrouped?.totalPrice }} €</IonChip
+                >Precio total del item:
+                {{ itemsUnitsGrouped?.totalPrice }} €</IonChip
               >
             </h1>
             <IonList>
@@ -154,9 +154,8 @@ async function reduceQuantity(idShoppinglistItem: number, itemPrice: number) {
                 <IonCard style="background-color: rgb(237, 255, 224)">
                   <IonCardHeader>
                     <IonCardTitle
-                      >Coste unitario por precio:{{
-                        itemUnitUp.calculatedPrice
-                      }}</IonCardTitle
+                      >Precio total de la unidad :
+                      {{ itemUnitUp.calculatedPrice }} €</IonCardTitle
                     >
                   </IonCardHeader>
                   <IonCardContent>

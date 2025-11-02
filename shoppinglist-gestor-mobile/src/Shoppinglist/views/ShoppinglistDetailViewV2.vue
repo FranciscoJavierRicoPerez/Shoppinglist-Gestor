@@ -35,7 +35,6 @@ const openModal = ref<boolean>(false);
 onMounted(async () => {
   const param = Number(route.params.id);
   const response = await getShoppinglistDetailsView(param);
-  console.log(response);
   shoppinglistDetailsViewStore.setShoppinglistDetailsView(response);
   shoppinglistDetailsViewStore.setShoppinglistDetailsViewItems(response.items);
   shoppinglistDetailsViewStore.setTotalPrice(

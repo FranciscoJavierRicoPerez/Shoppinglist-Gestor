@@ -1,8 +1,11 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglist.service;
 
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetShoppinglistDetailsMetadata;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetShoppinglistTableMetadata;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistViewException;
 
 public interface ShoppinglistViewService {
+    ResponseGetShoppinglistTableMetadata getShoppinglistTableMetadata() throws ShoppinglistViewException;
+
     ResponseGetShoppinglistDetailsMetadata getShoopinglistDetailsMetadata(Long idShoppinglist) throws ShoppinglistViewException;
 }
