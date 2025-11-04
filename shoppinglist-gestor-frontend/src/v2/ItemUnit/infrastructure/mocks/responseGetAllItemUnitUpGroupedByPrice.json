@@ -1,0 +1,10 @@
+{
+  "totalPrice": 7,
+  "itemsUpGrouped": [
+    {
+      "price": 1,
+      "quantity": 3,
+      "calculatedPrice": 3
+    }
+  ]
+}
