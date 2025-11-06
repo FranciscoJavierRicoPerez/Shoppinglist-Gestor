@@ -1,11 +1,132 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import Panel from 'primevue/panel'
+import DatePicker from 'primevue/datepicker'
+import { ref } from 'vue'
+import InputText from 'primevue/inputtext'
+import InputNumber from 'primevue/inputnumber'
+import { FloatLabel } from 'primevue'
+import Button from 'primevue/button'
+import {
+  defaultShoppinglistFilter,
+  type ShoppinglistFilter,
+} from '@/v2/Shoppinglist/domain/ShoppinglistFilter'
+import { useGetShoppinglistFiltered } from '@/v2/Shoppinglist/application/useGetShoppinglistFiltered'
+import { useShoppinglistStore } from '@/v2/Shoppinglist/stores/shoppinglistStore'
+import { useShoppinglistFilterStore } from '@/v2/Shoppinglist/stores/shoppinglistFilterStore'
+import type { ShoppinglistMetadata } from '@/v2/Shoppinglist/domain/ShoppinglistMetadata'
+import { useGetShoppinglistTableMetadata } from '@/v2/Shoppinglist/application/useGetShoppinglistTableMetadata'
+const storeShoppinglistFilter = useShoppinglistFilterStore()
+const store = useShoppinglistStore()
+const { refetch: getAllShoppinglistFiltered } = useGetShoppinglistFiltered()
+const { refetch: getShoppinglistTableMetadata } = useGetShoppinglistTableMetadata()
+const shoppinglistFilterForm = ref<ShoppinglistFilter>({ ...defaultShoppinglistFilter })
+
+const filteredShoppinglist = ref<ShoppinglistMetadata[]>([])
+
+function verifyFilterForm() {
+  return (
+    shoppinglistFilterForm.value.code === '' &&
+    shoppinglistFilterForm.value.closeDate === null &&
+    shoppinglistFilterForm.value.creationDate === null &&
+    shoppinglistFilterForm.value.totalPrice === null &&
+    shoppinglistFilterForm.value.isActive === null
+  )
+}
+
+async function searchShoppinglistByFilter() {
+  shoppinglistFilterForm.value.isActive =
+    storeShoppinglistFilter.actualPanelId === 0
+      ? null
+      : storeShoppinglistFilter.actualPanelId === 1
+        ? true
+        : false
+  if (verifyFilterForm()) {
+    filteredShoppinglist.value = await getShoppinglistTableMetadata()
+  } else {
+    filteredShoppinglist.value = await getAllShoppinglistFiltered(shoppinglistFilterForm.value)
+  }
+  if (filteredShoppinglist.value.length > 0) {
+    store.setShoppinglistArray(filteredShoppinglist.value)
+  }
+}
+</script>
 <template>
-  <p>
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-    labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-    laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-    voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-    non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-  </p>
+  <Panel class="panelFilter" toggleable>
+    <template #header>
+      <span class="panelHeader">Filtro de listas de compra</span>
+    </template>
+    <template #footer>
+      <Button
+        icon="pi pi-search"
+        severity="success"
+        aria-label="Search"
+        @click="searchShoppinglistByFilter()"
+      />
+    </template>
+    <!-- Shoppinglist filter form -->
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <FloatLabel variant="on">
+            <DatePicker
+              id="datepicker-24h"
+              v-model="shoppinglistFilterForm.creationDate"
+              showTime
+              hourFormat="24"
+              class="bigInputs"
+            />
+            <label for="shoppinglistCreationDate">Fecha de creación</label>
+          </FloatLabel>
+        </div>
+        <div class="col">
+          <FloatLabel variant="on">
+            <DatePicker
+              id="datepicker-24h"
+              v-model="shoppinglistFilterForm.closeDate"
+              showTime
+              hourFormat="24"
+              class="bigInputs"
+            />
+            <label for="shoppinglistCloseDate">Fecha de cierre</label>
+          </FloatLabel>
+        </div>
+        <div class="col">
+          <FloatLabel variant="on">
+            <InputText
+              id="shoppinglistCode"
+              v-model="shoppinglistFilterForm.code"
+              class="smallInputs"
+            ></InputText>
+            <label for="shoppinglistCode">Código</label>
+          </FloatLabel>
+        </div>
+        <div class="col">
+          <FloatLabel variant="on">
+            <InputNumber
+              id="shoppinglistTotalPrice"
+              v-model="shoppinglistFilterForm.totalPrice"
+              class="smallInputs"
+            ></InputNumber>
+            <label for="shoppinglistTotalPrice">Precio Total</label>
+          </FloatLabel>
+        </div>
+      </div>
+    </div>
+    <!--  End of the Shoppinglist filter form  -->
+  </Panel>
 </template>
-<style lang="css"></style>
+<style lang="css">
+.panelFilter {
+  margin-top: 1rem;
+}
+.panelHeader {
+  font-size: xx-large;
+  font-weight: bold;
+}
+.bigInputs {
+  width: 100%;
+}
+.smallInputs {
+  width: 100%;
+}
+</style>

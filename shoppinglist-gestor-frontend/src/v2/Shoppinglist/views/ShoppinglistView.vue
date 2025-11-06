@@ -12,7 +12,7 @@ import { Divider } from 'primevue'
 </template>
 <style lang="css">
 /** Explicacion de flex:
-  -> flex: grow shrink basis 
+  -> flex: grow shrink basis
     -> grow -> puede crecer para ocupar el espacio sobrante
     -> shrink -> puede reducirse si no hay espacio suficiente
     -> basis -> tamaño base inicial
@@ -20,10 +20,10 @@ import { Divider } from 'primevue'
 
 .filters {
   display: flex;
-  flex: 1 0 200px;
+  flex: 1 1 300px;
 }
 .table {
   display: flex;
-  flex: 1 1 1000px;
+  flex: 1 1 300px;
 }
 </style>
