@@ -20,8 +20,11 @@ import Navbar from '@/Shared/components/Navbar.vue'
 }
 .custom-footer {
   background-color: rgb(51, 255, 153);
-  margin-top: 10px;
-  height: 50px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 1rem;
 }
 .custom-text {
   text-align: center;

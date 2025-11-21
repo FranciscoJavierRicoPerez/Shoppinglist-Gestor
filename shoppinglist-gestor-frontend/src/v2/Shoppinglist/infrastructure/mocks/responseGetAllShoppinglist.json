@@ -1,0 +1,66 @@
+[
+  {
+    "id": 1,
+    "creationDate": "04/12/2024",
+    "code": "SHOPPINGLIST-1",
+    "closeDate": null,
+    "totalPrice": 100,
+    "isActive": true
+  },
+  {
+    "id": 2,
+    "creationDate": "04/12/2024",
+    "code": "SHOPPINGLIST-2",
+    "closeDate": "04/12/2024",
+    "totalPrice": 100,
+    "isActive": true
+  },
+  {
+    "id": 3,
+    "creationDate": "04/12/2024",
+    "code": "SHOPPINGLIST-3",
+    "closeDate": null,
+    "totalPrice": 100,
+    "isActive": false
+  },
+  {
+    "id": 4,
+    "creationDate": "04/12/2024",
+    "code": "SHOPPINGLIST-4",
+    "closeDate": null,
+    "totalPrice": 100,
+    "isActive": true
+  },
+  {
+    "id": 5,
+    "creationDate": "04/12/2024",
+    "code": "SHOPPINGLIST-5",
+    "closeDate": null,
+    "totalPrice": 100,
+    "isActive": false
+  },
+  {
+    "id": 6,
+    "creationDate": "04/12/2024",
+    "code": "SHOPPINGLIST-6",
+    "closeDate": null,
+    "totalPrice": 100,
+    "isActive": true
+  },
+  {
+    "id": 7,
+    "creationDate": "04/12/2024",
+    "code": "SHOPPINGLIST-7",
+    "closeDate": null,
+    "totalPrice": 100,
+    "isActive": false
+  },
+  {
+    "id": 8,
+    "creationDate": "04/12/2024",
+    "code": "SHOPPINGLIST-8",
+    "closeDate": null,
+    "totalPrice": 100,
+    "isActive": true
+  }
+]

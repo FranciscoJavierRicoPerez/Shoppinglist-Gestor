@@ -60,7 +60,6 @@ async function addNewShoppinglist() {
 }
 
 function updateShoppinglistTables() {
-  debugger
   shoppinglistActiveTable.value = store.getActiveShoppinglist()
   shoppinglistNoActiveTable.value = store.getNoActiveShoppinglist()
 }

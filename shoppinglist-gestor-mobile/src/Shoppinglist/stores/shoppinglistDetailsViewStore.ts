@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { ShoppinglistViewDetails } from "../domain/ShoppinglistViewDetails";
 import { ShoppinglistItemMetadata } from "@/ShoppinglistItem/domain/ShoppinglistItemMetadata";
+import { ShoppinglistMetadata } from "../domain/ShoppinglistMetadata";
 
 export const useShoppinglistDetailsViewStore = defineStore(
   "shoppinglistDetailsViewStore",
@@ -9,6 +10,12 @@ export const useShoppinglistDetailsViewStore = defineStore(
     const shoppinglistDetailsView = ref<ShoppinglistViewDetails>();
     const shoppinglistDetailsViewItems = ref<ShoppinglistItemMetadata[]>([]);
     const totalPrice = ref<number>(-1);
+    const shoppinglistItemMetadata = ref<ShoppinglistItemMetadata>();
+    const shoppinglistMetadata = ref<ShoppinglistMetadata>();
+
+    function setShoppinglistMetadata(data: ShoppinglistMetadata) {
+      shoppinglistMetadata.value = data
+    }
 
     function setShoppinglistDetailsView(data: ShoppinglistViewDetails) {
       shoppinglistDetailsView.value = data;
@@ -60,6 +67,14 @@ export const useShoppinglistDetailsViewStore = defineStore(
       shoppinglistDetailsViewItems.value.push(data);
     }
 
+    function getShoppinglistItem(id: number) {
+      shoppinglistItemMetadata.value = shoppinglistDetailsViewItems.value.filter(element => element.id != id)[0]
+    }
+
+    function setShoppinglistItemMetadata(data : ShoppinglistItemMetadata) {
+      shoppinglistItemMetadata.value = data
+    }
+
     return {
       shoppinglistDetailsView,
       shoppinglistDetailsViewItems,
@@ -71,6 +86,11 @@ export const useShoppinglistDetailsViewStore = defineStore(
       addShoppinglistItemMetadata,
       updateTotalPriceWithWPItemValue,
       updateTotalPriceWithUpItemValue,
+      getShoppinglistItem,
+      shoppinglistItemMetadata,
+      setShoppinglistItemMetadata,
+      shoppinglistMetadata,
+      setShoppinglistMetadata
     };
   }
 );
