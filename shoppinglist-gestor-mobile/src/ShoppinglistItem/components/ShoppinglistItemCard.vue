@@ -15,7 +15,6 @@ import {
 import { onMounted, ref, type PropType } from "vue";
 import { ShoppinglistItemMetadata } from "@/ShoppinglistItem/domain/ShoppinglistItemMetadata";
 import { useDeleteShoppinglistItem } from "@/ShoppinglistItem/application/useDeleteShoppinglistItem";
-import { useShoppinglistItemStore } from "@/ShoppinglistItem/stores/shoppinglistItemStore";
 import ItemUnitUpInfoDialog from "@/ItemUnit/components/ItemUnitUpInfoDialog.vue";
 import ItemUnitWpInfoDialog from "@/ItemUnit/components/ItemUnitWpInfoDialog.vue";
 import { useUpdateShoppinglistTotalPrice } from "@/Shoppinglist/application/useUpdateShoppinglistTotalPrice";
@@ -29,47 +28,54 @@ const { refetch: updateShoppinglistTotalPrice } =
 const route = useRoute();
 
 const props = defineProps({
-  shoppinglistItemList: {
-    type: Object as PropType<ShoppinglistItemMetadata[]>,
+  shoppinglistItem: {
+    type: Object as PropType<ShoppinglistItemMetadata>,
     default: () => null,
   },
 });
 
-const list = ref<ShoppinglistItemMetadata[]>();
+const shoppinglistItem = ref<ShoppinglistItemMetadata>();
 
 const store = useShoppinglistDetailsViewStore();
 
+const emit = defineEmits(["update-visible-elements"]);
+
 onMounted(() => {
-  list.value = store.shoppinglistDetailsViewItems;
-  console.log(list.value);
+  shoppinglistItem.value = props.shoppinglistItem;
+  store.setShoppinglistItemMetadata(shoppinglistItem.value);
+  console.log(shoppinglistItem.value);
 });
 
 async function removeShoppinglistItem(idItem: number) {
+  console.log("INFO: Se va a proceder a borrar el elemento con id: " + idItem);
   let response = await deleteShoppinglistItem(idItem);
   if (response.delete) {
     await updateShoppinglistTotalPrice(Number(route.params.id));
+    console.log("Se va a proceder a borrar el item: " + idItem);
     store.removeShoppinglistItemMetadata(idItem);
     store.setTotalPrice(store.shoppinglistDetailsViewItems);
-    list.value = store.shoppinglistDetailsViewItems;
+    emit("update-visible-elements");
   }
 }
 
-function getCalculteSystemCode(data: ShoppinglistItemMetadata | any): string {
-  return data.calculateSystemCode;
+function getCalculteSystemCode(data: any): string {
+  return data;
 }
 </script>
 <template>
-  <IonItem v-for="shoppinglistItem in list">
-    <IonLabel>
+  <div v-if="shoppinglistItem">
+    <IonItem>
       <IonCard
         :class="[
           {
             'customCard-UP-background':
-              getCalculteSystemCode(shoppinglistItem) === 'UP',
+              getCalculteSystemCode(shoppinglistItem.calculateSystemCode) ===
+              'UP',
           },
           {
             'customCard-WP-background':
-              getCalculteSystemCode(shoppinglistItem) === 'WP',
+              getCalculteSystemCode(shoppinglistItem.calculateSystemCode) ===
+              'WP',
           },
         ]"
       >
@@ -109,15 +115,15 @@ function getCalculteSystemCode(data: ShoppinglistItemMetadata | any): string {
           ></IonButton>
         </IonCardContent>
       </IonCard>
-    </IonLabel>
-  </IonItem>
+    </IonItem>
+  </div>
 </template>
 <style lang="css">
 .customCard-UP-background {
-  background-color: rgb(250, 252, 224);
+  background-color: rgb(241, 248, 141);
 }
 
 .customCard-WP-background {
-  background-color: rgb(252, 246, 224);
+  background-color: rgb(189, 249, 148);
 }
 </style>
