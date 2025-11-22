@@ -17,14 +17,14 @@ import {
   IonSegmentContent,
   IonSegmentView,
   SegmentChangeEventDetail,
-  IonCardHeader,
-  IonCardTitle,
-  IonCardContent,
 } from "@ionic/vue";
 import { onMounted, watch } from "vue";
 import { ref } from "vue";
 import ShoppinglistCardInfo from "./ShoppinglistCardInfo.vue";
-import { defaultShoppinglist, Shoppinglist } from "@/Shoppinglist/domain/Shoppinglist";
+import {
+  defaultShoppinglist,
+  Shoppinglist,
+} from "@/Shoppinglist/domain/Shoppinglist";
 import { useGetAllShoppinglist } from "@/Shoppinglist/application/useGetAllShoppinglist";
 import { useCreateShoppinglistMetadata } from "@/Shoppinglist/application/useCreateShoppinglistMetadata";
 import { useShoppinglistStore } from "@/Shoppinglist/stores/shoppinglistStore";
@@ -76,6 +76,7 @@ function updateShoppinglistElementsVisible(removedObject: boolean) {
     actualShoppinglistVisible.value = [];
   }
   const start = actualShoppinglistVisible.value.length;
+  const chunkSize = 50;
   // Indicamos con que lista se debe trabajar en funcion del tab seleccionado
   let selected_list: Shoppinglist[] = [];
   if (selectedTab.value === "all") {
@@ -87,12 +88,8 @@ function updateShoppinglistElementsVisible(removedObject: boolean) {
   if (selectedTab.value === "archives") {
     selected_list = shoppinglistNoActiveTable.value;
   }
-  for (let i = 0; i < 50; i++) {
-    // ShoppinglistTable.vue (LINEA 105) => Revisar si hay alguna forma de obviar el !== undefined
-    if (selected_list[start + i] !== undefined) {
-      actualShoppinglistVisible.value.push(selected_list[start + i]);
-    }
-  }
+  const nextChunk = selected_list.slice(start, start + chunkSize);
+  actualShoppinglistVisible.value.push(...nextChunk);
 }
 
 // Evento infinito
