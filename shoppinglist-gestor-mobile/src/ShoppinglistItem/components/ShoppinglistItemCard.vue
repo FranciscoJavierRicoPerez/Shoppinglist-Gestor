@@ -43,15 +43,12 @@ const emit = defineEmits(["update-visible-elements"]);
 onMounted(() => {
   shoppinglistItem.value = props.shoppinglistItem;
   store.setShoppinglistItemMetadata(shoppinglistItem.value);
-  console.log(shoppinglistItem.value);
 });
 
 async function removeShoppinglistItem(idItem: number) {
-  console.log("INFO: Se va a proceder a borrar el elemento con id: " + idItem);
   let response = await deleteShoppinglistItem(idItem);
   if (response.delete) {
     await updateShoppinglistTotalPrice(Number(route.params.id));
-    console.log("Se va a proceder a borrar el item: " + idItem);
     store.removeShoppinglistItemMetadata(idItem);
     store.setTotalPrice(store.shoppinglistDetailsViewItems);
     emit("update-visible-elements");
