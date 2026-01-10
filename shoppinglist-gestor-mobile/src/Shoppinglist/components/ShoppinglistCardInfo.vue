@@ -13,6 +13,7 @@ import {
   IonChip,
 } from "@ionic/vue";
 import { useShoppinglistStore } from "@/Shoppinglist/stores/shoppinglistStore";
+import { useToastStore } from "@/Shared/stores/toastStore";
 const { refetch: updateIsActive } = useUpdateIsActiveShoppinglist();
 const { refetch: deleteShoppinglist } = useDeleteShoppinglistData();
 const store = useShoppinglistStore();
@@ -23,6 +24,8 @@ const props = defineProps({
     default: () => null,
   },
 });
+
+const toastStore = useToastStore();
 
 async function archiveShoppinglist() {
   let response: boolean = await updateIsActive(props.shoppinglist.id);
@@ -37,6 +40,11 @@ async function removeShoppinglist() {
   if (response) {
     store.removeShoppinglist(props.shoppinglist.id);
     emit("updateShoppinglistTables");
+    toastStore.show(
+      true,
+      false,
+      "Se ha borrado el shoppinglist : " + props.shoppinglist.code
+    );
   }
 }
 </script>

@@ -2,7 +2,6 @@ import { deleteShoppinglistData } from '@/Shoppinglist/infrastructure/useCases/d
 
 export function useDeleteShoppinglistData() {
   async function refetch(id: number): Promise<boolean> {
-    debugger
     return deleteShoppinglistData(id)
   }
 

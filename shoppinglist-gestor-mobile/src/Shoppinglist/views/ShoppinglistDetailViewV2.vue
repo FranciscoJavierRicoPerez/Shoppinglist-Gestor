@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useGetShoppinglistDetailsView } from "@/Shoppinglist/application/useGetShoppinglistDetailsView";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useShoppinglistDetailsViewStore } from "@/Shoppinglist/stores/shoppinglistDetailsViewStore";
 import ShoppinglistItemAddDialog from "@/ShoppinglistItem/components/ShoppinglistItemAddDialog.vue";
@@ -20,6 +20,7 @@ import {
   IonList,
   IonPage,
   IonIcon,
+  IonLabel,
 } from "@ionic/vue";
 import Header from "@/Shared/components/Header.vue";
 import Footer from "@/Shared/components/Footer.vue";
@@ -27,39 +28,67 @@ import Information from "@/Shared/components/Information.vue";
 
 import ShoppinglistItemCard from "@/ShoppinglistItem/components/ShoppinglistItemCard.vue";
 import { ShoppinglistItemMetadata } from "@/ShoppinglistItem/domain/ShoppinglistItemMetadata";
+import { ShoppinglistMetadata } from "../domain/ShoppinglistMetadata";
 
 const shoppinglistDetailsViewStore = useShoppinglistDetailsViewStore();
 const { refetch: getShoppinglistDetailsView } = useGetShoppinglistDetailsView();
 const route = useRoute();
 const openModal = ref<boolean>(false);
+const actualShoppinglistItemsVisible = ref<ShoppinglistItemMetadata[]>([]);
+
+const shoppinglistMetadata = ref<ShoppinglistMetadata>();
+// const totalPrice = ref<number>(-1)
+/* const updateShoppinglistItemList = ref<boolean>(false);
+
+watch(updateShoppinglistItemList, (newValue) => {
+  debugger;
+  // updateShoppinglistItemList.value = newValue;
+  if (updateShoppinglistItemList.value) {
+    actualShoppinglistItemsVisible.value =
+      shoppinglistDetailsViewStore.shoppinglistDetailsViewItems;
+  }
+}); */
+
 onMounted(async () => {
   const param = Number(route.params.id);
   const response = await getShoppinglistDetailsView(param);
+  shoppinglistDetailsViewStore.setShoppinglistMetadata(
+    response.shoppinglistMetadata
+  );
   shoppinglistDetailsViewStore.setShoppinglistDetailsView(response);
   shoppinglistDetailsViewStore.setShoppinglistDetailsViewItems(response.items);
   shoppinglistDetailsViewStore.setTotalPrice(
     shoppinglistDetailsViewStore.shoppinglistDetailsViewItems
   );
-  updateShoppinglistItemsElementsVisible();
+  shoppinglistMetadata.value =
+    shoppinglistDetailsViewStore.shoppinglistMetadata;
+  updateShoppinglistItemsElementsVisible(false);
 });
-
-const actualShoppinglistItemsVisible = ref<ShoppinglistItemMetadata[]>([]);
 
 // Evento infinito
 const ionInfinite = (event: InfiniteScrollCustomEvent) => {
-  updateShoppinglistItemsElementsVisible();
+  updateShoppinglistItemsElementsVisible(false);
   setTimeout(() => {
     event.target.complete();
   }, 500);
 };
 
-function updateShoppinglistItemsElementsVisible() {
-  const start = actualShoppinglistItemsVisible.value.length;
-  for (let i = 0; i < 50; i++) {
-    actualShoppinglistItemsVisible.value.push(
-      shoppinglistDetailsViewStore.shoppinglistDetailsViewItems[start + i]
-    );
+function updateShoppinglistItemsElementsVisible(removedObject: boolean) {
+  if (removedObject) {
+    actualShoppinglistItemsVisible.value = [];
   }
+  let elementsList: ShoppinglistItemMetadata[] =
+    shoppinglistDetailsViewStore.shoppinglistDetailsViewItems;
+  const start = actualShoppinglistItemsVisible.value.length;
+  const chunkSize = 50;
+
+  const nextChunk = elementsList.slice(start, start + chunkSize);
+
+  actualShoppinglistItemsVisible.value.push(...nextChunk);
+}
+
+function updateShoppinglistElementsVisible(removedObject: boolean = true) {
+  updateShoppinglistItemsElementsVisible(removedObject);
 }
 </script>
 <template>
@@ -70,16 +99,8 @@ function updateShoppinglistItemsElementsVisible() {
       <IonCard>
         <IonCardHeader>
           <IonCardTitle>
-            <IonChip color="primary">{{
-              shoppinglistDetailsViewStore.shoppinglistDetailsView
-                ?.shoppinglistMetadata.code
-            }}</IonChip>
-            <div
-              v-if="
-                shoppinglistDetailsViewStore.shoppinglistDetailsView
-                  ?.shoppinglistMetadata.isActive
-              "
-            >
+            <IonChip color="primary">{{ shoppinglistMetadata?.code }}</IonChip>
+            <div v-if="shoppinglistMetadata?.isActive">
               <IonChip color="success">Activa</IonChip>
             </div>
             <div v-else>
@@ -93,10 +114,7 @@ function updateShoppinglistItemsElementsVisible() {
           <IonCardSubtitle>
             <IonChip color="warning"
               >Lista de la compra del
-              {{
-                shoppinglistDetailsViewStore.shoppinglistDetailsView
-                  ?.shoppinglistMetadata.creationDate
-              }}
+              {{ shoppinglistMetadata?.creationDate }}
             </IonChip>
           </IonCardSubtitle>
         </IonCardHeader>
@@ -114,11 +132,17 @@ function updateShoppinglistItemsElementsVisible() {
           </div>
           <div v-else>
             <IonList>
-              <ShoppinglistItemCard
-                :shoppinglistItemList="
-                  shoppinglistDetailsViewStore.shoppinglistDetailsViewItems
-                "
-              ></ShoppinglistItemCard>
+              <div
+                v-for="value in actualShoppinglistItemsVisible"
+                :key="value.id"
+              >
+                <IonLabel>
+                  <ShoppinglistItemCard
+                    :shoppinglistItem="value"
+                    @update-visible-elements="updateShoppinglistElementsVisible"
+                  ></ShoppinglistItemCard>
+                </IonLabel>
+              </div>
             </IonList>
             <IonInfiniteScroll @ionInfinite="ionInfinite">
               <IonInfiniteScrollContent></IonInfiniteScrollContent>

@@ -6,7 +6,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'ShoppinglistView',
-      component: () => import('@/Shoppinglist/views/ShoppinglistView.vue'),
+      component: () => import('@/v2/Shoppinglist/views/ShoppinglistView.vue'),
     },
     {
       path: '/information',

@@ -17,20 +17,22 @@ import {
   IonSegmentContent,
   IonSegmentView,
   SegmentChangeEventDetail,
-  IonCardHeader,
-  IonCardTitle,
-  IonCardContent,
 } from "@ionic/vue";
-import { onMounted, watch } from "vue";
+import { h, onMounted, watch } from "vue";
 import { ref } from "vue";
 import ShoppinglistCardInfo from "./ShoppinglistCardInfo.vue";
-import { defaultShoppinglist, Shoppinglist } from "@/Shoppinglist/domain/Shoppinglist";
+import {
+  defaultShoppinglist,
+  Shoppinglist,
+} from "@/Shoppinglist/domain/Shoppinglist";
 import { useGetAllShoppinglist } from "@/Shoppinglist/application/useGetAllShoppinglist";
 import { useCreateShoppinglistMetadata } from "@/Shoppinglist/application/useCreateShoppinglistMetadata";
 import { useShoppinglistStore } from "@/Shoppinglist/stores/shoppinglistStore";
 import Header from "@/Shared/components/Header.vue";
 import Footer from "@/Shared/components/Footer.vue";
 import Information from "@/Shared/components/Information.vue";
+import Toast from "@/Shared/components/Toast.vue";
+import { useToastStore } from "@/Shared/stores/toastStore";
 const { refetch: getAllShoppinglist } = useGetAllShoppinglist();
 const shoppinglistTable = ref<Shoppinglist[]>([{ ...defaultShoppinglist }]);
 const shoppinglistActiveTable = ref<Shoppinglist[]>([
@@ -52,6 +54,8 @@ const mapSections = ref(
 );
 
 let selectedTab = ref<string>("all");
+
+const toastStore = useToastStore();
 
 // Este listado representa los elementos que son visibles actualmente en la pantalla
 const actualShoppinglistVisible = ref<Shoppinglist[]>([]);
@@ -76,6 +80,7 @@ function updateShoppinglistElementsVisible(removedObject: boolean) {
     actualShoppinglistVisible.value = [];
   }
   const start = actualShoppinglistVisible.value.length;
+  const chunkSize = 50;
   // Indicamos con que lista se debe trabajar en funcion del tab seleccionado
   let selected_list: Shoppinglist[] = [];
   if (selectedTab.value === "all") {
@@ -87,12 +92,8 @@ function updateShoppinglistElementsVisible(removedObject: boolean) {
   if (selectedTab.value === "archives") {
     selected_list = shoppinglistNoActiveTable.value;
   }
-  for (let i = 0; i < 50; i++) {
-    // ShoppinglistTable.vue (LINEA 105) => Revisar si hay alguna forma de obviar el !== undefined
-    if (selected_list[start + i] !== undefined) {
-      actualShoppinglistVisible.value.push(selected_list[start + i]);
-    }
-  }
+  const nextChunk = selected_list.slice(start, start + chunkSize);
+  actualShoppinglistVisible.value.push(...nextChunk);
 }
 
 // Evento infinito
@@ -108,6 +109,11 @@ async function addNewShoppinglist() {
   if (shoppinglistMetadata) {
     store.addShoppinglist(shoppinglistMetadata);
     updateShoppinglistTables(false);
+    toastStore.show(
+      true,
+      true,
+      "Se ha creado la lista de la compra: " + shoppinglistMetadata.code
+    );
   }
 }
 

@@ -24,7 +24,6 @@ export function createShoppinglist(data: ResponseShoppinglist): Shoppinglist {
 }
 
 export function createShoppinglistDetails(data: ResponseShoppinglistDetails): ShoppinglistDetails {
-  debugger
   return {
     id: data.id,
     creationDate: data.creationDate,

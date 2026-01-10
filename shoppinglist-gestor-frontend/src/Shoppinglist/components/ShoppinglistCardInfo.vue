@@ -31,7 +31,6 @@ async function archiveShoppinglist() {
 }
 
 async function removeShoppinglist() {
-  debugger
   let response: boolean = await deleteShoppinglist(props.shoppinglist.id)
   if (response) {
     store.removeShoppinglist(props.shoppinglist.id)
