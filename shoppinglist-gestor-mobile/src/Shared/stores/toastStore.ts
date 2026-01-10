@@ -33,6 +33,6 @@ export const useToastStore = defineStore("toastStore", () => {
   return {
     toastData,
     show,
-    reset
+    reset,
   };
 });

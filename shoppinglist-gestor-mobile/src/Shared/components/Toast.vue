@@ -11,7 +11,7 @@ function handleDismiss() {
 <template>
   <IonToast
     :is-open="toastStore.toastData?.open"
-    :duration="5000"
+    :duration="1000"
     :color="toastStore.toastData?.isInformation ? 'primary' : 'danger'"
     :message="toastStore.toastData?.message"
     @did-dismiss="handleDismiss()"

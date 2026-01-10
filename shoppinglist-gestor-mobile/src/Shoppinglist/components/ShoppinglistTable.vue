@@ -109,7 +109,11 @@ async function addNewShoppinglist() {
   if (shoppinglistMetadata) {
     store.addShoppinglist(shoppinglistMetadata);
     updateShoppinglistTables(false);
-    toastStore.show(true, true, 'Creado shoppinglist');
+    toastStore.show(
+      true,
+      true,
+      "Se ha creado la lista de la compra: " + shoppinglistMetadata.code
+    );
   }
 }
 
