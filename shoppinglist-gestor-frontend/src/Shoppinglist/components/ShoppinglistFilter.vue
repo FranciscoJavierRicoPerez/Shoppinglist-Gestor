@@ -15,13 +15,23 @@ import type { Shoppinglist } from '@/Shoppinglist/domain/Shoppinglist'
 import { useShoppinglistStore } from '@/Shoppinglist/stores/shoppinglistStore'
 import { useGetAllShoppinglist } from '@/Shoppinglist/application/useGetAllShoppinglist'
 import { useShoppinglistFilterStore } from '@/Shoppinglist/stores/shoppinglistFilterStore'
+import { useShoppinglistTableStore } from '@/Shoppinglist/stores/shoppinglistTableStore'
+import type { ShoppinglistMetadata } from '../domain/ShoppinglistMetadata'
+import {
+  defaultShoppinglistTable,
+  type ShoppinglistTable,
+} from '@/Shoppinglist/domain/ShoppinglistTable'
+import { useGetShoppinglistTableMetadata } from '../application/useGetShoppinglistTableMetadata'
 const storeShoppinglistFilter = useShoppinglistFilterStore()
-const store = useShoppinglistStore()
+// const store = useShoppinglistStore()
+
+const shoppinglistTableStore = useShoppinglistTableStore()
+
 const { refetch: getAllShoppinglistFiltered } = useGetShoppinglistFiltered()
-const { refetch: getAllShoppinglist } = useGetAllShoppinglist()
+const { refetch: getShoppinglistTableMetadata } = useGetShoppinglistTableMetadata()
 const shoppinglistFilterForm = ref<ShoppinglistFilter>({ ...defaultShoppinglistFilter })
 
-const filteredShoppinglist = ref<Shoppinglist[]>([])
+const filteredShoppinglistTable = ref<ShoppinglistTable>({ ...defaultShoppinglistTable })
 
 function verifyFilterForm() {
   return (
@@ -41,12 +51,12 @@ async function searchShoppinglistByFilter() {
         ? true
         : false
   if (verifyFilterForm()) {
-    filteredShoppinglist.value = await getAllShoppinglist()
+    filteredShoppinglistTable.value = await getShoppinglistTableMetadata()
   } else {
-    filteredShoppinglist.value = await getAllShoppinglistFiltered(shoppinglistFilterForm.value)
+    filteredShoppinglistTable.value = await getAllShoppinglistFiltered(shoppinglistFilterForm.value)
   }
-  if (filteredShoppinglist.value.length > 0) {
-    store.setShoppinglistArray(filteredShoppinglist.value)
+  if (filteredShoppinglistTable.value.shoppinglistTable.length > 0) {
+    shoppinglistTableStore.setShoppinglistTable(filteredShoppinglistTable.value.shoppinglistTable)
   }
 }
 </script>

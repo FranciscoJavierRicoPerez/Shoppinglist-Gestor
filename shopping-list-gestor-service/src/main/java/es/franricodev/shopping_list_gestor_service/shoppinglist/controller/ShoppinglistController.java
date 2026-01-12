@@ -40,7 +40,7 @@ public interface ShoppinglistController {
     @PutMapping("/v1/update")
     ResponseEntity<ShoppinglistDTO> updateShoppinglist(@RequestBody RequestUpdateShoppinglistDTO request);
 
-    @Deprecated
+    //@Deprecated
     @Operation(summary = "Provides the information on all shoppinglists whose data is consistent with the filters")
     @GetMapping("/v1/filter")
     ResponseEntity<List<ShoppinglistDTO>> filterShoppinglist(
