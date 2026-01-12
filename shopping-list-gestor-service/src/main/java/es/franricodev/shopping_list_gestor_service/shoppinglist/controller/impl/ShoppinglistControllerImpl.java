@@ -2,6 +2,7 @@ package es.franricodev.shopping_list_gestor_service.shoppinglist.controller.impl
 
 import es.franricodev.shopping_list_gestor_service.shoppinglist.controller.ShoppinglistController;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.*;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseCreateShoppinglist;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.service.ShoppinglistService;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.exception.ShoppinglistItemException;
@@ -38,10 +39,15 @@ public class ShoppinglistControllerImpl implements ShoppinglistController {
         return new ResponseEntity<>(shoppinglistDTOS, httpStatus);
     }
 
+    /* TODO: Modificar la respuesa
+        -> ResponseEntity<ShoppinglistDTO> => ResponseEntity<ResponseCreateShoppinglist>
+        => ResponseCreateShoppinglist
+            -> ShoppinglistMetadata
+    * */
     @PostMapping("/v1/create")
-    public ResponseEntity<ShoppinglistDTO> createShoppinglist(@NotNull @RequestBody RequestCreateShoppinglistDTO request) {
+    public ResponseEntity<ResponseCreateShoppinglist> createShoppinglist(@NotNull @RequestBody RequestCreateShoppinglistDTO request) {
         log.info("Creation of the new shoppinglist");
-        return new ResponseEntity<>(shoppinglistService.create(request), HttpStatus.CREATED);
+        return new ResponseEntity<>(shoppinglistService.createV2(request), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/v1/delete/{id}")

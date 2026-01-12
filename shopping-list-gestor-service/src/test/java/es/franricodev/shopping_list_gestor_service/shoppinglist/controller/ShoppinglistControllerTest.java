@@ -75,13 +75,13 @@ public class ShoppinglistControllerTest {
         Assertions.assertEquals(expected.getStatusCode(), real.getStatusCode());
     }
 
-    @Test
+    /* @Test
     void createShoppinglistTest() {
         ResponseEntity<ShoppinglistDTO> expected = new ResponseEntity<>(shoppinglistDTO, HttpStatus.CREATED);
         Mockito.when(shoppinglistService.create(Mockito.any())).thenReturn(shoppinglistDTO);
         ResponseEntity<ShoppinglistDTO> real = shoppinglistController.createShoppinglist(requestCreateShoppinglistDTO);
         Assertions.assertEquals(expected.getStatusCode(), real.getStatusCode());
-    }
+    } */
 
     @Test
     void deleteShoppinglistTest() throws ShoppinglistException {

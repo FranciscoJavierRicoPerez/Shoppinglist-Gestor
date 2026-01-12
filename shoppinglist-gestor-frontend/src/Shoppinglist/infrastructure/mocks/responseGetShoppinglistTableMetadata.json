@@ -1,0 +1,32 @@
+{
+  "shoppinglistTableMetadataList": [
+    {
+      "idShoppinglist": 1,
+      "code": "SHOPPINGLIST_1",
+      "creationDate": "12/01/2025",
+      "totalPrice": 14.56,
+      "isActive": true
+    },
+    {
+      "idShoppinglist": 2,
+      "code": "SHOPPINGLIST_2",
+      "creationDate": "12/01/2025",
+      "totalPrice": 19.87,
+      "isActive": false
+    },
+    {
+      "idShoppinglist": 3,
+      "code": "SHOPPINGLIST_3",
+      "creationDate": "12/01/2025",
+      "totalPrice": 9.87,
+      "isActive": true
+    },
+    {
+      "idShoppinglist": 4,
+      "code": "SHOPPINGLIST_3",
+      "creationDate": "12/01/2025",
+      "totalPrice": 56.34,
+      "isActive": false
+    }
+  ]
+}
