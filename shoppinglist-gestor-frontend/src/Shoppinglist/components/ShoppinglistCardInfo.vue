@@ -10,13 +10,15 @@ import { useShoppinglistStore } from '@/Shoppinglist/stores/shoppinglistStore'
 import Toast, { type ToastMessageOptions } from 'primevue/toast'
 import { useToast } from 'primevue/usetoast'
 import { useDeleteShoppinglistData } from '@/Shoppinglist/application/useDeleteShoppinglistData'
+import type { ShoppinglistMetadata } from '@/Shoppinglist/domain/ShoppinglistMetadata'
+import { useShoppinglistTableStore } from '@/Shoppinglist/stores/shoppinglistTableStore'
 const { refetch: updateIsActive } = useUpdateIsActiveShoppinglist()
 const { refetch: deleteShoppinglist } = useDeleteShoppinglistData()
-const store = useShoppinglistStore()
+const shoppinglistTableStore = useShoppinglistTableStore()
 const emit = defineEmits(['updateShoppinglistTables'])
 const props = defineProps({
   shoppinglist: {
-    type: Object as PropType<Shoppinglist>,
+    type: Object as PropType<ShoppinglistMetadata>,
     default: () => null,
   },
 })
@@ -25,15 +27,15 @@ const toast = useToast()
 async function archiveShoppinglist() {
   let response: boolean = await updateIsActive()
   if (response) {
-    store.updateShoppinglistActive(props.shoppinglist.id)
+    shoppinglistTableStore.updateShoppinglistActive(props.shoppinglist.idShoppinglist)
     emit('updateShoppinglistTables')
   }
 }
 
 async function removeShoppinglist() {
-  let response: boolean = await deleteShoppinglist(props.shoppinglist.id)
+  let response: boolean = await deleteShoppinglist(props.shoppinglist.idShoppinglist)
   if (response) {
-    store.removeShoppinglist(props.shoppinglist.id)
+    shoppinglistTableStore.removeShoppinglist(props.shoppinglist.idShoppinglist)
     emit('updateShoppinglistTables')
     createToast({
       severity: 'success',
@@ -72,7 +74,7 @@ function createToast(toastOptions: ToastMessageOptions) {
     <template #title>{{ shoppinglist.code }}</template>
     <template #subtitle>{{ shoppinglist.creationDate }}</template>
     <template #content>
-      <p>{{ shoppinglist.totalPrice }}</p>
+      <p>{{ shoppinglist.totalPrice }}€</p>
       <div v-if="shoppinglist.isActive">
         <Tag severity="success">
           <span class="tag-custom">Activo</span>
@@ -91,7 +93,7 @@ function createToast(toastOptions: ToastMessageOptions) {
         :disabled="!shoppinglist.isActive"
         @click="archiveShoppinglist()"
       ></Button>
-      <RouterLink :to="`/shoppinglist/${shoppinglist.id}`">
+      <RouterLink :to="`/shoppinglist/${shoppinglist.idShoppinglist}`">
         <Button class="buttons-separation" label="Ver" severity="info"></Button>
       </RouterLink>
       <Button
