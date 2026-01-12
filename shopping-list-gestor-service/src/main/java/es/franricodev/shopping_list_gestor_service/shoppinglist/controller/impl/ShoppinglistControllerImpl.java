@@ -44,10 +44,16 @@ public class ShoppinglistControllerImpl implements ShoppinglistController {
         => ResponseCreateShoppinglist
             -> ShoppinglistMetadata
     * */
-    @PostMapping("/v1/create")
-    public ResponseEntity<ResponseCreateShoppinglist> createShoppinglist(@NotNull @RequestBody RequestCreateShoppinglistDTO request) {
+    @PostMapping("/v2/create")
+    public ResponseEntity<ResponseCreateShoppinglist> createShoppinglistV2(@NotNull @RequestBody RequestCreateShoppinglistDTO request) {
         log.info("Creation of the new shoppinglist");
         return new ResponseEntity<>(shoppinglistService.createV2(request), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/v1/create")
+    public ResponseEntity<ShoppinglistDTO> createShoppinglist(RequestCreateShoppinglistDTO request) {
+        log.info("Creation of the new shoppinglist");
+        return new ResponseEntity<>(shoppinglistService.create(request), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/v1/delete/{id}")

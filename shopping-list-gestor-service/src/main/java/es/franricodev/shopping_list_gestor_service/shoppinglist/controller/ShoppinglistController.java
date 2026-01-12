@@ -26,7 +26,11 @@ public interface ShoppinglistController {
 
     @Operation(summary = "Create a shoppinglist")
     @PostMapping("/v1/create")
-    ResponseEntity<ResponseCreateShoppinglist> createShoppinglist(@NotNull @RequestBody RequestCreateShoppinglistDTO request);
+    ResponseEntity<ShoppinglistDTO> createShoppinglist(@NotNull @RequestBody RequestCreateShoppinglistDTO request);
+
+    @Operation(summary = "Create a shoppinglist")
+    @PostMapping("/v2/create")
+    ResponseEntity<ResponseCreateShoppinglist> createShoppinglistV2(@NotNull @RequestBody RequestCreateShoppinglistDTO request);
 
     @Operation(summary = "Delete the information of a shoppinglist")
     @DeleteMapping("/v1/delete/{id}")

@@ -14,7 +14,7 @@ async function InMemory(): Promise<ResponseCreateShoppinglist> {
 }
 
 async function Api(): Promise<ResponseCreateShoppinglist> {
-  const url = import.meta.env.VITE_API_URL_COMPUTER + '/api/shoppinglist/v1/create'
+  const url = import.meta.env.VITE_API_URL_COMPUTER + '/api/shoppinglist/v2/create'
   const response = await axios.post(url, {
     code: 'CODE',
     totalPrice: 0,
