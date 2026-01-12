@@ -1,8 +1,12 @@
 import type { Shoppinglist } from '@/Shoppinglist/domain/Shoppinglist'
 import type { ResponseShoppinglist } from '@/Shoppinglist/infrastructure/models/ResponseShoppinglist'
-import type { ResponseShoppinglistDetails } from '../models/ResponseShoppinglistDetails'
+import type { ResponseShoppinglistDetails } from '@/Shoppinglist/infrastructure/models/ResponseShoppinglistDetails'
 import type { ShoppinglistDetails } from '@/Shoppinglist/domain/ShoppinglistDetails'
 import { createShoppinglistItemArray } from '@/ShoppinglistItem/infrastructure/services/shoppinglistItemService'
+import type { ShoppinglistTable } from '@/Shoppinglist/domain/ShoppinglistTable'
+import type { ResponseGetShoppinglistTableMetadata } from '../models/responses/ResponseGetShoppinglistTableMetadata'
+import type { ShoppinglistMetadata } from '@/Shoppinglist/domain/ShoppinglistMetadata'
+import type { ResponseShoppinglistMetadata } from '../models/responses/ResponseShoppinglistMetadata'
 
 export function createShoppinglistArray(data: ResponseShoppinglist[]): Shoppinglist[] {
   let shoppinglistArray: Shoppinglist[] = []
@@ -32,5 +36,29 @@ export function createShoppinglistDetails(data: ResponseShoppinglistDetails): Sh
     totalPrice: data.totalPrice,
     isActive: data.isActive,
     items: createShoppinglistItemArray(data.items),
+  }
+}
+
+export function createShoppinglistTable(
+  data: ResponseGetShoppinglistTableMetadata,
+): ShoppinglistTable {
+  let shoppinglistTable: ShoppinglistMetadata[] = []
+  data.shoppinglistTableMetadataList.forEach((element) => {
+    shoppinglistTable.push(createShoppinglistMetadataService(element))
+  })
+  return {
+    shoppinglistTable: shoppinglistTable,
+  }
+}
+
+export function createShoppinglistMetadataService(
+  data: ResponseShoppinglistMetadata,
+): ShoppinglistMetadata {
+  return {
+    idShoppinglist: data.idShoppinglist,
+    code: data.code,
+    creationDate: data.creationDate,
+    totalPrice: data.totalPrice,
+    isActive: data.isActive,
   }
 }

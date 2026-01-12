@@ -7,12 +7,10 @@ import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.Shoppinglist
 import es.franricodev.shopping_list_gestor_service.shoppinglist.model.Shoppinglist;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.mapper.ShoppinglistItemMapper;
 import es.franricodev.shopping_list_gestor_service.utils.DateUtils;
-import jdk.jfr.Name;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
-import org.mapstruct.factory.Mappers;
 
 import java.util.Date;
 import java.util.List;

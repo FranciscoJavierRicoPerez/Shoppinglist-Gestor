@@ -1,6 +1,7 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglist.service.impl;
 
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.*;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseCreateShoppinglist;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ShoppinglistMetadata;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.mapper.ShoppinglistMapper;
@@ -52,6 +53,25 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
                         shoppinglistMapper.createShoppinglist(request)
                 )
         );
+    }
+
+    @Override
+    public ResponseCreateShoppinglist createV2(RequestCreateShoppinglistDTO request) {
+        log.info("Creation of the new shoppinglist V2");
+        Shoppinglist shoppinglist = shoppinglistRepository.save(shoppinglistMapper.createShoppinglist(request));
+        return ResponseCreateShoppinglist
+                .builder()
+                .shoppinglistCreated(
+                        ShoppinglistMetadata
+                                .builder()
+                                .idShoppinglist(shoppinglist.getId())
+                                .totalPrice(shoppinglist.getTotalPrice())
+                                .code(shoppinglist.getCode())
+                                .isActive(shoppinglist.getIsActive())
+                                .creationDate(String.valueOf(shoppinglist.getCreationDate()))
+                                .build()
+                )
+                .build();
     }
 
     @Override

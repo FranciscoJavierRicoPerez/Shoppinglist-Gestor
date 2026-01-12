@@ -4,6 +4,7 @@ import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestCreat
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestUpdateShoppinglistDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.ShoppinglistDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.ShoppinglistDetailsDTO;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseCreateShoppinglist;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
@@ -26,6 +27,10 @@ public interface ShoppinglistController {
     @Operation(summary = "Create a shoppinglist")
     @PostMapping("/v1/create")
     ResponseEntity<ShoppinglistDTO> createShoppinglist(@NotNull @RequestBody RequestCreateShoppinglistDTO request);
+
+    @Operation(summary = "Create a shoppinglist")
+    @PostMapping("/v2/create")
+    ResponseEntity<ResponseCreateShoppinglist> createShoppinglistV2(@NotNull @RequestBody RequestCreateShoppinglistDTO request);
 
     @Operation(summary = "Delete the information of a shoppinglist")
     @DeleteMapping("/v1/delete/{id}")

@@ -1,6 +1,7 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglist.service;
 
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.*;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseCreateShoppinglist;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetShoppinglistDetailsMetadata;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ShoppinglistMetadata;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
@@ -15,6 +16,8 @@ public interface ShoppinglistService {
     List<ShoppinglistDTO> findAllShoppinglists() throws ShoppinglistException;
 
     ShoppinglistDTO create(RequestCreateShoppinglistDTO request);
+
+    ResponseCreateShoppinglist createV2(RequestCreateShoppinglistDTO request);
 
     void deleteShoppinglist(Long id) throws ShoppinglistException;
 

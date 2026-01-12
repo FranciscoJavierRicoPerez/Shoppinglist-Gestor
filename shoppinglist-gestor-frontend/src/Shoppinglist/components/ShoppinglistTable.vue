@@ -1,12 +1,9 @@
 <script setup lang="ts">
-import { defaultShoppinglist, type Shoppinglist } from '@/Shoppinglist/domain/Shoppinglist'
 import { onMounted, ref, watch } from 'vue'
-import { useGetAllShoppinglist } from '@/Shoppinglist/application/useGetAllShoppinglist'
 import ShoppinglistCardInfo from '@/Shoppinglist/components/ShoppinglistCardInfo.vue'
 import Panel from 'primevue/panel'
 import Button from 'primevue/button'
 import Toast, { type ToastMessageOptions } from 'primevue/toast'
-import { useShoppinglistStore } from '@/Shoppinglist/stores/shoppinglistStore'
 import { useCreateShoppinglistMetadata } from '@/Shoppinglist/application/useCreateShoppinglistMetadata'
 import { useToast } from 'primevue/usetoast'
 import Tabs from 'primevue/tabs'
@@ -15,21 +12,28 @@ import Tab from 'primevue/tab'
 import TabPanels from 'primevue/tabpanels'
 import TabPanel from 'primevue/tabpanel'
 import { useShoppinglistFilterStore } from '@/Shoppinglist/stores/shoppinglistFilterStore'
-const { refetch: getAllShoppinglist } = useGetAllShoppinglist()
-const shoppinglistTable = ref<Shoppinglist[]>([{ ...defaultShoppinglist }])
-const shoppinglistActiveTable = ref<Shoppinglist[]>([{ ...defaultShoppinglist }])
-const shoppinglistNoActiveTable = ref<Shoppinglist[]>([{ ...defaultShoppinglist }])
+import { defaultShoppinglistTable, type ShoppinglistTable } from '../domain/ShoppinglistTable'
+import { useGetShoppinglistTableMetadata } from '@/Shoppinglist/application/useGetShoppinglistTableMetadata'
+import { useShoppinglistTableStore } from '@/Shoppinglist/stores/shoppinglistTableStore'
+import type { ShoppinglistMetadata } from '../domain/ShoppinglistMetadata'
+const { refetch: getShoppinglistTableMetadata } = useGetShoppinglistTableMetadata()
+
+const shoppinglistTable = ref<ShoppinglistTable>({ ...defaultShoppinglistTable })
+const shoppinglistTableStore = useShoppinglistTableStore()
+
+const shoppinglistActiveTable = ref<ShoppinglistMetadata[]>([])
+const shoppinglistNoActiveTable = ref<ShoppinglistMetadata[]>([])
 const { refetch: createShoppinglistMetadata } = useCreateShoppinglistMetadata()
-const store = useShoppinglistStore()
 const toast = useToast()
 const tabsPanelIds = ref<string[]>(['0', '1', '2'])
 const actualPanelSelected = ref<number>(-1)
 
+// TODO: ES POSIBLE QUE HAYA QUE REFACTORIZAR ESTE STORE
 const storeShoppinglistFilter = useShoppinglistFilterStore()
 
 onMounted(async () => {
-  shoppinglistTable.value = await getAllShoppinglist()
-  store.setShoppinglistArray(shoppinglistTable.value)
+  shoppinglistTable.value = await getShoppinglistTableMetadata()
+  shoppinglistTableStore.setShoppinglistTable(shoppinglistTable.value.shoppinglistTable)
   updateShoppinglistTables()
 })
 
@@ -39,9 +43,9 @@ watch(actualPanelSelected, (newActualPanelSelected) => {
 
 async function addNewShoppinglist() {
   console.log('INFO: Añadiendo una nueva lista de la compra')
-  let shoppinglistMetadata: Shoppinglist = await createShoppinglistMetadata()
+  let shoppinglistMetadata: ShoppinglistMetadata = await createShoppinglistMetadata()
   if (shoppinglistMetadata) {
-    store.addShoppinglist(shoppinglistMetadata)
+    shoppinglistTableStore.addShoppinglist(shoppinglistMetadata)
     updateShoppinglistTables()
     createToast({
       severity: 'success',
@@ -60,8 +64,8 @@ async function addNewShoppinglist() {
 }
 
 function updateShoppinglistTables() {
-  shoppinglistActiveTable.value = store.getActiveShoppinglist()
-  shoppinglistNoActiveTable.value = store.getNoActiveShoppinglist()
+  shoppinglistActiveTable.value = shoppinglistTableStore.getActiveShoppinglist()
+  shoppinglistNoActiveTable.value = shoppinglistTableStore.getNoActiveShoppinglist()
 }
 
 function createToast(toastOptions: ToastMessageOptions) {
@@ -75,7 +79,7 @@ function createToast(toastOptions: ToastMessageOptions) {
 
 function selectTableToShow(element: string) {
   return element === '0'
-    ? store.shoppinglistArray
+    ? shoppinglistTableStore.shoppinglistTable
     : element === '1'
       ? shoppinglistActiveTable.value
       : shoppinglistNoActiveTable.value
