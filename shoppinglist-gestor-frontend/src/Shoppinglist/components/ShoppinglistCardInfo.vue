@@ -109,7 +109,7 @@ function createToast(toastOptions: ToastMessageOptions) {
 .card-general {
   margin-right: 1rem;
   margin-top: 10px;
-  max-width: 20rem;
+  /* max-width: 30rem; */
 }
 
 .card-background-actives-card {

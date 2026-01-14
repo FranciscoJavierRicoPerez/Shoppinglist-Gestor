@@ -11,6 +11,8 @@ import TabList from 'primevue/tablist'
 import Tab from 'primevue/tab'
 import TabPanels from 'primevue/tabpanels'
 import TabPanel from 'primevue/tabpanel'
+import VirtualScroller from 'primevue/virtualscroller'
+import ScrollPanel from 'primevue/scrollpanel'
 import { useShoppinglistFilterStore } from '@/Shoppinglist/stores/shoppinglistFilterStore'
 import { defaultShoppinglistTable, type ShoppinglistTable } from '../domain/ShoppinglistTable'
 import { useGetShoppinglistTableMetadata } from '@/Shoppinglist/application/useGetShoppinglistTableMetadata'
@@ -111,14 +113,16 @@ function generateTabTitleName(element: string) {
       <TabPanels>
         <div v-for="panelId in tabsPanelIds">
           <TabPanel :value="panelId">
-            <div class="cardOrganization">
-              <div v-for="shoppinglistData of selectTableToShow(panelId)">
-                <ShoppinglistCardInfo
-                  :shoppinglist="shoppinglistData"
-                  @update-shoppinglist-tables="updateShoppinglistTables"
-                ></ShoppinglistCardInfo>
+            <ScrollPanel style="width: 100%; height: 600px">
+              <div class="d-flex flex-row flex-wrap">
+                <div v-for="shoppinglistData of selectTableToShow(panelId)">
+                  <ShoppinglistCardInfo
+                    :shoppinglist="shoppinglistData"
+                    @update-shoppinglist-tables="updateShoppinglistTables"
+                  ></ShoppinglistCardInfo>
+                </div>
               </div>
-            </div>
+            </ScrollPanel>
           </TabPanel>
         </div>
       </TabPanels>
