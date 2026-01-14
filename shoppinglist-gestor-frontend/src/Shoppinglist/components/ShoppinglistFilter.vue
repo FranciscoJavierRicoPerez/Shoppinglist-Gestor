@@ -74,55 +74,45 @@ async function searchShoppinglistByFilter() {
       />
     </template>
     <!-- Shoppinglist filter form -->
-    <div class="container-xxlg">
-      <div class="row">
-        <div class="col-3">
-          <FloatLabel variant="on">
-            <DatePicker
-              id="datepicker-24h"
-              v-model="shoppinglistFilterForm.creationDate"
-              showTime
-              hourFormat="24"
-              class="bigInputs"
-            />
-            <label for="shoppinglistCreationDate">Fecha de creación</label>
-          </FloatLabel>
-        </div>
-        <div class="col-3">
-          <FloatLabel variant="on">
-            <DatePicker
-              id="datepicker-24h"
-              v-model="shoppinglistFilterForm.closeDate"
-              showTime
-              hourFormat="24"
-              class="bigInputs"
-            />
-            <label for="shoppinglistCloseDate">Fecha de cierre</label>
-          </FloatLabel>
-        </div>
-        <div class="col-2">
-          <FloatLabel variant="on">
-            <InputText
-              id="shoppinglistCode"
-              v-model="shoppinglistFilterForm.code"
-              class="smallInputs"
-            ></InputText>
-            <label for="shoppinglistCode">Código</label>
-          </FloatLabel>
-        </div>
-        <div class="col-2">
-          <FloatLabel variant="on">
-            <InputNumber
-              id="shoppinglistTotalPrice"
-              v-model="shoppinglistFilterForm.totalPrice"
-              class="smallInputs"
-            ></InputNumber>
-            <label for="shoppinglistTotalPrice">Precio Total</label>
-          </FloatLabel>
-        </div>
-      </div>
+    <!-- New Version of the form with Flexbox -->
+    <div class="d-flex align-items-center justify-content-start flex-wrap">
+      <FloatLabel class="form-margin" style="width: 25rem" variant="on">
+        <DatePicker
+          id="datepicker-24h"
+          v-model="shoppinglistFilterForm.creationDate"
+          showTime
+          hourFormat="24"
+          class="bigInputs"
+        />
+        <label for="shoppinglistCreationDate">Fecha de creación</label>
+      </FloatLabel>
+      <FloatLabel class="form-margin" style="width: 25rem" variant="on">
+        <DatePicker
+          id="datepicker-24h"
+          v-model="shoppinglistFilterForm.closeDate"
+          showTime
+          hourFormat="24"
+          class="bigInputs"
+        />
+        <label for="shoppinglistCloseDate">Fecha de cierre</label>
+      </FloatLabel>
+      <FloatLabel class="form-margin" style="width: 25rem" variant="on">
+        <InputText
+          id="shoppinglistCode"
+          v-model="shoppinglistFilterForm.code"
+          class="smallInputs"
+        ></InputText>
+        <label for="shoppinglistCode">Código</label>
+      </FloatLabel>
+      <FloatLabel class="form-margin" style="width: 25rem" variant="on">
+        <InputNumber
+          id="shoppinglistTotalPrice"
+          v-model="shoppinglistFilterForm.totalPrice"
+          class="smallInputs"
+        ></InputNumber>
+        <label for="shoppinglistTotalPrice">Precio Total</label>
+      </FloatLabel>
     </div>
-    <!--  End of the Shoppinglist filter form  -->
   </Panel>
 </template>
 <style lang="css">
@@ -138,5 +128,9 @@ async function searchShoppinglistByFilter() {
 }
 .smallInputs {
   width: 100%;
+}
+.form-margin {
+  margin-right: 5px;
+  margin-top: 5px;
 }
 </style>
