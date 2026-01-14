@@ -95,7 +95,7 @@ function generateTabTitleName(element: string) {
 </script>
 <template>
   <Toast></Toast>
-  <Panel class="panelShoppinglistTable">
+  <Panel class="panelShoppinglistTable" toggleable>
     <template #header>
       <span class="panelHeader">Listas de la compra</span>
     </template>
