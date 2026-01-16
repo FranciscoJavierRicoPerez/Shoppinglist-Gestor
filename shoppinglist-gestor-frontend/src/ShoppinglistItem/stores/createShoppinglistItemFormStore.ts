@@ -7,6 +7,9 @@ export const useCreateShoppinglistItemFormStore = defineStore(
     const selectedProduct = ref<string>('') // Product name
     const productOptions = ref<string[]>([])
 
+    const selectedCalculateSystem = ref<number>(-1)
+
+    // TODO: VALIDAR FUNCIONAMIENTO DE ESTO
     function verifyIsSelectedProductAlreadyExists(
       selectedProduct: string,
       productOptions: string[],
@@ -20,6 +23,7 @@ export const useCreateShoppinglistItemFormStore = defineStore(
     return {
       selectedProduct,
       productOptions,
+      selectedCalculateSystem,
       verifyIsSelectedProductAlreadyExists,
     }
   },

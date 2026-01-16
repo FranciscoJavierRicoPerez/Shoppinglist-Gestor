@@ -24,15 +24,15 @@ onMounted(async () => {
   <div class="d-flex flex-row justify-content-start flex-wrap">
     <ShoppinglistDetailsInformation
       id="informationComponent"
-      style="margin-bottom: 1rem; margin-right: 1rem; min-width: 21.5rem; width: 25%"
+      style="margin-bottom: 1rem; margin-right: 10px; min-width: 13%"
     ></ShoppinglistDetailsInformation>
     <ShoppinglistItemsTable
       id="tableComponent"
-      style="margin-bottom: 1rem; margin-right: 1rem; min-width: 21.5rem; width: 50%"
+      style="margin-bottom: 1rem; margin-right: 10px; min-width: 63%"
     ></ShoppinglistItemsTable>
     <ShoppinglistItemCreateForm
       id="createFormComponent"
-      style="margin-right: 1rem; min-width: 21.5rem; width: 23%"
+      style="min-width: 23%"
     ></ShoppinglistItemCreateForm>
   </div>
 </template>
