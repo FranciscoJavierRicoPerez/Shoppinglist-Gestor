@@ -1,0 +1,67 @@
+{
+  "shoppinglistMetadata": {
+    "idShoppinglist": 1,
+    "code": "Shoppinglist_Code_1",
+    "creationDate": "15/01/2026",
+    "totalPrice": 39.48,
+    "isActive": true
+  },
+  "items": [
+    {
+      "id": 1,
+      "name": "Manzanas",
+      "assignationToListDate": "15/01/2026",
+      "calculateSystemCode": "WP",
+      "calculatedPrice": 2.1
+    },
+    {
+      "id": 2,
+      "name": "Gel de baño",
+      "assignationToListDate": "15/01/2026",
+      "calculateSystemCode": "UP",
+      "calculatedPrice": 3.22
+    },
+    {
+      "id": 3,
+      "name": "Emperador",
+      "assignationToListDate": "15/01/2026",
+      "calculateSystemCode": "WP",
+      "calculatedPrice": 9.86
+    },
+    {
+      "id": 4,
+      "name": "Solomillo",
+      "assignationToListDate": "15/01/2026",
+      "calculateSystemCode": "UP",
+      "calculatedPrice": 4.56
+    },
+    {
+      "id": 5,
+      "name": "Peras",
+      "assignationToListDate": "15/01/2026",
+      "calculateSystemCode": "WP",
+      "calculatedPrice": 2.1
+    },
+    {
+      "id": 6,
+      "name": "Espuma de afeitar",
+      "assignationToListDate": "15/01/2026",
+      "calculateSystemCode": "UP",
+      "calculatedPrice": 3.22
+    },
+    {
+      "id": 7,
+      "name": "Naranjas",
+      "assignationToListDate": "15/01/2026",
+      "calculateSystemCode": "WP",
+      "calculatedPrice": 9.86
+    },
+    {
+      "id": 8,
+      "name": "Leche",
+      "assignationToListDate": "15/01/2026",
+      "calculateSystemCode": "UP",
+      "calculatedPrice": 4.56
+    }
+  ]
+}

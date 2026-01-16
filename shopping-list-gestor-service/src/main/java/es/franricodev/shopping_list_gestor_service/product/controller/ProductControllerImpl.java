@@ -1,6 +1,8 @@
 package es.franricodev.shopping_list_gestor_service.product.controller;
 
 import es.franricodev.shopping_list_gestor_service.product.dto.ProductDTO;
+import es.franricodev.shopping_list_gestor_service.product.dto.response.ResponseProductsNames;
+import es.franricodev.shopping_list_gestor_service.product.exception.ProductException;
 import es.franricodev.shopping_list_gestor_service.product.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,5 +30,21 @@ public class ProductControllerImpl implements ProductController {
         log.info("Getting all the products from the database");
         HttpStatus httpStatus = HttpStatus.OK;
         return new ResponseEntity<>(productService.getAllProducts(), httpStatus);
+    }
+
+    @Override
+    public ResponseEntity<ResponseProductsNames> getAllProductsNames() {
+        log.info("Getting all the names of the products from the database");
+        HttpStatus httpStatus = HttpStatus.OK;
+        ResponseProductsNames responseProductsNames = null;
+        try {
+            responseProductsNames = ResponseProductsNames
+                    .builder()
+                    .productsNames(productService.getAllProductsNames())
+                    .build();
+        } catch (ProductException e) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+        }
+        return new ResponseEntity<>(responseProductsNames, httpStatus);
     }
 }
