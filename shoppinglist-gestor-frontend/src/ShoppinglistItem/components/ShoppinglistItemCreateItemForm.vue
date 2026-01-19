@@ -3,41 +3,35 @@ import CalculateSystemSelector from '@/CalculateSystem/components/CalculateSyste
 import CreateProductForm from '@/Product/components/CreateProductForm.vue'
 import Card from 'primevue/card'
 import { useCreateShoppinglistItemFormStore } from '../stores/createShoppinglistItemFormStore'
+import ItemUnitUpCreateForm from '@/ItemUnit/components/ItemUnitUpCreateForm.vue'
+import ItemUnitWpCreateForm from '@/ItemUnit/components/ItemUnitWpCreateForm.vue'
 
 const createShoppinglistItemFormStore = useCreateShoppinglistItemFormStore()
 </script>
 <template>
   <Card>
     <template #header>
-      <h5>Creacion nuevo producto</h5>
+      <div class="text-2xl font-italic ml-3 mt-2">Información nuevo producto</div>
     </template>
     <template #content>
       <!-- Formulario de creacion de un SLI -->
-      <div class="d-flex flex-column">
+      <div class="flex flex-column justify-content-center">
         <!-- Formulario con todos los productos introducidos alguna vez -->
-        <div style="font-size: small">
-          <p>
-            <strong
-              >Selecciona un producto del listado o introduce el nombre del producto que quieres
-              añadir</strong
-            >
-          </p>
+        <div class="text-sm font-semibold mb-2">
+          Selecciona un producto del listado o introduce el nombre del producto que quieres añadir
         </div>
         <CreateProductForm></CreateProductForm>
         <!-- Selector con los sistemas de calculo -->
-        <div style="font-size: small">
-          <p>
-            <strong>Selecciona el sistema para calcular el precio</strong>
-          </p>
-        </div>
-        <CalculateSystemSelector></CalculateSystemSelector>
+        <div class="text-sm font-semibold mb-2">Selecciona el sistema para calcular el precio</div>
+        <CalculateSystemSelector class="mb-2"></CalculateSystemSelector>
         <!-- Formulario de valores para el calculo del precio en funcion del sistema de calculo -->
         <div v-if="createShoppinglistItemFormStore.selectedCalculateSystem !== -1">
+          <div class="text-sm font-semibold mb-3">Introduce los datos</div>
           <div v-if="createShoppinglistItemFormStore.selectedCalculateSystem === 1">
-            <p>SE PROCEDE UTILIZAR EL UP TIPO</p>
+            <ItemUnitUpCreateForm></ItemUnitUpCreateForm>
           </div>
           <div v-else>
-            <p>SE PROCEDE A UTILIZAR EL WP TIPO</p>
+            <ItemUnitWpCreateForm></ItemUnitWpCreateForm>
           </div>
         </div>
       </div>

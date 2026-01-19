@@ -21,18 +21,9 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <div class="d-flex flex-row justify-content-start flex-wrap">
-    <ShoppinglistDetailsInformation
-      id="informationComponent"
-      style="margin-bottom: 1rem; margin-right: 10px; min-width: 13%"
-    ></ShoppinglistDetailsInformation>
-    <ShoppinglistItemsTable
-      id="tableComponent"
-      style="margin-bottom: 1rem; margin-right: 10px; min-width: 63%"
-    ></ShoppinglistItemsTable>
-    <ShoppinglistItemCreateForm
-      id="createFormComponent"
-      style="min-width: 23%"
-    ></ShoppinglistItemCreateForm>
+  <div class="flex flex-column sm:flex-row align-items-start justify-content-between gap-1">
+    <ShoppinglistDetailsInformation class="flex-grow-0 shadow-5"></ShoppinglistDetailsInformation>
+    <ShoppinglistItemsTable class="flex-grow-1 shadow-5"></ShoppinglistItemsTable>
+    <ShoppinglistItemCreateForm class="flex-grow-0 shadow-5"></ShoppinglistItemCreateForm>
   </div>
 </template>

@@ -12,40 +12,34 @@ const props = defineProps({
 })
 </script>
 <template>
-  <div class="d-flex flex-column">
+  <div>
     <Card
       :class="{
-        'wp-card-background': shoppinglistItem.calculateSystemCode === 'WP',
-        'up-card-background': shoppinglistItem.calculateSystemCode === 'UP',
+        'bg-green-300': shoppinglistItem.calculateSystemCode === 'WP',
+        'bg-green-200': shoppinglistItem.calculateSystemCode === 'UP',
       }"
     >
       <template #header>
-        <h5 style="margin-left: 1rem; margin-top: 10px">{{ shoppinglistItem.name }}</h5>
+        <div class="ml-3 mt-2 text-2xl text-left font-italic">{{ shoppinglistItem.name }}</div>
       </template>
       <template #subtitle>
         <Tag severity="info" rounded> Coste producto: {{ shoppinglistItem.calculatedPrice }} </Tag>
       </template>
       <template #content>
-        <div class="d-flex flex-row justify-content-start">
-          <Tag severity="warn" rounded style="margin-right: 0.5rem">
+        <div class="flex flex-row gap-2 justify-content-start">
+          <Tag severity="warn" rounded>
             Añadido el: {{ shoppinglistItem.assignationToLisDate }}
           </Tag>
-          <Tag severity="success" rounded
+          <Tag rounded class="bg-indigo-300 text-white"
             >Sistema de calculo: {{ shoppinglistItem.calculateSystemCode }}</Tag
           >
         </div>
       </template>
       <template #footer>
-        <div class="d-flex flex-row justify-content-start flex-wrap">
+        <div class="flex flex-row gap-2 justify-content-start">
           <!-- ESTE PRIMER BOTON DEBE DE VARIAR EN FUNCION DE LOS DE UP Y WP Y ABRIR EL MODAL PARA AÑADIR EL ITEM UNIT-->
-          <Button
-            severity="info"
-            label="KG/€"
-            size="small"
-            style="width: 45%; margin-right: 1rem"
-            raised
-          ></Button>
-          <Button severity="danger" label="Borrar" size="small" style="width: 45%" raised></Button>
+          <Button class="w-full" severity="info" label="KG/€" raised></Button>
+          <Button class="w-full" severity="danger" label="Borrar" raised></Button>
         </div>
       </template>
     </Card>

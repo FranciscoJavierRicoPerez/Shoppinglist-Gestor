@@ -7,14 +7,16 @@ import { useCreateShoppinglistItemFormStore } from '@/ShoppinglistItem/stores/cr
 const createShoppinglistItemFormStore = useCreateShoppinglistItemFormStore()
 </script>
 <template>
-  <ProductsSelector></ProductsSelector>
-  <FloatLabel variant="on" style="margin-top: 1rem">
-    <InputText
-      id="productName"
-      v-model="createShoppinglistItemFormStore.selectedProduct"
-      style="min-width: 100%"
-    ></InputText>
-    <label for="productName">Producto</label>
-  </FloatLabel>
+  <div class="flex flex-column gap-2">
+    <ProductsSelector></ProductsSelector>
+    <FloatLabel variant="on">
+      <InputText
+        id="productName"
+        v-model="createShoppinglistItemFormStore.selectedProduct"
+        class="w-full"
+      ></InputText>
+      <label for="productName">Producto</label>
+    </FloatLabel>
+  </div>
 </template>
 <style lang="css"></style>

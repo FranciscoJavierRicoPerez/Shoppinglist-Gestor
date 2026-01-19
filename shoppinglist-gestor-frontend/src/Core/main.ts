@@ -13,6 +13,8 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 
 import router from './router'
 
+import 'primeflex/primeflex.css'
+
 const app = createApp(App)
 
 app.use(PrimeVue, {

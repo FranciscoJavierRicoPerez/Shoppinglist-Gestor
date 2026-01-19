@@ -9,6 +9,14 @@ export const useCreateShoppinglistItemFormStore = defineStore(
 
     const selectedCalculateSystem = ref<number>(-1)
 
+    const quantity = ref<number | null>(null)
+    const unitaryPrice = ref<number | null>(null)
+
+    const priceKg = ref<number | null>(null)
+    const weight = ref<number | null>(null)
+
+    const shoppinglistItemPrice = ref<number | null>(null)
+
     // TODO: VALIDAR FUNCIONAMIENTO DE ESTO
     function verifyIsSelectedProductAlreadyExists(
       selectedProduct: string,
@@ -25,6 +33,11 @@ export const useCreateShoppinglistItemFormStore = defineStore(
       productOptions,
       selectedCalculateSystem,
       verifyIsSelectedProductAlreadyExists,
+      quantity,
+      unitaryPrice,
+      priceKg,
+      weight,
+      shoppinglistItemPrice,
     }
   },
 )

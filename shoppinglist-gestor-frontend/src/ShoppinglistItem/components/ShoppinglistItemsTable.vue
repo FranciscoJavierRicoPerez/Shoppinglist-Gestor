@@ -22,10 +22,7 @@ onMounted(() => {
     </template>
     <ScrollPanel style="width: 100%; height: 50rem">
       <div v-for="item in items">
-        <ShoppinglistItemInfoCard
-          style="margin-bottom: 1rem"
-          :shoppinglistItem="item"
-        ></ShoppinglistItemInfoCard>
+        <ShoppinglistItemInfoCard class="mb-2" :shoppinglistItem="item"></ShoppinglistItemInfoCard>
       </div>
     </ScrollPanel>
   </Panel>

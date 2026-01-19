@@ -10,14 +10,10 @@ import ShoppinglistItemCreateFormResume from './ShoppinglistItemCreateFormResume
       <h3>Nuevo Producto</h3>
     </template>
     <template #footer>
-      <Button security="info" label="Añadir producto" style="width: 100%"></Button>
+      <Button security="info" label="Añadir producto" class="w-full"></Button>
     </template>
-    <div class="d-flex flex-column justify-content-start">
-      <div style="margin-bottom: 1rem">
-        <ShoppinglistItemCreateItemForm></ShoppinglistItemCreateItemForm>
-      </div>
-      <ShoppinglistItemCreateFormResume></ShoppinglistItemCreateFormResume>
-    </div>
+    <ShoppinglistItemCreateItemForm class="mb-2 bg-green-100"></ShoppinglistItemCreateItemForm>
+    <ShoppinglistItemCreateFormResume class="bg-green-100"></ShoppinglistItemCreateFormResume>
   </Panel>
 </template>
 <style lang="css"></style>

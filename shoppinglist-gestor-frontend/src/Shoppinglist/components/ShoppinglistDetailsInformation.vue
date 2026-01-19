@@ -18,16 +18,9 @@ onMounted(() => {
       <template #header>
         <h3>Información</h3>
       </template>
-      <!-- <template #footer>
-        <div class="d-flex flex-row justify-content-center flex-wrap">
-          <Button style="margin-right: 1rem">Archivar</Button>
-          <Button style="margin-right: 1rem">Borrar</Button>
-          <Button>Exportar Informacion</Button>
-        </div> 
-      </template> -->
-      <div class="d-flex flex-column justify-content-start flex-wrap">
-        <div class="d-flex flex-row justify-content-center flex-wrap" style="margin-bottom: 1rem">
-          <Tag style="min-width: 5rem; margin-right: 1rem">
+      <div class="flex flex-column flex-wrap gap-2">
+        <div class="flex flex-row gap-2 justify-content-between">
+          <Tag>
             <div v-if="shoppinglistMetadata?.isActive">
               <strong>ABIERTA</strong>
             </div>
@@ -35,16 +28,10 @@ onMounted(() => {
               <strong>CERRADA</strong>
             </div>
           </Tag>
-          <Tag severity="info" style="min-width: 13rem">{{ shoppinglistMetadata?.code }}</Tag>
+          <Tag severity="info">{{ shoppinglistMetadata?.code }}</Tag>
         </div>
-        <Tag style="margin-bottom: 1rem" severity="danger"
-          >Precio total {{ shoppinglistMetadata?.totalPrice }} €</Tag
-        >
-        <Tag
-          style="margin-bottom: 1rem"
-          severity="warn"
-          :class="{ multiDate: shoppinglistMetadata?.closeDate !== null }"
-        >
+        <Tag severity="danger">Precio total {{ shoppinglistMetadata?.totalPrice }} €</Tag>
+        <Tag severity="warn" :class="{ multiDate: shoppinglistMetadata?.closeDate !== null }">
           Lista de la compra del {{ shoppinglistMetadata?.creationDate }}
           <div v-if="shoppinglistMetadata?.closeDate !== null">
             <strong> al {{ shoppinglistMetadata?.closeDate }}</strong>
