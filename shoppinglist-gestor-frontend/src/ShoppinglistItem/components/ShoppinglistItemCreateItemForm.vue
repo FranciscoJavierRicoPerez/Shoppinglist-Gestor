@@ -26,7 +26,7 @@ const createShoppinglistItemFormStore = useCreateShoppinglistItemFormStore()
         <CalculateSystemSelector class="mb-2"></CalculateSystemSelector>
         <!-- Formulario de valores para el calculo del precio en funcion del sistema de calculo -->
         <div v-if="createShoppinglistItemFormStore.selectedCalculateSystem !== -1">
-          <div class="text-sm font-semibold mb-3">Introduce los datos</div>
+          <div class="text-sm font-semibold mb-2">Introduce los datos</div>
           <div v-if="createShoppinglistItemFormStore.selectedCalculateSystem === 1">
             <ItemUnitUpCreateForm></ItemUnitUpCreateForm>
           </div>

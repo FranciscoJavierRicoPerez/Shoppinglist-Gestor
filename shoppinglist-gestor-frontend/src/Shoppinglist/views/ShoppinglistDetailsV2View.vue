@@ -21,7 +21,9 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <div class="flex flex-column sm:flex-row align-items-start justify-content-between gap-1">
+  <div
+    class="flex flex-column sm:flex-row align-items-start justify-content-between flex-wrap gap-1"
+  >
     <ShoppinglistDetailsInformation class="flex-grow-0 shadow-5"></ShoppinglistDetailsInformation>
     <ShoppinglistItemsTable class="flex-grow-1 shadow-5"></ShoppinglistItemsTable>
     <ShoppinglistItemCreateForm class="flex-grow-0 shadow-5"></ShoppinglistItemCreateForm>

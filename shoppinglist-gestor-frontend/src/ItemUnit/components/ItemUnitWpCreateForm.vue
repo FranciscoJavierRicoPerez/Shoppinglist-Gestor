@@ -29,7 +29,7 @@ function calculateShoppinglistItemTotalPrice() {
 </script>
 <template>
   <div class="flex flex-row gap-2">
-    <FloatLabel class="w-full">
+    <FloatLabel variant="on" class="w-full">
       <InputNumber
         id="pricekg"
         class="w-full"
@@ -39,7 +39,7 @@ function calculateShoppinglistItemTotalPrice() {
       ></InputNumber>
       <label for="pricekg">Precio Kg/€</label>
     </FloatLabel>
-    <FloatLabel class="w-full">
+    <FloatLabel variant="on" class="w-full">
       <InputNumber
         id="weight"
         class="w-full"

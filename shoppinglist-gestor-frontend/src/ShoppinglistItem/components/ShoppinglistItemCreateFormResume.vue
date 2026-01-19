@@ -2,8 +2,14 @@
 import { useCreateShoppinglistItemFormStore } from '@/ShoppinglistItem/stores/createShoppinglistItemFormStore'
 import Card from 'primevue/card'
 import Tag from 'primevue/tag'
+import { computed } from 'vue'
 
 const store = useCreateShoppinglistItemFormStore()
+
+const selectedCalculateSystemText = computed(() => {
+  let result = store.selectedCalculateSystem === 1 ? 'UP' : 'WP'
+  return 'Sistema de calculo: ' + result
+})
 </script>
 <template>
   <Card>
@@ -14,9 +20,9 @@ const store = useCreateShoppinglistItemFormStore()
       <div class="flex flex-column gap-2">
         <Tag severity="info">Producto: {{ store.selectedProduct }}</Tag>
         <div v-if="store.selectedCalculateSystem !== -1">
-          <Tag class="flex w-full bg-indigo-500 text-white mb-2"
-            >Sistema de calculo: {{ store.selectedCalculateSystem }}</Tag
-          >
+          <Tag class="flex w-full bg-indigo-500 text-white mb-2">{{
+            selectedCalculateSystemText
+          }}</Tag>
           <div v-if="store.selectedCalculateSystem === 1">
             <div class="flex justify-content-start mb-2">
               <Tag class="bg-orange-400 text-white w-6 mr-2"
