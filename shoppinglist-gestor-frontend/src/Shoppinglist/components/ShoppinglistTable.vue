@@ -122,10 +122,10 @@ function generateTabTitleName(element: string) {
         <div v-for="panelId in tabsPanelIds">
           <TabPanel :value="panelId">
             <ScrollPanel style="width: 100%; height: 600px">
-              <div class="flex flex-row flex-wrap">
+              <div class="flex flex-row flex-wrap justify-content-center">
                 <div v-for="shoppinglistData of selectTableToShow(panelId)">
                   <ShoppinglistCardInfo
-                    class="shadow-5"
+                    class="shadow-3"
                     :shoppinglist="shoppinglistData"
                     @update-shoppinglist-tables="updateShoppinglistTables"
                   ></ShoppinglistCardInfo>
