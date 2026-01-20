@@ -1,4 +1,4 @@
-import './assets/main.css'
+import './Core/assets/main.css'
 import 'primeicons/primeicons.css'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
@@ -6,12 +6,12 @@ import PrimeVue from 'primevue/config'
 import Aura from '@primevue/themes/aura'
 import ToastService from 'primevue/toastservice'
 
-import App from './App.vue'
+import App from './Core/App.vue'
 
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-import router from './router'
+import router from './Core/router'
 
 import 'primeflex/primeflex.css'
 
