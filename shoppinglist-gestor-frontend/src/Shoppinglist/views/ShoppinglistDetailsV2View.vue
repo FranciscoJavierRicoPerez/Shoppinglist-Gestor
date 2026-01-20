@@ -3,9 +3,9 @@ import ShoppinglistDetailsInformation from '@/Shoppinglist/components/Shoppingli
 import ShoppinglistItemCreateForm from '@/ShoppinglistItem/components/ShoppinglistItemCreateForm.vue'
 import ShoppinglistItemsTable from '@/ShoppinglistItem/components/ShoppinglistItemsTable.vue'
 import { useShoppinglistDetailStore } from '@/Shoppinglist/stores/shoppinglistDetailStore'
-import { onMounted } from 'vue'
 import { useGetShoppinlistDetailsMetadata } from '@/Shoppinglist/application/useGetShopinglistDetailsMetadata'
 import { useRoute } from 'vue-router'
+import { onMounted } from 'vue'
 
 /**
  * - Obtener el detalle de la lista de la compra del EP: /api/shoppinglistview/v1/{id}/details
@@ -21,11 +21,9 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <div
-    class="flex flex-column sm:flex-row align-items-start justify-content-between flex-wrap gap-1"
-  >
-    <ShoppinglistDetailsInformation class="flex-grow-0 shadow-5"></ShoppinglistDetailsInformation>
-    <ShoppinglistItemsTable class="flex-grow-1 shadow-5"></ShoppinglistItemsTable>
-    <ShoppinglistItemCreateForm class="flex-grow-0 shadow-5"></ShoppinglistItemCreateForm>
+  <div class="flex align-items-start justify-content-between flex-wrap gap-2">
+    <ShoppinglistDetailsInformation class="grow-0 shadow-5"></ShoppinglistDetailsInformation>
+    <ShoppinglistItemsTable class="grow shadow-5"></ShoppinglistItemsTable>
+    <ShoppinglistItemCreateForm class="grow-0 shadow-5"></ShoppinglistItemCreateForm>
   </div>
 </template>

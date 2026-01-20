@@ -14,7 +14,7 @@ const selectedCalculateSystemText = computed(() => {
 <template>
   <Card>
     <template #header>
-      <div class="text-2xl font-italic ml-3 mt-2">Resumen nuevo producto</div>
+      <div class="text-2xl italic ml-3 mt-2">Resumen nuevo producto</div>
     </template>
     <template #content>
       <div class="flex flex-column gap-2">

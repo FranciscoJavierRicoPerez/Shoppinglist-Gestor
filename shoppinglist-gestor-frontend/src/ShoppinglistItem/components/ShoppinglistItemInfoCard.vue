@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, type PropType } from 'vue'
+import { type PropType } from 'vue'
 import type { ShoppinglistItemMetadata } from '@/ShoppinglistItem/domain/ShoppinglistItemMetadata'
 import Card from 'primevue/card'
 import Button from 'primevue/button'

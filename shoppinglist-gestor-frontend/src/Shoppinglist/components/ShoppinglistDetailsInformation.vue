@@ -16,7 +16,7 @@ onMounted(() => {
   <div>
     <Panel toggleable>
       <template #header>
-        <h3>Información</h3>
+        <div class="text-2xl italic">Información</div>
       </template>
       <div class="flex flex-column flex-wrap gap-2">
         <div class="flex flex-row gap-2 justify-content-between">

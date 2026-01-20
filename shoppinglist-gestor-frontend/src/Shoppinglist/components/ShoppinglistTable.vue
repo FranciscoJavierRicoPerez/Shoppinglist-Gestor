@@ -95,12 +95,20 @@ function generateTabTitleName(element: string) {
 </script>
 <template>
   <Toast></Toast>
-  <Panel class="panelShoppinglistTable" toggleable>
+  <Panel class="w-full h-full mt-2 grow shadow-5 max-w-content" toggleable>
     <template #header>
-      <span class="panelHeader">Listas de la compra</span>
+      <div class="text-2xl italic">Tus listas de la compra</div>
     </template>
-    <div class="cardOrganization">
-      <Button label="Nueva lista" icon="pi pi-plus" @click="addNewShoppinglist"></Button>
+    <template #footer>
+      Seccion de informacion general sobre las listas, cantidad, precio de la suma de todas, etc...
+    </template>
+    <div class="flex flex-wrap">
+      <Button
+        class="bg-green-500 w-3"
+        label="Nueva lista"
+        icon="pi pi-plus"
+        @click="addNewShoppinglist"
+      ></Button>
     </div>
     <Tabs value="0">
       <TabList>
@@ -114,9 +122,10 @@ function generateTabTitleName(element: string) {
         <div v-for="panelId in tabsPanelIds">
           <TabPanel :value="panelId">
             <ScrollPanel style="width: 100%; height: 600px">
-              <div class="d-flex flex-row flex-wrap">
+              <div class="flex flex-row flex-wrap">
                 <div v-for="shoppinglistData of selectTableToShow(panelId)">
                   <ShoppinglistCardInfo
+                    class="shadow-5"
                     :shoppinglist="shoppinglistData"
                     @update-shoppinglist-tables="updateShoppinglistTables"
                   ></ShoppinglistCardInfo>
@@ -129,16 +138,3 @@ function generateTabTitleName(element: string) {
     </Tabs>
   </Panel>
 </template>
-<style>
-.panelHeader {
-  font-size: xx-large;
-  font-weight: bold;
-}
-.panelShoppinglistTable {
-  margin-top: 1rem;
-}
-.cardOrganization {
-  display: flex;
-  flex-wrap: wrap;
-}
-</style>

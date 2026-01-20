@@ -18,7 +18,7 @@ onMounted(() => {
 <template>
   <Panel toggleable>
     <template #header>
-      <h3>Listado de productos</h3>
+      <div class="text-2xl italic">Listado de productos</div>
     </template>
     <ScrollPanel style="width: 100%; height: 50rem">
       <div v-for="item in items">

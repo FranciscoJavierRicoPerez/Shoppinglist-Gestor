@@ -61,76 +61,57 @@ async function searchShoppinglistByFilter() {
 }
 </script>
 <template>
-  <Panel class="panelFilter" toggleable>
+  <Panel class="grew-0 shadow-5 w-full h-full mt-2" toggleable>
     <template #header>
-      <span class="panelHeader">Filtro de listas de compra</span>
+      <div class="text-2xl italic">Filtrado de listas de compras</div>
     </template>
     <template #footer>
       <Button
+        class="w-full bg-green-500"
         icon="pi pi-search"
-        severity="success"
         aria-label="Search"
         @click="searchShoppinglistByFilter()"
       />
     </template>
     <!-- Shoppinglist filter form -->
     <!-- New Version of the form with Flexbox -->
-    <div class="d-flex align-items-center justify-content-start flex-wrap">
-      <FloatLabel class="form-margin" style="width: 25rem" variant="on">
+    <div class="flex flex-column align-items-start justify-content-start flex-wrap w-full">
+      <FloatLabel class="flex w-full mb-1" style="width: 25rem" variant="on">
         <DatePicker
           id="datepicker-24h"
           v-model="shoppinglistFilterForm.creationDate"
           showTime
           hourFormat="24"
-          class="bigInputs"
+          class="w-full"
         />
         <label for="shoppinglistCreationDate">Fecha de creación</label>
       </FloatLabel>
-      <FloatLabel class="form-margin" style="width: 25rem" variant="on">
+      <FloatLabel class="flex w-full mb-1" variant="on">
         <DatePicker
           id="datepicker-24h"
           v-model="shoppinglistFilterForm.closeDate"
           showTime
           hourFormat="24"
-          class="bigInputs"
+          class="w-full"
         />
         <label for="shoppinglistCloseDate">Fecha de cierre</label>
       </FloatLabel>
-      <FloatLabel class="form-margin" style="width: 25rem" variant="on">
+      <FloatLabel class="flex w-full mb-1" variant="on">
         <InputText
           id="shoppinglistCode"
           v-model="shoppinglistFilterForm.code"
-          class="smallInputs"
+          class="w-full"
         ></InputText>
         <label for="shoppinglistCode">Código</label>
       </FloatLabel>
-      <FloatLabel class="form-margin" style="width: 25rem" variant="on">
+      <FloatLabel class="flex w-full mb-1" variant="on">
         <InputNumber
           id="shoppinglistTotalPrice"
           v-model="shoppinglistFilterForm.totalPrice"
-          class="smallInputs"
+          class="w-full"
         ></InputNumber>
         <label for="shoppinglistTotalPrice">Precio Total</label>
       </FloatLabel>
     </div>
   </Panel>
 </template>
-<style lang="css">
-.panelFilter {
-  margin-top: 1rem;
-}
-.panelHeader {
-  font-size: xx-large;
-  font-weight: bold;
-}
-.bigInputs {
-  width: 100%;
-}
-.smallInputs {
-  width: 100%;
-}
-.form-margin {
-  margin-right: 5px;
-  margin-top: 5px;
-}
-</style>

@@ -7,7 +7,7 @@ import ShoppinglistItemCreateFormResume from './ShoppinglistItemCreateFormResume
 <template>
   <Panel id="1" toggleable>
     <template #header>
-      <h3>Nuevo Producto</h3>
+      <div class="text-2xl font-italic">Nuevo Producto</div>
     </template>
     <template #footer>
       <Button security="info" label="Añadir producto" class="w-full"></Button>
