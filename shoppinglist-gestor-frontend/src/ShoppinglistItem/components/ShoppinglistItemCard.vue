@@ -15,7 +15,7 @@ defineProps({
 <template>
   <div v-for="item in shoppinglistItemList">
     <Card class="mainCard" style="max-width: 25rem">
-      <template #title>{{ item.product?.name }}</template>
+      <template #title>Titulo</template>
       <template #content>
         <Tag severity="info" style="margin-right: 1rem">Cantidad {{ item.quantity }}</Tag>
         <Tag severity="primary">Precio {{ item.calculatedPrice }} €</Tag>

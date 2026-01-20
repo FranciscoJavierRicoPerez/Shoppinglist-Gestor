@@ -2,7 +2,7 @@ import type { ProductsNames } from '@/Product/domain/ProductsNames'
 import type { ResponseProductsNames } from '@/Product/infrastructure/models/response/ResponseProductsNames'
 import responseGetAllProductsNames from '@/Product/infrastructure/mocks/responseGetAllProductsNames.json'
 import axios from 'axios'
-import { createProductsNames } from '@/Product/infrastructure/services/productService'
+import { createProductsNames } from '../services/ProductService'
 async function getAllProductsNames(): Promise<ProductsNames> {
   const response: ResponseProductsNames =
     import.meta.env.VITE_DATA_ACCESS === 'LOCAL' ? await InMemory() : await Api()

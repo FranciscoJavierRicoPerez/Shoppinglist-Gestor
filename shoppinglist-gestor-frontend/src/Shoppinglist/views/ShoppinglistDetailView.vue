@@ -11,7 +11,7 @@ import Button from 'primevue/button'
 import ShoppinglistItemCard from '@/ShoppinglistItem/components/ShoppinglistItemCard.vue'
 const { refetch: getShoppinglistDetails } = useGetShoppinglistDetails()
 
-const shoppinglistDetails = ref<ShoppinglistDetails>({ ...defaultShoppinglistDetails })
+const shoppinglistDetails = ref<ShoppinglistDetails | null>({ ...defaultShoppinglistDetails })
 
 onMounted(async () => {
   // We have to obtain the object ShoppinglistDetails
@@ -23,7 +23,7 @@ onMounted(async () => {
     <template #header><span class="panelHeader">Informacion lista de la compra</span> </template>
     <p>
       <Tag style="font-size: large; margin-right: 1rem">
-        <div v-if="shoppinglistDetails.isActive">
+        <div v-if="shoppinglistDetails?.isActive">
           <strong>ABIERTA</strong>
         </div>
         <div v-else>
@@ -31,19 +31,19 @@ onMounted(async () => {
         </div>
       </Tag>
       <Tag severity="info" style="font-size: larger; margin-right: 1rem">{{
-        shoppinglistDetails.code
+        shoppinglistDetails?.code
       }}</Tag>
       <Tag severity="danger" style="font-size: larger"
-        >Precio total {{ shoppinglistDetails.totalPrice }} €</Tag
+        >Precio total {{ shoppinglistDetails?.totalPrice }} €</Tag
       >
       <Tag
         severity="warn"
         style="font-size: larger"
-        :class="{ multiDate: shoppinglistDetails.closeDate !== null }"
+        :class="{ multiDate: shoppinglistDetails?.closeDate !== null }"
       >
-        Lista de la compra del {{ shoppinglistDetails.creationDate }}
-        <div v-if="shoppinglistDetails.closeDate !== null">
-          <strong> al {{ shoppinglistDetails.closeDate }}</strong>
+        Lista de la compra del {{ shoppinglistDetails?.creationDate }}
+        <div v-if="shoppinglistDetails?.closeDate !== null">
+          <strong> al {{ shoppinglistDetails?.closeDate }}</strong>
         </div>
       </Tag>
     </p>
@@ -61,7 +61,7 @@ onMounted(async () => {
     <div class="cardOrganization">
       <!-- <ProductDataview :productList="shoppinglistDetails.products"></ProductDataview> -->
       <ShoppinglistItemCard
-        :shoppinglistItemList="shoppinglistDetails.items"
+        :shoppinglistItemList="shoppinglistDetails?.items"
       ></ShoppinglistItemCard>
     </div>
   </Panel>

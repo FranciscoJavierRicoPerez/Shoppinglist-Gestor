@@ -2,7 +2,7 @@ import type { ShoppinglistDetails } from '@/Shoppinglist/domain/ShoppinglistDeta
 import { getShoppinglistDetails } from '@/Shoppinglist/infrastructure/useCases/getShoppinglistDetails'
 
 export function useGetShoppinglistDetails() {
-  async function refetch(): Promise<ShoppinglistDetails> {
+  async function refetch(): Promise<ShoppinglistDetails | null> {
     return await getShoppinglistDetails()
   }
   return { refetch }
