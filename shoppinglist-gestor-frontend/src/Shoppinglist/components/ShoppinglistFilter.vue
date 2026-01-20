@@ -15,13 +15,23 @@ import type { Shoppinglist } from '@/Shoppinglist/domain/Shoppinglist'
 import { useShoppinglistStore } from '@/Shoppinglist/stores/shoppinglistStore'
 import { useGetAllShoppinglist } from '@/Shoppinglist/application/useGetAllShoppinglist'
 import { useShoppinglistFilterStore } from '@/Shoppinglist/stores/shoppinglistFilterStore'
+import { useShoppinglistTableStore } from '@/Shoppinglist/stores/shoppinglistTableStore'
+import type { ShoppinglistMetadata } from '../domain/ShoppinglistMetadata'
+import {
+  defaultShoppinglistTable,
+  type ShoppinglistTable,
+} from '@/Shoppinglist/domain/ShoppinglistTable'
+import { useGetShoppinglistTableMetadata } from '../application/useGetShoppinglistTableMetadata'
 const storeShoppinglistFilter = useShoppinglistFilterStore()
-const store = useShoppinglistStore()
+// const store = useShoppinglistStore()
+
+const shoppinglistTableStore = useShoppinglistTableStore()
+
 const { refetch: getAllShoppinglistFiltered } = useGetShoppinglistFiltered()
-const { refetch: getAllShoppinglist } = useGetAllShoppinglist()
+const { refetch: getShoppinglistTableMetadata } = useGetShoppinglistTableMetadata()
 const shoppinglistFilterForm = ref<ShoppinglistFilter>({ ...defaultShoppinglistFilter })
 
-const filteredShoppinglist = ref<Shoppinglist[]>([])
+const filteredShoppinglistTable = ref<ShoppinglistTable>({ ...defaultShoppinglistTable })
 
 function verifyFilterForm() {
   return (
@@ -41,92 +51,67 @@ async function searchShoppinglistByFilter() {
         ? true
         : false
   if (verifyFilterForm()) {
-    filteredShoppinglist.value = await getAllShoppinglist()
+    filteredShoppinglistTable.value = await getShoppinglistTableMetadata()
   } else {
-    filteredShoppinglist.value = await getAllShoppinglistFiltered(shoppinglistFilterForm.value)
+    filteredShoppinglistTable.value = await getAllShoppinglistFiltered(shoppinglistFilterForm.value)
   }
-  if (filteredShoppinglist.value.length > 0) {
-    store.setShoppinglistArray(filteredShoppinglist.value)
+  if (filteredShoppinglistTable.value.shoppinglistTable.length > 0) {
+    shoppinglistTableStore.setShoppinglistTable(filteredShoppinglistTable.value.shoppinglistTable)
   }
 }
 </script>
 <template>
-  <Panel class="panelFilter" toggleable>
+  <Panel class="grew-0 shadow-5 w-full h-full mt-2" toggleable>
     <template #header>
-      <span class="panelHeader">Filtro de listas de compra</span>
+      <div class="text-2xl italic">Filtrado de listas de compras</div>
     </template>
     <template #footer>
       <Button
+        class="w-full bg-green-500"
         icon="pi pi-search"
-        severity="success"
         aria-label="Search"
         @click="searchShoppinglistByFilter()"
       />
     </template>
     <!-- Shoppinglist filter form -->
-    <div class="container-xxlg">
-      <div class="row">
-        <div class="col-3">
-          <FloatLabel variant="on">
-            <DatePicker
-              id="datepicker-24h"
-              v-model="shoppinglistFilterForm.creationDate"
-              showTime
-              hourFormat="24"
-              class="bigInputs"
-            />
-            <label for="shoppinglistCreationDate">Fecha de creación</label>
-          </FloatLabel>
-        </div>
-        <div class="col-3">
-          <FloatLabel variant="on">
-            <DatePicker
-              id="datepicker-24h"
-              v-model="shoppinglistFilterForm.closeDate"
-              showTime
-              hourFormat="24"
-              class="bigInputs"
-            />
-            <label for="shoppinglistCloseDate">Fecha de cierre</label>
-          </FloatLabel>
-        </div>
-        <div class="col-2">
-          <FloatLabel variant="on">
-            <InputText
-              id="shoppinglistCode"
-              v-model="shoppinglistFilterForm.code"
-              class="smallInputs"
-            ></InputText>
-            <label for="shoppinglistCode">Código</label>
-          </FloatLabel>
-        </div>
-        <div class="col-2">
-          <FloatLabel variant="on">
-            <InputNumber
-              id="shoppinglistTotalPrice"
-              v-model="shoppinglistFilterForm.totalPrice"
-              class="smallInputs"
-            ></InputNumber>
-            <label for="shoppinglistTotalPrice">Precio Total</label>
-          </FloatLabel>
-        </div>
-      </div>
+    <!-- New Version of the form with Flexbox -->
+    <div class="flex flex-column align-items-start justify-content-start flex-wrap w-full">
+      <FloatLabel class="flex w-full mb-1" style="width: 25rem" variant="on">
+        <DatePicker
+          id="datepicker-24h"
+          v-model="shoppinglistFilterForm.creationDate"
+          showTime
+          hourFormat="24"
+          class="w-full"
+        />
+        <label for="shoppinglistCreationDate">Fecha de creación</label>
+      </FloatLabel>
+      <FloatLabel class="flex w-full mb-1" variant="on">
+        <DatePicker
+          id="datepicker-24h"
+          v-model="shoppinglistFilterForm.closeDate"
+          showTime
+          hourFormat="24"
+          class="w-full"
+        />
+        <label for="shoppinglistCloseDate">Fecha de cierre</label>
+      </FloatLabel>
+      <FloatLabel class="flex w-full mb-1" variant="on">
+        <InputText
+          id="shoppinglistCode"
+          v-model="shoppinglistFilterForm.code"
+          class="w-full"
+        ></InputText>
+        <label for="shoppinglistCode">Código</label>
+      </FloatLabel>
+      <FloatLabel class="flex w-full mb-1" variant="on">
+        <InputNumber
+          id="shoppinglistTotalPrice"
+          v-model="shoppinglistFilterForm.totalPrice"
+          class="w-full"
+        ></InputNumber>
+        <label for="shoppinglistTotalPrice">Precio Total</label>
+      </FloatLabel>
     </div>
-    <!--  End of the Shoppinglist filter form  -->
   </Panel>
 </template>
-<style lang="css">
-.panelFilter {
-  margin-top: 1rem;
-}
-.panelHeader {
-  font-size: xx-large;
-  font-weight: bold;
-}
-.bigInputs {
-  width: 100%;
-}
-.smallInputs {
-  width: 100%;
-}
-</style>

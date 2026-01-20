@@ -1,5 +1,5 @@
 @import './base.css';
-
+@import 'output.css';
 #app {
   padding: 1rem;
   font-weight: normal;

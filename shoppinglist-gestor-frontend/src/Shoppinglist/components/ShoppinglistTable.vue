@@ -11,6 +11,8 @@ import TabList from 'primevue/tablist'
 import Tab from 'primevue/tab'
 import TabPanels from 'primevue/tabpanels'
 import TabPanel from 'primevue/tabpanel'
+import VirtualScroller from 'primevue/virtualscroller'
+import ScrollPanel from 'primevue/scrollpanel'
 import { useShoppinglistFilterStore } from '@/Shoppinglist/stores/shoppinglistFilterStore'
 import { defaultShoppinglistTable, type ShoppinglistTable } from '../domain/ShoppinglistTable'
 import { useGetShoppinglistTableMetadata } from '@/Shoppinglist/application/useGetShoppinglistTableMetadata'
@@ -93,12 +95,20 @@ function generateTabTitleName(element: string) {
 </script>
 <template>
   <Toast></Toast>
-  <Panel class="panelShoppinglistTable">
+  <Panel class="w-full h-full mt-2 grow shadow-5 max-w-content" toggleable>
     <template #header>
-      <span class="panelHeader">Listas de la compra</span>
+      <div class="text-2xl italic">Tus listas de la compra</div>
     </template>
-    <div class="cardOrganization">
-      <Button label="Nueva lista" icon="pi pi-plus" @click="addNewShoppinglist"></Button>
+    <template #footer>
+      Seccion de informacion general sobre las listas, cantidad, precio de la suma de todas, etc...
+    </template>
+    <div class="flex flex-wrap">
+      <Button
+        class="bg-green-500 w-3"
+        label="Nueva lista"
+        icon="pi pi-plus"
+        @click="addNewShoppinglist"
+      ></Button>
     </div>
     <Tabs value="0">
       <TabList>
@@ -111,30 +121,20 @@ function generateTabTitleName(element: string) {
       <TabPanels>
         <div v-for="panelId in tabsPanelIds">
           <TabPanel :value="panelId">
-            <div class="cardOrganization">
-              <div v-for="shoppinglistData of selectTableToShow(panelId)">
-                <ShoppinglistCardInfo
-                  :shoppinglist="shoppinglistData"
-                  @update-shoppinglist-tables="updateShoppinglistTables"
-                ></ShoppinglistCardInfo>
+            <ScrollPanel style="width: 100%; height: 600px">
+              <div class="flex flex-row flex-wrap justify-content-center">
+                <div v-for="shoppinglistData of selectTableToShow(panelId)">
+                  <ShoppinglistCardInfo
+                    class="shadow-3"
+                    :shoppinglist="shoppinglistData"
+                    @update-shoppinglist-tables="updateShoppinglistTables"
+                  ></ShoppinglistCardInfo>
+                </div>
               </div>
-            </div>
+            </ScrollPanel>
           </TabPanel>
         </div>
       </TabPanels>
     </Tabs>
   </Panel>
 </template>
-<style>
-.panelHeader {
-  font-size: xx-large;
-  font-weight: bold;
-}
-.panelShoppinglistTable {
-  margin-top: 1rem;
-}
-.cardOrganization {
-  display: flex;
-  flex-wrap: wrap;
-}
-</style>

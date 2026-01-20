@@ -1,6 +1,7 @@
 package es.franricodev.shopping_list_gestor_service.calculateSystem.controller;
 
 import es.franricodev.shopping_list_gestor_service.calculateSystem.dto.CalculateSystemDTO;
+import es.franricodev.shopping_list_gestor_service.calculateSystem.dto.response.ResponseGetAllCalculateSystems;
 import es.franricodev.shopping_list_gestor_service.calculateSystem.service.CalculateSystemService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +25,10 @@ public class CalculateSystemControllerImpl implements CalculateSystemController 
 
     @GetMapping("/v1/all")
     @Override
-    public ResponseEntity<List<CalculateSystemDTO>> getAllCalculateSystems() {
+    public ResponseEntity<ResponseGetAllCalculateSystems> getAllCalculateSystems() {
         log.info("Getting all the calculate systems in the database");
-        List<CalculateSystemDTO> calculateSystemDTOList = null;
         HttpStatus httpStatus = HttpStatus.OK;
-        calculateSystemDTOList = calculateSystemService.findAll();
-        return new ResponseEntity<>(calculateSystemDTOList, httpStatus);
+        ResponseGetAllCalculateSystems response = new ResponseGetAllCalculateSystems(calculateSystemService.findAll());
+        return new ResponseEntity<>(response, httpStatus);
     }
 }

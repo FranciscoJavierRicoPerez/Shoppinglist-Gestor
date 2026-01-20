@@ -1,6 +1,6 @@
 package es.franricodev.shopping_list_gestor_service.calculateSystem.controller;
 
-import es.franricodev.shopping_list_gestor_service.calculateSystem.dto.CalculateSystemDTO;
+import es.franricodev.shopping_list_gestor_service.calculateSystem.dto.response.ResponseGetAllCalculateSystems;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,11 +24,11 @@ public interface CalculateSystemController {
                     responseCode = "200",
                     content = {
                         @Content(
-                                schema = @Schema(implementation = CalculateSystemDTO.class),
+                                schema = @Schema(implementation = ResponseGetAllCalculateSystems.class),
                                 mediaType = "application/json"
                         )
                     })
     })
     @GetMapping("/v1/all")
-    ResponseEntity<List<CalculateSystemDTO>> getAllCalculateSystems();
+    ResponseEntity<ResponseGetAllCalculateSystems> getAllCalculateSystems();
 }
