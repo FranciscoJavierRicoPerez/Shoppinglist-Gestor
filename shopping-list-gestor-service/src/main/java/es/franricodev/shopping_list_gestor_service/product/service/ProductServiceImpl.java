@@ -77,4 +77,14 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.productListToProductDtoList(products);
     }
 
+    @Override
+    public List<String> getAllProductsNames() {
+        log.info("Getting all the names of the products in the database");
+        List<String> productsNames = productRepository.findAll().stream().map(Product::getName).toList();
+        if (productsNames.isEmpty()) {
+            throw new ProductException("No se han encontrado ningun producto");
+        }
+        return productsNames;
+    }
+
 }

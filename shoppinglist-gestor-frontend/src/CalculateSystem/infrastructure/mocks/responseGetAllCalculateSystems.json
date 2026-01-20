@@ -1,0 +1,14 @@
+{
+  "calculateSystemDTOList": [
+    {
+      "id": 1,
+      "name": "Precio Unitario",
+      "code": "UP"
+    },
+    {
+      "id": 2,
+      "name": "Precio Kg/€",
+      "code": "WP"
+    }
+  ]
+}

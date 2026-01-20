@@ -4,4 +4,5 @@ export interface ShoppinglistMetadata {
   creationDate: string
   totalPrice: number
   isActive: boolean
+  closeDate: string | null
 }

@@ -1,31 +1,12 @@
-import type { Product } from '@/Product/domain/Product'
-import type { ResponseProduct } from '../models/ResponseProduct'
-import type { ResponseProductDetails } from '../models/ResponseProductDetails'
-import type { ProductDetails } from '@/Product/domain/ProductDetails'
-import { createProductUnitList } from '@/ProductUnit/infrastructure/services/ProductUnitService'
+import type { ProductsNames } from '@/Product/domain/ProductsNames'
+import type { ResponseProductsNames } from '../models/response/ResponseProductsNames'
 
-export function createProductArray(data: ResponseProduct[]): Product[] | null {
-  let products: Product[] = []
-  data.forEach((element) => {
-    products.push(createProduct(element))
+export function createProductsNames(data: ResponseProductsNames): ProductsNames {
+  let names: string[] = []
+  data.productsNames.forEach((element) => {
+    names.push(element)
   })
-  return products
-}
-
-export function createProduct(data: ResponseProduct): Product {
   return {
-    id: data.id,
-    name: data.name,
-    price: data.price,
-  }
-}
-
-export function createProductDetails(data: ResponseProductDetails): ProductDetails {
-  return {
-    id: data.id,
-    name: data.name,
-    quantity: data.quantity,
-    price: data.price,
-    productUnitList: createProductUnitList(data.productUnitList),
+    productsNames: names,
   }
 }

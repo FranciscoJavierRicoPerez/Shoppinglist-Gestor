@@ -1,6 +1,7 @@
 package es.franricodev.shopping_list_gestor_service.product.controller;
 
 import es.franricodev.shopping_list_gestor_service.product.dto.ProductDTO;
+import es.franricodev.shopping_list_gestor_service.product.dto.response.ResponseProductsNames;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -31,4 +32,19 @@ public interface ProductController {
     })
     @GetMapping("/v1/all")
     ResponseEntity<List<ProductDTO>> getAllProducts();
+
+    @Operation(summary = "Return the name of all products in the database")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    content = {
+                            @Content(
+                                    schema = @Schema(implementation = ResponseProductsNames.class),
+                                    mediaType = "application/json"
+                            )
+                    }
+            )
+    })
+    @GetMapping("/v1/names")
+    ResponseEntity<ResponseProductsNames> getAllProductsNames();
 }

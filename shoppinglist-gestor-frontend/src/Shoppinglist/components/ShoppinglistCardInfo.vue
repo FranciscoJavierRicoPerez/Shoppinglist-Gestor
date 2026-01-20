@@ -87,21 +87,24 @@ function createToast(toastOptions: ToastMessageOptions) {
       </div>
     </template>
     <template #footer>
-      <Button
-        label="Archivar"
-        severity="help"
-        :disabled="!shoppinglist.isActive"
-        @click="archiveShoppinglist()"
-      ></Button>
-      <RouterLink :to="`/shoppinglist/${shoppinglist.idShoppinglist}`">
-        <Button class="buttons-separation" label="Ver" severity="info"></Button>
-      </RouterLink>
-      <Button
-        class="buttons-separation"
-        label="Eliminar"
-        severity="danger"
-        @click="removeShoppinglist()"
-      ></Button>
+      <div class="d-flex flex-row justify-content-start flex-wrap">
+        <Button
+          class="buttons-separation"
+          label="Archivar"
+          severity="help"
+          :disabled="!shoppinglist.isActive"
+          @click="archiveShoppinglist()"
+        ></Button>
+        <RouterLink :to="`/shoppinglist/${shoppinglist.idShoppinglist}`">
+          <Button class="buttons-separation" label="Ver" severity="info"></Button>
+        </RouterLink>
+        <Button
+          class="buttons-separation"
+          label="Eliminar"
+          severity="danger"
+          @click="removeShoppinglist()"
+        ></Button>
+      </div>
     </template>
   </Card>
 </template>
@@ -109,7 +112,7 @@ function createToast(toastOptions: ToastMessageOptions) {
 .card-general {
   margin-right: 1rem;
   margin-top: 10px;
-  max-width: 20rem;
+  /* max-width: 30rem; */
 }
 
 .card-background-actives-card {
@@ -121,7 +124,8 @@ function createToast(toastOptions: ToastMessageOptions) {
 }
 
 .buttons-separation {
-  margin-left: 1rem;
+  margin-top: 6px;
+  margin-right: 1rem;
 }
 .tag-custom {
   font-size: large;
