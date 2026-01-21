@@ -101,6 +101,7 @@ function generateTabTitleName(element: string) {
     </template>
     <template #footer>
       Seccion de informacion general sobre las listas, cantidad, precio de la suma de todas, etc...
+      REVISAR
     </template>
     <div class="flex flex-wrap">
       <Button
