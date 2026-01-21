@@ -19,7 +19,7 @@ const items = ref([
 
 <template>
   <nav>
-    <Menubar :model="items" class="menubar">
+    <Menubar :model="items" class="flex w-full">
       <template #item="{ item, props }">
         <RouterLink v-if="item.to" v-bind="props" :to="item.to" class="menu-item">
           <i :class="item.icon"></i>

@@ -4,32 +4,21 @@ import Navbar from '@/Shared/components/Navbar.vue'
 </script>
 
 <template>
-  <div class="custom-header custom-text">GestCompras</div>
-  <header>
-    <Navbar></Navbar>
-  </header>
-  <RouterView />
-  <!-- <footer class="custom-footer custom-text">Francisco Javier Rico Pérez - 2025/2026 v0.0.1</footer> -->
-</template>
+  <div class="flex flex-column justify-content-between">
+    <div class="bg-green-400 w-full p-3">
+      <div class="flex text-6xl font-italic justify-content-center">GestCompras</div>
+    </div>
+    <header class="p-3">
+      <Navbar></Navbar>
+    </header>
+    <div class="grow-0 mb-6 p-3">
+      <RouterView />
+    </div>
 
-<style scoped>
-.custom-header {
-  background-color: rgb(51, 255, 153);
-  margin-bottom: 10px;
-  height: 50px;
-}
-.custom-footer {
-  background-color: rgb(51, 255, 153);
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 1rem;
-}
-.custom-text {
-  text-align: center;
-  font-size: xx-large;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  font-style: italic;
-}
-</style>
+    <footer class="text-3xl bg-green-400 mt-9 w-full p-3">
+      <div class="flex text-3xl font-italic justify-content-center">
+        Francisco Javier Rico Pérez - 2025/2026 v0.0.1
+      </div>
+    </footer>
+  </div>
+</template>
