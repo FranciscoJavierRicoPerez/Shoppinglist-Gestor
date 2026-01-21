@@ -17,7 +17,7 @@ import Navbar from '@/Shared/components/Navbar.vue'
 
     <footer class="text-3xl bg-green-400 mt-9 w-full p-3">
       <div class="flex text-3xl font-italic justify-content-center">
-        Francisco Javier Rico Pérez - 2025/2026 v0.0.1
+        Francisco Javier Rico Pérez - 2026 v0.0.1
       </div>
     </footer>
   </div>

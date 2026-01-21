@@ -28,6 +28,15 @@ export const useCreateShoppinglistItemFormStore = defineStore(
       return list.length > 0
     }
 
+    function setValuesDefault(): void {
+      selectedProduct.value = ''
+      ;((selectedCalculateSystem.value = -1), (quantity.value = null))
+      unitaryPrice.value = null
+      priceKg.value = null
+      weight.value = null
+      shoppinglistItemPrice.value = null
+    }
+
     return {
       selectedProduct,
       productOptions,
@@ -38,6 +47,7 @@ export const useCreateShoppinglistItemFormStore = defineStore(
       priceKg,
       weight,
       shoppinglistItemPrice,
+      setValuesDefault,
     }
   },
 )

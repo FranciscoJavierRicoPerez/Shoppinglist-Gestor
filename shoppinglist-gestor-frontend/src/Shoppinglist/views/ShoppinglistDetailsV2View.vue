@@ -6,7 +6,7 @@ import { useShoppinglistDetailStore } from '@/Shoppinglist/stores/shoppinglistDe
 import { useGetShoppinlistDetailsMetadata } from '@/Shoppinglist/application/useGetShopinglistDetailsMetadata'
 import { useRoute } from 'vue-router'
 import { onMounted } from 'vue'
-
+import Toast from 'primevue/toast'
 /**
  * - Obtener el detalle de la lista de la compra del EP: /api/shoppinglistview/v1/{id}/details
  * - Almacenar en un store para el detalle -> shoppinglistDetailStore.ts
@@ -21,6 +21,7 @@ onMounted(async () => {
 })
 </script>
 <template>
+  <Toast></Toast>
   <div class="flex align-items-start justify-content-between flex-wrap gap-2">
     <ShoppinglistDetailsInformation class="grow-0 shadow-5"></ShoppinglistDetailsInformation>
     <ShoppinglistItemsTable class="grow shadow-5"></ShoppinglistItemsTable>

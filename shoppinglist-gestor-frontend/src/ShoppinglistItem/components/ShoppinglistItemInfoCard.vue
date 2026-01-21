@@ -4,12 +4,51 @@ import type { ShoppinglistItemMetadata } from '@/ShoppinglistItem/domain/Shoppin
 import Card from 'primevue/card'
 import Button from 'primevue/button'
 import Tag from 'primevue/tag'
+import { useShoppinglistDetailStore } from '@/Shoppinglist/stores/shoppinglistDetailStore'
+import type { ToastMessageOptions } from 'primevue/toast'
+import { useToast } from 'primevue/usetoast'
 const props = defineProps({
   shoppinglistItem: {
     type: Object as PropType<ShoppinglistItemMetadata>,
     default: () => null,
   },
 })
+
+const shoppinglistDetailsStore = useShoppinglistDetailStore()
+
+const toast = useToast()
+
+function createToast(toastOptions: ToastMessageOptions) {
+  toast.add({
+    severity: toastOptions.severity,
+    summary: toastOptions.summary,
+    detail: toastOptions.detail,
+    life: toastOptions.life,
+  })
+}
+
+function removeShoppinglistItem(id: number): void {
+  console.log('INFO: Borrando el shoppinglist item con id : ' + id)
+
+  // IMPLEMENTACION LLAMANDO AL BACKEND
+  const response: boolean = true
+  if (response) {
+    shoppinglistDetailsStore.updateItemsList(shoppinglistDetailsStore.removeItem(id))
+    createToast({
+      severity: 'success',
+      summary: 'Se ha borrado el producto ' + props.shoppinglistItem.name,
+      detail: 'El producto ' + props.shoppinglistItem.name + ' se ha borrado correctamente',
+      life: 3000,
+    })
+  } else {
+    createToast({
+      severity: 'danger',
+      summary: 'Error en el borrado del producto ' + props.shoppinglistItem.idShoppinglistItem,
+      detail: 'No ha podido borrarse el producto: ' + props.shoppinglistItem.idShoppinglistItem,
+      life: 3000,
+    })
+  }
+}
 </script>
 <template>
   <div>
@@ -39,17 +78,15 @@ const props = defineProps({
         <div class="flex flex-row gap-2 justify-content-start">
           <!-- ESTE PRIMER BOTON DEBE DE VARIAR EN FUNCION DE LOS DE UP Y WP Y ABRIR EL MODAL PARA AÑADIR EL ITEM UNIT-->
           <Button class="w-full" severity="info" label="KG/€" raised></Button>
-          <Button class="w-full" severity="danger" label="Borrar" raised></Button>
+          <Button
+            class="w-full"
+            severity="danger"
+            label="Borrar"
+            raised
+            @click="removeShoppinglistItem(shoppinglistItem.idShoppinglistItem)"
+          ></Button>
         </div>
       </template>
     </Card>
   </div>
 </template>
-<style lang="css">
-.wp-card-background {
-  background-color: rgb(242, 238, 207) !important;
-}
-.up-card-background {
-  background-color: rgb(252, 221, 201) !important;
-}
-</style>

@@ -7,10 +7,9 @@ import Panel from 'primevue/panel'
 import ScrollPanel from 'primevue/scrollpanel'
 
 const shoppinglistDetailsStore = useShoppinglistDetailStore()
-const items = ref<ShoppinglistItemMetadata[]>([])
 
 onMounted(() => {
-  items.value = shoppinglistDetailsStore.shoppinglistDetails?.items
+  shoppinglistDetailsStore.items = shoppinglistDetailsStore.shoppinglistDetails?.items
     ? shoppinglistDetailsStore.shoppinglistDetails?.items
     : []
 })
@@ -21,7 +20,7 @@ onMounted(() => {
       <div class="text-2xl italic">Listado de productos</div>
     </template>
     <ScrollPanel style="width: 100%; height: 50rem">
-      <div v-for="item in items">
+      <div v-for="item in shoppinglistDetailsStore.items">
         <ShoppinglistItemInfoCard class="mb-2" :shoppinglistItem="item"></ShoppinglistItemInfoCard>
       </div>
     </ScrollPanel>
