@@ -22,9 +22,11 @@ onMounted(async () => {
 </script>
 <template>
   <Toast></Toast>
-  <div class="flex align-items-start justify-content-between flex-wrap gap-2">
-    <ShoppinglistDetailsInformation class="grow-0 shadow-5"></ShoppinglistDetailsInformation>
-    <ShoppinglistItemsTable class="grow shadow-5"></ShoppinglistItemsTable>
-    <ShoppinglistItemCreateForm class="grow-0 shadow-5"></ShoppinglistItemCreateForm>
+  <div class="flex flex-column gap-2">
+    <ShoppinglistDetailsInformation class="grow shadow-5"></ShoppinglistDetailsInformation>
+    <div class="flex flex-wrap gap-2 align-items-start sm:flex-nowrap">
+      <ShoppinglistItemsTable class="w-full grow-0 shadow-5"></ShoppinglistItemsTable>
+      <ShoppinglistItemCreateForm class="w-full grow shadow-5"></ShoppinglistItemCreateForm>
+    </div>
   </div>
 </template>

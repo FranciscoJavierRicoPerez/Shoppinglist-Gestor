@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, type PropType } from 'vue'
+import { computed, onMounted, ref, type PropType } from 'vue'
 import type { ShoppinglistItemMetadata } from '@/ShoppinglistItem/domain/ShoppinglistItemMetadata'
 import Card from 'primevue/card'
 import Button from 'primevue/button'
@@ -9,6 +9,11 @@ import type { ToastMessageOptions } from 'primevue/toast'
 import { useToast } from 'primevue/usetoast'
 import { useDeleteShoppinglistItem } from '../application/useDeleteShoppinglistItem'
 import type { DeleteShoppinglistItemData } from '../infrastructure/models/dto/DeleteShoppinglistItemData'
+import ItemUnitUpDialog from '@/ItemUnit/components/ItemUnitUpDialog.vue'
+import ItemUnitWpDialog from '@/ItemUnit/components/ItemUnitWpDialog.vue'
+
+const openModalWpItem = ref<boolean>(false)
+const openModalUpItem = ref<boolean>(false)
 
 /** --- PROPS SECTIONS --- */
 const props = defineProps({
@@ -105,9 +110,20 @@ async function removeShoppinglistItem(id: number): Promise<void> {
         </div>
       </template>
       <template #footer>
-        <div class="flex flex-row gap-2 justify-content-start">
-          <!-- ESTE PRIMER BOTON DEBE DE VARIAR EN FUNCION DE LOS DE UP Y WP Y ABRIR EL MODAL PARA AÑADIR EL ITEM UNIT-->
-          <Button class="w-full" severity="info" label="KG/€" raised></Button>
+        <!-- <Button
+            class="w-full"
+            severity="info"
+            :label="shoppinglistItem.calculateSystemCode === 'WP' ? 'KG/€' : 'Uds/€'"
+            raised
+            @click="openItemUnitModal(shoppinglistItem.calculateSystemCode === 'WP')"
+          ></Button>-->
+        <div class="flex flex-column gap-2">
+          <div v-if="shoppinglistItem.calculateSystemCode === 'WP'">
+            <ItemUnitWpDialog></ItemUnitWpDialog>
+          </div>
+          <div v-else>
+            <ItemUnitUpDialog></ItemUnitUpDialog>
+          </div>
           <Button
             class="w-full"
             severity="danger"

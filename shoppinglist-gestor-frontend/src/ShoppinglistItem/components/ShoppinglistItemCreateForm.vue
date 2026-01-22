@@ -111,7 +111,9 @@ function verifyForm() {
         @click="createNewShoppinglistItem()"
       ></Button>
     </template>
-    <ShoppinglistItemCreateItemForm class="mb-2 bg-green-100"></ShoppinglistItemCreateItemForm>
+    <ShoppinglistItemCreateItemForm
+      class="w-19rem sm:w-full mb-2 bg-green-100"
+    ></ShoppinglistItemCreateItemForm>
     <ShoppinglistItemCreateFormResume class="bg-green-100"></ShoppinglistItemCreateFormResume>
   </Panel>
 </template>

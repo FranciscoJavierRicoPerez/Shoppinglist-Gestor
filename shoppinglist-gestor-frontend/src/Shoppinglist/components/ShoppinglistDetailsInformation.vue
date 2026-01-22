@@ -47,13 +47,11 @@ onMounted(() => {
       <template #header>
         <div class="text-2xl italic">{{ informacionHeaderText }}</div>
       </template>
-      <div class="flex flex-column flex-wrap gap-2">
-        <div class="flex flex-row gap-2 justify-content-between">
-          <Tag>{{ shoppinglistStatusText }}</Tag>
-          <Tag severity="info">{{ shoppinglistCodeText }}</Tag>
-        </div>
-        <Tag severity="danger">{{ shoppinglistTotalPriceText }}</Tag>
-        <Tag severity="warn">
+      <div class="flex flex-row flex-wrap gap-2">
+        <Tag class="text-xl italic">{{ shoppinglistStatusText }}</Tag>
+        <Tag class="text-xl italic" severity="info">{{ shoppinglistCodeText }}</Tag>
+        <Tag class="text-xl italic" severity="danger">{{ shoppinglistTotalPriceText }}</Tag>
+        <Tag class="text-xl italic" severity="warn">
           {{ shoppinglistDatesText }}
         </Tag>
       </div>
