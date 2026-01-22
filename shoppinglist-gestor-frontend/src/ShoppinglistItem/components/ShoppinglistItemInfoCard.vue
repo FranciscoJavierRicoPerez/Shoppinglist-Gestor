@@ -7,6 +7,8 @@ import Tag from 'primevue/tag'
 import { useShoppinglistDetailStore } from '@/Shoppinglist/stores/shoppinglistDetailStore'
 import type { ToastMessageOptions } from 'primevue/toast'
 import { useToast } from 'primevue/usetoast'
+import { useDeleteShoppinglistItem } from '../application/useDeleteShoppinglistItem'
+import type { DeleteShoppinglistItemData } from '../infrastructure/models/dto/DeleteShoppinglistItemData'
 
 /** --- PROPS SECTIONS --- */
 const props = defineProps({
@@ -16,6 +18,10 @@ const props = defineProps({
   },
 })
 /** ---------------------- */
+
+/** ---- USE CASES ---- */
+const { refetch: deleteShoppinglistItem } = useDeleteShoppinglistItem()
+/** ------------------- */
 
 /** ---- STORE SECTION ---- */
 const shoppinglistDetailsStore = useShoppinglistDetailStore()
@@ -50,20 +56,20 @@ function createToast(toastOptions: ToastMessageOptions) {
   })
 }
 
-function removeShoppinglistItem(id: number): void {
+async function removeShoppinglistItem(id: number): Promise<void> {
   console.log('INFO: Borrando el shoppinglist item con id : ' + id)
-
   // IMPLEMENTACION LLAMANDO AL BACKEND
-
-  const response: boolean = true
-  if (response) {
+  const response: DeleteShoppinglistItemData = await deleteShoppinglistItem(id)
+  if (response.delete) {
     shoppinglistDetailsStore.updateItemsList(shoppinglistDetailsStore.removeItem(id))
+    shoppinglistDetailsStore.updateTotalPrice(false, props.shoppinglistItem.calculatedPrice)
     createToast({
       severity: 'success',
       summary: 'Se ha borrado el producto ' + props.shoppinglistItem.name,
-      detail: 'El producto ' + props.shoppinglistItem.name + ' se ha borrado correctamente',
+      detail: response.message,
       life: 3000,
     })
+    // SI SE HA BORRADO CORRECTAMENTE HABRIA QUE ACTUALIZAR EL VALOR DEL TOTAL PRICE DE LA LISTA DE LA COMPRA
   } else {
     createToast({
       severity: 'danger',

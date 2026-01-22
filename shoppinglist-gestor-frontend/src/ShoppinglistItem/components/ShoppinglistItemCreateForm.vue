@@ -8,6 +8,7 @@ import type { RequestCreateShoppinglistItemForm } from '../infrastructure/models
 import { useCreateShoppinglistItem } from '@/ShoppinglistItem/application/useCreateShoppinglistItem'
 import { useToast, type ToastMessageOptions } from 'primevue'
 import { useShoppinglistDetailStore } from '@/Shoppinglist/stores/shoppinglistDetailStore'
+import { computed } from 'vue'
 
 const store = useCreateShoppinglistItemFormStore()
 const shoppinglistDetailsStore = useShoppinglistDetailStore()
@@ -15,6 +16,10 @@ const shoppinglistDetailsStore = useShoppinglistDetailStore()
 const { refetch: createShoppinglistItem } = useCreateShoppinglistItem()
 
 const toast = useToast()
+
+const createFormHeaderText = computed(() => {
+  return 'Nuevo Producto'
+})
 
 function createToast(toastOptions: ToastMessageOptions) {
   toast.add({
@@ -68,6 +73,10 @@ async function createNewShoppinglistItem() {
     // Añadir el nuevo SLI al listado y limpiar el formulario
     store.setValuesDefault()
     shoppinglistDetailsStore.addItem(response.shoppinglistItemMetadata)
+    shoppinglistDetailsStore.updateTotalPrice(
+      true,
+      response.shoppinglistItemMetadata.calculatedPrice,
+    )
   } else {
     createToast({
       severity: 'danger',
@@ -91,7 +100,7 @@ function verifyForm() {
 <template>
   <Panel id="1" toggleable>
     <template #header>
-      <div class="text-2xl font-italic">Nuevo Producto</div>
+      <div class="text-2xl font-italic">{{ createFormHeaderText }}</div>
     </template>
     <template #footer>
       <Button

@@ -75,9 +75,9 @@ const shoppinglistItemPriceText = computed(() => {
                 <Tag v-if="store.weight" class="bg-orange-400 text-white w-6">{{ weightText }}</Tag>
               </div>
             </div>
-            <Tag v-if="store.shoppinglistItemPrice" class="bg-red-400 text-white w-full"
-              >{{ shoppinglistItemPriceText }}€</Tag
-            >
+            <Tag v-if="store.shoppinglistItemPrice" class="bg-red-400 text-white w-full">{{
+              shoppinglistItemPriceText
+            }}</Tag>
           </div>
         </div>
       </div>
