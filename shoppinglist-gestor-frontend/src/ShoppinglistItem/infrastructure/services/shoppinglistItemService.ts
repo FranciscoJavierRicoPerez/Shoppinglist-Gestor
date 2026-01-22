@@ -4,6 +4,8 @@ import type { ResponseShoppinglistItem } from '../models/ResponseShoppinglistIte
 import type { ResponseShoppinglistItemsMetadata } from '../models/ResponseShoppinglistIemsMetadata'
 import type { ShoppinglistItemMetadata } from '@/ShoppinglistItem/domain/ShoppinglistItemMetadata'
 import type { ResponseShoppinglistMetadata } from '@/Shoppinglist/infrastructure/models/responses/ResponseShoppinglistMetadata'
+import type { ResponseCreateShoppinglistItem } from '../models/response/ResponseCreateShoppinglistItem'
+import type { RequestCreateShoppinglistItemForm } from '../models/request/RequestCreateShoppinglistItemForm'
 
 /* export function createShoppinglistItemArray(data: ResponseShoppinglistItem[]): ShoppinglistItem[] {
   let shoppinglistItemArray: ShoppinglistItem[] = []
@@ -42,5 +44,18 @@ export function createShoppinglistItemMetadata(
     calculateSystemCode: data.calculateSystemCode,
     assignationToLisDate: data.assignationToListDate,
     name: data.name,
+  }
+}
+
+export function createShoppinglistItemMetadataFromCreateForm(
+  data: ResponseCreateShoppinglistItem,
+  form: RequestCreateShoppinglistItemForm,
+): ShoppinglistItemMetadata {
+  return {
+    idShoppinglistItem: data.idShoppinglistItemCreated,
+    name: form.productInfo.productName,
+    assignationToLisDate: data.creationDate,
+    calculateSystemCode: form.selectedCalculateSystem === 1 ? 'UP' : 'WP',
+    calculatedPrice: data.shoppinglistItemCalculatedPrice,
   }
 }

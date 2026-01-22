@@ -1,15 +1,89 @@
 <script setup lang="ts">
-import { type PropType } from 'vue'
+import { computed, onMounted, ref, type PropType } from 'vue'
 import type { ShoppinglistItemMetadata } from '@/ShoppinglistItem/domain/ShoppinglistItemMetadata'
 import Card from 'primevue/card'
 import Button from 'primevue/button'
 import Tag from 'primevue/tag'
+import { useShoppinglistDetailStore } from '@/Shoppinglist/stores/shoppinglistDetailStore'
+import type { ToastMessageOptions } from 'primevue/toast'
+import { useToast } from 'primevue/usetoast'
+import { useDeleteShoppinglistItem } from '../application/useDeleteShoppinglistItem'
+import type { DeleteShoppinglistItemData } from '../infrastructure/models/dto/DeleteShoppinglistItemData'
+import ItemUnitUpDialog from '@/ItemUnit/components/ItemUnitUpDialog.vue'
+import ItemUnitWpDialog from '@/ItemUnit/components/ItemUnitWpDialog.vue'
+
+const openModalWpItem = ref<boolean>(false)
+const openModalUpItem = ref<boolean>(false)
+
+/** --- PROPS SECTIONS --- */
 const props = defineProps({
   shoppinglistItem: {
     type: Object as PropType<ShoppinglistItemMetadata>,
     default: () => null,
   },
 })
+/** ---------------------- */
+
+/** ---- USE CASES ---- */
+const { refetch: deleteShoppinglistItem } = useDeleteShoppinglistItem()
+/** ------------------- */
+
+/** ---- STORE SECTION ---- */
+const shoppinglistDetailsStore = useShoppinglistDetailStore()
+/** ----------------------- */
+
+const toast = useToast()
+
+/** ---- COMPUTED SECTION ---- */
+const shoppinglistItemPriceText = computed(() => {
+  return 'Coste producto: ' + props.shoppinglistItem.calculatedPrice + '€'
+})
+
+const shoppinglistItemAssignationToListDateText = computed(() => {
+  return 'Añadido el: ' + props.shoppinglistItem.assignationToLisDate
+})
+
+const shoppinglistItemCalculateSystemText = computed(() => {
+  return 'Sistema de calculo: ' + props.shoppinglistItem.calculateSystemCode
+})
+
+const shoppinglistItemNameText = computed(() => {
+  return props.shoppinglistItem.name
+})
+/** ---- END COMPUTED SECTION ---- */
+
+function createToast(toastOptions: ToastMessageOptions) {
+  toast.add({
+    severity: toastOptions.severity,
+    summary: toastOptions.summary,
+    detail: toastOptions.detail,
+    life: toastOptions.life,
+  })
+}
+
+async function removeShoppinglistItem(id: number): Promise<void> {
+  console.log('INFO: Borrando el shoppinglist item con id : ' + id)
+  // IMPLEMENTACION LLAMANDO AL BACKEND
+  const response: DeleteShoppinglistItemData = await deleteShoppinglistItem(id)
+  if (response.delete) {
+    shoppinglistDetailsStore.updateItemsList(shoppinglistDetailsStore.removeItem(id))
+    shoppinglistDetailsStore.updateTotalPrice(false, props.shoppinglistItem.calculatedPrice)
+    createToast({
+      severity: 'success',
+      summary: 'Se ha borrado el producto ' + props.shoppinglistItem.name,
+      detail: response.message,
+      life: 3000,
+    })
+    // SI SE HA BORRADO CORRECTAMENTE HABRIA QUE ACTUALIZAR EL VALOR DEL TOTAL PRICE DE LA LISTA DE LA COMPRA
+  } else {
+    createToast({
+      severity: 'danger',
+      summary: 'Error en el borrado del producto ' + props.shoppinglistItem.idShoppinglistItem,
+      detail: 'No ha podido borrarse el producto: ' + props.shoppinglistItem.idShoppinglistItem,
+      life: 3000,
+    })
+  }
+}
 </script>
 <template>
   <div>
@@ -20,36 +94,45 @@ const props = defineProps({
       }"
     >
       <template #header>
-        <div class="ml-3 mt-2 text-2xl text-left font-italic">{{ shoppinglistItem.name }}</div>
+        <div class="ml-3 mt-2 text-2xl text-left font-italic">{{ shoppinglistItemNameText }}</div>
       </template>
       <template #subtitle>
-        <Tag severity="info" rounded> Coste producto: {{ shoppinglistItem.calculatedPrice }} </Tag>
+        <Tag severity="info" rounded>{{ shoppinglistItemPriceText }} </Tag>
       </template>
       <template #content>
         <div class="flex flex-row gap-2 justify-content-start">
           <Tag severity="warn" rounded>
-            Añadido el: {{ shoppinglistItem.assignationToLisDate }}
+            {{ shoppinglistItemAssignationToListDateText }}
           </Tag>
-          <Tag rounded class="bg-indigo-300 text-white"
-            >Sistema de calculo: {{ shoppinglistItem.calculateSystemCode }}</Tag
-          >
+          <Tag rounded class="bg-indigo-300 text-white">{{
+            shoppinglistItemCalculateSystemText
+          }}</Tag>
         </div>
       </template>
       <template #footer>
-        <div class="flex flex-row gap-2 justify-content-start">
-          <!-- ESTE PRIMER BOTON DEBE DE VARIAR EN FUNCION DE LOS DE UP Y WP Y ABRIR EL MODAL PARA AÑADIR EL ITEM UNIT-->
-          <Button class="w-full" severity="info" label="KG/€" raised></Button>
-          <Button class="w-full" severity="danger" label="Borrar" raised></Button>
+        <!-- <Button
+            class="w-full"
+            severity="info"
+            :label="shoppinglistItem.calculateSystemCode === 'WP' ? 'KG/€' : 'Uds/€'"
+            raised
+            @click="openItemUnitModal(shoppinglistItem.calculateSystemCode === 'WP')"
+          ></Button>-->
+        <div class="flex flex-column gap-2">
+          <div v-if="shoppinglistItem.calculateSystemCode === 'WP'">
+            <ItemUnitWpDialog></ItemUnitWpDialog>
+          </div>
+          <div v-else>
+            <ItemUnitUpDialog></ItemUnitUpDialog>
+          </div>
+          <Button
+            class="w-full"
+            severity="danger"
+            label="Borrar"
+            raised
+            @click="removeShoppinglistItem(shoppinglistItem.idShoppinglistItem)"
+          ></Button>
         </div>
       </template>
     </Card>
   </div>
 </template>
-<style lang="css">
-.wp-card-background {
-  background-color: rgb(242, 238, 207) !important;
-}
-.up-card-background {
-  background-color: rgb(252, 221, 201) !important;
-}
-</style>

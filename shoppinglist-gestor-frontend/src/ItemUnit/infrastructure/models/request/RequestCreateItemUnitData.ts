@@ -3,6 +3,6 @@ import type { RequestCreateWpItemUnitData } from './RequestCreateWpItemUnitData'
 
 export interface RequestCreateUnitData {
   createItemUnit: boolean
-  createUpItemUnitData: RequestCreateUpItemUnitData
-  createWpItemUnitData: RequestCreateWpItemUnitData
+  createUpItemUnitData: RequestCreateUpItemUnitData | null
+  createWpItemUnitData: RequestCreateWpItemUnitData | null
 }

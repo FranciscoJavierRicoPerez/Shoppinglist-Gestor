@@ -28,7 +28,7 @@ function calculateShoppinglistItemTotalPrice() {
 }
 </script>
 <template>
-  <div class="flex flex-row gap-2">
+  <div class="flex flex-column sm:flex-row gap-2">
     <FloatLabel variant="on" class="w-full">
       <InputNumber id="quantity" v-model="quantity" class="w-full"></InputNumber>
       <label for="quantity">Cantidad</label>

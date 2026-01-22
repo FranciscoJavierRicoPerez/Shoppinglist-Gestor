@@ -11,5 +11,4 @@ public class ResponseCreateShoppinglistItem {
     private Double shoppinglistItemCalculatedPrice; // SLI calculated price
     private Double totalPrice; // New shoppinglist price value
     private String creationDate;
-
 }
