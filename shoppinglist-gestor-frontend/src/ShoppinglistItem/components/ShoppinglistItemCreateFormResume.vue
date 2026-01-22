@@ -48,7 +48,12 @@ const shoppinglistItemPriceText = computed(() => {
     </template>
     <template #content>
       <div v-if="store.selectedProduct === ''">
-        <InformationCard></InformationCard>
+        <InformationCard
+          :information="{
+            header: 'Información',
+            content: 'No hay información suficiente para crear el resumen',
+          }"
+        ></InformationCard>
       </div>
       <div v-else>
         <div class="flex flex-column gap-2">
