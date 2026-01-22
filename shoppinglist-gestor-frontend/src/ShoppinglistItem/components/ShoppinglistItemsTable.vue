@@ -22,7 +22,11 @@ onMounted(() => {
     </template>
     <div v-if="shoppinglistDetailsStore.items.length === 0">
       <InformationCard
-        :information="{ header: 'Información', content: 'No hay items para mostrar' }"
+        :information="{
+          header: 'Información',
+          content:
+            'Aun no has añadido nigun producto, rellena el formulario para añadir productos a la lista.',
+        }"
       ></InformationCard>
     </div>
     <div v-else>
