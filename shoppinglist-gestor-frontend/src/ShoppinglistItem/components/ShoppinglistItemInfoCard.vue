@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type PropType } from 'vue'
+import { computed, onMounted, type PropType } from 'vue'
 import type { ShoppinglistItemMetadata } from '@/ShoppinglistItem/domain/ShoppinglistItemMetadata'
 import Card from 'primevue/card'
 import Button from 'primevue/button'
@@ -7,16 +7,39 @@ import Tag from 'primevue/tag'
 import { useShoppinglistDetailStore } from '@/Shoppinglist/stores/shoppinglistDetailStore'
 import type { ToastMessageOptions } from 'primevue/toast'
 import { useToast } from 'primevue/usetoast'
+
+/** --- PROPS SECTIONS --- */
 const props = defineProps({
   shoppinglistItem: {
     type: Object as PropType<ShoppinglistItemMetadata>,
     default: () => null,
   },
 })
+/** ---------------------- */
 
+/** ---- STORE SECTION ---- */
 const shoppinglistDetailsStore = useShoppinglistDetailStore()
+/** ----------------------- */
 
 const toast = useToast()
+
+/** ---- COMPUTED SECTION ---- */
+const shoppinglistItemPriceText = computed(() => {
+  return 'Coste producto: ' + props.shoppinglistItem.calculatedPrice + '€'
+})
+
+const shoppinglistItemAssignationToListDateText = computed(() => {
+  return 'Añadido el: ' + props.shoppinglistItem.assignationToLisDate
+})
+
+const shoppinglistItemCalculateSystemText = computed(() => {
+  return 'Sistema de calculo: ' + props.shoppinglistItem.calculateSystemCode
+})
+
+const shoppinglistItemNameText = computed(() => {
+  return props.shoppinglistItem.name
+})
+/** ---- END COMPUTED SECTION ---- */
 
 function createToast(toastOptions: ToastMessageOptions) {
   toast.add({
@@ -31,6 +54,7 @@ function removeShoppinglistItem(id: number): void {
   console.log('INFO: Borrando el shoppinglist item con id : ' + id)
 
   // IMPLEMENTACION LLAMANDO AL BACKEND
+
   const response: boolean = true
   if (response) {
     shoppinglistDetailsStore.updateItemsList(shoppinglistDetailsStore.removeItem(id))
@@ -59,19 +83,19 @@ function removeShoppinglistItem(id: number): void {
       }"
     >
       <template #header>
-        <div class="ml-3 mt-2 text-2xl text-left font-italic">{{ shoppinglistItem.name }}</div>
+        <div class="ml-3 mt-2 text-2xl text-left font-italic">{{ shoppinglistItemNameText }}</div>
       </template>
       <template #subtitle>
-        <Tag severity="info" rounded> Coste producto: {{ shoppinglistItem.calculatedPrice }} </Tag>
+        <Tag severity="info" rounded>{{ shoppinglistItemPriceText }} </Tag>
       </template>
       <template #content>
         <div class="flex flex-row gap-2 justify-content-start">
           <Tag severity="warn" rounded>
-            Añadido el: {{ shoppinglistItem.assignationToLisDate }}
+            {{ shoppinglistItemAssignationToListDateText }}
           </Tag>
-          <Tag rounded class="bg-indigo-300 text-white"
-            >Sistema de calculo: {{ shoppinglistItem.calculateSystemCode }}</Tag
-          >
+          <Tag rounded class="bg-indigo-300 text-white">{{
+            shoppinglistItemCalculateSystemText
+          }}</Tag>
         </div>
       </template>
       <template #footer>
