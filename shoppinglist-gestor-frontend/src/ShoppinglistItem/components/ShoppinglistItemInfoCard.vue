@@ -110,13 +110,6 @@ async function removeShoppinglistItem(id: number): Promise<void> {
         </div>
       </template>
       <template #footer>
-        <!-- <Button
-            class="w-full"
-            severity="info"
-            :label="shoppinglistItem.calculateSystemCode === 'WP' ? 'KG/€' : 'Uds/€'"
-            raised
-            @click="openItemUnitModal(shoppinglistItem.calculateSystemCode === 'WP')"
-          ></Button>-->
         <div class="flex flex-column gap-2">
           <div v-if="shoppinglistItem.calculateSystemCode === 'WP'">
             <ItemUnitWpDialog></ItemUnitWpDialog>
