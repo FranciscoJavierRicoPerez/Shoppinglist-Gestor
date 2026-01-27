@@ -3,10 +3,7 @@ package es.franricodev.shopping_list_gestor_service.shoppinglistitem.controller;
 import es.franricodev.shopping_list_gestor_service.itemUnit.dto.request.CreateItemUnitData;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetAllItemsUnit;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItemV2;
-import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseCreateShoppinglistItem;
-import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseDeleteShoppinglistItem;
-import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseGetAllItemUnitUpGroupedByPrice;
-import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseItemUnitWpMetadata;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.*;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.dto.request.RequestAddItemUnitWP;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -141,5 +138,9 @@ public interface ShoppinglistItemController {
     @PostMapping("/v1/createShoppinglistItemMetadata")
     ResponseEntity<ResponseCreateShoppinglistItem> createShoppinglistItemMetadata(
             @RequestBody RequestCreateShoppinglistItemV2 requestCreateShoppinglistItem);
+
+
+    /* @GetMapping("/v1/{idShoppinglistItem}/itemsUnitWpInfo")
+    ResponseEntity<ResponseGetItemUnitWpMetadata> getItemUnitWpMetadata(@PathVariable(name = "idShoppinglistItem") Long idShoppinglistItem); */
 
 }

@@ -12,9 +12,6 @@ import type { DeleteShoppinglistItemData } from '../infrastructure/models/dto/De
 import ItemUnitUpDialog from '@/ItemUnit/components/ItemUnitUpDialog.vue'
 import ItemUnitWpDialog from '@/ItemUnit/components/ItemUnitWpDialog.vue'
 
-const openModalWpItem = ref<boolean>(false)
-const openModalUpItem = ref<boolean>(false)
-
 /** --- PROPS SECTIONS --- */
 const props = defineProps({
   shoppinglistItem: {
@@ -23,6 +20,12 @@ const props = defineProps({
   },
 })
 /** ---------------------- */
+
+const calculatedPrice = ref<number>(-1)
+
+onMounted(() => {
+  calculatedPrice.value = props.shoppinglistItem.calculatedPrice
+})
 
 /** ---- USE CASES ---- */
 const { refetch: deleteShoppinglistItem } = useDeleteShoppinglistItem()
@@ -36,7 +39,7 @@ const toast = useToast()
 
 /** ---- COMPUTED SECTION ---- */
 const shoppinglistItemPriceText = computed(() => {
-  return 'Coste producto: ' + props.shoppinglistItem.calculatedPrice + '€'
+  return 'Coste producto: ' + calculatedPrice.value + '€'
 })
 
 const shoppinglistItemAssignationToListDateText = computed(() => {
@@ -59,6 +62,18 @@ function createToast(toastOptions: ToastMessageOptions) {
     detail: toastOptions.detail,
     life: toastOptions.life,
   })
+}
+
+function updateCalculatedPrice(data: any) {
+  console.log(data)
+  calculatedPrice.value = data
+  if (shoppinglistDetailsStore.shoppinglistDetails) {
+    shoppinglistDetailsStore.recalculateShoppinglistTotalPrice(
+      shoppinglistDetailsStore.shoppinglistDetails?.shoppinglistMetadata.totalPrice,
+      props.shoppinglistItem.calculatedPrice,
+      calculatedPrice.value,
+    )
+  }
 }
 
 async function removeShoppinglistItem(id: number): Promise<void> {
@@ -112,7 +127,10 @@ async function removeShoppinglistItem(id: number): Promise<void> {
       <template #footer>
         <div class="flex flex-column gap-2">
           <div v-if="shoppinglistItem.calculateSystemCode === 'WP'">
-            <ItemUnitWpDialog></ItemUnitWpDialog>
+            <ItemUnitWpDialog
+              :idShoppinglistItem="shoppinglistItem.idShoppinglistItem"
+              @newSliCalculatedPrice="updateCalculatedPrice"
+            ></ItemUnitWpDialog>
           </div>
           <div v-else>
             <ItemUnitUpDialog></ItemUnitUpDialog>

@@ -10,10 +10,7 @@ async function InMemory(): Promise<ResponseShoppinglistDetailsMetadata> {
 
 async function Api(idShoppinglist: number): Promise<ResponseShoppinglistDetailsMetadata> {
   const url =
-    import.meta.env.VITE_API_URL_COMPUTER +
-    '/api/shoppinglistview/v1/' +
-    idShoppinglist +
-    '/details'
+    import.meta.env.VITE_API_URL_COMPUTER + 'api/shoppinglistview/v1/' + idShoppinglist + '/details'
   const response = await axios.get(url)
   return response.data
 }

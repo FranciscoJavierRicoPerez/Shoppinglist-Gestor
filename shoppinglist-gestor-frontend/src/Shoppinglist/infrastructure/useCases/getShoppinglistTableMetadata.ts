@@ -15,7 +15,7 @@ async function InMemory(): Promise<ResponseGetShoppinglistTableMetadata> {
 }
 
 async function Api(): Promise<ResponseGetShoppinglistTableMetadata> {
-  const url = import.meta.env.VITE_API_URL_COMPUTER + '/api/shoppinglistview/v1/all'
+  const url = import.meta.env.VITE_API_URL_COMPUTER + 'api/shoppinglistview/v1/all'
   const response = await axios.get(url)
   return response.data
 }

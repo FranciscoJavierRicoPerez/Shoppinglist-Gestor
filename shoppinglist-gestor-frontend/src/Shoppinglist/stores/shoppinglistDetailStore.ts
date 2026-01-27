@@ -22,10 +22,20 @@ export const useShoppinglistDetailStore = defineStore('shoppinglistDetailStore',
     items.value = newItemList
   }
 
+  // Esta funcion sirve cuando se añade un nuevo SLI o se borra un SLI
   function updateTotalPrice(add: boolean, value: number) {
     if (totalPrice.value) {
       add ? (totalPrice.value += value) : (totalPrice.value -= value)
     }
+  }
+
+  // Esta funcion sirve cuando se esta actualizando el SLI
+  function recalculateShoppinglistTotalPrice(
+    actualTotal: number,
+    oldSliItemPrice: number,
+    newSliItemPrice: number,
+  ) {
+    totalPrice.value = actualTotal - oldSliItemPrice + newSliItemPrice
   }
 
   return {
@@ -36,5 +46,6 @@ export const useShoppinglistDetailStore = defineStore('shoppinglistDetailStore',
     updateItemsList,
     totalPrice,
     updateTotalPrice,
+    recalculateShoppinglistTotalPrice,
   }
 })
