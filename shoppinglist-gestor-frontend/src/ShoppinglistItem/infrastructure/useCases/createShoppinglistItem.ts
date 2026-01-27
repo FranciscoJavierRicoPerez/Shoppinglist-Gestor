@@ -23,8 +23,7 @@ async function Api(
   data: RequestCreateShoppinglistItemForm,
 ): Promise<ResponseCreateShoppinglistItem> {
   const url =
-    import.meta.env.VITE_API_URL_COMPUTER +
-    '/api/shoppinglistitem/v1/createShoppinglistItemMetadata'
+    import.meta.env.VITE_API_URL_COMPUTER + 'api/shoppinglistitem/v1/createShoppinglistItemMetadata'
   const response = await axios.post(url, data)
   return response.data
 }

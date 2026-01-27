@@ -19,7 +19,7 @@ async function InMemory(): Promise<ResponseGetShoppinglistTableMetadata> {
 async function Api(data: ShoppinglistFilter): Promise<ResponseGetShoppinglistTableMetadata> {
   const url =
     import.meta.env.VITE_API_URL_COMPUTER +
-    '/api/shoppinglist/v1/filter?code=' +
+    'api/shoppinglist/v1/filter?code=' +
     data.code +
     '?creationDate=' +
     data.creationDate +
