@@ -16,7 +16,7 @@ async function deleteShoppinglistItem(
 async function Api(idShoppinglistItem: number): Promise<ResponseDeleteShoppinglistItem> {
   const url =
     import.meta.env.VITE_API_URL_COMPUTER +
-    '/api/shoppinglistitem/v1/' +
+    'api/shoppinglistitem/v1/' +
     idShoppinglistItem +
     'delete'
   const response = axios.delete(url)

@@ -3,7 +3,7 @@ import ShoppinglistDetailsInformation from '@/Shoppinglist/components/Shoppingli
 import ShoppinglistItemCreateForm from '@/ShoppinglistItem/components/ShoppinglistItemCreateForm.vue'
 import ShoppinglistItemsTable from '@/ShoppinglistItem/components/ShoppinglistItemsTable.vue'
 import { useShoppinglistDetailStore } from '@/Shoppinglist/stores/shoppinglistDetailStore'
-import { useGetShoppinlistDetailsMetadata } from '@/Shoppinglist/application/useGetShopinglistDetailsMetadata'
+import { useGetShoppinglistDetailsMetadata } from '@/Shoppinglist/application/useGetShoppinglistDetailsMetadata'
 import { useRoute } from 'vue-router'
 import { onMounted } from 'vue'
 import Toast from 'primevue/toast'
@@ -13,7 +13,7 @@ import Toast from 'primevue/toast'
  */
 const route = useRoute()
 const shoppinglistDetailStore = useShoppinglistDetailStore()
-const { refetch: getShoppinglistDetailsMetadata } = useGetShoppinlistDetailsMetadata()
+const { refetch: getShoppinglistDetailsMetadata } = useGetShoppinglistDetailsMetadata()
 
 onMounted(async () => {
   const param = Number(route.params.id)

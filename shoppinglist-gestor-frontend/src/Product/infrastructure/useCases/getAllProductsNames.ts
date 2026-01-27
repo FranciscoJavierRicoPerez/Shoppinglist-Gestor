@@ -14,7 +14,7 @@ async function InMemory(): Promise<ResponseProductsNames> {
 }
 
 async function Api(): Promise<ResponseProductsNames> {
-  const url = import.meta.env.VITE_API_URL_COMPUTER + '/api/product/v1/names'
+  const url = import.meta.env.VITE_API_URL_COMPUTER + 'api/product/v1/names'
   const response = await axios.get(url)
   return response.data
 }

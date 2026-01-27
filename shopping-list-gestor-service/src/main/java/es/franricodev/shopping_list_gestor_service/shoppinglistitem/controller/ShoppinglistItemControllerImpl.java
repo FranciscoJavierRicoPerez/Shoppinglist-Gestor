@@ -6,10 +6,7 @@ import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.Res
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestAddItemUnitUnitaryPrice;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItemV2;
-import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseCreateShoppinglistItem;
-import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseDeleteShoppinglistItem;
-import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseGetAllItemUnitUpGroupedByPrice;
-import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseItemUnitWpMetadata;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.*;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.exception.ShoppinglistItemException;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.messages.ShoppinglistItemMessagesError;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.messages.ShoppinglistItemMessagesSuccess;
@@ -135,4 +132,12 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
         }
         return new ResponseEntity<>(response, httpStatus);
     }
+    /* // TODO: CREATE LOGIC
+    @Override
+    public ResponseEntity<ResponseGetItemUnitWpMetadata> getItemUnitWpMetadata(Long idShoppinglistItem) {
+        ResponseGetItemUnitWpMetadata response = new ResponseGetItemUnitWpMetadata(10.0, 10.0, 100.00);
+        log.info("Getting the item unit metadata");
+
+        return ResponseEntity.ok(response);
+    } */
 }
