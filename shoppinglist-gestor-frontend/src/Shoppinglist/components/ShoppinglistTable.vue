@@ -105,7 +105,7 @@ function generateTabTitleName(element: string) {
     </template>
     <div class="flex flex-wrap">
       <Button
-        class="bg-green-500 w-3"
+        class="bg-green-500 w-full"
         label="Nueva lista"
         icon="pi pi-plus"
         @click="addNewShoppinglist"
