@@ -5,6 +5,7 @@ import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.Res
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetShoppinglistTableMetadata;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistViewException;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.service.ShoppinglistViewService;
+import es.franricodev.shopping_list_gestor_service.sse.service.EventService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,10 @@ public class ShoppinglistViewControllerImpl implements ShoppinglistViewControlle
 
     @Autowired
     private ShoppinglistViewService shoppinglistViewService;
+
+    @Autowired
+    private EventService eventService;
+
 
     @Override
     public ResponseEntity<ResponseGetShoppinglistTableMetadata> getShoppinglistTableMetadata() {

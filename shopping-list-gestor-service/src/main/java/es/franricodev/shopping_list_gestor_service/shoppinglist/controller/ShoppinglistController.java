@@ -24,6 +24,7 @@ public interface ShoppinglistController {
     @GetMapping("/v1")
     ResponseEntity<List<ShoppinglistDTO>> getAllShoppinglist();
 
+    @Deprecated
     @Operation(summary = "Create a shoppinglist")
     @PostMapping("/v1/create")
     ResponseEntity<ShoppinglistDTO> createShoppinglist(@NotNull @RequestBody RequestCreateShoppinglistDTO request);

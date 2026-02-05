@@ -6,6 +6,7 @@ import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.Res
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.service.ShoppinglistService;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.exception.ShoppinglistItemException;
+import es.franricodev.shopping_list_gestor_service.sse.service.EventService;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class ShoppinglistControllerImpl implements ShoppinglistController {
 
     @Autowired
     private ShoppinglistService shoppinglistService;
+
+    @Autowired
+    private EventService eventService;
 
     @GetMapping("/v1")
     public ResponseEntity<List<ShoppinglistDTO>> getAllShoppinglist() {
@@ -46,7 +50,8 @@ public class ShoppinglistControllerImpl implements ShoppinglistController {
     * */
     @PostMapping("/v2/create")
     public ResponseEntity<ResponseCreateShoppinglist> createShoppinglistV2(@NotNull @RequestBody RequestCreateShoppinglistDTO request) {
-        log.info("Creation of the new shoppinglist");
+        log.info("Creation of the new shoppinglist v2");
+        eventService.enviarEventoATodos("mensaje de prueba");
         return new ResponseEntity<>(shoppinglistService.createV2(request), HttpStatus.CREATED);
     }
 

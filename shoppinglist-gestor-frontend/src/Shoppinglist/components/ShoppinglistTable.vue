@@ -30,6 +30,9 @@ const toast = useToast()
 const tabsPanelIds = ref<string[]>(['0', '1', '2'])
 const actualPanelSelected = ref<number>(-1)
 
+const mensajeEvento = ref<string | null>(null)
+const eventSource = ref<EventSource>()
+
 // TODO: ES POSIBLE QUE HAYA QUE REFACTORIZAR ESTE STORE
 const storeShoppinglistFilter = useShoppinglistFilterStore()
 
@@ -37,6 +40,14 @@ onMounted(async () => {
   shoppinglistTable.value = await getShoppinglistTableMetadata()
   shoppinglistTableStore.setShoppinglistTable(shoppinglistTable.value.shoppinglistTable)
   updateShoppinglistTables()
+
+  eventSource.value = new EventSource('http://192.168.18.7:9000/api/v1/events')
+
+  eventSource.value.addEventListener('message', (event) => {
+    console.log('message')
+    mensajeEvento.value = event.data
+    console.log(event.data)
+  })
 })
 
 watch(actualPanelSelected, (newActualPanelSelected) => {
@@ -95,6 +106,7 @@ function generateTabTitleName(element: string) {
 </script>
 <template>
   <Toast></Toast>
+  <p>{{ mensajeEvento }}</p>
   <Panel class="w-full h-full mt-2 grow shadow-5 max-w-content" toggleable>
     <template #header>
       <div class="text-2xl italic">Tus listas de la compra</div>
