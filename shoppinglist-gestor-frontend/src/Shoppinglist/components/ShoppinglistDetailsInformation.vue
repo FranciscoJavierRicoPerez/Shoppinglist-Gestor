@@ -23,7 +23,13 @@ const shoppinglistCodeText = computed(() => {
 })
 
 const shoppinglistTotalPriceText = computed(() => {
-  return 'Precio total: ' + shoppinglistDetailsStore.totalPrice + '€'
+  let response = 'Precio total: '
+  if (shoppinglistDetailsStore.totalPrice > 0) {
+    response += shoppinglistDetailsStore.totalPrice.toFixed(2) + '€'
+  } else {
+    response += '0,00 €'
+  }
+  return response
 })
 
 const shoppinglistDatesText = computed(() => {
