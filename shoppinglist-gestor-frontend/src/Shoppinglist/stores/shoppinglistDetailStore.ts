@@ -8,7 +8,7 @@ export const useShoppinglistDetailStore = defineStore('shoppinglistDetailStore',
   const shoppinglistDetails = ref<ShoppinglistDetailsMetadata>()
   const items = ref<ShoppinglistItemMetadata[]>([])
 
-  const totalPrice = ref<number | null>(null)
+  const totalPrice = ref<number>(-1)
 
   function addItem(data: ShoppinglistItemMetadata): void {
     items.value.push(data)
@@ -24,9 +24,9 @@ export const useShoppinglistDetailStore = defineStore('shoppinglistDetailStore',
 
   // Esta funcion sirve cuando se añade un nuevo SLI o se borra un SLI
   function updateTotalPrice(add: boolean, value: number) {
-    if (totalPrice.value) {
-      add ? (totalPrice.value += value) : (totalPrice.value -= value)
-    }
+    add
+      ? (totalPrice.value = totalPrice.value + value)
+      : (totalPrice.value = totalPrice.value - value)
   }
 
   // Esta funcion sirve cuando se esta actualizando el SLI

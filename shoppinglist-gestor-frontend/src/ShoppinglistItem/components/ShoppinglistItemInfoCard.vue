@@ -39,7 +39,7 @@ const toast = useToast()
 
 /** ---- COMPUTED SECTION ---- */
 const shoppinglistItemPriceText = computed(() => {
-  return 'Coste producto: ' + calculatedPrice.value + '€'
+  return 'Coste producto: ' + props.shoppinglistItem.calculatedPrice + '€'
 })
 
 const shoppinglistItemAssignationToListDateText = computed(() => {
