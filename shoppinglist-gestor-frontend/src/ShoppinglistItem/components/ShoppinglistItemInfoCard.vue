@@ -128,7 +128,7 @@ async function removeShoppinglistItem(id: number): Promise<void> {
         <div class="flex flex-column gap-2">
           <div v-if="shoppinglistItem.calculateSystemCode === 'WP'">
             <ItemUnitWpDialog
-              :idShoppinglistItem="shoppinglistItem.idShoppinglistItem"
+              :shoppinglistItem="shoppinglistItem"
               @newSliCalculatedPrice="updateCalculatedPrice"
             ></ItemUnitWpDialog>
           </div>

@@ -6,6 +6,8 @@ import Divider from 'primevue/divider'
 import ItemUnitWpUpdateForm from './ItemUnitWpUpdateForm.vue'
 import ItemUnitWpResume from './ItemUnitWpResume.vue'
 import { useUpdateItemWpFormStore } from '@/ItemUnit/store/updateItemWpFormStore'
+import type { ShoppinglistItemMetadata } from '@/ShoppinglistItem/domain/ShoppinglistItemMetadata'
+import { useShoppinglistDetailStore } from '@/Shoppinglist/stores/shoppinglistDetailStore'
 const visible = ref<boolean>(false)
 
 // /v1/{idShoppinglistItem}/itemsUnitsWpInfo -> LLAMAR A ESTO EN EL mounted()
@@ -13,9 +15,13 @@ const visible = ref<boolean>(false)
 const store = useUpdateItemWpFormStore()
 // /v1/{idShoppinglistItem}/addItemUnitWP -> ENDPOINT PARA LA ACTUALIZACION DEL ITEM WP
 
+const shoppinglistDetailsStore = useShoppinglistDetailStore()
+
+// MODIFICAR ESTO PARA EN VEZ DE PASAR SOLO EL ID PASAR EL SHOPPINGLISTITEM ENTERO
 const props = defineProps({
-  idShoppinglistItem: {
-    type: Number as PropType<number>,
+  shoppinglistItem: {
+    type: Object as PropType<ShoppinglistItemMetadata>,
+    default: () => null,
   },
 })
 
@@ -35,7 +41,17 @@ function updateShoppinglistPrice() {
    * 2 - EL VALOR DE LA LISTA DE LA COMPRA
    */
   // PASO - 1
-  emit('newSliCalculatedPrice', store.newProductPrice)
+  // *** EN VEZ DE ACTUALIZAR MANDANDO EL EMIT SENCILLAMENTE EL shoppinglistItem pasado como parametro le asigno el nuevo valor
+  // emit('newSliCalculatedPrice', store.newProductPrice)
+  if (store.newProductPrice !== null) {
+    let oldValue = props.shoppinglistItem.calculatedPrice
+    props.shoppinglistItem.calculatedPrice = store.newProductPrice
+    shoppinglistDetailsStore.recalculateShoppinglistTotalPrice(
+      shoppinglistDetailsStore.totalPrice,
+      oldValue,
+      store.newProductPrice,
+    )
+  }
 }
 </script>
 <template>
@@ -49,7 +65,7 @@ function updateShoppinglistPrice() {
     </Divider>
     <ItemUnitWpResume
       :isUpdateInfo="false"
-      :idShoppinglistItem="props.idShoppinglistItem"
+      :idShoppinglistItem="props.shoppinglistItem.idShoppinglistItem"
     ></ItemUnitWpResume>
     <Divider align="center" type="solid">
       <b>Actualizar Producto</b>
