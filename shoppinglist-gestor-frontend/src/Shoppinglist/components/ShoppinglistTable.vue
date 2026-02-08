@@ -18,6 +18,7 @@ import { defaultShoppinglistTable, type ShoppinglistTable } from '../domain/Shop
 import { useGetShoppinglistTableMetadata } from '@/Shoppinglist/application/useGetShoppinglistTableMetadata'
 import { useShoppinglistTableStore } from '@/Shoppinglist/stores/shoppinglistTableStore'
 import type { ShoppinglistMetadata } from '../domain/ShoppinglistMetadata'
+import InformationCard from '@/Shared/components/InformationCard.vue'
 const { refetch: getShoppinglistTableMetadata } = useGetShoppinglistTableMetadata()
 
 const shoppinglistTable = ref<ShoppinglistTable>({ ...defaultShoppinglistTable })
@@ -95,14 +96,25 @@ function generateTabTitleName(element: string) {
 </script>
 <template>
   <Toast></Toast>
+  <!-- <div v-if="shoppinglistTable.shoppinglistTable.length === 0">
+    <InformationCard
+      :information="{
+        header: 'Información',
+        content:
+          'No existen listas de la compra disponibles, añade listas para poder gestionar la información',
+      }"
+    ></InformationCard>
+  </div>
+  <div v-else></div> -->
+
   <Panel class="w-full h-full mt-2 grow shadow-5 max-w-content" toggleable>
     <template #header>
       <div class="text-2xl italic">Tus listas de la compra</div>
     </template>
-    <template #footer>
+    <!-- <template #footer>
       Seccion de informacion general sobre las listas, cantidad, precio de la suma de todas, etc...
       REVISAR
-    </template>
+    </template> -->
     <div class="flex flex-wrap">
       <Button
         class="bg-green-500 w-full"
@@ -124,12 +136,23 @@ function generateTabTitleName(element: string) {
           <TabPanel :value="panelId">
             <ScrollPanel style="width: 100%; height: 600px">
               <div class="flex flex-row flex-wrap justify-content-center">
-                <div v-for="shoppinglistData of selectTableToShow(panelId)">
-                  <ShoppinglistCardInfo
-                    class="shadow-3"
-                    :shoppinglist="shoppinglistData"
-                    @update-shoppinglist-tables="updateShoppinglistTables"
-                  ></ShoppinglistCardInfo>
+                <div v-if="selectTableToShow(panelId).length == 0">
+                  <InformationCard
+                    :information="{
+                      header: 'Información',
+                      content:
+                        'No existen listas de la compra disponibles, añade listas para poder gestionar la información.',
+                    }"
+                  ></InformationCard>
+                </div>
+                <div v-else>
+                  <div v-for="shoppinglistData of selectTableToShow(panelId)">
+                    <ShoppinglistCardInfo
+                      class="shadow-3"
+                      :shoppinglist="shoppinglistData"
+                      @update-shoppinglist-tables="updateShoppinglistTables"
+                    ></ShoppinglistCardInfo>
+                  </div>
                 </div>
               </div>
             </ScrollPanel>
