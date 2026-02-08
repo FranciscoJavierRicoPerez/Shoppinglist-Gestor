@@ -1,7 +1,5 @@
-import type { Shoppinglist } from '@/Shoppinglist/domain/Shoppinglist'
-import type { ResponseShoppinglist } from '@/Shoppinglist/infrastructure/models/ResponseShoppinglist'
 import responseGetFilteredShoppinglist from '@/Shoppinglist/infrastructure/mocks/responseGetFilteredShoppinglist.json'
-import { createShoppinglistArray, createShoppinglistTable } from '../services/ShoppinglistService'
+import { createShoppinglistTable } from '../services/ShoppinglistService'
 import type { ShoppinglistFilter } from '@/Shoppinglist/domain/ShoppinglistFilter'
 import type { ShoppinglistTable } from '@/Shoppinglist/domain/ShoppinglistTable'
 import type { ResponseGetShoppinglistTableMetadata } from '@/Shoppinglist/infrastructure/models/responses/ResponseGetShoppinglistTableMetadata'
@@ -21,15 +19,17 @@ async function Api(data: ShoppinglistFilter): Promise<ResponseGetShoppinglistTab
     import.meta.env.VITE_API_URL_COMPUTER +
     'api/shoppinglist/v1/filter?code=' +
     data.code +
-    '?creationDate=' +
+    '&creationDate=' +
     data.creationDate +
-    '?closeDate=' +
+    '&closeDate=' +
     data.closeDate +
-    '?totalPrice=' +
+    '&totalPrice=' +
     data.totalPrice +
-    '?isActive=' +
+    '&isActive=' +
     data.isActive
-
+  debugger
+  console.log(data)
+  debugger
   const response = await axios.get(url)
   return response.data
 }
