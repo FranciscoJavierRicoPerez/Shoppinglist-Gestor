@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import Dialog from 'primevue/dialog'
-import { computed, onMounted, ref, type PropType } from 'vue'
+import { computed, ref, type PropType } from 'vue'
 import Button from 'primevue/button'
 import Divider from 'primevue/divider'
 import ItemUnitWpUpdateForm from './ItemUnitWpUpdateForm.vue'
 import ItemUnitWpResume from './ItemUnitWpResume.vue'
 import { useUpdateItemWpFormStore } from '@/ItemUnit/store/updateItemWpFormStore'
+import type { ShoppinglistItemMetadata } from '@/ShoppinglistItem/domain/ShoppinglistItemMetadata'
+import { useShoppinglistDetailStore } from '@/Shoppinglist/stores/shoppinglistDetailStore'
 const visible = ref<boolean>(false)
 
 // /v1/{idShoppinglistItem}/itemsUnitsWpInfo -> LLAMAR A ESTO EN EL mounted()
@@ -13,9 +15,13 @@ const visible = ref<boolean>(false)
 const store = useUpdateItemWpFormStore()
 // /v1/{idShoppinglistItem}/addItemUnitWP -> ENDPOINT PARA LA ACTUALIZACION DEL ITEM WP
 
+const shoppinglistDetailsStore = useShoppinglistDetailStore()
+
+// MODIFICAR ESTO PARA EN VEZ DE PASAR SOLO EL ID PASAR EL SHOPPINGLISTITEM ENTERO
 const props = defineProps({
-  idShoppinglistItem: {
-    type: Number as PropType<number>,
+  shoppinglistItem: {
+    type: Object as PropType<ShoppinglistItemMetadata>,
+    default: () => null,
   },
 })
 
@@ -26,16 +32,15 @@ const modalHeaderText = computed(() => {
 })
 
 function updateShoppinglistPrice() {
-  console.log('ACTUALIZANDO PRECIOS')
-  /**
-   * AQUI TENGO QUE ACTUALIZAR 2 VALORES.
-   * 1 - EL VALOR DEL SLI TIENE QUE CAMBIAR POR EL NUEVO
-   *   => ENVIAR A LA CAPA SUPERIOR (ShoppinglistItemInfoCard.vue calculatedPrice) UN EVENTO CON EL NUEVO VALOR
-   *   Y ASIGNARLO A LA VARIABLE
-   * 2 - EL VALOR DE LA LISTA DE LA COMPRA
-   */
-  // PASO - 1
-  emit('newSliCalculatedPrice', store.newProductPrice)
+  if (store.newProductPrice !== null) {
+    let oldValue = props.shoppinglistItem.calculatedPrice
+    props.shoppinglistItem.calculatedPrice = store.newProductPrice
+    shoppinglistDetailsStore.recalculateShoppinglistTotalPrice(
+      shoppinglistDetailsStore.totalPrice,
+      oldValue,
+      store.newProductPrice,
+    )
+  }
 }
 </script>
 <template>
@@ -49,7 +54,7 @@ function updateShoppinglistPrice() {
     </Divider>
     <ItemUnitWpResume
       :isUpdateInfo="false"
-      :idShoppinglistItem="props.idShoppinglistItem"
+      :shoppinglistItem="props.shoppinglistItem"
     ></ItemUnitWpResume>
     <Divider align="center" type="solid">
       <b>Actualizar Producto</b>

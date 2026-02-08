@@ -11,13 +11,13 @@ import TabList from 'primevue/tablist'
 import Tab from 'primevue/tab'
 import TabPanels from 'primevue/tabpanels'
 import TabPanel from 'primevue/tabpanel'
-import VirtualScroller from 'primevue/virtualscroller'
 import ScrollPanel from 'primevue/scrollpanel'
 import { useShoppinglistFilterStore } from '@/Shoppinglist/stores/shoppinglistFilterStore'
 import { defaultShoppinglistTable, type ShoppinglistTable } from '../domain/ShoppinglistTable'
 import { useGetShoppinglistTableMetadata } from '@/Shoppinglist/application/useGetShoppinglistTableMetadata'
 import { useShoppinglistTableStore } from '@/Shoppinglist/stores/shoppinglistTableStore'
 import type { ShoppinglistMetadata } from '../domain/ShoppinglistMetadata'
+import InformationCard from '@/Shared/components/InformationCard.vue'
 const { refetch: getShoppinglistTableMetadata } = useGetShoppinglistTableMetadata()
 
 const shoppinglistTable = ref<ShoppinglistTable>({ ...defaultShoppinglistTable })
@@ -30,7 +30,6 @@ const toast = useToast()
 const tabsPanelIds = ref<string[]>(['0', '1', '2'])
 const actualPanelSelected = ref<number>(-1)
 
-// TODO: ES POSIBLE QUE HAYA QUE REFACTORIZAR ESTE STORE
 const storeShoppinglistFilter = useShoppinglistFilterStore()
 
 onMounted(async () => {
@@ -99,10 +98,12 @@ function generateTabTitleName(element: string) {
     <template #header>
       <div class="text-2xl italic">Tus listas de la compra</div>
     </template>
-    <template #footer>
-      Seccion de informacion general sobre las listas, cantidad, precio de la suma de todas, etc...
-      REVISAR
-    </template>
+    <!-- <template #footer>
+      <div class="bg-cyan-200">
+        Sección de informacion general sobre las listas, cantidad, precio de la suma de todas,
+        etc... REVISAR
+      </div>
+    </template> -->
     <div class="flex flex-wrap">
       <Button
         class="bg-green-500 w-full"
@@ -124,12 +125,23 @@ function generateTabTitleName(element: string) {
           <TabPanel :value="panelId">
             <ScrollPanel style="width: 100%; height: 600px">
               <div class="flex flex-row flex-wrap justify-content-center">
-                <div v-for="shoppinglistData of selectTableToShow(panelId)">
-                  <ShoppinglistCardInfo
-                    class="shadow-3"
-                    :shoppinglist="shoppinglistData"
-                    @update-shoppinglist-tables="updateShoppinglistTables"
-                  ></ShoppinglistCardInfo>
+                <div v-if="selectTableToShow(panelId).length == 0">
+                  <InformationCard
+                    :information="{
+                      header: 'Información',
+                      content:
+                        'No existen listas de la compra disponibles, añade listas para poder gestionar la información.',
+                    }"
+                  ></InformationCard>
+                </div>
+                <div v-else>
+                  <div v-for="shoppinglistData of selectTableToShow(panelId)">
+                    <ShoppinglistCardInfo
+                      class="shadow-3"
+                      :shoppinglist="shoppinglistData"
+                      @update-shoppinglist-tables="updateShoppinglistTables"
+                    ></ShoppinglistCardInfo>
+                  </div>
                 </div>
               </div>
             </ScrollPanel>

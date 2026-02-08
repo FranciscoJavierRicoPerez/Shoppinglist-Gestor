@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import Card from 'primevue/card'
 import Button from 'primevue/button'
-import type { PropType } from 'vue'
-import type { Shoppinglist } from '@/Shoppinglist/domain/Shoppinglist'
+import { computed, type PropType } from 'vue'
 import { RouterLink } from 'vue-router'
 import Tag from 'primevue/tag'
 import { useUpdateIsActiveShoppinglist } from '@/Shoppinglist/application/useUpdateIsActiveShoppinglist'
-import { useShoppinglistStore } from '@/Shoppinglist/stores/shoppinglistStore'
-import Toast, { type ToastMessageOptions } from 'primevue/toast'
+import { type ToastMessageOptions } from 'primevue/toast'
 import { useToast } from 'primevue/usetoast'
 import { useDeleteShoppinglistData } from '@/Shoppinglist/application/useDeleteShoppinglistData'
 import type { ShoppinglistMetadata } from '@/Shoppinglist/domain/ShoppinglistMetadata'
@@ -23,6 +21,22 @@ const props = defineProps({
   },
 })
 const toast = useToast()
+
+const slCode = computed(() => {
+  return props.shoppinglist.code
+})
+
+const slCreationDate = computed(() => {
+  return props.shoppinglist.creationDate
+})
+
+const slTotalPrice = computed(() => {
+  return props.shoppinglist.totalPrice + '€'
+})
+
+const slIsActive = computed(() => {
+  return props.shoppinglist.isActive
+})
 
 async function archiveShoppinglist() {
   let response: boolean = await updateIsActive()
@@ -67,15 +81,13 @@ function createToast(toastOptions: ToastMessageOptions) {
 <template>
   <Card
     class="card-general"
-    :class="
-      shoppinglist.isActive ? 'card-background-actives-card' : 'card-background-no-actives-card'
-    "
+    :class="slIsActive ? 'card-background-actives-card' : 'card-background-no-actives-card'"
   >
-    <template #title>{{ shoppinglist.code }}</template>
-    <template #subtitle>{{ shoppinglist.creationDate }}</template>
+    <template #title>{{ slCode }}</template>
+    <template #subtitle>{{ slCreationDate }}</template>
     <template #content>
-      <p>{{ shoppinglist.totalPrice }}€</p>
-      <div v-if="shoppinglist.isActive">
+      <p>{{ slTotalPrice }}</p>
+      <div v-if="slIsActive">
         <Tag severity="success">
           <span class="tag-custom">Activo</span>
         </Tag>
@@ -92,7 +104,7 @@ function createToast(toastOptions: ToastMessageOptions) {
           class="buttons-separation"
           label="Archivar"
           severity="help"
-          :disabled="!shoppinglist.isActive"
+          :disabled="!slIsActive"
           @click="archiveShoppinglist()"
         ></Button>
         <RouterLink :to="`/shoppinglist/${shoppinglist.idShoppinglist}`">
@@ -112,7 +124,6 @@ function createToast(toastOptions: ToastMessageOptions) {
 .card-general {
   margin-right: 1rem;
   margin-top: 10px;
-  /* max-width: 30rem; */
 }
 
 .card-background-actives-card {
