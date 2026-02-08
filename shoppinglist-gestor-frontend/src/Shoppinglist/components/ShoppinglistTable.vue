@@ -11,7 +11,6 @@ import TabList from 'primevue/tablist'
 import Tab from 'primevue/tab'
 import TabPanels from 'primevue/tabpanels'
 import TabPanel from 'primevue/tabpanel'
-import VirtualScroller from 'primevue/virtualscroller'
 import ScrollPanel from 'primevue/scrollpanel'
 import { useShoppinglistFilterStore } from '@/Shoppinglist/stores/shoppinglistFilterStore'
 import { defaultShoppinglistTable, type ShoppinglistTable } from '../domain/ShoppinglistTable'
@@ -31,7 +30,6 @@ const toast = useToast()
 const tabsPanelIds = ref<string[]>(['0', '1', '2'])
 const actualPanelSelected = ref<number>(-1)
 
-// TODO: ES POSIBLE QUE HAYA QUE REFACTORIZAR ESTE STORE
 const storeShoppinglistFilter = useShoppinglistFilterStore()
 
 onMounted(async () => {
@@ -96,24 +94,15 @@ function generateTabTitleName(element: string) {
 </script>
 <template>
   <Toast></Toast>
-  <!-- <div v-if="shoppinglistTable.shoppinglistTable.length === 0">
-    <InformationCard
-      :information="{
-        header: 'Información',
-        content:
-          'No existen listas de la compra disponibles, añade listas para poder gestionar la información',
-      }"
-    ></InformationCard>
-  </div>
-  <div v-else></div> -->
-
   <Panel class="w-full h-full mt-2 grow shadow-5 max-w-content" toggleable>
     <template #header>
       <div class="text-2xl italic">Tus listas de la compra</div>
     </template>
     <!-- <template #footer>
-      Seccion de informacion general sobre las listas, cantidad, precio de la suma de todas, etc...
-      REVISAR
+      <div class="bg-cyan-200">
+        Sección de informacion general sobre las listas, cantidad, precio de la suma de todas,
+        etc... REVISAR
+      </div>
     </template> -->
     <div class="flex flex-wrap">
       <Button
