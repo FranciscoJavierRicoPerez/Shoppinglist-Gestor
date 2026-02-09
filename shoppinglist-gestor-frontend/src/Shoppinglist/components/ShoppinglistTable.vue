@@ -124,17 +124,17 @@ function generateTabTitleName(element: string) {
         <div v-for="panelId in tabsPanelIds">
           <TabPanel :value="panelId">
             <ScrollPanel style="width: 100%; height: 600px">
-              <div class="flex flex-row flex-wrap justify-content-center">
-                <div v-if="selectTableToShow(panelId).length == 0">
-                  <InformationCard
-                    :information="{
-                      header: 'Información',
-                      content:
-                        'No existen listas de la compra disponibles, añade listas para poder gestionar la información.',
-                    }"
-                  ></InformationCard>
-                </div>
-                <div v-else>
+              <div v-if="selectTableToShow(panelId).length == 0">
+                <InformationCard
+                  :information="{
+                    header: 'Información',
+                    content:
+                      'No existen listas de la compra disponibles, añade listas para poder gestionar la información.',
+                  }"
+                ></InformationCard>
+              </div>
+              <div v-else>
+                <div class="flex flex-row flex-wrap justify-content-center">
                   <div v-for="shoppinglistData of selectTableToShow(panelId)">
                     <ShoppinglistCardInfo
                       class="shadow-3"

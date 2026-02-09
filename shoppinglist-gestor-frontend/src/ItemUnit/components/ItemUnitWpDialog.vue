@@ -10,14 +10,10 @@ import type { ShoppinglistItemMetadata } from '@/ShoppinglistItem/domain/Shoppin
 import { useShoppinglistDetailStore } from '@/Shoppinglist/stores/shoppinglistDetailStore'
 const visible = ref<boolean>(false)
 
-// /v1/{idShoppinglistItem}/itemsUnitsWpInfo -> LLAMAR A ESTO EN EL mounted()
-// crear un wpItemDetailsStore el cual me sirva para mostrar y actualizar la informacion del modal
 const store = useUpdateItemWpFormStore()
-// /v1/{idShoppinglistItem}/addItemUnitWP -> ENDPOINT PARA LA ACTUALIZACION DEL ITEM WP
 
 const shoppinglistDetailsStore = useShoppinglistDetailStore()
 
-// MODIFICAR ESTO PARA EN VEZ DE PASAR SOLO EL ID PASAR EL SHOPPINGLISTITEM ENTERO
 const props = defineProps({
   shoppinglistItem: {
     type: Object as PropType<ShoppinglistItemMetadata>,
@@ -29,6 +25,18 @@ const emit = defineEmits(['newSliCalculatedPrice'])
 
 const modalHeaderText = computed(() => {
   return 'Detalle del producto'
+})
+
+const productInfoText = computed(() => {
+  return 'Información del producto'
+})
+
+const updateProductText = computed(() => {
+  return 'Actualización del producto'
+})
+
+const updatedProductResumeText = computed(() => {
+  return 'Resumen del producto actualizado'
 })
 
 function updateShoppinglistPrice() {
@@ -45,23 +53,23 @@ function updateShoppinglistPrice() {
 </script>
 <template>
   <Button class="w-full" severity="info" label="Kg/€" raised @click="visible = true"></Button>
-  <Dialog class="" v-model:visible="visible" :position="'top'" :modal="true" :draggable="false">
+  <Dialog v-model:visible="visible" :position="'top'" :modal="true" :draggable="false">
     <template #header>
       <div class="ml-3 mt-2 text-2xl text-left font-italic">{{ modalHeaderText }}</div>
     </template>
     <Divider align="center" type="solid">
-      <b>Información del Producto</b>
+      <b>{{ productInfoText }}</b>
     </Divider>
     <ItemUnitWpResume
       :isUpdateInfo="false"
       :shoppinglistItem="props.shoppinglistItem"
     ></ItemUnitWpResume>
     <Divider align="center" type="solid">
-      <b>Actualizar Producto</b>
+      <b>{{ updateProductText }}</b>
     </Divider>
     <ItemUnitWpUpdateForm></ItemUnitWpUpdateForm>
     <Divider align="center" type="solid">
-      <b>Producto Actualizado</b>
+      <b>{{ updatedProductResumeText }}</b>
     </Divider>
     <ItemUnitWpResume :isUpdateInfo="true"></ItemUnitWpResume>
     <Divider> </Divider>
