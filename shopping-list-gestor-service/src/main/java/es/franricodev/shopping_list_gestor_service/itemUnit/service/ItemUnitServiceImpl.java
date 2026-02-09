@@ -6,7 +6,6 @@ import es.franricodev.shopping_list_gestor_service.itemUnit.exception.ItemUnitEx
 import es.franricodev.shopping_list_gestor_service.itemUnit.messages.ItemUnitMessagesError;
 import es.franricodev.shopping_list_gestor_service.itemUnit.model.ItemUnit;
 import es.franricodev.shopping_list_gestor_service.itemUnit.repository.ItemUnitRepository;
-import es.franricodev.shopping_list_gestor_service.shoppinglist.service.ShoppinglistService;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseGetAllItemUnitUpGroupedByPrice;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseItemUnitUpGrouped;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.ShoppinglistItem;
