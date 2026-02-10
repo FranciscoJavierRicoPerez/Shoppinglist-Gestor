@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import Panel from 'primevue/panel'
 import Tag from 'primevue/tag'
-// import Button from 'primevue/button'
 import { useShoppinglistDetailStore } from '@/Shoppinglist/stores/shoppinglistDetailStore'
 import type { ShoppinglistMetadata } from '@/Shoppinglist/domain/ShoppinglistMetadata'
 import { computed, onMounted, ref } from 'vue'
@@ -15,11 +14,13 @@ const informacionHeaderText = computed(() => {
 })
 
 const shoppinglistStatusText = computed(() => {
-  return shoppinglistMetadata.value?.isActive ? 'ABIERTA' : 'CERRADA'
+  return shoppinglistDetailsStore.shoppinglistDetails?.shoppinglistMetadata.isActive
+    ? 'ABIERTA'
+    : 'CERRADA'
 })
 
 const shoppinglistCodeText = computed(() => {
-  return shoppinglistMetadata.value?.code
+  return shoppinglistDetailsStore.shoppinglistDetails?.shoppinglistMetadata.code
 })
 
 const shoppinglistTotalPriceText = computed(() => {
@@ -33,19 +34,16 @@ const shoppinglistTotalPriceText = computed(() => {
 })
 
 const shoppinglistDatesText = computed(() => {
-  let response: string = 'Lista de la compra del ' + shoppinglistMetadata.value?.creationDate
-  if (shoppinglistMetadata.value?.closeDate) {
-    response += ' al ' + shoppinglistMetadata.value.closeDate
+  let response: string =
+    'Lista de la compra del ' +
+    shoppinglistDetailsStore.shoppinglistDetails?.shoppinglistMetadata.creationDate
+  if (shoppinglistDetailsStore.shoppinglistDetails?.shoppinglistMetadata.closeDate) {
+    response +=
+      ' al ' + shoppinglistDetailsStore.shoppinglistDetails?.shoppinglistMetadata.closeDate
   }
   return response
 })
 /** ---------------- */
-onMounted(() => {
-  shoppinglistMetadata.value = shoppinglistDetailsStore.shoppinglistDetails?.shoppinglistMetadata
-  if (shoppinglistDetailsStore.shoppinglistDetails)
-    shoppinglistDetailsStore.totalPrice =
-      shoppinglistDetailsStore.shoppinglistDetails?.shoppinglistMetadata.totalPrice
-})
 </script>
 <template>
   <div>
