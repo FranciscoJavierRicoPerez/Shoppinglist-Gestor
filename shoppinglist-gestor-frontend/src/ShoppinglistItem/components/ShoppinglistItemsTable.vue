@@ -1,19 +1,11 @@
 <script setup lang="ts">
 import { useShoppinglistDetailStore } from '@/Shoppinglist/stores/shoppinglistDetailStore'
-import type { ShoppinglistItemMetadata } from '@/ShoppinglistItem/domain/ShoppinglistItemMetadata'
-import { onMounted, ref } from 'vue'
 import ShoppinglistItemInfoCard from './ShoppinglistItemInfoCard.vue'
 import Panel from 'primevue/panel'
 import ScrollPanel from 'primevue/scrollpanel'
 import InformationCard from '@/Shared/components/InformationCard.vue'
 
 const shoppinglistDetailsStore = useShoppinglistDetailStore()
-
-onMounted(() => {
-  shoppinglistDetailsStore.items = shoppinglistDetailsStore.shoppinglistDetails?.items
-    ? shoppinglistDetailsStore.shoppinglistDetails?.items
-    : []
-})
 </script>
 <template>
   <Panel toggleable>

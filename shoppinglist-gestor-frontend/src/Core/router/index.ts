@@ -18,11 +18,6 @@ const router = createRouter({
       name: 'ShoppinglistDetailsView',
       component: () => import('@/Shoppinglist/views/ShoppinglistDetailsV2View.vue'),
     },
-    /* {
-      path: '/product/:id',
-      name: 'ProductDetailsView',
-      component: () => import('@/Product/views/ProductDetails.vue'),
-    }, */
   ],
 })
 

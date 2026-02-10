@@ -18,6 +18,13 @@ const { refetch: getShoppinglistDetailsMetadata } = useGetShoppinglistDetailsMet
 onMounted(async () => {
   const param = Number(route.params.id)
   shoppinglistDetailStore.shoppinglistDetails = await getShoppinglistDetailsMetadata(param)
+  shoppinglistDetailStore.items = shoppinglistDetailStore.shoppinglistDetails?.items
+    ? shoppinglistDetailStore.shoppinglistDetails?.items
+    : []
+  shoppinglistDetailStore.shoppinglistDetails
+    ? (shoppinglistDetailStore.totalPrice =
+        shoppinglistDetailStore.shoppinglistDetails?.shoppinglistMetadata.totalPrice)
+    : -1
 })
 </script>
 <template>
