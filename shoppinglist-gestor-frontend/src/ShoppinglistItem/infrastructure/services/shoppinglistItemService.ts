@@ -1,29 +1,7 @@
-import type { ShoppinglistItem } from '@/ShoppinglistItem/domain/ShoppinglistItem'
-import type { ResponseShoppinglistItem } from '../models/ResponseShoppinglistItem'
-// import { createProduct } from '@/Product/infrastructure/services/ProductService'
 import type { ResponseShoppinglistItemsMetadata } from '../models/ResponseShoppinglistIemsMetadata'
 import type { ShoppinglistItemMetadata } from '@/ShoppinglistItem/domain/ShoppinglistItemMetadata'
-import type { ResponseShoppinglistMetadata } from '@/Shoppinglist/infrastructure/models/responses/ResponseShoppinglistMetadata'
 import type { ResponseCreateShoppinglistItem } from '../models/response/ResponseCreateShoppinglistItem'
 import type { RequestCreateShoppinglistItemForm } from '../models/request/RequestCreateShoppinglistItemForm'
-
-/* export function createShoppinglistItemArray(data: ResponseShoppinglistItem[]): ShoppinglistItem[] {
-  let shoppinglistItemArray: ShoppinglistItem[] = []
-  data.forEach((element) => {
-    shoppinglistItemArray.push(createShoppinglistItem(element))
-  })
-  return shoppinglistItemArray
-}
-
-export function createShoppinglistItem(data: ResponseShoppinglistItem): ShoppinglistItem {
-  return {
-    id: data.id,
-    assignationToListDate: data.assignationToListDate,
-    calculatedPrice: data.calculatedPrice,
-    quantity: data.quantity,
-    product: createProduct(data.product),
-  }
-} */
 
 export function createShoppinglistItemMetadataArray(
   data: ResponseShoppinglistItemsMetadata[],
