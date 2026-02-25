@@ -133,7 +133,7 @@ async function removeShoppinglistItem(id: number): Promise<void> {
             ></ItemUnitWpDialog>
           </div>
           <div v-else>
-            <ItemUnitUpDialog></ItemUnitUpDialog>
+            <ItemUnitUpDialog :shoppinglistItem="shoppinglistItem"></ItemUnitUpDialog>
           </div>
           <Button
             class="w-full"

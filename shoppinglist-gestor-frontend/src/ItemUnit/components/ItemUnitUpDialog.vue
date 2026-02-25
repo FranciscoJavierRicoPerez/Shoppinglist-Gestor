@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import Dialog from 'primevue/dialog'
+import Tag from 'primevue/tag'
 import { computed, ref, type PropType } from 'vue'
 import Button from 'primevue/button'
-import { useUpdateItemWpFormStore } from '../store/updateItemWpFormStore'
 import { useShoppinglistDetailStore } from '@/Shoppinglist/stores/shoppinglistDetailStore'
 import type { ShoppinglistItemMetadata } from '@/ShoppinglistItem/domain/ShoppinglistItemMetadata'
 import Divider from 'primevue/divider'
+import ItemUnitUpPopover from './ItemUnitUpUpdateForm.vue'
+import { useItemUnitUpGroupedByPriceStore } from '../store/itemUnitUpGroupedByPriceStore'
+import ItemUnitUpCreateForm from './ItemUnitUpCreateForm.vue'
+import ItemUnitUpUpdateForm from './ItemUnitUpUpdateForm.vue'
 
 const visible = ref<boolean>(false)
 
-const modalHeaderText = computed(() => {
-  return 'Detalle del producto'
-})
-
-const store = useUpdateItemWpFormStore()
+const store = useItemUnitUpGroupedByPriceStore()
 
 const shoppinglistDetailsStore = useShoppinglistDetailStore()
 
@@ -24,14 +24,38 @@ const props = defineProps({
   },
 })
 
+const modalHeaderText = computed(() => {
+  return 'Detalle del producto'
+})
+
+const productInfoText = computed(() => {
+  return 'Información del producto'
+})
+
+const updateProductText = computed(() => {
+  return 'Actualización del producto'
+})
+
+const updatedProductResumeText = computed(() => {
+  return 'Resumen del producto actualizado'
+})
+
+const actualTotalPrice = computed(() => {
+  return 'Precio total: ' + props.shoppinglistItem.calculatedPrice
+})
+
+const addNewItemUnitText = computed(() => {
+  return 'Nuevo item unit'
+})
+
 function updateShoppinglistPrice() {
-  if (store.newProductPrice !== null) {
+  if (store.totalPrice !== null) {
     let oldValue = props.shoppinglistItem.calculatedPrice
-    props.shoppinglistItem.calculatedPrice = store.newProductPrice
+    props.shoppinglistItem.calculatedPrice = store.totalPrice
     shoppinglistDetailsStore.recalculateShoppinglistTotalPrice(
       shoppinglistDetailsStore.totalPrice,
       oldValue,
-      store.newProductPrice,
+      store.totalPrice,
     )
   }
 }
@@ -43,12 +67,18 @@ function updateShoppinglistPrice() {
       <div class="ml-3 mt-2 text-2xl text-left font-italic">{{ modalHeaderText }}</div>
     </template>
     <Divider align="center" type="solid">
-      <b>1</b>
+      <b>{{ productInfoText }}</b>
     </Divider>
+    <Tag class="w-full">{{ actualTotalPrice }}</Tag>
+    <Divider>
+      <b>{{ addNewItemUnitText }}</b>
+    </Divider>
+    <!-- Formulario para añadir un nuevo item unit  -->
+    <ItemUnitUpCreateForm :quickCreate="true"></ItemUnitUpCreateForm>
     <Divider align="center" type="solid">
-      <b>2</b>
+      <b>{{ updateProductText }}</b>
     </Divider>
-    <Divider></Divider>
+    <ItemUnitUpUpdateForm :shoppinglistItem="props.shoppinglistItem"></ItemUnitUpUpdateForm>
     <div class="flex justify-content-end gap-2">
       <Button
         class="w-full"

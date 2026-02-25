@@ -27,7 +27,7 @@ import java.util.List;
 @Service
 public class ItemUnitServiceImpl implements ItemUnitService {
 
-    @Lazy
+    @Lazy // REVISAR ESTE LAZY NO DEBERIA DE ESTAR AQUI
     @Autowired
     private ShoppinglistItemService shoppinglistItemService;
 
