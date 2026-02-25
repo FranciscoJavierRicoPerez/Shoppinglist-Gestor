@@ -47,15 +47,15 @@ async function createNewShoppinglistItem() {
         store.quantity === null || store.unitaryPrice === null
           ? null
           : {
-              quantity: -1,
-              unitaryPrice: -1,
+              quantity: store.quantity,
+              unitaryPrice: store.unitaryPrice,
             },
       createWpItemUnitData:
         store.priceKg === null || store.weight === null
           ? null
           : {
-              priceKg: -1,
-              weight: -1,
+              priceKg: store.priceKg,
+              weight: store.weight,
             },
     },
   }

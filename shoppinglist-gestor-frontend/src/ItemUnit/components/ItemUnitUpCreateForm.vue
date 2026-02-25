@@ -1,23 +1,38 @@
 <script setup lang="ts">
 import InputNumber from 'primevue/inputnumber'
 import FloatLabel from 'primevue/floatlabel'
+import Button from 'primevue/button'
 import { useCreateShoppinglistItemFormStore } from '@/ShoppinglistItem/stores/createShoppinglistItemFormStore'
-import { ref, watch } from 'vue'
+import { ref, watch, type PropType } from 'vue'
+import { useItemUnitUpGroupedByPriceStore } from '../store/itemUnitUpGroupedByPriceStore'
+
+const props = defineProps({
+  quickCreate: {
+    type: Boolean as PropType<Boolean>,
+    default: () => false,
+  },
+})
 
 const quantity = ref<number | null>(null)
 const unitaryPrice = ref<number | null>(null)
 
 watch(quantity, () => {
-  calculateShoppinglistItemTotalPrice()
+  if (!props.quickCreate) {
+    calculateShoppinglistItemTotalPrice()
+  }
 })
 
 watch(unitaryPrice, () => {
-  calculateShoppinglistItemTotalPrice()
+  if (!props.quickCreate) {
+    calculateShoppinglistItemTotalPrice()
+  }
 })
 
 const store = useCreateShoppinglistItemFormStore()
 
-function calculateShoppinglistItemTotalPrice() {
+const groupedItemsUpStore = useItemUnitUpGroupedByPriceStore()
+
+function calculateShoppinglistItemTotalPrice(): void {
   let totalPrice: number | null = null
   if (quantity.value && unitaryPrice.value) {
     totalPrice = quantity.value * unitaryPrice.value
@@ -25,6 +40,20 @@ function calculateShoppinglistItemTotalPrice() {
     store.unitaryPrice = unitaryPrice.value
   }
   store.shoppinglistItemPrice = totalPrice
+}
+
+function addNewItemUnitUp(): void {
+  console.log('llamar al servicio que se encarga de añadir un nuevo item unit')
+  // TAMBIEN TIENE QUE LLAMARSE AL STORE useItemUnitUpGroupedByPriceStore PARA AÑADIR LA NUEVA INSTANCIA
+  if (quantity.value && unitaryPrice.value) {
+    // ESTO NO SERA ASI, SERA CON LA RESPUESTA DEL SERVICIO
+    groupedItemsUpStore.add({
+      quantity: quantity.value,
+      price: unitaryPrice.value,
+      calculatedPrice: quantity.value * unitaryPrice.value,
+    })
+  }
+  groupedItemsUpStore.updateTotalPrice()
 }
 </script>
 <template>
@@ -43,5 +72,11 @@ function calculateShoppinglistItemTotalPrice() {
       ></InputNumber>
       <label for="unitaryPrice">Precio Unitario</label>
     </FloatLabel>
+    <Button
+      v-if="quickCreate"
+      class="w-full"
+      label="Añadir unidad"
+      @click="addNewItemUnitUp()"
+    ></Button>
   </div>
 </template>
