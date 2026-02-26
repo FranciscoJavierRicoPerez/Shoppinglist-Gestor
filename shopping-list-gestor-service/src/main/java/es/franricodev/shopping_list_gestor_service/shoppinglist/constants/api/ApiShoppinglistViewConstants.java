@@ -7,7 +7,7 @@ public class ApiShoppinglistViewConstants {
     // ------------------- URL CONSTANTS -----------------------------
     public static final String BASE_URL = "/api/shoppinglistview/";
     public static final String GET_ALL_V1 = "v1/all";
-    public static final String GET_DETAILS_V1 = "v1/{id}/details";
+    public static final String GET_DETAILS_V1 = "v1/{idShoppinglist}/details";
     // ------------ PATH VARIABLE CONSTANTS -----------------------------------------------------------
     public static final String ID_SHOPPINGLIST = "idShoppinglist";
 }

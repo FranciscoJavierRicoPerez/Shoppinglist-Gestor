@@ -12,7 +12,7 @@ public class ApiShoppinglistConstants {
     public static final String DELETE_V1 = "/v1/delete/{idShoppinglist}";
     public static final String UPDATE_V1 = "/v1/update";
     public static final String FILTER_V1 = "/v1/filter";
-    public static final String GET_DETAILS_V1 = "/v1/{idShopppinglist}/details";
+    public static final String GET_DETAILS_V1 = "/v1/{idShoppinglist}/details";
     public static final String UPDATE_IS_ACTIVE_V1 = "/v1/{idShoppinglist}/update/isActive";
     public static final String DELETE_LOGIC_V1 = "/v1/{idShoppinglist}/delete/logic";
     public static final String ADD_SHOPPINGLIST_ITEM_V1 = "/v1/{idShoppinglist}/addShoppinglistItem";
