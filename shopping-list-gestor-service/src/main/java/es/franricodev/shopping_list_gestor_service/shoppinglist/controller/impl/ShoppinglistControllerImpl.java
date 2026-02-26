@@ -1,5 +1,6 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglist.controller.impl;
 
+import es.franricodev.shopping_list_gestor_service.shoppinglist.constants.api.ApiShoppinglistConstants;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.controller.ShoppinglistController;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.*;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseCreateShoppinglist;
@@ -19,13 +20,13 @@ import java.util.List;
 @Slf4j
 @CrossOrigin(origins = {"http://localhost:8100/", "http://192.168.18.7:9000/", "*"})
 @RestController
-@RequestMapping("/api/shoppinglist")
+@RequestMapping(ApiShoppinglistConstants.BASE_URL)
 public class ShoppinglistControllerImpl implements ShoppinglistController {
 
     @Autowired
     private ShoppinglistService shoppinglistService;
 
-    @GetMapping("/v1")
+    @Override
     public ResponseEntity<List<ShoppinglistDTO>> getAllShoppinglist() {
         log.info("Getting all actives shoppinglists");
         HttpStatus httpStatus = HttpStatus.OK;
@@ -39,25 +40,20 @@ public class ShoppinglistControllerImpl implements ShoppinglistController {
         return new ResponseEntity<>(shoppinglistDTOS, httpStatus);
     }
 
-    /* TODO: Modificar la respuesa
-        -> ResponseEntity<ShoppinglistDTO> => ResponseEntity<ResponseCreateShoppinglist>
-        => ResponseCreateShoppinglist
-            -> ShoppinglistMetadata
-    * */
-    @PostMapping("/v2/create")
-    public ResponseEntity<ResponseCreateShoppinglist> createShoppinglistV2(@NotNull @RequestBody RequestCreateShoppinglistDTO request) {
-        log.info("Creation of the new shoppinglist");
-        return new ResponseEntity<>(shoppinglistService.createV2(request), HttpStatus.CREATED);
-    }
-
-    @PostMapping("/v1/create")
+    @Override
     public ResponseEntity<ShoppinglistDTO> createShoppinglist(RequestCreateShoppinglistDTO request) {
-        log.info("Creation of the new shoppinglist");
+        log.info("Creation v1 of the new shoppinglist");
         return new ResponseEntity<>(shoppinglistService.create(request), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/v1/delete/{id}")
-    public ResponseEntity<Boolean> deleteShoppinglist(@PathVariable Long id) {
+    @Override
+    public ResponseEntity<ResponseCreateShoppinglist> createShoppinglistV2(RequestCreateShoppinglistDTO request) {
+        log.info("Creation v2 of the new shoppinglist");
+        return new ResponseEntity<>(shoppinglistService.createV2(request), HttpStatus.CREATED);
+    }
+
+    @Override
+    public ResponseEntity<Boolean> deleteShoppinglist(Long id) {
         log.info("Delete of the shoppinglist with id: {}", id);
         HttpStatus httpStatus = HttpStatus.OK;
         try {
@@ -70,8 +66,8 @@ public class ShoppinglistControllerImpl implements ShoppinglistController {
     }
 
     // TODO: Conectar con el FE
-    @PutMapping("/v1/update")
-    public ResponseEntity<ShoppinglistDTO> updateShoppinglist(@RequestBody RequestUpdateShoppinglistDTO request) {
+    @Override
+    public ResponseEntity<ShoppinglistDTO> updateShoppinglist(RequestUpdateShoppinglistDTO request) {
         log.info("Update the shoppinglist with id: {}", request.getId());
         HttpStatus httpStatus = HttpStatus.CREATED;
         ShoppinglistDTO updated = null;
@@ -85,13 +81,10 @@ public class ShoppinglistControllerImpl implements ShoppinglistController {
     }
 
     // TODO: Conectar con el FE
-    @GetMapping("/v1/filter")
+    @Override
     public ResponseEntity<List<ShoppinglistDTO>> filterShoppinglist(
-            @RequestParam(name = "code", required = false) String code,
-            @RequestParam(name = "creationDate", required = false) String creationDate,
-            @RequestParam(name = "closeDate", required = false) String closeDate,
-            @RequestParam(name = "totalPrice", required = false) Double totalPrice,
-            @RequestParam(name = "isActive", required = false) Boolean isActive) {
+            String code, String creationDate, String closeDate, Double totalPrice, Boolean isActive
+    ) {
         log.info("Filter shoppinglists");
         HttpStatus httpStatus = HttpStatus.OK;
         List<ShoppinglistDTO> shoppinglistDTOList = null;
@@ -111,8 +104,8 @@ public class ShoppinglistControllerImpl implements ShoppinglistController {
         return new ResponseEntity<>(shoppinglistDTOList, httpStatus);
     }
 
-    @GetMapping("/v1/{id}/details")
-    public ResponseEntity<ShoppinglistDetailsDTO> getDetails(@PathVariable(name = "id") Long idShoppinglist) {
+    @Override
+    public ResponseEntity<ShoppinglistDetailsDTO> getDetails(Long idShoppinglist) {
        log.info("Get shoppinglist details");
        HttpStatus httpStatus = HttpStatus.OK;
        ShoppinglistDetailsDTO shoppinglistDetailsDTO = null;
@@ -125,8 +118,8 @@ public class ShoppinglistControllerImpl implements ShoppinglistController {
        return new ResponseEntity<>(shoppinglistDetailsDTO, httpStatus);
     }
 
-    @PutMapping("/v1/{id}/update/isActive")
-    public ResponseEntity<Boolean> updateShoppinglistIsActiveValue(@PathVariable(name = "id") Long idShoppinglist) {
+    @Override
+    public ResponseEntity<Boolean> updateShoppinglistIsActiveValue(Long idShoppinglist) {
         log.info("Update the value isActive of the shoppinglist with id: {}", idShoppinglist);
         HttpStatus httpStatus = HttpStatus.OK;
         ShoppinglistDTO shoppinglistDTO = null;

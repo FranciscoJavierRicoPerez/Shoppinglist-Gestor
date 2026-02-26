@@ -1,5 +1,6 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglist.controller.impl;
 
+import es.franricodev.shopping_list_gestor_service.shoppinglist.constants.api.ApiShoppinglistViewConstants;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.controller.ShoppinglistViewController;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetShoppinglistDetailsMetadata;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetShoppinglistTableMetadata;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
         "*"}
 )
 @RestController
-@RequestMapping("/api/shoppinglistview/")
+@RequestMapping(ApiShoppinglistViewConstants.BASE_URL)
 public class ShoppinglistViewControllerImpl implements ShoppinglistViewController {
 
     @Autowired
