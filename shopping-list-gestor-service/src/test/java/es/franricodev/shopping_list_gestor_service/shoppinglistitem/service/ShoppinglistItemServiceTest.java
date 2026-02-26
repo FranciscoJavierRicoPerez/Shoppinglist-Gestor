@@ -7,7 +7,7 @@ import es.franricodev.shopping_list_gestor_service.calculateSystem.service.Calcu
 import es.franricodev.shopping_list_gestor_service.product.model.Product;
 import es.franricodev.shopping_list_gestor_service.product.service.ProductServiceImpl;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
-import es.franricodev.shopping_list_gestor_service.shoppinglist.message.ErrorMessages;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.constants.messages.ErrorMessages;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.model.Shoppinglist;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.service.impl.ShoppinglistServiceImpl;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItemV2;

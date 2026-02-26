@@ -1,7 +1,8 @@
 package es.franricodev.shopping_list_gestor_service.upItemUnit.service;
 
-import es.franricodev.shopping_list_gestor_service.itemUnit.exception.ItemUnitException;
 import es.franricodev.shopping_list_gestor_service.upItemUnit.dto.request.RequestCreateUpItemUnitData;
+import es.franricodev.shopping_list_gestor_service.upItemUnit.dto.request.RequestUpdateItemUnitUpValues;
+import es.franricodev.shopping_list_gestor_service.upItemUnit.dto.request.UpdateItemUnitUpValues;
 import es.franricodev.shopping_list_gestor_service.upItemUnit.exception.UpItemUnitException;
 import es.franricodev.shopping_list_gestor_service.upItemUnit.model.UpItemUnit;
 import es.franricodev.shopping_list_gestor_service.upItemUnit.repository.UpItemUnitRepository;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -30,6 +32,7 @@ public class UpItemUnitServiceImpl implements UpItemUnitService{
 
     @Override
     public UpItemUnit updateUpItemUnit(UpItemUnit upItemUnit) {
+        log.info("Update item unit UP with id: {}", upItemUnit);
         return upItemUnitRepository.save(upItemUnit);
     }
 
@@ -47,6 +50,30 @@ public class UpItemUnitServiceImpl implements UpItemUnitService{
     public void deleteLogicUpItemUnit(UpItemUnit upItemUnit) {
         upItemUnit.setInfoBlock(true);
         upItemUnitRepository.save(upItemUnit);
+    }
+
+    @Override
+    public Optional<UpItemUnit> findByUnitaryPrice(double price) {
+        return upItemUnitRepository.findOneByunityPrice(price);
+    }
+
+    @Override
+    public void updateItemUnitUpValues(RequestUpdateItemUnitUpValues request) {
+        log.info("Update item units up values");
+        request.itemUnitUpValues().forEach(this::updateUpItemUnitValues);
+    }
+
+    private void updateUpItemUnitValues(UpdateItemUnitUpValues request) {
+        log.info("Updating the values of the item unit up with id: {}", request.idItemUnitUp());
+        try {
+            UpItemUnit upItemUnit = upItemUnitRepository.findById(request.idItemUnitUp()).orElseThrow(
+                    () ->  new UpItemUnitException("NOT_FOUND_ITEM_UNIT_UP_WITH_THE_REFERENCED_ID")
+            );
+            upItemUnit.setQuantity(upItemUnit.getQuantity() + request.quantity());
+            updateUpItemUnit(upItemUnit);
+        } catch (UpItemUnitException e) {
+            log.error(e.getMessage());
+        }
     }
 
 }

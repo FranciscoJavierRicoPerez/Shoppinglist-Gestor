@@ -1,5 +1,6 @@
 package es.franricodev.shopping_list_gestor_service.upItemUnit.web;
 
+import es.franricodev.shopping_list_gestor_service.upItemUnit.dto.request.RequestUpdateItemUnitUpValues;
 import es.franricodev.shopping_list_gestor_service.upItemUnit.exception.UpItemUnitException;
 import es.franricodev.shopping_list_gestor_service.upItemUnit.service.UpItemUnitService;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,13 @@ public class UpItemUnitControllerImpl implements UpItemUnitController{
         } catch (UpItemUnitException e) {
             throw new RuntimeException(e);
         }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Void> updateItemUnitUpValues(RequestUpdateItemUnitUpValues request) {
+        log.info("Updating the values of the all item units up indicated in the request");
+        upItemUnitService.updateItemUnitUpValues(request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

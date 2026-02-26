@@ -6,6 +6,7 @@ import { useGetItemUnitUpGroupedByPrice } from '../application/useGetItemUnitUpG
 import type { ShoppinglistItemMetadata } from '@/ShoppinglistItem/domain/ShoppinglistItemMetadata'
 import ItemUnitUpDetailsCard from './ItemUnitUpDetailsCard.vue'
 import { useItemUnitUpGroupedByPriceStore } from '../store/itemUnitUpGroupedByPriceStore'
+import InformationCard from '@/Shared/components/InformationCard.vue'
 
 const { refetch: getItemUnitsUpGroupedByPrice } = useGetItemUnitUpGroupedByPrice()
 
@@ -31,13 +32,24 @@ const totalPriceText = computed(() => {
 <template>
   <div class="flex flex-column gap-2">
     <Tag>{{ totalPriceText }}</Tag>
-    <ScrollPanel style="width: 100%; height: 25rem">
-      <div v-for="value in store.itemsGrouped">
-        <div class="flex flex-column mb-2">
-          <ItemUnitUpDetailsCard :itemUnitUpMetadata="value"></ItemUnitUpDetailsCard>
+    <div v-if="store.itemsGrouped.length === 0">
+      <InformationCard
+        class="mb-2"
+        :information="{
+          header: 'Información',
+          content: 'Actualmente no hay unidades asociadas al producto',
+        }"
+      ></InformationCard>
+    </div>
+    <div v-else>
+      <ScrollPanel style="width: 100%; height: 25rem">
+        <div v-for="value in store.itemsGrouped">
+          <div class="flex flex-column mb-2">
+            <ItemUnitUpDetailsCard :itemUnitUpMetadata="value"></ItemUnitUpDetailsCard>
+          </div>
         </div>
-      </div>
-    </ScrollPanel>
+      </ScrollPanel>
+    </div>
   </div>
 </template>
 <style lang="css"></style>

@@ -9,4 +9,5 @@ public class ResponseItemUnitUpGrouped {
     private Integer quantity;
     private Double price;
     private Double calculatedPrice;
+    private Long idItemUnitUp;
 }

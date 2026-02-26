@@ -22,12 +22,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
 public class ItemUnitServiceImpl implements ItemUnitService {
 
-    @Lazy // REVISAR ESTE LAZY NO DEBERIA DE ESTAR AQUI
+    @Lazy // REVISAR ESTE LAZY NO DEBERIA DE ESTAR AQUI - ¿crear un servicio de integracion que se encarg de añadir los item unit a item i los sli a la lista???? se usa en : addItemUnitToShoppinglistItem
     @Autowired
     private ShoppinglistItemService shoppinglistItemService;
 
@@ -106,7 +107,20 @@ public class ItemUnitServiceImpl implements ItemUnitService {
             wpItemUnitCreated = wpItemUnitService.createWpItemUnit(createItemUnitData.getCreateWpItemUnitData());
         }
         if(!isWpItemUnit && createItemUnitData.getCreateUpItemUnitData() != null) {
-            upItemUnitCreated = upItemUnitService.createUpItemUnit(createItemUnitData.getCreateUpItemUnitData());
+            // Se necesita una verificación previa para comprobar si ya existe algun item unit up con ese precio
+            // en el caso de que NO EXISTA se crea y si existiese ye debe de actualizar el registro con la nueva informacion
+            // aumentando el quantity
+            log.info("The item unit is a UP type, started the proccess for the verification if there is a item unit up with the unitary price: {}", createItemUnitData.getCreateUpItemUnitData().getUnitaryPrice());
+            Optional<UpItemUnit> itemUnitUpOpt = upItemUnitService.findByUnitaryPrice(createItemUnitData.getCreateUpItemUnitData().getUnitaryPrice());
+            if (itemUnitUpOpt.isPresent()) {
+                log.info("The item unit up with id: {} have the unitary price requested, started the update process", itemUnitUpOpt.get().getId());
+                UpItemUnit upItemUnit = itemUnitUpOpt.get();
+                upItemUnit.setQuantity(upItemUnit.getQuantity() + createItemUnitData.getCreateUpItemUnitData().getQuantity());
+                upItemUnitService.updateUpItemUnit(upItemUnit);
+            } else {
+                log.info("The aren't any item unit up with the requested unitary price, so will proceed with his creation");
+                upItemUnitCreated = upItemUnitService.createUpItemUnit(createItemUnitData.getCreateUpItemUnitData());
+            }
         }
 
         ItemUnit itemUnit = new ItemUnit();
@@ -157,14 +171,17 @@ public class ItemUnitServiceImpl implements ItemUnitService {
     private ResponseItemUnitUpGrouped createResponseItemUnitUpGrouped(List<ItemUnit> itemUnits, Double unitaryPrice) {
         ResponseItemUnitUpGrouped responseItemUnitUpGrouped = new ResponseItemUnitUpGrouped();
         int quantity = 0;
+        Long id = null;
         for(ItemUnit itemUnit : itemUnits) {
             if(itemUnit.getUpItemUnit().getUnityPrice().doubleValue() == unitaryPrice.doubleValue()) {
+                id = itemUnit.getUpItemUnit().getId();
                 quantity += itemUnit.getUpItemUnit().getQuantity();
             }
         }
         responseItemUnitUpGrouped.setPrice(unitaryPrice);
         responseItemUnitUpGrouped.setQuantity(quantity);
         responseItemUnitUpGrouped.setCalculatedPrice(unitaryPrice * quantity);
+        responseItemUnitUpGrouped.setIdItemUnitUp(id);
         return responseItemUnitUpGrouped;
     }
 

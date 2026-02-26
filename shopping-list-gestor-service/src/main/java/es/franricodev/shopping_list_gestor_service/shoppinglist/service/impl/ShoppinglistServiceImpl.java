@@ -5,7 +5,7 @@ import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.Res
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ShoppinglistMetadata;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.mapper.ShoppinglistMapper;
-import es.franricodev.shopping_list_gestor_service.shoppinglist.message.ErrorMessages;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.constants.messages.ErrorMessages;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.model.Shoppinglist;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.repository.ShoppinglistRepository;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.service.ShoppinglistService;
