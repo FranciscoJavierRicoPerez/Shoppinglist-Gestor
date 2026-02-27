@@ -1,5 +1,6 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglist.constants.api;
 
+// Constants related with the SHOPPINGLIST API documentation
 public class ApiShoppinglistConstants {
     // --------------- GENERAL CONSTANTS -------------------------------------------------------------
     public static final String API_NAME = "Shoppinglist Controller API Documentation";

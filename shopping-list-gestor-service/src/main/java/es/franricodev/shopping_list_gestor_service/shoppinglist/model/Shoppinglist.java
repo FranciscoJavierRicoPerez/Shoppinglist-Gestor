@@ -9,6 +9,8 @@ import lombok.Setter;
 
 import javax.xml.stream.events.Comment;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,7 +26,7 @@ public class Shoppinglist implements Serializable {
     private Long id;
 
     @Column(name = "CREATION_DATE")
-    private Date creationDate;
+    private LocalDate creationDate;
 
     @NotNull
     @Column(name = "CODE")
@@ -32,7 +34,7 @@ public class Shoppinglist implements Serializable {
 
     @Null
     @Column(name = "CLOSE_DATE")
-    private Date closeDate;
+    private LocalDate closeDate;
 
     @NotNull
     @Column(name = "TOTAL_PRICE")

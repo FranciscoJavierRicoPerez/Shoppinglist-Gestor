@@ -12,7 +12,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {ShoppinglistItemMapper.class})
@@ -28,7 +28,7 @@ public interface ShoppinglistMapper {
 
     List<Shoppinglist> toEntityList(List<ShoppinglistDTO> shoppinglistDTOS);
 
-    @Mapping(target = "creationDate", expression = "java(new java.util.Date())")
+    @Mapping(target = "creationDate", expression = "java(java.time.LocalDate.now())")
     @Mapping(target = "code", qualifiedByName = "generateShoppinglistCode")
     @Mapping(target = "infoBlock", defaultValue = "false")
     Shoppinglist createShoppinglist(RequestCreateShoppinglistDTO request);
@@ -40,7 +40,7 @@ public interface ShoppinglistMapper {
     @Named("generateShoppinglistCode")
     static String generateShoppinglistCode(String code) {
         StringBuilder stringBuilder = new StringBuilder();
-        return stringBuilder.append("SL-").append(code).append(DateUtils.formatDate(new Date())).toString();
+        return stringBuilder.append("SL-").append(code).append("_").append(DateUtils.formatLocalDate(LocalDate.now(), "dd/MM/yyyy")).toString();
     }
 
 }

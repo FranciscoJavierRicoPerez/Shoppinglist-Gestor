@@ -2,6 +2,8 @@ package es.franricodev.shopping_list_gestor_service.shoppinglist.service.impl;
 
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.*;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseCreateShoppinglist;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetFilteredShoppinglistMetadata;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetShoppinglistTableMetadata;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ShoppinglistMetadata;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.mapper.ShoppinglistMapper;
@@ -98,14 +100,14 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
     }
 
     @Override
-    public List<ShoppinglistDTO> filterShoppinglist(RequestFilterShoppinglistDTO request) throws ShoppinglistException {
+    public ResponseGetFilteredShoppinglistMetadata filterShoppinglist(RequestFilterShoppinglistDTO request) throws ShoppinglistException {
         log.info("Filter shoppinglist");
-        List<Shoppinglist> optionalShoppinglistsFiltered =
+        List<Shoppinglist> shoppinglistFiltered =
                 shoppinglistRepository.findAll(ShoppinglistSpecifications.withFilter(request));
-        if (optionalShoppinglistsFiltered.isEmpty()) {
+        if (shoppinglistFiltered.isEmpty()) {
             throw new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND);
         }
-        return shoppinglistMapper.toDTOList(optionalShoppinglistsFiltered);
+        return new ResponseGetFilteredShoppinglistMetadata(shoppinglistFiltered.stream().map(this::createShoppinglistMetadataFromShoppinglist).toList());
     }
 
     @Override
@@ -244,7 +246,7 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
     private ShoppinglistMetadata createShoppinglistMetadataFromShoppinglist(Shoppinglist shoppinglist) {
         return ShoppinglistMetadata.builder()
                 .code(shoppinglist.getCode())
-                .creationDate(DateUtils.formatDate(shoppinglist.getCreationDate()))
+                .creationDate(DateUtils.formatLocalDate(shoppinglist.getCreationDate(), "dd/MM/yyyy"))
                 .isActive(shoppinglist.getIsActive())
                 .totalPrice(shoppinglist.getTotalPrice())
                 .idShoppinglist(shoppinglist.getId())

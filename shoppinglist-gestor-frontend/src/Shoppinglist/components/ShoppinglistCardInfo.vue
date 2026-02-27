@@ -39,7 +39,7 @@ const slIsActive = computed(() => {
 })
 
 async function archiveShoppinglist() {
-  let response: boolean = await updateIsActive()
+  let response: boolean = await updateIsActive(props.shoppinglist.idShoppinglist)
   if (response) {
     shoppinglistTableStore.updateShoppinglistActive(props.shoppinglist.idShoppinglist)
     emit('updateShoppinglistTables')

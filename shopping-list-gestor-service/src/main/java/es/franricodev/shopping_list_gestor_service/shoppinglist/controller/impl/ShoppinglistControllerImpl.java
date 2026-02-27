@@ -4,9 +4,12 @@ import es.franricodev.shopping_list_gestor_service.shoppinglist.constants.api.Ap
 import es.franricodev.shopping_list_gestor_service.shoppinglist.controller.ShoppinglistController;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.*;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseCreateShoppinglist;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetFilteredShoppinglistMetadata;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetShoppinglistTableMetadata;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.service.ShoppinglistService;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.exception.ShoppinglistItemException;
+import es.franricodev.shopping_list_gestor_service.utils.DateUtils;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,26 +86,26 @@ public class ShoppinglistControllerImpl implements ShoppinglistController {
 
     // TODO: Conectar con el FE
     @Override
-    public ResponseEntity<List<ShoppinglistDTO>> filterShoppinglist(
-            String code, String creationDate, String closeDate, Double totalPrice, Boolean isActive
+    public ResponseEntity<ResponseGetFilteredShoppinglistMetadata> filterShoppinglist(
+            String code, String creationDate, String closeDate, String totalPrice, String isActive
     ) {
         log.info("Filter shoppinglists");
         HttpStatus httpStatus = HttpStatus.OK;
-        List<ShoppinglistDTO> shoppinglistDTOList = null;
+        ResponseGetFilteredShoppinglistMetadata response = null;
         try {
-            shoppinglistDTOList = shoppinglistService.filterShoppinglist(RequestFilterShoppinglistDTO
+            response = shoppinglistService.filterShoppinglist(RequestFilterShoppinglistDTO
                     .builder()
                     .createDate(creationDate)
                     .closeDate(closeDate)
-                    .totalPrice(totalPrice)
+                    .totalPrice(totalPrice != null && !totalPrice.isEmpty() ? Double.parseDouble(totalPrice) : null)
                     .code(code)
-                    .isActive(isActive)
+                    .isActive(isActive != null ? Boolean.parseBoolean(isActive) : Boolean.FALSE)
                     .build());
         } catch (ShoppinglistException e) {
             log.error(e.getMessage());
             httpStatus = HttpStatus.BAD_REQUEST;
         }
-        return new ResponseEntity<>(shoppinglistDTOList, httpStatus);
+        return new ResponseEntity<>(response, httpStatus);
     }
 
     @Override

@@ -85,7 +85,6 @@ async function createNewShoppinglistItem() {
       life: 3000,
     })
   }
-  debugger
 }
 
 function verifyForm() {

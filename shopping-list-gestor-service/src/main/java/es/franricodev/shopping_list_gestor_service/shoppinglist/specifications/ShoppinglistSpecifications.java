@@ -43,6 +43,8 @@ public class ShoppinglistSpecifications {
             predicates.add(builder.equal(root.get(TOTAL_PRICE).as(Double.class), filter.getTotalPrice()));
         }
         if(!Objects.isNull(filter.getCreateDate()) && !filter.getCreateDate().isEmpty()) {
+            // Llamar a DateUtils para que construya la fecha en el formato esperado
+            // -> 2026-02-26 16:16:40 => yyyy-mm-dd hh:MM:ss
             predicates.add(builder.equal(root.get(CREATION_DATE).as(String.class), filter.getCreateDate()));
         }
         if(!Objects.isNull(filter.getCloseDate()) && !filter.getCloseDate().isEmpty()) {

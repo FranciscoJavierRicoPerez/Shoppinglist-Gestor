@@ -6,12 +6,15 @@ import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestUpdat
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.ShoppinglistDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.ShoppinglistDetailsDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseCreateShoppinglist;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetFilteredShoppinglistMetadata;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetShoppinglistTableMetadata;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Tag(
@@ -20,12 +23,11 @@ import java.util.List;
 )
 public interface ShoppinglistController {
 
-    @Deprecated
-    @Operation(summary = "Get all shoppinglist in the database")
+    @Operation(summary = "Get all shoppinglist in the database", deprecated = true)
     @GetMapping(ApiShoppinglistConstants.GET_ALL_V1)
     ResponseEntity<List<ShoppinglistDTO>> getAllShoppinglist();
 
-    @Operation(summary = "Create a shoppinglist v1")
+    @Operation(summary = "Create a shoppinglist v1", deprecated = true)
     @PostMapping(ApiShoppinglistConstants.CREATE_V1)
     ResponseEntity<ShoppinglistDTO> createShoppinglist(@NotNull @RequestBody RequestCreateShoppinglistDTO request);
 
@@ -33,7 +35,7 @@ public interface ShoppinglistController {
     @PostMapping(ApiShoppinglistConstants.CREATE_V2)
     ResponseEntity<ResponseCreateShoppinglist> createShoppinglistV2(@NotNull @RequestBody RequestCreateShoppinglistDTO request);
 
-    @Operation(summary = "Delete the information of a shoppinglist")
+    @Operation(summary = "Delete the information of a shoppinglist", deprecated = true)
     @DeleteMapping(ApiShoppinglistConstants.DELETE_V1)
     ResponseEntity<Boolean> deleteShoppinglist(@PathVariable(name = ApiShoppinglistConstants.ID_SHOPPINGLIST) Long id);
 
@@ -41,17 +43,16 @@ public interface ShoppinglistController {
     @PutMapping(ApiShoppinglistConstants.UPDATE_V1)
     ResponseEntity<ShoppinglistDTO> updateShoppinglist(@RequestBody RequestUpdateShoppinglistDTO request);
 
-    //@Deprecated
     @Operation(summary = "Provides the information on all shoppinglists whose data is consistent with the filters")
     @GetMapping(ApiShoppinglistConstants.FILTER_V1)
-    ResponseEntity<List<ShoppinglistDTO>> filterShoppinglist(
-            @RequestParam(name = ApiShoppinglistConstants.CODE, required = false) String code,
-            @RequestParam(name = ApiShoppinglistConstants.CREATION_DATE, required = false) String creationDate,
-            @RequestParam(name = ApiShoppinglistConstants.CLOSE_DATE, required = false) String closeDate,
-            @RequestParam(name = ApiShoppinglistConstants.TOTAL_PRICE, required = false) Double totalPrice,
-            @RequestParam(name = ApiShoppinglistConstants.IS_ACTIVE, required = false) Boolean isActive);
+    ResponseEntity<ResponseGetFilteredShoppinglistMetadata> filterShoppinglist(
+            @RequestParam(name = ApiShoppinglistConstants.CODE, required = false, defaultValue = "") String code,
+            @RequestParam(name = ApiShoppinglistConstants.CREATION_DATE, required = false, defaultValue = "") String creationDate,
+            @RequestParam(name = ApiShoppinglistConstants.CLOSE_DATE, required = false, defaultValue = "") String closeDate,
+            @RequestParam(name = ApiShoppinglistConstants.TOTAL_PRICE, required = false, defaultValue = "") String totalPrice,
+            @RequestParam(name = ApiShoppinglistConstants.IS_ACTIVE, required = false, defaultValue = "true") String isActive);
 
-    @Operation(summary = "Provides the details of a shoppinglist")
+    @Operation(summary = "Provides the details of a shoppinglist", deprecated = true)
     @GetMapping(ApiShoppinglistConstants.GET_DETAILS_V1)
     ResponseEntity<ShoppinglistDetailsDTO> getDetails(@PathVariable(name = ApiShoppinglistConstants.ID_SHOPPINGLIST) Long idShoppinglist);
 

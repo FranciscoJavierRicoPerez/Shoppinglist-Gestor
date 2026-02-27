@@ -1,3 +1,5 @@
+import { apiClient } from '@/Core/config/apiClient'
+import { SHOPPINGLIST_ENDPOINTS } from '@/Core/config/config'
 import axios from 'axios'
 
 async function deleteShoppinglistData(id: number): Promise<boolean> {
@@ -11,8 +13,7 @@ async function InMemory(): Promise<boolean> {
 }
 
 async function Api(id: number): Promise<boolean> {
-  const url = import.meta.env.VITE_API_URL_COMPUTER + 'api/shoppinglist/v1/' + id + '/delete'
-  const response = await axios.delete(url)
+  const response = await apiClient.delete(SHOPPINGLIST_ENDPOINTS.DELETE_LOGIC_V1(id))
   return response.data
 }
 
