@@ -49,11 +49,12 @@ async function searchShoppinglistByFilter() {
   if (verifyFilterForm()) {
     filteredShoppinglistTable.value = await getShoppinglistTableMetadata()
   } else {
-    debugger
     filteredShoppinglistTable.value = await getAllShoppinglistFiltered(shoppinglistFilterForm.value)
   }
   if (filteredShoppinglistTable.value.shoppinglistTable.length > 0) {
     shoppinglistTableStore.setShoppinglistTable(filteredShoppinglistTable.value.shoppinglistTable)
+  } else {
+    shoppinglistTableStore.setShoppinglistTable([])
   }
 }
 </script>

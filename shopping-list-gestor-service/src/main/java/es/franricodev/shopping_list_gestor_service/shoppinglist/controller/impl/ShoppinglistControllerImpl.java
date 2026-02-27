@@ -5,12 +5,9 @@ import es.franricodev.shopping_list_gestor_service.shoppinglist.controller.Shopp
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.*;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseCreateShoppinglist;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetFilteredShoppinglistMetadata;
-import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetShoppinglistTableMetadata;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.service.ShoppinglistService;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.exception.ShoppinglistItemException;
-import es.franricodev.shopping_list_gestor_service.utils.DateUtils;
-import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -103,7 +101,7 @@ public class ShoppinglistControllerImpl implements ShoppinglistController {
                     .build());
         } catch (ShoppinglistException e) {
             log.error(e.getMessage());
-            httpStatus = HttpStatus.BAD_REQUEST;
+            response = new ResponseGetFilteredShoppinglistMetadata(Collections.emptyList());
         }
         return new ResponseEntity<>(response, httpStatus);
     }
