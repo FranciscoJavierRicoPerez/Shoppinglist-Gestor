@@ -51,6 +51,7 @@ function addNewItemUnitUp(): void {
       quantity: quantity.value,
       price: unitaryPrice.value,
       calculatedPrice: quantity.value * unitaryPrice.value,
+      idItemUnitUp: -1,
     })
   }
   groupedItemsUpStore.updateTotalPrice()

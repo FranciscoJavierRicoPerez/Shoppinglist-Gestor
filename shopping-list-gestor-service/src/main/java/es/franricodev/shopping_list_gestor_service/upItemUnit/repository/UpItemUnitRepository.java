@@ -10,4 +10,6 @@ import java.util.Optional;
 @Repository
 public interface UpItemUnitRepository extends JpaRepository<UpItemUnit, Long> {
     Optional<List<UpItemUnit>> findByunityPrice(Double price);
+
+    Optional<UpItemUnit> findOneByunityPrice(Double price);
 }

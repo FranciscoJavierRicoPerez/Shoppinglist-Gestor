@@ -2,7 +2,8 @@ import type { ResponseGetShoppinglistTableMetadata } from '@/Shoppinglist/infras
 import type { ShoppinglistTable } from '@/Shoppinglist/domain/ShoppinglistTable'
 import responseGetShoppinglisTableMetadata from '@/Shoppinglist/infrastructure/mocks/responseGetShoppinglistTableMetadata.json'
 import { createShoppinglistTable } from '@/Shoppinglist/infrastructure/services/ShoppinglistService'
-import axios from 'axios'
+import { apiClient } from '@/Core/config/apiClient'
+import { SHOPPINGLIST_VIEW_ENDPOINTS } from '@/Core/config/config'
 
 async function getShoppinglistTableMetadata(): Promise<ShoppinglistTable> {
   const response: ResponseGetShoppinglistTableMetadata =
@@ -15,8 +16,7 @@ async function InMemory(): Promise<ResponseGetShoppinglistTableMetadata> {
 }
 
 async function Api(): Promise<ResponseGetShoppinglistTableMetadata> {
-  const url = import.meta.env.VITE_API_URL_COMPUTER + 'api/shoppinglistview/v1/all'
-  const response = await axios.get(url)
+  const response = await apiClient.get(SHOPPINGLIST_VIEW_ENDPOINTS.GET_ALL_V1())
   return response.data
 }
 

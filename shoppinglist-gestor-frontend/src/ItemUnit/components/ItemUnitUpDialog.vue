@@ -10,6 +10,7 @@ import ItemUnitUpPopover from './ItemUnitUpUpdateForm.vue'
 import { useItemUnitUpGroupedByPriceStore } from '../store/itemUnitUpGroupedByPriceStore'
 import ItemUnitUpCreateForm from './ItemUnitUpCreateForm.vue'
 import ItemUnitUpUpdateForm from './ItemUnitUpUpdateForm.vue'
+import { useUpdateItemUnitUpValues } from '../application/useUpdateItemUnitUpValues'
 
 const visible = ref<boolean>(false)
 
@@ -23,6 +24,8 @@ const props = defineProps({
     default: () => null,
   },
 })
+
+const { refetch: updateItemUnitUpValues } = useUpdateItemUnitUpValues()
 
 const modalHeaderText = computed(() => {
   return 'Detalle del producto'
@@ -48,7 +51,8 @@ const addNewItemUnitText = computed(() => {
   return 'Nuevo item unit'
 })
 
-function updateShoppinglistPrice() {
+async function updateShoppinglistPrice() {
+  await updateItemUnitUpValues()
   if (store.totalPrice !== null) {
     let oldValue = props.shoppinglistItem.calculatedPrice
     props.shoppinglistItem.calculatedPrice = store.totalPrice

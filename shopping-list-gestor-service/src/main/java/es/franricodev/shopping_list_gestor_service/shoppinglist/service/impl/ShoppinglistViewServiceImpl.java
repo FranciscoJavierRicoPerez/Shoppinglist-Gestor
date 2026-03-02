@@ -4,7 +4,7 @@ import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.Res
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetShoppinglistTableMetadata;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistViewException;
-import es.franricodev.shopping_list_gestor_service.shoppinglist.message.ErrorMessages;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.constants.messages.ErrorMessages;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.service.ShoppinglistService;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.service.ShoppinglistViewService;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.exception.ShoppinglistItemException;
