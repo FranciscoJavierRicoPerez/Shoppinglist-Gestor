@@ -1,8 +1,9 @@
 import type { ProductsNames } from '@/Product/domain/ProductsNames'
 import type { ResponseProductsNames } from '@/Product/infrastructure/models/response/ResponseProductsNames'
 import responseGetAllProductsNames from '@/Product/infrastructure/mocks/responseGetAllProductsNames.json'
-import axios from 'axios'
 import { createProductsNames } from '../services/ProductService'
+import { apiClient } from '@/Core/config/apiClient'
+import { PRODUCTS_ENDPOINTS } from '@/Core/config/config'
 async function getAllProductsNames(): Promise<ProductsNames> {
   const response: ResponseProductsNames =
     import.meta.env.VITE_DATA_ACCESS === 'LOCAL' ? await InMemory() : await Api()
@@ -14,8 +15,7 @@ async function InMemory(): Promise<ResponseProductsNames> {
 }
 
 async function Api(): Promise<ResponseProductsNames> {
-  const url = import.meta.env.VITE_API_URL_COMPUTER + 'api/product/v1/names'
-  const response = await axios.get(url)
+  const response = await apiClient.get(PRODUCTS_ENDPOINTS.GET_NAMES_V1())
   return response.data
 }
 

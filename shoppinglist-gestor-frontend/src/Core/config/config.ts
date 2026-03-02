@@ -99,3 +99,19 @@ export const SHOPPINGLIST_VIEW_ENDPOINTS = {
     return SHOPPINGLIST_VIEW_ENDPOINTS.BASE_URL + `v1/${idShoppinglist}/details`
   },
 }
+
+// ---------- CALCULATE_SYSTEM_ENDPOINTS ------------------
+export const CALCULATE_SYSTEM_ENDPOINTS = {
+  BASE_URL: '/api/calculateSystem/',
+  GET_ALL_V1: (): string => {
+    return CALCULATE_SYSTEM_ENDPOINTS.BASE_URL + `v1/all`
+  },
+}
+
+// ---------- PRODUCTS_ENDPOINTS -------------------------
+export const PRODUCTS_ENDPOINTS = {
+  BASE_URL: '/api/product/',
+  GET_NAMES_V1: (): string => {
+    return PRODUCTS_ENDPOINTS.BASE_URL + `v1/names`
+  },
+}
