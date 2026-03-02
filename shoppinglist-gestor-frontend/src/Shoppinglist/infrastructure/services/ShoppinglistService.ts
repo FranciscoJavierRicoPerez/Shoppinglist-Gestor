@@ -45,6 +45,7 @@ export function createShoppinglistTable(
   data: ResponseGetShoppinglistTableMetadata,
 ): ShoppinglistTable {
   let shoppinglistTable: ShoppinglistMetadata[] = []
+  console.log(data)
   data.shoppinglistTableMetadataList.forEach((element) => {
     shoppinglistTable.push(createShoppinglistMetadataService(element))
   })

@@ -4,12 +4,14 @@
     {
       "quantity": 2,
       "price": 2.5,
-      "calculatedPrice": 5
+      "calculatedPrice": 5,
+      "idItemUnitUp": 1
     },
     {
       "quantity": 1,
       "price": 5,
-      "calculatedPrice": 5
+      "calculatedPrice": 5,
+      "idItemUnitUp": 2
     }
   ]
 }

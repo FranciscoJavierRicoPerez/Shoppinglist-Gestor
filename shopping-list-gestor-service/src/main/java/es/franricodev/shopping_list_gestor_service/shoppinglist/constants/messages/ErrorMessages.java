@@ -1,4 +1,4 @@
-package es.franricodev.shopping_list_gestor_service.shoppinglist.message;
+package es.franricodev.shopping_list_gestor_service.shoppinglist.constants.messages;
 
 import lombok.Getter;
 

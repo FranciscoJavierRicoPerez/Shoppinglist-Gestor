@@ -1,5 +1,6 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglist.controller;
 
+import es.franricodev.shopping_list_gestor_service.shoppinglist.constants.api.ApiShoppinglistViewConstants;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetShoppinglistDetailsMetadata;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetShoppinglistTableMetadata;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,8 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @Tag(
-        name = "Shoppinglist View Controller API Documentation",
-        description = "Management of all the visible data related with the shoppinglist and his details in the client"
+        name = ApiShoppinglistViewConstants.API_NAME,
+        description = ApiShoppinglistViewConstants.API_DESCRIPTION
 )
 public interface ShoppinglistViewController {
     @Operation(summary = "Get the metainformation necesary for the build of the shoppinglist table view")
@@ -31,7 +32,7 @@ public interface ShoppinglistViewController {
                     )
             }
     )
-    @GetMapping("v1/all")
+    @GetMapping(ApiShoppinglistViewConstants.GET_ALL_V1)
     ResponseEntity<ResponseGetShoppinglistTableMetadata> getShoppinglistTableMetadata();
 
     @Operation(summary = "Get the metainformation necessary for the build of the shoppinglist details view")
@@ -48,6 +49,6 @@ public interface ShoppinglistViewController {
                     )
             }
     )
-    @GetMapping("v1/{id}/details")
-    ResponseEntity<ResponseGetShoppinglistDetailsMetadata> getShoppinglistDetailsMetadata(@PathVariable("id") Long idShoppinglist);
+    @GetMapping(ApiShoppinglistViewConstants.GET_DETAILS_V1)
+    ResponseEntity<ResponseGetShoppinglistDetailsMetadata> getShoppinglistDetailsMetadata(@PathVariable(name = ApiShoppinglistViewConstants.ID_SHOPPINGLIST) Long idShoppinglist);
 }

@@ -1,9 +1,7 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglist.service;
 
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.*;
-import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseCreateShoppinglist;
-import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetShoppinglistDetailsMetadata;
-import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ShoppinglistMetadata;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.*;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.model.Shoppinglist;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.exception.ShoppinglistItemException;
@@ -23,7 +21,7 @@ public interface ShoppinglistService {
 
     ShoppinglistDTO updateShoppinglist(RequestUpdateShoppinglistDTO request) throws ShoppinglistException;
 
-    List<ShoppinglistDTO> filterShoppinglist(RequestFilterShoppinglistDTO request) throws ShoppinglistException;
+    ResponseGetFilteredShoppinglistMetadata filterShoppinglist(RequestFilterShoppinglistDTO request) throws ShoppinglistException;
 
     ShoppinglistDetailsDTO getShoppinglistDetails(Long id) throws ShoppinglistException;
 

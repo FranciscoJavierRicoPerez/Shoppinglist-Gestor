@@ -11,19 +11,15 @@ import {
   type ShoppinglistFilter,
 } from '@/Shoppinglist/domain/ShoppinglistFilter'
 import { useGetShoppinglistFiltered } from '@/Shoppinglist/application/useGetShoppinglistFiltered'
-import type { Shoppinglist } from '@/Shoppinglist/domain/Shoppinglist'
-import { useShoppinglistStore } from '@/Shoppinglist/stores/shoppinglistStore'
-import { useGetAllShoppinglist } from '@/Shoppinglist/application/useGetAllShoppinglist'
 import { useShoppinglistFilterStore } from '@/Shoppinglist/stores/shoppinglistFilterStore'
 import { useShoppinglistTableStore } from '@/Shoppinglist/stores/shoppinglistTableStore'
-import type { ShoppinglistMetadata } from '../domain/ShoppinglistMetadata'
 import {
   defaultShoppinglistTable,
   type ShoppinglistTable,
 } from '@/Shoppinglist/domain/ShoppinglistTable'
 import { useGetShoppinglistTableMetadata } from '../application/useGetShoppinglistTableMetadata'
+
 const storeShoppinglistFilter = useShoppinglistFilterStore()
-// const store = useShoppinglistStore()
 
 const shoppinglistTableStore = useShoppinglistTableStore()
 
@@ -57,6 +53,8 @@ async function searchShoppinglistByFilter() {
   }
   if (filteredShoppinglistTable.value.shoppinglistTable.length > 0) {
     shoppinglistTableStore.setShoppinglistTable(filteredShoppinglistTable.value.shoppinglistTable)
+  } else {
+    shoppinglistTableStore.setShoppinglistTable([])
   }
 }
 </script>
@@ -80,9 +78,8 @@ async function searchShoppinglistByFilter() {
         <DatePicker
           id="datepicker-24h"
           v-model="shoppinglistFilterForm.creationDate"
-          showTime
-          hourFormat="24"
           class="w-full"
+          dateFormat="dd/mm/yy"
         />
         <label for="shoppinglistCreationDate">Fecha de creación</label>
       </FloatLabel>
@@ -90,9 +87,8 @@ async function searchShoppinglistByFilter() {
         <DatePicker
           id="datepicker-24h"
           v-model="shoppinglistFilterForm.closeDate"
-          showTime
-          hourFormat="24"
           class="w-full"
+          dateFormat="dd/mm/yy"
         />
         <label for="shoppinglistCloseDate">Fecha de cierre</label>
       </FloatLabel>
