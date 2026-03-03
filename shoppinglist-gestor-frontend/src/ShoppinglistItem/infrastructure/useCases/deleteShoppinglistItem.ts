@@ -2,6 +2,8 @@ import axios from 'axios'
 import type { DeleteShoppinglistItemData } from '../models/dto/DeleteShoppinglistItemData'
 import type { ResponseDeleteShoppinglistItem } from '../models/response/ResponseDeleteShoppinglistItem'
 import responseDeleteShoppinglistItem from '@/ShoppinglistItem/infrastructure/mocks/responseDeleteShoppinglistItem.json'
+import { apiClient } from '@/Core/config/apiClient'
+import { SHOPPINGLIST_ITEMS_ENDPOINTS } from '@/Core/config/config'
 async function deleteShoppinglistItem(
   idShoppinglistItem: number,
 ): Promise<DeleteShoppinglistItemData> {
@@ -14,13 +16,10 @@ async function deleteShoppinglistItem(
 }
 
 async function Api(idShoppinglistItem: number): Promise<ResponseDeleteShoppinglistItem> {
-  const url =
-    import.meta.env.VITE_API_URL_COMPUTER +
-    'api/shoppinglistitem/v1/' +
-    idShoppinglistItem +
-    'delete'
-  const response = axios.delete(url)
-  return (await response).data
+  const response = await apiClient.delete(
+    SHOPPINGLIST_ITEMS_ENDPOINTS.DELETE_V1(idShoppinglistItem),
+  )
+  return response.data
 }
 
 async function InMemory(): Promise<ResponseDeleteShoppinglistItem> {

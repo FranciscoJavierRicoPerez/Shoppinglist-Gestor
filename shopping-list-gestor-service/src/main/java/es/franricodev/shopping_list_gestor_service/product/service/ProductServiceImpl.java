@@ -60,7 +60,9 @@ public class ProductServiceImpl implements ProductService {
     public Product createProductV2(CreateProductInfo createProductInfo)  {
         log.info("V2: Creating a new product service method");
         Product product = null;
-        if (createProductInfo.isAlreadyExists()) {
+        // TODO: Es un poco extraño que desde el cliente venga la validacion de si el producto existe o no en bbdd
+        boolean alreadyExists = verifyIfProductAlreadyExists(createProductInfo.getProductName());
+        if (alreadyExists) {
             log.info("The product already exist, returning the product with name: {} from the database", createProductInfo.getProductName());
             product = findProductByName(createProductInfo.getProductName());
         } else {
@@ -85,6 +87,11 @@ public class ProductServiceImpl implements ProductService {
             throw new ProductException("No se han encontrado ningun producto");
         }
         return productsNames;
+    }
+
+    @Override
+    public boolean verifyIfProductAlreadyExists(String productName) {
+        return productRepository.findByName(productName).isPresent();
     }
 
 }

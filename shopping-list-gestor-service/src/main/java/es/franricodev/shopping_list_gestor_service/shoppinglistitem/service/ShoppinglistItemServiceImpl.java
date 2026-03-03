@@ -248,6 +248,7 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
                 shoppinglistItem.setCalculatedPrice(shoppinglistItem.getCalculatedPrice() + itemUnitCreated.getTotalPrice());
                 shoppinglistItemRepository.save(shoppinglistItem);
             }
+            // TODO: Faltaría indicar a que lista de la compra se debe de asignar este SLI
             return ResponseCreateShoppinglistItem.builder()
                     .created(true)
                     .idShoppinglistItemCreated(shoppinglistItem.getId())

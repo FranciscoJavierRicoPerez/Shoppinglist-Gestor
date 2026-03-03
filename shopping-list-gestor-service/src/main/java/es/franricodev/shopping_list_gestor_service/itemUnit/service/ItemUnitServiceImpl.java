@@ -104,6 +104,7 @@ public class ItemUnitServiceImpl implements ItemUnitService {
         WpItemUnit wpItemUnitCreated = null;
         UpItemUnit upItemUnitCreated = null;
         if(isWpItemUnit && createItemUnitData.getCreateWpItemUnitData() != null) {
+            log.info("The item unit expected is WP type, started the proccess for the creation of the item unit wp");
             wpItemUnitCreated = wpItemUnitService.createWpItemUnit(createItemUnitData.getCreateWpItemUnitData());
         }
         if(!isWpItemUnit && createItemUnitData.getCreateUpItemUnitData() != null) {
@@ -111,13 +112,16 @@ public class ItemUnitServiceImpl implements ItemUnitService {
             // en el caso de que NO EXISTA se crea y si existiese ye debe de actualizar el registro con la nueva informacion
             // aumentando el quantity
             log.info("The item unit is a UP type, started the proccess for the verification if there is a item unit up with the unitary price: {}", createItemUnitData.getCreateUpItemUnitData().getUnitaryPrice());
-            Optional<UpItemUnit> itemUnitUpOpt = upItemUnitService.findByUnitaryPrice(createItemUnitData.getCreateUpItemUnitData().getUnitaryPrice());
-            if (itemUnitUpOpt.isPresent()) {
-                log.info("The item unit up with id: {} have the unitary price requested, started the update process", itemUnitUpOpt.get().getId());
-                UpItemUnit upItemUnit = itemUnitUpOpt.get();
-                upItemUnit.setQuantity(upItemUnit.getQuantity() + createItemUnitData.getCreateUpItemUnitData().getQuantity());
-                upItemUnitService.updateUpItemUnit(upItemUnit);
-            } else {
+            if (createItemUnitData.getCreateUpItemUnitData().getIdItemUnitUp() != null) {
+                Optional<UpItemUnit> itemUnitUpOpt = upItemUnitService.findById(createItemUnitData.getCreateUpItemUnitData().getIdItemUnitUp());
+                if (itemUnitUpOpt.isPresent()) {
+                    log.info("The item unit up with id: {} have the unitary price requested, started the update process", itemUnitUpOpt.get().getId());
+                    UpItemUnit upItemUnit = itemUnitUpOpt.get();
+                    upItemUnit.setQuantity(upItemUnit.getQuantity() + createItemUnitData.getCreateUpItemUnitData().getQuantity());
+                    upItemUnitService.updateUpItemUnit(upItemUnit);
+                }
+            }
+            else {
                 log.info("The aren't any item unit up with the requested unitary price, so will proceed with his creation");
                 upItemUnitCreated = upItemUnitService.createUpItemUnit(createItemUnitData.getCreateUpItemUnitData());
             }
@@ -219,6 +223,7 @@ public class ItemUnitServiceImpl implements ItemUnitService {
     }
 
     private void addItemUnitToShoppinglistItem(ItemUnit itemUnit, ShoppinglistItem shoppinglistItem) {
+        log.info("Adding the item unit {} to the shoppinglist item {}", itemUnit.getId(), shoppinglistItem.getId());
         if(itemUnit != null && shoppinglistItem != null) {
             if(shoppinglistItem.getItemUnitList().isEmpty()) {
                 ArrayList<ItemUnit> itemList = new ArrayList<>();

@@ -8,13 +8,21 @@ import type { RequestCreateShoppinglistItemForm } from '../infrastructure/models
 import { useCreateShoppinglistItem } from '@/ShoppinglistItem/application/useCreateShoppinglistItem'
 import { useToast, type ToastMessageOptions } from 'primevue'
 import { useShoppinglistDetailStore } from '@/Shoppinglist/stores/shoppinglistDetailStore'
-import { computed } from 'vue'
+import { computed, type PropType } from 'vue'
+import { useAddShoppinglistItemToShoppinglist } from '@/Shoppinglist/application/useAddShoppinglistItemToShoppinglist'
+
+const props = defineProps({
+  shoppinglistId: {
+    type: Number as PropType<number>,
+    default: () => null,
+  },
+})
 
 const store = useCreateShoppinglistItemFormStore()
 const shoppinglistDetailsStore = useShoppinglistDetailStore()
 
 const { refetch: createShoppinglistItem } = useCreateShoppinglistItem()
-
+const { refetch: addShoppinglistItemToShoppinglist } = useAddShoppinglistItemToShoppinglist()
 const toast = useToast()
 
 const createFormHeaderText = computed(() => {
@@ -47,6 +55,7 @@ async function createNewShoppinglistItem() {
         store.quantity === null || store.unitaryPrice === null
           ? null
           : {
+              idItemUnitUp: null,
               quantity: store.quantity,
               unitaryPrice: store.unitaryPrice,
             },
@@ -76,6 +85,12 @@ async function createNewShoppinglistItem() {
     shoppinglistDetailsStore.updateTotalPrice(
       true,
       response.shoppinglistItemMetadata.calculatedPrice,
+    )
+    // Debo de llamar al controlador -> ShoppinglistController.POST /v1/{idShoppinglist}/addShoppinglistItem
+    // para que se encarge de añadir a la lista de la compra el nuevo SLI
+    addShoppinglistItemToShoppinglist(
+      props.shoppinglistId,
+      response.shoppinglistItemMetadata.idShoppinglistItem,
     )
   } else {
     createToast({

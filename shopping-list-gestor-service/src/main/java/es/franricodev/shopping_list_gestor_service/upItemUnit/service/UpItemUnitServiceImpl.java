@@ -63,6 +63,12 @@ public class UpItemUnitServiceImpl implements UpItemUnitService{
         request.itemUnitUpValues().forEach(this::updateUpItemUnitValues);
     }
 
+    @Override
+    public Optional<UpItemUnit> findById(Long id) {
+        log.info("Find up item unit with id: {}", id);
+        return upItemUnitRepository.findById(id);
+    }
+
     private void updateUpItemUnitValues(UpdateItemUnitUpValues request) {
         log.info("Updating the values of the item unit up with id: {}", request.idItemUnitUp());
         try {

@@ -19,4 +19,6 @@ public interface UpItemUnitService {
     Optional<UpItemUnit> findByUnitaryPrice(double price);
 
     void updateItemUnitUpValues(RequestUpdateItemUnitUpValues request);
+
+    Optional<UpItemUnit> findById(Long id);
 }
