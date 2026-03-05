@@ -33,7 +33,10 @@ onMounted(async () => {
     <ShoppinglistDetailsInformation class="grow shadow-5"></ShoppinglistDetailsInformation>
     <div class="flex flex-wrap gap-2 align-items-start sm:flex-nowrap">
       <ShoppinglistItemsTable class="w-full grow-0 shadow-5"></ShoppinglistItemsTable>
-      <ShoppinglistItemCreateForm class="w-full grow shadow-5"></ShoppinglistItemCreateForm>
+      <ShoppinglistItemCreateForm
+        class="w-full grow shadow-5"
+        :shoppinglistId="Number(route.params.id)"
+      ></ShoppinglistItemCreateForm>
     </div>
   </div>
 </template>

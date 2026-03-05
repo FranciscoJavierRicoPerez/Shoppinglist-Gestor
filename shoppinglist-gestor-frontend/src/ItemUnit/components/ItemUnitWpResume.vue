@@ -10,6 +10,8 @@ const itemUnitWpMetadata = ref<ItemUnitWpMetadata>()
 const { refetch: getItemUnitWpMetadata } = useGetItemUnitWpMetadata()
 const store = useUpdateItemWpFormStore()
 
+const emit = defineEmits(['idItemUnitWp', 'idItemUnit'])
+
 const props = defineProps({
   isUpdateInfo: {
     type: Boolean as PropType<boolean>,
@@ -25,6 +27,8 @@ onMounted(async () => {
     itemUnitWpMetadata.value = await getItemUnitWpMetadata(
       props.shoppinglistItem.idShoppinglistItem,
     )
+  emit('idItemUnitWp', itemUnitWpMetadata.value?.idItemUnitWp)
+  emit('idItemUnit', itemUnitWpMetadata.value?.idItemUnit)
 })
 
 const productName = computed(() => {

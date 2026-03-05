@@ -140,7 +140,8 @@ public interface ShoppinglistItemController {
             @RequestBody RequestCreateShoppinglistItemV2 requestCreateShoppinglistItem);
 
 
-    /* @GetMapping("/v1/{idShoppinglistItem}/itemsUnitWpInfo")
-    ResponseEntity<ResponseGetItemUnitWpMetadata> getItemUnitWpMetadata(@PathVariable(name = "idShoppinglistItem") Long idShoppinglistItem); */
+    @Operation(summary = "Return the information of a wp item unit")
+    @GetMapping("/v1/{idShoppinglistItem}/itemsUnitWpInfo")
+    ResponseEntity<ResponseGetItemUnitWpMetadata> getItemUnitWpMetadata(@PathVariable(name = "idShoppinglistItem") Long idShoppinglistItem);
 
 }

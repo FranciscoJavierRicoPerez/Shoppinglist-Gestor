@@ -132,12 +132,19 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
         }
         return new ResponseEntity<>(response, httpStatus);
     }
-    /* // TODO: CREATE LOGIC
+    // TODO: CREATE LOGIC
     @Override
     public ResponseEntity<ResponseGetItemUnitWpMetadata> getItemUnitWpMetadata(Long idShoppinglistItem) {
-        ResponseGetItemUnitWpMetadata response = new ResponseGetItemUnitWpMetadata(10.0, 10.0, 100.00);
+        // ResponseGetItemUnitWpMetadata response = new ResponseGetItemUnitWpMetadata(10.0, 10.0, 100.00);
         log.info("Getting the item unit metadata");
-
+        ResponseGetItemUnitWpMetadata response = null;
+        ResponseItemUnitWpMetadata result = null;
+        try {
+            result = shoppinglistItemService.getItemUnitWpMetadata(idShoppinglistItem);
+            response = new ResponseGetItemUnitWpMetadata(result.getPriceKg(), result.getWeight(), result.getCalculatedPrice(), result.getIdItemUnitWp(), result.getIdItemUnit());
+        } catch (ShoppinglistItemException e) {
+            throw new RuntimeException(e);
+        }
         return ResponseEntity.ok(response);
-    } */
+    }
 }

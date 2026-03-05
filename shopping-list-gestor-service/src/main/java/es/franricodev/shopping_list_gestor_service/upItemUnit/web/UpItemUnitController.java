@@ -1,6 +1,7 @@
 package es.franricodev.shopping_list_gestor_service.upItemUnit.web;
 
 import es.franricodev.shopping_list_gestor_service.upItemUnit.dto.request.RequestUpdateItemUnitUpValues;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -11,6 +12,7 @@ public interface UpItemUnitController {
     @DeleteMapping("/v1/removeUpItemUnitByPrice")
     ResponseEntity<Void> removeUpItemUnitByPrice(@RequestParam(name = "unitaryPrice") Double price);
 
+    @Operation(summary = "Update the quantity of all the items units up referenced in the request body")
     @PutMapping("/v1/updateItemUnitsUp")
     ResponseEntity<Void> updateItemUnitUpValues(@RequestBody RequestUpdateItemUnitUpValues request);
 
