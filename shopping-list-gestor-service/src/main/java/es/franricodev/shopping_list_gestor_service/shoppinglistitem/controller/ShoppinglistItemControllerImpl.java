@@ -141,7 +141,7 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
         ResponseItemUnitWpMetadata result = null;
         try {
             result = shoppinglistItemService.getItemUnitWpMetadata(idShoppinglistItem);
-            response = new ResponseGetItemUnitWpMetadata(result.getPriceKg(), result.getWeight(), result.getCalculatedPrice());
+            response = new ResponseGetItemUnitWpMetadata(result.getPriceKg(), result.getWeight(), result.getCalculatedPrice(), result.getIdItemUnitWp(), result.getIdItemUnit());
         } catch (ShoppinglistItemException e) {
             throw new RuntimeException(e);
         }

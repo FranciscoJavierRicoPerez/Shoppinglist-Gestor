@@ -13,4 +13,6 @@ public class ResponseItemUnitWpMetadata {
     private Double priceKg;
     private Double weight;
     private Double calculatedPrice;
+    private Long idItemUnitWp;
+    private Long idItemUnit;
 }

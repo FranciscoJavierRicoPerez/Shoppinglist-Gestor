@@ -92,6 +92,7 @@ public class ItemUnitServiceImpl implements ItemUnitService {
         return totalPriceCalculated;
     }
 
+    // TODO: REFACTORIZAR -> ESTE METODO SOLO DEBE USARSE EN EL PROCESO DE CREACION DE ITEM UNIT NO PARA LA ACTUALIZACION => ¡¡¡ DESACOPLAR, RESPONSABILIDAD UNICA !!!
     @Override
     public ItemUnit createItemUnitV2(CreateItemUnitData createItemUnitData, boolean isWpItemUnit, ShoppinglistItem shoppinglistItem) throws ItemUnitException {
         validateCorrectItemUnitCreationData(createItemUnitData, isWpItemUnit);
@@ -170,6 +171,22 @@ public class ItemUnitServiceImpl implements ItemUnitService {
             }
             itemUnitRepository.save(itemUnit);
         }
+    }
+
+    @Override
+    public ItemUnit updateItemUnit(Long idItemUnit) throws ItemUnitException {
+        // TODO: Falta el objeto request con la informacion necesaria
+        ItemUnit toUpdate = itemUnitRepository.findById(idItemUnit).orElseThrow(() -> new ItemUnitException(ItemUnitMessagesError.ITEMUNIT_NOT_FOUND));
+        if (toUpdate.isWpItem()) {
+            log.info("The item unit {}, have item unit wp let procced with the calculate of his values", idItemUnit);
+            double totalPrice = wpItemUnitService.getCalcuatedValue(toUpdate.getWpItemUnit().getId());
+            toUpdate.setTotalPrice(totalPrice);
+        } else {
+            log.info("The item unit {}, hace items unit up let procced with the calculate of his values", idItemUnit);
+            //double totalPrice = upItemUnitService.upItemUnitTotalPrice();
+            double totalPrice = 0;
+        }
+        return null;
     }
 
     private ResponseItemUnitUpGrouped createResponseItemUnitUpGrouped(List<ItemUnit> itemUnits, Double unitaryPrice) {

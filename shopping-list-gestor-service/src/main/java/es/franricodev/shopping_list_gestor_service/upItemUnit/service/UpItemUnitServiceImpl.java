@@ -69,6 +69,12 @@ public class UpItemUnitServiceImpl implements UpItemUnitService{
         return upItemUnitRepository.findById(id);
     }
 
+    @Override
+    public double upItemUnitTotalPrice(List<Long> ids) {
+        double totalPrice = 0;
+
+    }
+
     private void updateUpItemUnitValues(UpdateItemUnitUpValues request) {
         log.info("Updating the values of the item unit up with id: {}", request.idItemUnitUp());
         try {

@@ -12,6 +12,8 @@ async function getItemUnitWpMetadata(idShoppinglistItem: number): Promise<ItemUn
     priceKg: response.priceKg,
     weight: response.weight,
     calculatedPrice: response.calculatedPrice,
+    idItemUnitWp: response.idItemUnitWp,
+    idItemUnit: response.idItemUnit,
   }
 }
 

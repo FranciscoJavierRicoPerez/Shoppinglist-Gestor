@@ -176,7 +176,10 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
             response = ResponseItemUnitWpMetadata.builder()
                     .weight(wpItemUnit.getWeight())
                     .priceKg(wpItemUnit.getPriceKg())
-                    .calculatedPrice(wpItemUnit.getPriceKg() * wpItemUnit.getWeight()).build();
+                    .calculatedPrice(wpItemUnit.getPriceKg() * wpItemUnit.getWeight())
+                    .idItemUnitWp(wpItemUnit.getId())
+                    .idItemUnit(itemUnit.getId())
+                    .build();
         }
         return response;
     }

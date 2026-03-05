@@ -5,6 +5,7 @@ import es.franricodev.shopping_list_gestor_service.upItemUnit.dto.request.Reques
 import es.franricodev.shopping_list_gestor_service.upItemUnit.exception.UpItemUnitException;
 import es.franricodev.shopping_list_gestor_service.upItemUnit.model.UpItemUnit;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UpItemUnitService {
@@ -21,4 +22,7 @@ public interface UpItemUnitService {
     void updateItemUnitUpValues(RequestUpdateItemUnitUpValues request);
 
     Optional<UpItemUnit> findById(Long id);
+
+    double upItemUnitTotalPrice(List<Long> ids);
+
 }

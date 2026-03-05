@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class RequestCreateWpItemUnitData {
+    private Long idWpItemUnit;
     private double priceKg;
     private double weight;
 }
