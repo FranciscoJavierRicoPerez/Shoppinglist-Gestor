@@ -1,11 +1,16 @@
 package es.franricodev.shopping_list_gestor_service.wpItemUnit.service;
 
+import es.franricodev.shopping_list_gestor_service.itemUnit.exception.ItemUnitException;
+import es.franricodev.shopping_list_gestor_service.itemUnit.messages.ItemUnitMessagesError;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.constants.messages.ErrorMessages;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.dto.request.RequestCreateWpItemUnitData;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.model.WpItemUnit;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.repository.WpItemUnitRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -33,6 +38,17 @@ public class WpItemUnitServiceImpl implements WpItemUnitService {
     public void deleteLogicWpItemUnit(WpItemUnit wpItemUnit) {
         wpItemUnit.setInfoBlock(true);
         repository.save(wpItemUnit);
+    }
+
+    @Override
+    public Optional<WpItemUnit> findById(Long id) {
+        return repository.findById(id);
+    }
+
+    @Override
+    public double getCalcuatedValue(Long idWpItem) throws ItemUnitException {
+        WpItemUnit wpItemUnitOptional = findById(idWpItem).orElseThrow(() -> new ItemUnitException(ItemUnitMessagesError.ITEMUNIT_NOT_FOUND));
+        return wpItemUnitOptional.getPriceKg() * wpItemUnitOptional.getWeight();
     }
 
 }

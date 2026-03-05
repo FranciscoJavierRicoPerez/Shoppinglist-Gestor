@@ -28,4 +28,7 @@ public interface ItemUnitService {
     ResponseGetAllItemUnitUpGroupedByPrice getAllItemsUnitUpGroupedByPrice(ShoppinglistItem shoppinglistItem);
 
     void deleteLogicItemUnitList(List<ItemUnit> itemUnitList);
+
+    ItemUnit updateItemUnit(Long idItemUnit) throws ItemUnitException;
+
 }

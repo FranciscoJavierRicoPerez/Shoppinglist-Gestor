@@ -1,25 +1,16 @@
 package es.franricodev.shopping_list_gestor_service.itemUnit.controller;
 
-import es.franricodev.shopping_list_gestor_service.itemUnit.service.ItemUnitService;
-import io.swagger.v3.oas.annotations.Hidden;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PutMapping;
 
-@Hidden
-@RestController
-@RequestMapping("/api/itemunit")
-public class ItemUnitController {
-
-    @Autowired
-    private ItemUnitService itemUnitService;
-
-    @DeleteMapping("/{idItemUnit}/removeItemUnit")
-    public ResponseEntity<?> removeItemUnit(@PathVariable("idItemUnit") Long id) {
-        return ResponseEntity.ok(null);
-    }
-
+@Tag(
+        name = "Item Unit Controller API Documentation"
+)
+public interface ItemUnitController {
+    @Operation(summary = "Update the values for and item unit")
+    @PutMapping("/v1/itemUnit/{idItemUnit}/update")
+    ResponseEntity<Void> updateItemUnit(@PathVariable(name = "idItemUnit") Long idItemUnit);
 }

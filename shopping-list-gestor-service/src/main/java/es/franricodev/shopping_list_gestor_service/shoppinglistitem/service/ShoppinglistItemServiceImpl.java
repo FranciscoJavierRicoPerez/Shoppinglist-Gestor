@@ -176,7 +176,10 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
             response = ResponseItemUnitWpMetadata.builder()
                     .weight(wpItemUnit.getWeight())
                     .priceKg(wpItemUnit.getPriceKg())
-                    .calculatedPrice(wpItemUnit.getPriceKg() * wpItemUnit.getWeight()).build();
+                    .calculatedPrice(wpItemUnit.getPriceKg() * wpItemUnit.getWeight())
+                    .idItemUnitWp(wpItemUnit.getId())
+                    .idItemUnit(itemUnit.getId())
+                    .build();
         }
         return response;
     }
@@ -248,6 +251,7 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
                 shoppinglistItem.setCalculatedPrice(shoppinglistItem.getCalculatedPrice() + itemUnitCreated.getTotalPrice());
                 shoppinglistItemRepository.save(shoppinglistItem);
             }
+            // TODO: Faltaría indicar a que lista de la compra se debe de asignar este SLI
             return ResponseCreateShoppinglistItem.builder()
                     .created(true)
                     .idShoppinglistItemCreated(shoppinglistItem.getId())

@@ -21,4 +21,6 @@ public interface ProductService {
     List<ProductDTO> getAllProducts();
 
     List<String> getAllProductsNames();
+
+    boolean verifyIfProductAlreadyExists(String productName);
 }
