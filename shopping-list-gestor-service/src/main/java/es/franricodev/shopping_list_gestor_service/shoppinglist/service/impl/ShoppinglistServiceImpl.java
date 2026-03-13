@@ -3,7 +3,6 @@ package es.franricodev.shopping_list_gestor_service.shoppinglist.service.impl;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.*;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseCreateShoppinglist;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetFilteredShoppinglistMetadata;
-import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetShoppinglistTableMetadata;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ShoppinglistMetadata;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.mapper.ShoppinglistMapper;
@@ -149,7 +148,7 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
         return shoppinglist;
     }
 
-    // TODO: REFACTORIZAR A PROGRAMACION FUNCIONAL O QUERY QUE DEVUELVA ESTO CONCRETAMENTE
+    // TODO: REFACTORIZAR A PROGRAMACION FUNCIONAL O QUERY QUE DEVUELVA ESTO CONCRETAMENTE :(
     @Override
     public Shoppinglist findShoppinglistByShoppinglistItemId(Long idItem) {
         List<Shoppinglist> shoppinglistList = shoppinglistRepository.findAll();

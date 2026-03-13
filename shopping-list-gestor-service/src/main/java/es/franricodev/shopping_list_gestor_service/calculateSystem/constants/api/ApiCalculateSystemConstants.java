@@ -1,4 +1,4 @@
-package es.franricodev.shopping_list_gestor_service.calculateSystem.constants;
+package es.franricodev.shopping_list_gestor_service.calculateSystem.constants.api;
 
 public class ApiCalculateSystemConstants {
     // -------------- GENERAL CONSTANSTS ---------------------

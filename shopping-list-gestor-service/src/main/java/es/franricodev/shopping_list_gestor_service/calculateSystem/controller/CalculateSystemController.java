@@ -1,5 +1,6 @@
 package es.franricodev.shopping_list_gestor_service.calculateSystem.controller;
 
+import es.franricodev.shopping_list_gestor_service.calculateSystem.constants.api.ApiCalculateSystemConstants;
 import es.franricodev.shopping_list_gestor_service.calculateSystem.dto.response.ResponseGetAllCalculateSystems;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -10,11 +11,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.List;
-
 @Tag(
-        name = "Calculate System Controller API Documentation",
-        description = "Management of the operations related with the calculate system"
+        name = ApiCalculateSystemConstants.API_NAME,
+        description = ApiCalculateSystemConstants.API_DESCRIPTION
 )
 public interface CalculateSystemController {
 
@@ -29,6 +28,6 @@ public interface CalculateSystemController {
                         )
                     })
     })
-    @GetMapping("/v1/all")
+    @GetMapping(ApiCalculateSystemConstants.GET_ALL_V1)
     ResponseEntity<ResponseGetAllCalculateSystems> getAllCalculateSystems();
 }

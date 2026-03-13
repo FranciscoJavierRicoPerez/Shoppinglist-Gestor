@@ -72,7 +72,7 @@ public class UpItemUnitServiceImpl implements UpItemUnitService{
     @Override
     public double upItemUnitTotalPrice(List<Long> ids) {
         double totalPrice = 0;
-
+        return totalPrice;
     }
 
     private void updateUpItemUnitValues(UpdateItemUnitUpValues request) {

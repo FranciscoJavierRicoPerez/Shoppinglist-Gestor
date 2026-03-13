@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +26,7 @@ public class ShoppinglistControllerImpl implements ShoppinglistController {
 
     @Autowired
     private ShoppinglistService shoppinglistService;
-
+    
     @Override
     public ResponseEntity<List<ShoppinglistDTO>> getAllShoppinglist() {
         log.info("Getting all actives shoppinglists");
@@ -82,7 +81,6 @@ public class ShoppinglistControllerImpl implements ShoppinglistController {
         return new ResponseEntity<>(updated, httpStatus);
     }
 
-    // TODO: Conectar con el FE
     @Override
     public ResponseEntity<ResponseGetFilteredShoppinglistMetadata> filterShoppinglist(
             String code, String creationDate, String closeDate, String totalPrice, String isActive
