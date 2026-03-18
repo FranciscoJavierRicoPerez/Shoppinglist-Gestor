@@ -7,4 +7,6 @@ public class ApiCalculateSystemConstants {
     // -------------- URL CONSTANTS --------------------------
     public static final String BASE_URL = "/api/calculatesystem";
     public static final String GET_ALL_V1 = "/v1/all";
+    // ------------ OPERATIONS DESCRIPTIONS -----------------------------------------------------------
+    public static final String GET_ALL_V1_OP_SUMMARY = "Returns all the calculate system in the database";
 }

@@ -4,12 +4,10 @@ import es.franricodev.shopping_list_gestor_service.itemUnit.dto.request.CreateIt
 import es.franricodev.shopping_list_gestor_service.itemUnit.exception.ItemUnitException;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetAllItemsUnit;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
-import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestAddItemUnitUnitaryPrice;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.constants.api.ApiShoppinglistItemConstants;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItemV2;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.*;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.exception.ShoppinglistItemException;
-import es.franricodev.shopping_list_gestor_service.shoppinglistitem.messages.ShoppinglistItemMessagesError;
-import es.franricodev.shopping_list_gestor_service.shoppinglistitem.messages.ShoppinglistItemMessagesSuccess;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.service.ShoppinglistItemService;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.dto.request.RequestAddItemUnitWP;
 import lombok.extern.slf4j.Slf4j;
@@ -21,19 +19,19 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @CrossOrigin(origins = {"http://localhost:8100/", "http://192.168.18.7:9000/", "*"})
 @RestController
-@RequestMapping("/api/shoppinglistitem")
+@RequestMapping(ApiShoppinglistItemConstants.BASE_URL)
 public class ShoppinglistItemControllerImpl implements ShoppinglistItemController {
 
     @Autowired
     private ShoppinglistItemService shoppinglistItemService;
 
     @Override
-    public ResponseEntity<ResponseDeleteShoppinglistItem> deleteShoppinglistItem(Long idItem) {
-        log.info("Delete the shoppinglist item with id: {}", idItem);
+    public ResponseEntity<ResponseDeleteShoppinglistItem> deleteShoppinglistItem(Long idShoppinglistItem) {
+        log.info("Delete the shoppinglist item with id: {}", idShoppinglistItem);
         ResponseDeleteShoppinglistItem responseDeleteShoppinglistItem = null;
         HttpStatus httpStatus = HttpStatus.OK;
         try {
-            responseDeleteShoppinglistItem = shoppinglistItemService.deleteLogicShoppinglistItemById(idItem);
+            responseDeleteShoppinglistItem = shoppinglistItemService.deleteLogicShoppinglistItemById(idShoppinglistItem);
         } catch (ShoppinglistItemException shoppinglistItemException) {
             httpStatus = HttpStatus.BAD_REQUEST;
         }
@@ -53,11 +51,11 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
     }
 
     @Override
-    public ResponseEntity<Void> removeItemUnit(@PathVariable("idItem") Long idItem, @PathVariable("idItemUnit") Long idItemUnit) {
-        log.info("Removing the item unit with id: {} from the shoppinglist item with id: {}", idItem, idItemUnit);
+    public ResponseEntity<Void> removeItemUnit(Long idItem, Long idShoppinglistItem) {
+        log.info("Removing the item unit with id: {} from the shoppinglist item with id: {}", idItem, idShoppinglistItem);
         HttpStatus httpStatus = HttpStatus.OK;
         try {
-            shoppinglistItemService.removeItemUnitFromShoppinglistItem(idItem, idItemUnit);
+            shoppinglistItemService.removeItemUnitFromShoppinglistItem(idItem, idShoppinglistItem);
         } catch (ShoppinglistItemException e) {
             httpStatus = HttpStatus.BAD_REQUEST;
         }
@@ -65,7 +63,7 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
     }
 
     @Override
-    public ResponseEntity<ResponseGetAllItemsUnit> getAllItemUnitsFromShoppinglistItem(@PathVariable("idShoppinglistItem") Long idShoppinglistItem) {
+    public ResponseEntity<ResponseGetAllItemsUnit> getAllItemUnitsFromShoppinglistItem(Long idShoppinglistItem) {
         log.info("Getting all the items units with calculate system UP of shoppinglist item with id: {}", idShoppinglistItem);
         ResponseGetAllItemsUnit responseGetAllItemsUnit = new ResponseGetAllItemsUnit();
         HttpStatus httpStatus = HttpStatus.OK;
@@ -81,7 +79,7 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
 
 
     @Override
-    public ResponseEntity<Void> addItemUnitWPToShoppinglistItem(@PathVariable("idShoppinglistItem") Long idShoppinglistItem, @RequestBody RequestAddItemUnitWP requestAddItemUnitWP) {
+    public ResponseEntity<Void> addItemUnitWPToShoppinglistItem(Long idShoppinglistItem, RequestAddItemUnitWP requestAddItemUnitWP) {
         log.info("Creating a new item unit WP for the shoppinglist item with id: {}", idShoppinglistItem);
         HttpStatus httpStatus = HttpStatus.OK;
         try {

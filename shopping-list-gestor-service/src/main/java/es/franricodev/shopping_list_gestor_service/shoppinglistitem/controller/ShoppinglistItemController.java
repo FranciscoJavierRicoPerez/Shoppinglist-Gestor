@@ -1,7 +1,9 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglistitem.controller;
 
+import es.franricodev.shopping_list_gestor_service.constants.GeneralConstants;
 import es.franricodev.shopping_list_gestor_service.itemUnit.dto.request.CreateItemUnitData;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetAllItemsUnit;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.constants.api.ApiShoppinglistItemConstants;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItemV2;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.*;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.dto.request.RequestAddItemUnitWP;
@@ -15,119 +17,122 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(
-        name = "Shoppinglist Item Controller API Documentation",
-        description = "Management of the operation related with the items of the shoppinglist"
+        name = ApiShoppinglistItemConstants.API_NAME,
+        description = ApiShoppinglistItemConstants.API_DESCRIPTION
 )
 public interface ShoppinglistItemController {
 
-    @Operation(summary = "Remove a shoppinglist item from the shoppinglist")
+    @Operation(summary = ApiShoppinglistItemConstants.DELETE_V1_OP_SUMMARY)
     @ApiResponses({
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = GeneralConstants.HTTP_200,
                     content = {
                             @Content(
                                     schema = @Schema(implementation = ResponseDeleteShoppinglistItem.class),
-                                    mediaType = "application/json")
+                                    mediaType = GeneralConstants.APPLICATION_JSON)
                     })
     })
-    @DeleteMapping("/v1/{idItem}/delete")
+    @DeleteMapping(ApiShoppinglistItemConstants.DELETE_V1)
     ResponseEntity<ResponseDeleteShoppinglistItem> deleteShoppinglistItem(
-            @PathVariable("idItem") Long idItem
+            @PathVariable(ApiShoppinglistItemConstants.ID_SHOPPINGLIST_ITEM) Long idShoppinglistItem
     );
 
-    @Operation(summary = "Add new item unit of UP type in the shoppinglist item")
+    @Operation(summary = ApiShoppinglistItemConstants.ADD_ITEM_UNIT_UP_V1_OP_SUMMARY)
     @ApiResponses({
             @ApiResponse(
-                    responseCode = "204",
-                    description = "No Content"
+                    responseCode = GeneralConstants.HTTP_204,
+                    description = GeneralConstants.DESC_204
             )
     })
-    @PostMapping("/v1/{idShoppinglistItem}/addItemUnitUP")
+    @PostMapping(ApiShoppinglistItemConstants.ADD_ITEM_UNIT_UP_V1)
     ResponseEntity<Void> addItemUnit(
-            @PathVariable("idShoppinglistItem") Long idShoppinglistItem,
+            @PathVariable(ApiShoppinglistItemConstants.ID_SHOPPINGLIST_ITEM) Long idShoppinglistItem,
             @RequestBody CreateItemUnitData request
     );
 
-    @Operation(summary = "Remove a item unit in the shoppinglist item from the shoppinglist")
+    @Operation(summary = ApiShoppinglistItemConstants.REMOVE_ITEM_UNIT_V1_OP_SUMMARY)
     @ApiResponses({
             @ApiResponse(
-                    responseCode = "204",
-                    description = "No Content"
+                    responseCode = GeneralConstants.HTTP_204,
+                    description = GeneralConstants.DESC_204
             )
     })
-    @DeleteMapping("/v1/{idItem}/removeItemUnit/{idItemUnit}")
+    @DeleteMapping(ApiShoppinglistItemConstants.REMOVE_ITEM_UNIT_V1)
     ResponseEntity<?> removeItemUnit(
-            @PathVariable("idItem") Long idItem,
-            @PathVariable("idItemUnit") Long idItemUnit
+            @PathVariable(ApiShoppinglistItemConstants.ID_SHOPPINGLIST_ITEM) Long idShoppinglistItem,
+            @PathVariable(ApiShoppinglistItemConstants.ID_ITEM_UNIT) Long idItemUnit
     );
 
-    @Operation(summary = "Get all the item units from the shoppinglist items")
+    @Operation(summary = ApiShoppinglistItemConstants.GET_ALL_ITEM_UNITS_V1_OP_SUMMARY)
     @ApiResponses({
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = GeneralConstants.DESC_200,
                     content = {
                             @Content(
                                     schema = @Schema(implementation = ResponseGetAllItemsUnit.class),
-                                    mediaType = "application/json"
+                                    mediaType = GeneralConstants.APPLICATION_JSON
                             )
                     })
     })
-    @GetMapping("/v1/{idShoppinglistItem}/itemsUnits")
+    @GetMapping(ApiShoppinglistItemConstants.GET_ALL_ITEM_UNITS_V1)
     ResponseEntity<ResponseGetAllItemsUnit> getAllItemUnitsFromShoppinglistItem(
-            @PathVariable("idShoppinglistItem") Long idShoppinglistItem
+            @PathVariable(ApiShoppinglistItemConstants.ID_SHOPPINGLIST_ITEM) Long idShoppinglistItem
     );
 
-    @Operation(summary = "Add new item unit of WP type in the shoppinglist item")
+    @Operation(summary = ApiShoppinglistItemConstants.ADD_ITEM_UNIT_WP_V1_OP_SUMMARY)
     @ApiResponses({
             @ApiResponse(
-                    responseCode = "204",
-                    description = "No Content"
+                    responseCode = GeneralConstants.HTTP_204,
+                    description = GeneralConstants.DESC_204
             )
     })
-    @PostMapping("/v1/{idShoppinglistItem}/addItemUnitWP")
+    @PostMapping(ApiShoppinglistItemConstants.ADD_ITEM_UNIT_WP_V1)
     ResponseEntity<Void> addItemUnitWPToShoppinglistItem(
-            @PathVariable("idShoppinglistItem") Long idShoppinglistItem,
+            @PathVariable(ApiShoppinglistItemConstants.ID_SHOPPINGLIST_ITEM) Long idShoppinglistItem,
             @RequestBody RequestAddItemUnitWP requestAddItemUnitWP
     );
 
     @Operation(
-            summary = "Returns all the items units of the shoppinglist item type UP grouped by price"
+            summary = ApiShoppinglistItemConstants.GET_ALL_ITEMS_UNIT_UP_GROUPED_BY_PRICE_V1_OP_SUMMARY
     )
     @ApiResponses({
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = GeneralConstants.HTTP_200,
+                    description = GeneralConstants.DESC_200,
                     content = {
                             @Content(
                                     schema = @Schema(implementation = ResponseGetAllItemUnitUpGroupedByPrice.class),
-                                    mediaType = "application/json"
+                                    mediaType = GeneralConstants.APPLICATION_JSON
                             )
                     }
             )
     })
-    @GetMapping("/v1/{idShoppinglistItem}/itemsUnitsUpGroupedByPrice")
+    @GetMapping(ApiShoppinglistItemConstants.GET_ALL_ITEMS_UNIT_UP_GROUPED_BY_PRICE_V1)
     ResponseEntity<ResponseGetAllItemUnitUpGroupedByPrice> getItemsUnitsUpGroupedByPrice(
-            @PathVariable(name = "idShoppinglistItem") Long idShoppinglistItem);
+            @PathVariable(name = ApiShoppinglistItemConstants.ID_SHOPPINGLIST_ITEM) Long idShoppinglistItem);
 
-    @Operation(summary = "Returns the metadata of the items units wp")
+    @Operation(summary = ApiShoppinglistItemConstants.GET_ITEM_UNITS_WP_METADATA_V1_OP_SUMAMRY)
     @ApiResponses({
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = GeneralConstants.HTTP_200,
+                    description = GeneralConstants.DESC_200,
                     content = {
                             @Content(
                                     schema = @Schema(implementation = ResponseItemUnitWpMetadata.class),
-                                    mediaType = "application/json"
+                                    mediaType = GeneralConstants.APPLICATION_JSON
                             )
                     }
             )
     })
-    @GetMapping("/v1/{idShoppinglistItem}/itemsUnitsWpInfo")
+    @GetMapping(ApiShoppinglistItemConstants.GET_ITEM_UNITS_WP_METADATA_V1)
     ResponseEntity<ResponseItemUnitWpMetadata> getItemsUnitsWpMetadata(
-            @PathVariable(name = "idShoppinglistItem") Long idShoppinglistItem);
+            @PathVariable(name = ApiShoppinglistItemConstants.ID_SHOPPINGLIST_ITEM) Long idShoppinglistItem);
 
-    @Operation(summary = "Creation of the shoppinglist item metadata")
+    @Operation(summary = ApiShoppinglistItemConstants.CREATE_SHOPPINGLIST_ITEM_METADATA_V1_OP_SUMMARY)
     @ApiResponses({
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = GeneralConstants.HTTP_201,
+                    description = GeneralConstants.DESC_201,
                     content = {
                             @Content(
                                     schema = @Schema(implementation = ResponseCreateShoppinglistItem.class)
@@ -135,13 +140,13 @@ public interface ShoppinglistItemController {
                     }
             )
     })
-    @PostMapping("/v1/createShoppinglistItemMetadata")
+    @PostMapping(ApiShoppinglistItemConstants.CREATE_SHOPPINGLIST_ITEM_METADATA_V1)
     ResponseEntity<ResponseCreateShoppinglistItem> createShoppinglistItemMetadata(
             @RequestBody RequestCreateShoppinglistItemV2 requestCreateShoppinglistItem);
 
 
-    @Operation(summary = "Return the information of a wp item unit")
-    @GetMapping("/v1/{idShoppinglistItem}/itemsUnitWpInfo")
-    ResponseEntity<ResponseGetItemUnitWpMetadata> getItemUnitWpMetadata(@PathVariable(name = "idShoppinglistItem") Long idShoppinglistItem);
+    @Operation(summary = ApiShoppinglistItemConstants.GET_ITEM_UNITS_WP_METADATA_V2_OP_SUMAMRY)
+    @GetMapping(ApiShoppinglistItemConstants.GET_ITEM_UNITS_WP_METADATA_V2)
+    ResponseEntity<ResponseGetItemUnitWpMetadata> getItemUnitWpMetadata(@PathVariable(name = ApiShoppinglistItemConstants.ID_SHOPPINGLIST_ITEM) Long idShoppinglistItem);
 
 }

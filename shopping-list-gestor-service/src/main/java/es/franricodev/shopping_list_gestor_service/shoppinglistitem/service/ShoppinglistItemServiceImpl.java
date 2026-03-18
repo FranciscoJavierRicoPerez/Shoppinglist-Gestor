@@ -20,7 +20,7 @@ import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseItemUnitWpMetadata;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.exception.ShoppinglistItemException;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.mapper.ShoppinglistItemMapper;
-import es.franricodev.shopping_list_gestor_service.shoppinglistitem.messages.ShoppinglistItemMessagesError;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.constants.messages.ShoppinglistItemMessagesError;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.ShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.repository.ShoppinglistItemRepository;
 import es.franricodev.shopping_list_gestor_service.utils.DateUtils;

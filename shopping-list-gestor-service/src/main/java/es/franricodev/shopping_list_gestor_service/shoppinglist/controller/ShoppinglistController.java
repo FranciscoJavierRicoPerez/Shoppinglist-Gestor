@@ -20,27 +20,27 @@ import java.util.List;
 )
 public interface ShoppinglistController {
 
-    @Operation(summary = "Get all shoppinglist in the database", deprecated = true)
+    @Operation(summary = ApiShoppinglistConstants.GET_ALL_V1_OP_SUMMARY, deprecated = true)
     @GetMapping(ApiShoppinglistConstants.GET_ALL_V1)
     ResponseEntity<List<ShoppinglistDTO>> getAllShoppinglist();
 
-    @Operation(summary = "Create a shoppinglist v1", deprecated = true)
+    @Operation(summary = ApiShoppinglistConstants.CREATE_V1_OP_SUMMARY, deprecated = true)
     @PostMapping(ApiShoppinglistConstants.CREATE_V1)
     ResponseEntity<ShoppinglistDTO> createShoppinglist(@NotNull @RequestBody RequestCreateShoppinglistDTO request);
 
-    @Operation(summary = "Create a shoppinglist v2")
+    @Operation(summary = ApiShoppinglistConstants.CREATE_V2_OP_SUMMARY)
     @PostMapping(ApiShoppinglistConstants.CREATE_V2)
     ResponseEntity<ResponseCreateShoppinglist> createShoppinglistV2(@NotNull @RequestBody RequestCreateShoppinglistDTO request);
 
-    @Operation(summary = "Delete the information of a shoppinglist", deprecated = true)
+    @Operation(summary = ApiShoppinglistConstants.DELETE_V1_OP_SUMMARY, deprecated = true)
     @DeleteMapping(ApiShoppinglistConstants.DELETE_V1)
     ResponseEntity<Boolean> deleteShoppinglist(@PathVariable(name = ApiShoppinglistConstants.ID_SHOPPINGLIST) Long id);
 
-    @Operation(summary = "Update the information of a shoppinglist")
+    @Operation(summary = ApiShoppinglistConstants.UPDATE_V1_OP_SUMMARY)
     @PutMapping(ApiShoppinglistConstants.UPDATE_V1)
     ResponseEntity<ShoppinglistDTO> updateShoppinglist(@RequestBody RequestUpdateShoppinglistDTO request);
 
-    @Operation(summary = "Provides the information on all shoppinglists whose data is consistent with the filters")
+    @Operation(summary = ApiShoppinglistConstants.FILTER_V1_OP_SUMMARY)
     @GetMapping(ApiShoppinglistConstants.FILTER_V1)
     ResponseEntity<ResponseGetFilteredShoppinglistMetadata> filterShoppinglist(
             @RequestParam(name = ApiShoppinglistConstants.CODE, required = false, defaultValue = "") String code,
@@ -49,25 +49,25 @@ public interface ShoppinglistController {
             @RequestParam(name = ApiShoppinglistConstants.TOTAL_PRICE, required = false, defaultValue = "") String totalPrice,
             @RequestParam(name = ApiShoppinglistConstants.IS_ACTIVE, required = false, defaultValue = "true") String isActive);
 
-    @Operation(summary = "Provides the details of a shoppinglist", deprecated = true)
+    @Operation(summary = ApiShoppinglistConstants.GET_DETAILS_V1_OP_SUMMARY, deprecated = true)
     @GetMapping(ApiShoppinglistConstants.GET_DETAILS_V1)
     ResponseEntity<ShoppinglistDetailsDTO> getDetails(@PathVariable(name = ApiShoppinglistConstants.ID_SHOPPINGLIST) Long idShoppinglist);
 
-    @Operation(summary = "Update the shoppinglist active value")
+    @Operation(summary = ApiShoppinglistConstants.UPDATE_IS_ACTIVE_V1_OP_SUMMARY)
     @PutMapping(ApiShoppinglistConstants.UPDATE_IS_ACTIVE_V1)
     ResponseEntity<Boolean> updateShoppinglistIsActiveValue(@PathVariable(name = ApiShoppinglistConstants.ID_SHOPPINGLIST) Long idShoppinglist);
 
-    @Operation(summary = "Logic deletion of the shoppinglist entity")
+    @Operation(summary = ApiShoppinglistConstants.DELETE_LOGIC_V1_OP_SUMMARY)
     @DeleteMapping(ApiShoppinglistConstants.DELETE_LOGIC_V1)
     ResponseEntity<Boolean> deleteLogicShoppinglist(@PathVariable(name = ApiShoppinglistConstants.ID_SHOPPINGLIST) Long idShoppinglist);
 
-    @Operation(summary = "Add a new ShoppinglistItem to the Shoppinglist")
+    @Operation(summary = ApiShoppinglistConstants.ADD_SHOPPINGLIST_ITEM_V1_OP_SUMMARY)
     @PostMapping(ApiShoppinglistConstants.ADD_SHOPPINGLIST_ITEM_V1)
     ResponseEntity<Void> addShoppinglistItemToShoppinglist(
             @PathVariable(name = ApiShoppinglistConstants.ID_SHOPPINGLIST) Long idShoppinglist,
             @RequestParam(name = ApiShoppinglistConstants.ID_SHOPPINGLIST_ITEM) Long idShoppinglistItem);
 
-    @Operation(summary = "Update the total price of the shoppinglist")
+    @Operation(summary = ApiShoppinglistConstants.UPDATE_TOTAL_PRICE_V1_OP_SUMMARY)
     @PutMapping(ApiShoppinglistConstants.UPDATE_TOTAL_PRICE_V1)
     ResponseEntity<Void> updateTotalPrice(@PathVariable(name = ApiShoppinglistConstants.ID_SHOPPINGLIST) Long idShoppinglist);
     
