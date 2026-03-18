@@ -23,7 +23,8 @@ public interface ShoppinglistViewController {
     @ApiResponses(
             {
                     @ApiResponse(
-                            responseCode = "200",
+                            responseCode = GeneralConstants.HTTP_200,
+                            description = GeneralConstants.DESC_200,
                             content = {
                                     @Content(
                                             schema = @Schema(implementation = ResponseGetShoppinglistTableMetadata.class),
@@ -41,6 +42,7 @@ public interface ShoppinglistViewController {
             {
                     @ApiResponse(
                             responseCode = GeneralConstants.HTTP_200,
+                            description = GeneralConstants.DESC_200,
                             content = {
                                     @Content(
                                             schema = @Schema(implementation = ResponseGetShoppinglistDetailsMetadata.class),
