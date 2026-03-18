@@ -111,7 +111,7 @@ public interface ShoppinglistItemController {
     ResponseEntity<ResponseGetAllItemUnitUpGroupedByPrice> getItemsUnitsUpGroupedByPrice(
             @PathVariable(name = ApiShoppinglistItemConstants.ID_SHOPPINGLIST_ITEM) Long idShoppinglistItem);
 
-    @Operation(summary = ApiShoppinglistItemConstants.GET_ITEM_UNITS_WP_METADATA_V1_OP_SUMAMRY)
+    @Operation(summary = ApiShoppinglistItemConstants.GET_ITEM_UNITS_WP_METADATA_V1_OP_SUMAMRY, deprecated = true)
     @ApiResponses({
             @ApiResponse(
                     responseCode = GeneralConstants.HTTP_200,
