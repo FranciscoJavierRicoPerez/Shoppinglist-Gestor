@@ -10,6 +10,7 @@ import { useToast } from 'primevue/usetoast'
 import { useDeleteShoppinglistData } from '@/Shoppinglist/application/useDeleteShoppinglistData'
 import type { ShoppinglistMetadata } from '@/Shoppinglist/domain/ShoppinglistMetadata'
 import { useShoppinglistTableStore } from '@/Shoppinglist/stores/shoppinglistTableStore'
+import { useUpdateShoppinglistTotalPrice } from '../application/useUpdateShoppinglistTotalPrice'
 const { refetch: updateIsActive } = useUpdateIsActiveShoppinglist()
 const { refetch: deleteShoppinglist } = useDeleteShoppinglistData()
 const shoppinglistTableStore = useShoppinglistTableStore()
