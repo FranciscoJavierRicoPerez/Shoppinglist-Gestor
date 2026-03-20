@@ -5,6 +5,9 @@ export const PRODUCTION_BASE_URL = ''
 // --------- SHOPPINGLIST_ENDPOINTS --------------------------------------------------------------------
 export const SHOPPINGLIST_ENDPOINTS = {
   BASE_URL: '/api/shoppinglist',
+  UPDATE_TOTAL_PRICE_V1: (idShoppinglist: number): string => {
+    return SHOPPINGLIST_ENDPOINTS.BASE_URL + `/v1/${idShoppinglist}/updateTotalPrice`
+  },
   CREATE_V2: (): string => {
     return SHOPPINGLIST_ENDPOINTS.BASE_URL + `/v2/create`
   },
