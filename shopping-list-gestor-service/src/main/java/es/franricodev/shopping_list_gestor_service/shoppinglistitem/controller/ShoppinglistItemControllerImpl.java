@@ -145,4 +145,16 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
         }
         return ResponseEntity.ok(response);
     }
+
+    @Override
+    public ResponseEntity<Void> updateShoppinglistItemCalcualatedPrice(Long idShoppinglistItem) {
+        log.info("Update the calculated price of the shoppinglist item with id {} ", idShoppinglistItem);
+        HttpStatus httpStatus = HttpStatus.NO_CONTENT;
+        try {
+            shoppinglistItemService.updateShoppinglistItemCalculatedPrice(idShoppinglistItem);
+        } catch (ShoppinglistItemException e) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+        }
+        return new ResponseEntity<>(httpStatus);
+    }
 }

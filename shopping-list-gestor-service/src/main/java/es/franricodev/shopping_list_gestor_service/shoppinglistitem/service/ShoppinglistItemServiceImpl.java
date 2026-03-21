@@ -273,6 +273,14 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
         return shoppinglistItems.stream().map(this::buildShoppinglistItemMetadataDTO).toList();
     }
 
+    @Override
+    public void updateShoppinglistItemCalculatedPrice(Long idShoppinglistItem) {
+        log.info("Update the calculate price of the shoppinglist item with id: {}", idShoppinglistItem);
+        ShoppinglistItem shoppinglistItem = findShoppinglistItemById(idShoppinglistItem);
+        shoppinglistItem.setCalculatedPrice(getShoppinglistItemCalculatedPrice(shoppinglistItem));
+        updateShoppinglistItem(shoppinglistItem);
+    }
+
     private ShoppinglistItemMetadataDTO buildShoppinglistItemMetadataDTO(ShoppinglistItem shoppinglistItem) {
         return ShoppinglistItemMetadataDTO.builder()
                 .id(shoppinglistItem.getId())
@@ -284,6 +292,7 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
     }
 
     private double getShoppinglistItemCalculatedPrice(ShoppinglistItem shoppinglistItem) {
+        log.info("Calculate of the calculate price value of the shoppinglist item with id : {}", shoppinglistItem.getId());
         double calculatedPrice = 0.0;
         if(!shoppinglistItem.getItemUnitList().isEmpty()) {
            for(ItemUnit itemUnit : shoppinglistItem.getItemUnitList()) {

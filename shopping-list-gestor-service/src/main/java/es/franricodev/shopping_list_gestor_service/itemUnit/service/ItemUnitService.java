@@ -2,6 +2,7 @@ package es.franricodev.shopping_list_gestor_service.itemUnit.service;
 
 import es.franricodev.shopping_list_gestor_service.calculateSystem.model.CalculateSystem;
 import es.franricodev.shopping_list_gestor_service.itemUnit.dto.request.CreateItemUnitData;
+import es.franricodev.shopping_list_gestor_service.itemUnit.dto.request.RequestUpdateItemUnitWpTotalPrice;
 import es.franricodev.shopping_list_gestor_service.itemUnit.exception.ItemUnitException;
 import es.franricodev.shopping_list_gestor_service.itemUnit.model.ItemUnit;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseGetAllItemUnitUpGroupedByPrice;
@@ -29,6 +30,10 @@ public interface ItemUnitService {
 
     void deleteLogicItemUnitList(List<ItemUnit> itemUnitList);
 
-    ItemUnit updateItemUnit(Long idItemUnit) throws ItemUnitException;
+    // ItemUnit updateItemUnit(Long idItemUnit) throws ItemUnitException;
+
+    void updateItemUnit(ItemUnit itemUnit);
+
+    void updateItemUnitTotalPrice(Long idItemUnit, RequestUpdateItemUnitWpTotalPrice request);
 
 }

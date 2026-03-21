@@ -14,6 +14,7 @@ public class ApiShoppinglistItemConstants {
     public static final String GET_ALL_ITEMS_UNIT_UP_GROUPED_BY_PRICE_V1 = "/v1/{idShoppinglistItem}/itemsUnitsUpGroupedByPrice";
     public static final String GET_ITEM_UNITS_WP_METADATA_V1 = "/v1/{idShoppinglistItem}/itemsUnitsWpInfo";
     public static final String CREATE_SHOPPINGLIST_ITEM_METADATA_V1 = "/v1/createShoppinglistItemMetadata";
+    public static final String UPDATE_SHOPPINGLIST_ITEM_CALCULATED_PRICE_V1 = "/v1/{idShoppinglistItem}/update/calculatedPrice";
     public static final String GET_ITEM_UNITS_WP_METADATA_V2 = "/v2/{idShoppinglistItem}/itemsUnitWpInfo";
     // -------------------- PATH VARIABLE CONSTANTS ----------------
     public static final String ID_SHOPPINGLIST_ITEM = "idShoppinglistItem";
@@ -27,6 +28,7 @@ public class ApiShoppinglistItemConstants {
     public static final String GET_ALL_ITEMS_UNIT_UP_GROUPED_BY_PRICE_V1_OP_SUMMARY = "Returns all the items units of the shoppinglist item type UP grouped by price";
     public static final String GET_ITEM_UNITS_WP_METADATA_V1_OP_SUMAMRY = "Returns the metadata of the items units wp";
     public static final String CREATE_SHOPPINGLIST_ITEM_METADATA_V1_OP_SUMMARY = "Creation of the shoppinglist item metadata";
+    public static final String UPDATE_SHOPPINGLIST_ITEM_CALCULATED_PRICE_V1_OP_SUMMARY = "Update the calculated price of the shoppinglist item, the process recalculate the value with the item units associated";
     public static final String GET_ITEM_UNITS_WP_METADATA_V2_OP_SUMAMRY = "Return the information of a wp item unit";
 
 }

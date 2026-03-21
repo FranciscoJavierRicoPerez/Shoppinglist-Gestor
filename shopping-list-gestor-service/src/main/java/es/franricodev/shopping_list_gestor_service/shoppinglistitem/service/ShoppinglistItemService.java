@@ -43,6 +43,8 @@ public interface ShoppinglistItemService {
 
     // ResponseGetItemUnitWpMetadata getItemUnitWpMetadata(Long idShoppinglist) throws ShoppinglistItemException;
 
+    void updateShoppinglistItemCalculatedPrice(Long idShoppinglistItem);
+
 }
 
 

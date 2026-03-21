@@ -2,8 +2,9 @@ package es.franricodev.shopping_list_gestor_service.itemUnit.service;
 
 import es.franricodev.shopping_list_gestor_service.calculateSystem.model.CalculateSystem;
 import es.franricodev.shopping_list_gestor_service.itemUnit.dto.request.CreateItemUnitData;
+import es.franricodev.shopping_list_gestor_service.itemUnit.dto.request.RequestUpdateItemUnitWpTotalPrice;
 import es.franricodev.shopping_list_gestor_service.itemUnit.exception.ItemUnitException;
-import es.franricodev.shopping_list_gestor_service.itemUnit.messages.ItemUnitMessagesError;
+import es.franricodev.shopping_list_gestor_service.itemUnit.constants.messages.ItemUnitMessagesError;
 import es.franricodev.shopping_list_gestor_service.itemUnit.model.ItemUnit;
 import es.franricodev.shopping_list_gestor_service.itemUnit.repository.ItemUnitRepository;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseGetAllItemUnitUpGroupedByPrice;
@@ -22,7 +23,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -61,8 +61,9 @@ public class ItemUnitServiceImpl implements ItemUnitService {
     }
 
     @Override
-    public ItemUnit findItemUnitById(Long id) throws Exception {
-        return itemUnitRepository.findById(id).orElseThrow(Exception::new);
+    public ItemUnit findItemUnitById(Long idItemUnit)  {
+        log.info("Search item unit with id: {}", idItemUnit);
+        return itemUnitRepository.findById(idItemUnit).orElseThrow(() -> new ItemUnitException(ItemUnitMessagesError.ITEMUNIT_NOT_FOUND));
     }
 
     @Override
@@ -159,7 +160,7 @@ public class ItemUnitServiceImpl implements ItemUnitService {
         }
     }
 
-    @Override
+    /* @Override
     public ItemUnit updateItemUnit(Long idItemUnit) throws ItemUnitException {
         // TODO: Falta el objeto request con la informacion necesaria
         ItemUnit toUpdate = itemUnitRepository.findById(idItemUnit).orElseThrow(() -> new ItemUnitException(ItemUnitMessagesError.ITEMUNIT_NOT_FOUND));
@@ -173,6 +174,20 @@ public class ItemUnitServiceImpl implements ItemUnitService {
             double totalPrice = 0;
         }
         return null;
+    } */
+
+    @Override
+    public void updateItemUnit(ItemUnit itemUnit) {
+        log.info("Update item unit with id {}", itemUnit.getId());
+        itemUnitRepository.save(itemUnit);
+    }
+
+    @Override
+    public void updateItemUnitTotalPrice(Long idItemUnit, RequestUpdateItemUnitWpTotalPrice request) {
+        log.info("Setting the new total price value [new total price: {}] to the item unit with id: {}", request.newTotalPrice(), idItemUnit);
+        ItemUnit itemUnit = findItemUnitById(idItemUnit);
+        itemUnit.setTotalPrice(request.newTotalPrice());
+        updateItemUnit(itemUnit);
     }
 
     private ResponseItemUnitUpGrouped createResponseItemUnitUpGrouped(List<ItemUnit> itemUnits, Double unitaryPrice) {

@@ -263,6 +263,8 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
                 }
             }
             log.info("The new total cost will be {}", totalPriceCalculated);
+        } else {
+            log.info("There are not any items for the calculate");
         }
         return totalPriceCalculated;
     }

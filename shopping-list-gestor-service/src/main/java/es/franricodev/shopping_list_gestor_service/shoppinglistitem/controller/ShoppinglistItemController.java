@@ -149,4 +149,15 @@ public interface ShoppinglistItemController {
     @GetMapping(ApiShoppinglistItemConstants.GET_ITEM_UNITS_WP_METADATA_V2)
     ResponseEntity<ResponseGetItemUnitWpMetadata> getItemUnitWpMetadata(@PathVariable(name = ApiShoppinglistItemConstants.ID_SHOPPINGLIST_ITEM) Long idShoppinglistItem);
 
+    @Operation(summary = ApiShoppinglistItemConstants.UPDATE_SHOPPINGLIST_ITEM_CALCULATED_PRICE_V1_OP_SUMMARY)
+    @ApiResponses({
+      @ApiResponse(
+              responseCode = GeneralConstants.HTTP_204,
+              description = GeneralConstants.DESC_204
+      )
+    })
+    @PutMapping(ApiShoppinglistItemConstants.UPDATE_SHOPPINGLIST_ITEM_CALCULATED_PRICE_V1)
+    ResponseEntity<Void> updateShoppinglistItemCalcualatedPrice(@PathVariable(name = ApiShoppinglistItemConstants.ID_SHOPPINGLIST_ITEM) Long idShoppinglistItem);
+
+
 }

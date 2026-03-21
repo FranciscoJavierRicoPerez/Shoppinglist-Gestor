@@ -10,6 +10,9 @@ import type { ShoppinglistItemMetadata } from '@/ShoppinglistItem/domain/Shoppin
 import { useShoppinglistDetailStore } from '@/Shoppinglist/stores/shoppinglistDetailStore'
 import { useUpdateShoppinglistTotalPrice } from '@/Shoppinglist/application/useUpdateShoppinglistTotalPrice'
 import { useRoute } from 'vue-router'
+import { useUpdateItemUnitWpValues } from '../application/useUpdateItemUnitWpValues'
+import { useUpdateItemUnitTotalPrice } from '../application/useUpdateItemUnitTotalPrice'
+import { useUpdateShoppinglistItemCalculatedPrice } from '@/ShoppinglistItem/application/useUpdateShoppinglistItemCalculatedPrice'
 const visible = ref<boolean>(false)
 
 const store = useUpdateItemWpFormStore()
@@ -17,6 +20,10 @@ const store = useUpdateItemWpFormStore()
 const shoppinglistDetailsStore = useShoppinglistDetailStore()
 
 const { refetch: updateShoppinglistTotalPrice } = useUpdateShoppinglistTotalPrice()
+const { refetch: updateItemUnitWpValues } = useUpdateItemUnitWpValues()
+const { refetch: updateItemUnitTotalPrice } = useUpdateItemUnitTotalPrice()
+const { refetch: updateShoppinglistItemCalculatedPrice } =
+  useUpdateShoppinglistItemCalculatedPrice()
 
 const props = defineProps({
   shoppinglistItem: {
@@ -56,15 +63,36 @@ async function updateItemUnitWp() {
    *
    * Objeto Request -> RequestUpdateItemUnitWpData
    *     idWpItemUnit -> Para actualizar los valores de price_kg and weight -> idItemUnitWp.value
-   *     newQuantity -> store.newWeight
+   *     newWeight-> store.newWeight
    *     newPriceKg -> store.newPriceKg
    *     newProductPrice -> store.newProductPrice -> ItemUnit.total_price (EQUIVALENCIA DE COLUMNAS)
    *     idItemUnit -> idItemUnit.value
    * Interfaz del EP -> /api/itemunit/{iditemunit}/update/itemunitwp/{iditemunitwp}
    *
    */
-
-  updateShoppinglistPrice()
+  if (
+    idItemUnitWp.value &&
+    idItemUnit.value &&
+    store.newProductPrice &&
+    store.newPriceKg &&
+    store.newWeight
+  ) {
+    // Actualziamos el item unit wp
+    await updateItemUnitWpValues(idItemUnitWp.value, {
+      newWeight: store.newWeight,
+      newPriceKg: store.newPriceKg,
+    })
+    // Ahora sabemos que hay que actualizar la información del item unit asociado, hay que recalcular su
+    // total_price
+    // CREAR UN SERVICIO QUE RECALCULE EL TOTAL_PRICE DEL item unit indicado
+    // - servio que actualice el precio del item unit indicado
+    await updateItemUnitTotalPrice(idItemUnit.value, store.newProductPrice)
+    // UNA VEZ RECALCULADO ESE TOTAL PRICE HAY QUE RECALCULAR EL PRECIO DEL SLI
+    // - servicio que actualice el precio del sli indicado
+    await updateShoppinglistItemCalculatedPrice(props.shoppinglistItem.idShoppinglistItem) // -> ESTE SERVICIO ES MEJOR QUE HAGA TODO EL CALCULO EN EL BE
+    // AHORA POR ULTIMO RECALCULAMOS EL PRECIO DE LA SL
+    updateShoppinglistPrice()
+  }
 }
 
 async function updateShoppinglistPrice() {
