@@ -28,7 +28,7 @@ public interface ShoppinglistViewController {
                             content = {
                                     @Content(
                                             schema = @Schema(implementation = ResponseGetShoppinglistTableMetadata.class),
-                                            mediaType = "application/json"
+                                            mediaType = GeneralConstants.APPLICATION_JSON
                                     )
                             }
                     )

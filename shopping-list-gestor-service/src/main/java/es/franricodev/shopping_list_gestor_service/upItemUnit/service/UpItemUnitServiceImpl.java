@@ -75,7 +75,14 @@ public class UpItemUnitServiceImpl implements UpItemUnitService{
         return totalPrice;
     }
 
-    private void updateUpItemUnitValues(UpdateItemUnitUpValues request) {
+    @Override
+    public Long searchUnitaryPrice(UpItemUnit upItemUnit, Double unitaryPrice) {
+        log.info("Verify if the item unit up : {}, has an unitary price : {} associated", upItemUnit.getId(), unitaryPrice);
+        return upItemUnit.getUnityPrice().equals(unitaryPrice) ?  upItemUnit.getId() : null;
+    }
+
+    @Override
+    public void updateUpItemUnitValues(UpdateItemUnitUpValues request) {
         log.info("Updating the values of the item unit up with id: {}", request.idItemUnitUp());
         try {
             UpItemUnit upItemUnit = upItemUnitRepository.findById(request.idItemUnitUp()).orElseThrow(

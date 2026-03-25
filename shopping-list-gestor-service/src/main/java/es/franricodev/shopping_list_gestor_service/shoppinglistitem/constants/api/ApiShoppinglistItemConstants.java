@@ -7,10 +7,10 @@ public class ApiShoppinglistItemConstants {
     // -------------------- URL CONSTANTS --------------------------
     public static final String BASE_URL = "/api/shoppinglistitem";
     public static final String DELETE_V1 = "/v1/{idShoppinglistItem}/delete";
-    public static final String ADD_ITEM_UNIT_UP_V1 = "/v1/{idShoppinglistItem}/addItemUnitUP";
+    public static final String ADD_ITEM_UNIT_UP_V1 = "/v1/{idShoppinglistItem}/addItemUnitUp";
     public static final String REMOVE_ITEM_UNIT_V1 = "/v1/{idShoppinglistItem}/removeItemUnit/{idItemUnit}";
     public static final String GET_ALL_ITEM_UNITS_V1 = "/v1/{idShoppinglistItem}/itemsUnits";
-    public static final String ADD_ITEM_UNIT_WP_V1 = "/v1/{idShoppinglistItem}/addItemUnitWP";
+    public static final String ADD_ITEM_UNIT_WP_V1 = "/v1/{idShoppinglistItem}/addItemUnitWp";
     public static final String GET_ALL_ITEMS_UNIT_UP_GROUPED_BY_PRICE_V1 = "/v1/{idShoppinglistItem}/itemsUnitsUpGroupedByPrice";
     public static final String GET_ITEM_UNITS_WP_METADATA_V1 = "/v1/{idShoppinglistItem}/itemsUnitsWpInfo";
     public static final String CREATE_SHOPPINGLIST_ITEM_METADATA_V1 = "/v1/createShoppinglistItemMetadata";

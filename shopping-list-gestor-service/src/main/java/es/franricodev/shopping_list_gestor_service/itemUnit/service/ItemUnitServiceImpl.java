@@ -3,6 +3,7 @@ package es.franricodev.shopping_list_gestor_service.itemUnit.service;
 import es.franricodev.shopping_list_gestor_service.calculateSystem.model.CalculateSystem;
 import es.franricodev.shopping_list_gestor_service.itemUnit.dto.request.CreateItemUnitData;
 import es.franricodev.shopping_list_gestor_service.itemUnit.dto.request.RequestUpdateItemUnitWpTotalPrice;
+import es.franricodev.shopping_list_gestor_service.itemUnit.dto.response.ResponseVerifyExistsItemUnitUpWithUnitaryPrice;
 import es.franricodev.shopping_list_gestor_service.itemUnit.exception.ItemUnitException;
 import es.franricodev.shopping_list_gestor_service.itemUnit.constants.messages.ItemUnitMessagesError;
 import es.franricodev.shopping_list_gestor_service.itemUnit.model.ItemUnit;
@@ -11,6 +12,7 @@ import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseItemUnitUpGrouped;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.ShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.service.ShoppinglistItemService;
+import es.franricodev.shopping_list_gestor_service.upItemUnit.dto.request.UpdateItemUnitUpValues;
 import es.franricodev.shopping_list_gestor_service.upItemUnit.model.UpItemUnit;
 import es.franricodev.shopping_list_gestor_service.upItemUnit.service.UpItemUnitService;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.dto.request.RequestAddItemUnitWP;
@@ -188,6 +190,38 @@ public class ItemUnitServiceImpl implements ItemUnitService {
         ItemUnit itemUnit = findItemUnitById(idItemUnit);
         itemUnit.setTotalPrice(request.newTotalPrice());
         updateItemUnit(itemUnit);
+    }
+
+    @Override
+    public ResponseVerifyExistsItemUnitUpWithUnitaryPrice verifyExistsAnItemUnitUpWithUnitaryPrice(List<ItemUnit> itemsUnits, Double unitaryPrice) {
+        ResponseVerifyExistsItemUnitUpWithUnitaryPrice response = null;
+        for(ItemUnit itemUnit : itemsUnits) {
+            Long idItemUnitUp = null;
+            if(itemUnit.isUpItem()) {
+                log.info("Verify if the item unit up: {} have the value", itemUnit.getUpItemUnit().getId());
+                idItemUnitUp = upItemUnitService.searchUnitaryPrice(itemUnit.getUpItemUnit(), unitaryPrice);
+                if(idItemUnitUp != null) {
+                    response = new ResponseVerifyExistsItemUnitUpWithUnitaryPrice(
+                            idItemUnitUp,
+                            itemUnit.getId()
+                    );
+                    break;
+                }
+            }
+        }
+        return response;
+    }
+
+    @Override
+    public ItemUnit updateItemUnitUpValues(Long idItemUnit, Long idItemUnitUp, int newQuantity) {
+        ItemUnit itemUnit = findItemUnitById(idItemUnit);
+        if (itemUnit.isUpItem()) {
+            upItemUnitService.updateUpItemUnitValues(new UpdateItemUnitUpValues(idItemUnitUp, newQuantity));
+        }
+        itemUnit.setInfoBlock(false);
+        itemUnit.setTotalPrice(calculateItemUnitTotalPriceV2(itemUnit));
+        itemUnit = itemUnitRepository.save(itemUnit);
+        return itemUnit;
     }
 
     private ResponseItemUnitUpGrouped createResponseItemUnitUpGrouped(List<ItemUnit> itemUnits, Double unitaryPrice) {

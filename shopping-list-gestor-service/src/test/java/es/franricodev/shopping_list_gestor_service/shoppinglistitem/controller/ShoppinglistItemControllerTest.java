@@ -1,6 +1,7 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglistitem.controller;
 
 import es.franricodev.shopping_list_gestor_service.shoppinglist.service.impl.ShoppinglistServiceImpl;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.controller.impl.ShoppinglistItemControllerImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

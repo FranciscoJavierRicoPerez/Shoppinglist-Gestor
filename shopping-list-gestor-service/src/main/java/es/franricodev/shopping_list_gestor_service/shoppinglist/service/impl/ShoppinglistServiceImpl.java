@@ -1,6 +1,7 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglist.service.impl;
 
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.*;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ReponseUpdateShoppinglistTotalPrice;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseCreateShoppinglist;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetFilteredShoppinglistMetadata;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ShoppinglistMetadata;
@@ -175,7 +176,6 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
     @Transactional
     @Override
     public Shoppinglist updateShoppinglist(Shoppinglist shoppinglist) {
-        System.out.println(shoppinglist.toString());
         log.info("Updating the values of the shoppinglist with id: {}", shoppinglist.getId());
         return shoppinglistRepository.save(shoppinglist);
     }
@@ -195,12 +195,15 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
     }
 
     @Override
-    public void updateShoppinglistTotalPrice(Shoppinglist shoppinglist) {
+    public ReponseUpdateShoppinglistTotalPrice updateShoppinglistTotalPrice(Shoppinglist shoppinglist) {
+        ReponseUpdateShoppinglistTotalPrice response = null;
         if(shoppinglist != null) {
             log.info("Updating shoppinglist total price");
             shoppinglist.setTotalPrice(calculateShoppinglistTotalPrice(shoppinglist));
-            updateShoppinglist(shoppinglist);
+            shoppinglist = updateShoppinglist(shoppinglist);
+            response = new ReponseUpdateShoppinglistTotalPrice(shoppinglist.getTotalPrice());
         }
+        return response;
     }
 
     @Override

@@ -109,6 +109,9 @@ export const SHOPPINGLIST_ITEMS_ENDPOINTS = {
       SHOPPINGLIST_ITEMS_ENDPOINTS.BASE_URL + `/v1/${idShoppinglistItem}/update/calculatedPrice`
     )
   },
+  ADD_ITEM_UNIT_UP_V1: (idShoppinglistItem: number): string => {
+    return SHOPPINGLIST_ITEMS_ENDPOINTS.BASE_URL + `/v1/${idShoppinglistItem}/addItemUnitUp`
+  },
 }
 // -------------------------------------------------------------------------------------------------
 // ---------- WP_ITEM_UNIT_ENDPOINTS ---------------------------------------------------------

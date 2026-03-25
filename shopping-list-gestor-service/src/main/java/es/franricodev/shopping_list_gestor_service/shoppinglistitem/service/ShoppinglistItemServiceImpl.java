@@ -5,6 +5,7 @@ import es.franricodev.shopping_list_gestor_service.calculateSystem.model.Calcula
 import es.franricodev.shopping_list_gestor_service.calculateSystem.service.CalculateSystemService;
 import es.franricodev.shopping_list_gestor_service.itemUnit.dto.ItemUnitDTO;
 import es.franricodev.shopping_list_gestor_service.itemUnit.dto.request.CreateItemUnitData;
+import es.franricodev.shopping_list_gestor_service.itemUnit.dto.response.ResponseVerifyExistsItemUnitUpWithUnitaryPrice;
 import es.franricodev.shopping_list_gestor_service.itemUnit.exception.ItemUnitException;
 import es.franricodev.shopping_list_gestor_service.itemUnit.mapper.ItemUnitMapper;
 import es.franricodev.shopping_list_gestor_service.itemUnit.model.ItemUnit;
@@ -57,19 +58,38 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
     private ItemUnitMapper itemUnitMapper;
 
     @Override
-    public void addItemUnitToShoppinglistItem(CreateItemUnitData createItemUnitData, Long idShoppinglistItem) throws ShoppinglistItemException, ItemUnitException, ShoppinglistException {
+    public void addItemUnitUpToShoppinglistItem(CreateItemUnitData createItemUnitData, Long idShoppinglistItem) throws ShoppinglistItemException, ItemUnitException, ShoppinglistException {
         log.info("Add a new item unit to the shoppinglist item: {}", idShoppinglistItem);
         Optional<ShoppinglistItem> optionalShoppinglistItem = shoppinglistItemRepository.findById(idShoppinglistItem);
         if (optionalShoppinglistItem.isEmpty()) {
             throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_NOT_FOUND_ERR);
         }
         ShoppinglistItem shoppinglistItem = optionalShoppinglistItem.get();
-        ItemUnit itemUnitCreated = itemUnitService.createItemUnitV2(createItemUnitData, false, shoppinglistItem);
-        if(itemUnitCreated != null) {
+
+        /* TODO: Aqui hay que hacer una verificacion previa
+            Si el precio unitario indicado en el objeto createItemUnitData para el item unit up ya existe para
+            el shoppinglist item indicado, se debe de hace un proceso de actualización del item unit up, NO DE
+            CREACIÓN DE UN NUEVO REGISTRO
+            PASOS A SEGUIR
+                1º - Servicio en item unit service que compruebe si existe algun item unit up con el precio indicado que este asociado al shoppinglist
+                2º - Si existe un item unit up con ese precio, se procede a actualizar la cantidad de unidades asociadas
+                3º - Si no existe, se llama al servicio createItemUnitV2
+        */
+
+        ResponseVerifyExistsItemUnitUpWithUnitaryPrice response = itemUnitService.verifyExistsAnItemUnitUpWithUnitaryPrice(shoppinglistItem.getItemUnitList(), createItemUnitData.getCreateUpItemUnitData().getUnitaryPrice());
+        ItemUnit itemUnit = null;
+        if (response == null) {
+            log.info("There are not any Item Units UP associated to the SHOPPINGLIST-ITEM with id : {} with unitary price : {}, create Item Unit UP process started", shoppinglistItem.getId(), createItemUnitData.getCreateUpItemUnitData().getUnitaryPrice());
+            itemUnit = itemUnitService.createItemUnitV2(createItemUnitData, false, shoppinglistItem);
+        } else {
+            log.info("There are at least one Item Unit UP with an unitary price of : {} in the SHOPPINGLIST-ITEM with id : {}, adding quantity process started for the ITEM UNIT UP with id: {}", createItemUnitData.getCreateUpItemUnitData().getUnitaryPrice(), shoppinglistItem.getId(), response.idUpItemUnit());
+            itemUnit = itemUnitService.updateItemUnitUpValues(response.idItemUnit(), response.idUpItemUnit(), createItemUnitData.getCreateUpItemUnitData().getQuantity());
+        }
+        if(itemUnit != null) {
             ArrayList<ItemUnit> itemsUnitCreated = new ArrayList<>();
-            itemsUnitCreated.add(itemUnitCreated);
+            itemsUnitCreated.add(itemUnit);
             shoppinglistItem.setItemUnitList(itemsUnitCreated);
-            shoppinglistItem.setCalculatedPrice(shoppinglistItem.getCalculatedPrice() + itemUnitCreated.getTotalPrice());
+            shoppinglistItem.setCalculatedPrice(shoppinglistItem.getCalculatedPrice() + itemUnit.getTotalPrice());
             shoppinglistItemRepository.save(shoppinglistItem);
         }
     }
@@ -123,7 +143,7 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
             ItemUnit itemUnit = itemUnitService.createItemUnit(shoppinglistItem, 0D, shoppinglistItem.getCalculateSystem());
             shoppinglistItem.setItemUnitList(Collections.singletonList(itemUnit));
         } else {
-            log.info("The shoppinglist item already have a item unit WP, this is gonna be updted with the new values of weight and pricekg");
+            log.info("The shoppinglist item already have a item unit WP, this is gonna be updated with the new values of weight and pricekg");
             // En este caso se tiene que actualizar el shoppinglist item
             itemUnitService.updateItemUnit(shoppinglistItem.getItemUnitList().get(0), requestAddItemUnitWP);
         }

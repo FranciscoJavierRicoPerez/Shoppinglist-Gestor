@@ -3,6 +3,7 @@ package es.franricodev.shopping_list_gestor_service.shoppinglist.controller.impl
 import es.franricodev.shopping_list_gestor_service.shoppinglist.constants.api.ApiShoppinglistConstants;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.controller.ShoppinglistController;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.*;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ReponseUpdateShoppinglistTotalPrice;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseCreateShoppinglist;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetFilteredShoppinglistMetadata;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
@@ -158,14 +159,15 @@ public class ShoppinglistControllerImpl implements ShoppinglistController {
     }
 
     @Override
-    public ResponseEntity<Void> updateTotalPrice(Long idShoppinglist) {
+    public ResponseEntity<ReponseUpdateShoppinglistTotalPrice> updateTotalPrice(Long idShoppinglist) {
         log.info("Update the total cost of the shoppinglist with id: {}", idShoppinglist);
         HttpStatus httpStatus = HttpStatus.OK;
+        ReponseUpdateShoppinglistTotalPrice response = null;
         try {
-            shoppinglistService.updateShoppinglistTotalPrice(shoppinglistService.findShoppinglistById(idShoppinglist));
+            response = shoppinglistService.updateShoppinglistTotalPrice(shoppinglistService.findShoppinglistById(idShoppinglist));
         } catch (ShoppinglistException e) {
             httpStatus = HttpStatus.BAD_REQUEST;
         }
-        return new ResponseEntity<>(httpStatus);
+        return new ResponseEntity<>(response, httpStatus);
     }
 }

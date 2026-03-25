@@ -1,10 +1,11 @@
-package es.franricodev.shopping_list_gestor_service.shoppinglistitem.controller;
+package es.franricodev.shopping_list_gestor_service.shoppinglistitem.controller.impl;
 
 import es.franricodev.shopping_list_gestor_service.itemUnit.dto.request.CreateItemUnitData;
 import es.franricodev.shopping_list_gestor_service.itemUnit.exception.ItemUnitException;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetAllItemsUnit;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.constants.api.ApiShoppinglistItemConstants;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.controller.ShoppinglistItemController;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItemV2;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.*;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.exception.ShoppinglistItemException;
@@ -39,11 +40,11 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
     }
 
     @Override
-    public ResponseEntity<Void> addItemUnit(Long idShoppinglistItem, CreateItemUnitData request) {
+    public ResponseEntity<Void> addItemUnitUp(Long idShoppinglistItem, CreateItemUnitData request) {
         log.info("Creating a new item unit UP for the shoppinglist item with id: {}", idShoppinglistItem);
         HttpStatus httpStatus = HttpStatus.OK;
         try {
-            shoppinglistItemService.addItemUnitToShoppinglistItem(request, idShoppinglistItem);
+            shoppinglistItemService.addItemUnitUpToShoppinglistItem(request, idShoppinglistItem);
         } catch (ShoppinglistItemException |ItemUnitException | ShoppinglistException e) {
             httpStatus =  HttpStatus.BAD_REQUEST;
         }
@@ -149,7 +150,7 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
     @Override
     public ResponseEntity<Void> updateShoppinglistItemCalcualatedPrice(Long idShoppinglistItem) {
         log.info("Update the calculated price of the shoppinglist item with id {} ", idShoppinglistItem);
-        HttpStatus httpStatus = HttpStatus.NO_CONTENT;
+        HttpStatus httpStatus = HttpStatus.OK;
         try {
             shoppinglistItemService.updateShoppinglistItemCalculatedPrice(idShoppinglistItem);
         } catch (ShoppinglistItemException e) {

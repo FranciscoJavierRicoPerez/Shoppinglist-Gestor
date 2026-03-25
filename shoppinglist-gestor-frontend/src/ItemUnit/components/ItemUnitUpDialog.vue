@@ -78,7 +78,10 @@ async function updateShoppinglistPrice() {
       <b>{{ addNewItemUnitText }}</b>
     </Divider>
     <!-- Formulario para añadir un nuevo item unit  -->
-    <ItemUnitUpCreateForm :quickCreate="true"></ItemUnitUpCreateForm>
+    <ItemUnitUpCreateForm
+      :quickCreate="true"
+      :idShoppinglistItem="props.shoppinglistItem.idShoppinglistItem"
+    ></ItemUnitUpCreateForm>
     <Divider align="center" type="solid">
       <b>{{ updateProductText }}</b>
     </Divider>
