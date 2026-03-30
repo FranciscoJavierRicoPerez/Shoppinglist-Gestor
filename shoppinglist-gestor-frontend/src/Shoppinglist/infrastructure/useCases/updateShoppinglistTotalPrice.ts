@@ -11,7 +11,7 @@ async function InMemory(): Promise<number> {
 }
 async function Api(idShoppinglist: number): Promise<number> {
   const response = await apiClient.put(SHOPPINGLIST_ENDPOINTS.UPDATE_TOTAL_PRICE_V1(idShoppinglist))
-  return response.data
+  return response.data.newTotalPrice
 }
 
 export { updateShoppinglistTotalPrice }

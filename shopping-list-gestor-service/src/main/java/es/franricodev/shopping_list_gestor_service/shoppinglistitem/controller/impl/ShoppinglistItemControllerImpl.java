@@ -131,10 +131,9 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
         }
         return new ResponseEntity<>(response, httpStatus);
     }
-    // TODO: CREATE LOGIC
+
     @Override
     public ResponseEntity<ResponseGetItemUnitWpMetadata> getItemUnitWpMetadata(Long idShoppinglistItem) {
-        // ResponseGetItemUnitWpMetadata response = new ResponseGetItemUnitWpMetadata(10.0, 10.0, 100.00);
         log.info("Getting the item unit metadata");
         ResponseGetItemUnitWpMetadata response = null;
         ResponseItemUnitWpMetadata result = null;

@@ -95,4 +95,9 @@ public class UpItemUnitServiceImpl implements UpItemUnitService{
         }
     }
 
+    @Override
+    public Double getItemUnitUpCalculatedPrice(UpItemUnit itemUnitUp) {
+        return itemUnitUp.getUnityPrice() * itemUnitUp.getQuantity();
+    }
+
 }

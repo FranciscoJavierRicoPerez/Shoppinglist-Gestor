@@ -219,7 +219,7 @@ public class ItemUnitServiceImpl implements ItemUnitService {
             upItemUnitService.updateUpItemUnitValues(new UpdateItemUnitUpValues(idItemUnitUp, newQuantity));
         }
         itemUnit.setInfoBlock(false);
-        itemUnit.setTotalPrice(calculateItemUnitTotalPriceV2(itemUnit));
+        itemUnit.setTotalPrice(calculateItemUnitTotalPriceV2(itemUnit));// TODO -> EL PROBLEMA VIENE DE AQUI, QUE ES DONDE SE DUPLICA EL VALOR
         itemUnit = itemUnitRepository.save(itemUnit);
         return itemUnit;
     }
@@ -266,10 +266,10 @@ public class ItemUnitServiceImpl implements ItemUnitService {
     private double calculateItemUnitTotalPriceV2(ItemUnit itemUnit){
         double totalPriceCalculated = 0.0;
         if(itemUnit.getUpItemUnit() != null) {
-            totalPriceCalculated = itemUnit.getUpItemUnit().getUnityPrice() * itemUnit.getUpItemUnit().getQuantity();
+            totalPriceCalculated = upItemUnitService.getItemUnitUpCalculatedPrice(itemUnit.getUpItemUnit());
         }
         if(itemUnit.getWpItemUnit() != null) {
-            totalPriceCalculated = itemUnit.getWpItemUnit().getPriceKg() * itemUnit.getWpItemUnit().getWeight();
+            totalPriceCalculated = wpItemUnitService.getItemUnitWpCalculatedPrice(itemUnit.getWpItemUnit());
         }
         return totalPriceCalculated;
     }

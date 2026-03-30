@@ -29,4 +29,6 @@ public interface UpItemUnitService {
     Long searchUnitaryPrice(UpItemUnit upItemUnit, Double unitaryPrice);
 
     void updateUpItemUnitValues(UpdateItemUnitUpValues request);
+
+    Double getItemUnitUpCalculatedPrice(UpItemUnit itemUnitUp);
 }

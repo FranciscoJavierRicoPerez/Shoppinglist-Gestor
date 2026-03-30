@@ -19,4 +19,6 @@ public interface WpItemUnitService {
     double getCalcuatedValue(Long idWpItem) throws ItemUnitException;
 
     void updateWpItemUnit(Long idItemUnitWp, RequestUpdateItemUnitWp requestUpdateItemUnitWp);
+
+    Double getItemUnitWpCalculatedPrice(WpItemUnit wpItemUnit);
 }

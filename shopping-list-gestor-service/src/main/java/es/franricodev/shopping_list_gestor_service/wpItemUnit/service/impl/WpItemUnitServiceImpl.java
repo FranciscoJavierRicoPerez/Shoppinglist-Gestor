@@ -68,4 +68,9 @@ public class WpItemUnitServiceImpl implements WpItemUnitService {
         updateWpItemUnit(wpItemUnit);
     }
 
+    @Override
+    public Double getItemUnitWpCalculatedPrice(WpItemUnit wpItemUnit) {
+        return wpItemUnit.getPriceKg() * wpItemUnit.getWeight();
+    }
+
 }

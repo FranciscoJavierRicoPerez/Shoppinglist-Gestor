@@ -67,7 +67,6 @@ public class ShoppinglistControllerImpl implements ShoppinglistController {
         return new ResponseEntity<>(!httpStatus.isError(),httpStatus);
     }
 
-    // TODO: Conectar con el FE
     @Override
     public ResponseEntity<ShoppinglistDTO> updateShoppinglist(RequestUpdateShoppinglistDTO request) {
         log.info("Update the shoppinglist with id: {}", request.getId());

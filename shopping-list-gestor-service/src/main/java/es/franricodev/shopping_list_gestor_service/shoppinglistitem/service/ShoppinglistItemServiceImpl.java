@@ -89,8 +89,9 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
             ArrayList<ItemUnit> itemsUnitCreated = new ArrayList<>();
             itemsUnitCreated.add(itemUnit);
             shoppinglistItem.setItemUnitList(itemsUnitCreated);
-            shoppinglistItem.setCalculatedPrice(shoppinglistItem.getCalculatedPrice() + itemUnit.getTotalPrice());
-            shoppinglistItemRepository.save(shoppinglistItem);
+            double result = getShoppinglistItemCalculatedPrice(shoppinglistItem);
+            shoppinglistItem.setCalculatedPrice(result); // En este caso el shoppinglist.calculated_price es la suma de todos los itemsUnits.total_price que tenga asociaso
+            updateShoppinglistItem(shoppinglistItem);
         }
     }
 
@@ -140,6 +141,7 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
         // En este caso, solo puede existir un unico item unit de tipo WP, unicamente se ira actualizando el precio o el peso.
         // por lo tanto hay que buscar si existe un item unit previo
         if(shoppinglistItem.getItemUnitList().isEmpty()) {
+            // TODO : SUSTITUIR createItemUnit POR createItemUnitV2
             ItemUnit itemUnit = itemUnitService.createItemUnit(shoppinglistItem, 0D, shoppinglistItem.getCalculateSystem());
             shoppinglistItem.setItemUnitList(Collections.singletonList(itemUnit));
         } else {
@@ -316,6 +318,7 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
         double calculatedPrice = 0.0;
         if(!shoppinglistItem.getItemUnitList().isEmpty()) {
            for(ItemUnit itemUnit : shoppinglistItem.getItemUnitList()) {
+               log.info("Getting the total price of the item unit: {}", itemUnit.getId());
                calculatedPrice += itemUnit.getTotalPrice();
            }
         }
