@@ -154,14 +154,20 @@ public class ItemUnitServiceImpl implements ItemUnitService {
         log.info("Logic deletion of the items unit from the list");
         for (ItemUnit itemUnit : itemUnitList) {
             itemUnit.setInfoBlock(true);
-            if (itemUnit.isWpItem()) {
-                wpItemUnitService.deleteLogicWpItemUnit(itemUnit.getWpItemUnit());
-            } else {
-                for (UpItemUnit upItemUnit : itemUnit.getUpItemUnitList()) {
-                    upItemUnitService.deleteLogicUpItemUnit(upItemUnit);
-                }
-            }
+            deleteLogicItemUnit(itemUnit);
             itemUnitRepository.save(itemUnit);
+        }
+    }
+
+    @Override
+    public void deleteLogicItemUnit(ItemUnit itemUnit) {
+        log.info("Logic deletion of the item unit {}", itemUnit.getId());
+        if (itemUnit.isWpItem()) {
+            wpItemUnitService.deleteLogicWpItemUnit(itemUnit.getWpItemUnit());
+        } else {
+            for (UpItemUnit upItemUnit : itemUnit.getUpItemUnitList()) {
+                upItemUnitService.deleteLogicUpItemUnit(upItemUnit);
+            }
         }
     }
 
@@ -221,6 +227,7 @@ public class ItemUnitServiceImpl implements ItemUnitService {
 
     @Override
     public ItemUnit updateItemUnitUpValues(Long idItemUnit, Long idItemUnitUp, int newQuantity) {
+        log.info("Updating the item unit up {} from the item unit {} with the new quantity {}", idItemUnitUp, idItemUnit, newQuantity);
         ItemUnit itemUnit = findItemUnitById(idItemUnit);
         if (itemUnit.isUpItem()) {
             upItemUnitService.updateUpItemUnitValues(new UpdateItemUnitUpValues(idItemUnitUp, newQuantity));

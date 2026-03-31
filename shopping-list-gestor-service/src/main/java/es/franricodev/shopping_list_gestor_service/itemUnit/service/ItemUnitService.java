@@ -31,7 +31,7 @@ public interface ItemUnitService {
 
     void deleteLogicItemUnitList(List<ItemUnit> itemUnitList);
 
-    // ItemUnit updateItemUnit(Long idItemUnit) throws ItemUnitException;
+    void deleteLogicItemUnit(ItemUnit itemUnit);
 
     void updateItemUnit(ItemUnit itemUnit);
 

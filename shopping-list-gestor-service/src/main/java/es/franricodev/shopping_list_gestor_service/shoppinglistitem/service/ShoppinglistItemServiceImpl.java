@@ -15,6 +15,8 @@ import es.franricodev.shopping_list_gestor_service.product.service.ProductServic
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.ShoppinglistItemMetadataDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItemV2;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestUpItemUnitUpdateMetadata;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestUpdateShoppinglistItemItemUnitsUp;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseCreateShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseDeleteShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseGetAllItemUnitUpGroupedByPrice;
@@ -298,6 +300,27 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
         ShoppinglistItem shoppinglistItem = findShoppinglistItemById(idShoppinglistItem);
         shoppinglistItem.setCalculatedPrice(getShoppinglistItemCalculatedPrice(shoppinglistItem));
         updateShoppinglistItem(shoppinglistItem);
+    }
+
+    @Override
+    public void updateShoppinglistItemUpItemsUnitData(Long idShoppinglistItem, RequestUpdateShoppinglistItemItemUnitsUp request) {
+        log.info("Update the shoppinglist item {} items units up values", idShoppinglistItem);
+        ShoppinglistItem shoppinglistItem = findShoppinglistItemById(idShoppinglistItem);
+        if (shoppinglistItem.getCalculateSystem().getCode().equals("UP")) {
+            log.info("The shoppinglist item {} found have the calculate system up, lets proceed getting all the items units associated", idShoppinglistItem);
+            List<ItemUnit> itemsUnits = itemUnitService.findAllItemUnitsByShoppinglistItem(shoppinglistItem);
+            for (ItemUnit itemUnit : itemsUnits) {
+                for(RequestUpItemUnitUpdateMetadata requestData : request.requestUpItemUnitUpdateMetadataList()) {
+                    if (itemUnit.getId().equals(requestData.idItemUnit())) {
+                        if (!requestData.removeItemUnitUp()) {
+                            itemUnitService.updateItemUnitUpValues(requestData.idItemUnit(), requestData.idItemUnitUp(), requestData.newQuantity());
+                        } else {
+                            itemUnitService.deleteLogicItemUnit(itemUnit);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private ShoppinglistItemMetadataDTO buildShoppinglistItemMetadataDTO(ShoppinglistItem shoppinglistItem) {

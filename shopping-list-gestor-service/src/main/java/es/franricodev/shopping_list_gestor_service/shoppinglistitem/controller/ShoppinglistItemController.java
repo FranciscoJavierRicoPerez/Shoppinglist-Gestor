@@ -5,6 +5,7 @@ import es.franricodev.shopping_list_gestor_service.itemUnit.dto.request.CreateIt
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetAllItemsUnit;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.constants.api.ApiShoppinglistItemConstants;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItemV2;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestUpdateShoppinglistItemItemUnitsUp;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.*;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.dto.request.RequestAddItemUnitWP;
 import io.swagger.v3.oas.annotations.Operation;
@@ -109,7 +110,8 @@ public interface ShoppinglistItemController {
     })
     @GetMapping(ApiShoppinglistItemConstants.GET_ALL_ITEMS_UNIT_UP_GROUPED_BY_PRICE_V1)
     ResponseEntity<ResponseGetAllItemUnitUpGroupedByPrice> getItemsUnitsUpGroupedByPrice(
-            @PathVariable(name = ApiShoppinglistItemConstants.ID_SHOPPINGLIST_ITEM) Long idShoppinglistItem);
+            @PathVariable(name = ApiShoppinglistItemConstants.ID_SHOPPINGLIST_ITEM) Long idShoppinglistItem
+    );
 
     @Operation(summary = ApiShoppinglistItemConstants.GET_ITEM_UNITS_WP_METADATA_V1_OP_SUMAMRY, deprecated = true)
     @ApiResponses({
@@ -126,7 +128,8 @@ public interface ShoppinglistItemController {
     })
     @GetMapping(ApiShoppinglistItemConstants.GET_ITEM_UNITS_WP_METADATA_V1)
     ResponseEntity<ResponseItemUnitWpMetadata> getItemsUnitsWpMetadata(
-            @PathVariable(name = ApiShoppinglistItemConstants.ID_SHOPPINGLIST_ITEM) Long idShoppinglistItem);
+            @PathVariable(name = ApiShoppinglistItemConstants.ID_SHOPPINGLIST_ITEM) Long idShoppinglistItem
+    );
 
     @Operation(summary = ApiShoppinglistItemConstants.CREATE_SHOPPINGLIST_ITEM_METADATA_V1_OP_SUMMARY)
     @ApiResponses({
@@ -142,12 +145,15 @@ public interface ShoppinglistItemController {
     })
     @PostMapping(ApiShoppinglistItemConstants.CREATE_SHOPPINGLIST_ITEM_METADATA_V1)
     ResponseEntity<ResponseCreateShoppinglistItem> createShoppinglistItemMetadata(
-            @RequestBody RequestCreateShoppinglistItemV2 requestCreateShoppinglistItem);
+            @RequestBody RequestCreateShoppinglistItemV2 requestCreateShoppinglistItem
+    );
 
 
     @Operation(summary = ApiShoppinglistItemConstants.GET_ITEM_UNITS_WP_METADATA_V2_OP_SUMAMRY)
     @GetMapping(ApiShoppinglistItemConstants.GET_ITEM_UNITS_WP_METADATA_V2)
-    ResponseEntity<ResponseGetItemUnitWpMetadata> getItemUnitWpMetadata(@PathVariable(name = ApiShoppinglistItemConstants.ID_SHOPPINGLIST_ITEM) Long idShoppinglistItem);
+    ResponseEntity<ResponseGetItemUnitWpMetadata> getItemUnitWpMetadata(
+            @PathVariable(name = ApiShoppinglistItemConstants.ID_SHOPPINGLIST_ITEM) Long idShoppinglistItem
+    );
 
     @Operation(summary = ApiShoppinglistItemConstants.UPDATE_SHOPPINGLIST_ITEM_CALCULATED_PRICE_V1_OP_SUMMARY)
     @ApiResponses({
@@ -157,7 +163,21 @@ public interface ShoppinglistItemController {
       )
     })
     @PutMapping(ApiShoppinglistItemConstants.UPDATE_SHOPPINGLIST_ITEM_CALCULATED_PRICE_V1)
-    ResponseEntity<Void> updateShoppinglistItemCalcualatedPrice(@PathVariable(name = ApiShoppinglistItemConstants.ID_SHOPPINGLIST_ITEM) Long idShoppinglistItem);
+    ResponseEntity<Void> updateShoppinglistItemCalcualatedPrice(
+            @PathVariable(name = ApiShoppinglistItemConstants.ID_SHOPPINGLIST_ITEM) Long idShoppinglistItem
+    );
 
+    @Operation(summary = ApiShoppinglistItemConstants.UPDATE_SHOPPINGLIST_ITEM_UP_ITEM_UNIT_DATA_V1_OP_SUMMARY)
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = GeneralConstants.HTTP_204,
+                    description = GeneralConstants.DESC_204
+            )
+    })
+    @PutMapping(ApiShoppinglistItemConstants.UPDATE_SHOPPINGLIST_ITEM_UP_ITEM_UNIT_V1_DATA)
+    ResponseEntity<Void> updateShoppinglistItemUpItemsUnitData(
+            @PathVariable(name = ApiShoppinglistItemConstants.ID_SHOPPINGLIST_ITEM) Long idShoppinglistItem,
+            @RequestBody RequestUpdateShoppinglistItemItemUnitsUp request
+    );
 
 }
