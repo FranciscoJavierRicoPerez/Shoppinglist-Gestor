@@ -41,8 +41,6 @@ public interface ShoppinglistItemService {
 
     List<ShoppinglistItemMetadataDTO> getShoppinglistItemMetadataDTO(Long idShoppinglist) throws ShoppinglistItemException;
 
-    // ResponseGetItemUnitWpMetadata getItemUnitWpMetadata(Long idShoppinglist) throws ShoppinglistItemException;
-
     void updateShoppinglistItemCalculatedPrice(Long idShoppinglistItem);
 
 }

@@ -30,5 +30,5 @@ public interface UpItemUnitService {
 
     void updateUpItemUnitValues(UpdateItemUnitUpValues request);
 
-    Double getItemUnitUpCalculatedPrice(UpItemUnit itemUnitUp);
+    Double getItemUnitUpCalculatedPrice(List<UpItemUnit> itemUnitUpList);
 }

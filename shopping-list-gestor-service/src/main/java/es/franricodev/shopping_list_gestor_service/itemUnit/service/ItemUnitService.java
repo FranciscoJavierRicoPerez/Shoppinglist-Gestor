@@ -40,4 +40,6 @@ public interface ItemUnitService {
     ResponseVerifyExistsItemUnitUpWithUnitaryPrice verifyExistsAnItemUnitUpWithUnitaryPrice(List<ItemUnit> itemsUnits, Double unitaryPrice);
 
     ItemUnit updateItemUnitUpValues(Long idItemUnit, Long idItemUnitUp, int newQuantity);
+
+    List<ItemUnit> findAllItemUnitsByShoppinglistItem(ShoppinglistItem shoppinglistItem);
 }

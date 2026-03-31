@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -32,15 +34,15 @@ public class ItemUnit {
     @JoinColumn(name = "wp_item_unit_id")
     private WpItemUnit wpItemUnit;
 
-    @OneToOne(fetch = FetchType.LAZY,  cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JoinColumn(name = "up_item_unit_id")
-    private UpItemUnit upItemUnit;
+    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_unit_id")
+    private List<UpItemUnit> upItemUnitList = new ArrayList<>();
 
     public boolean isWpItem() {
         return wpItemUnit != null;
     }
     public boolean isUpItem() {
-        return upItemUnit != null;
+        return upItemUnitList != null && !upItemUnitList.isEmpty();
     }
 
     @NotNull

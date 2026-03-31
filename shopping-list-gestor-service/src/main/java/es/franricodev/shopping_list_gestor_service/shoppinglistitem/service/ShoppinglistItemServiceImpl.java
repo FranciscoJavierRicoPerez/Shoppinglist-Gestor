@@ -65,17 +65,6 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
             throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_NOT_FOUND_ERR);
         }
         ShoppinglistItem shoppinglistItem = optionalShoppinglistItem.get();
-
-        /* TODO: Aqui hay que hacer una verificacion previa
-            Si el precio unitario indicado en el objeto createItemUnitData para el item unit up ya existe para
-            el shoppinglist item indicado, se debe de hace un proceso de actualización del item unit up, NO DE
-            CREACIÓN DE UN NUEVO REGISTRO
-            PASOS A SEGUIR
-                1º - Servicio en item unit service que compruebe si existe algun item unit up con el precio indicado que este asociado al shoppinglist
-                2º - Si existe un item unit up con ese precio, se procede a actualizar la cantidad de unidades asociadas
-                3º - Si no existe, se llama al servicio createItemUnitV2
-        */
-
         ResponseVerifyExistsItemUnitUpWithUnitaryPrice response = itemUnitService.verifyExistsAnItemUnitUpWithUnitaryPrice(shoppinglistItem.getItemUnitList(), createItemUnitData.getCreateUpItemUnitData().getUnitaryPrice());
         ItemUnit itemUnit = null;
         if (response == null) {
@@ -90,7 +79,7 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
             itemsUnitCreated.add(itemUnit);
             shoppinglistItem.setItemUnitList(itemsUnitCreated);
             double result = getShoppinglistItemCalculatedPrice(shoppinglistItem);
-            shoppinglistItem.setCalculatedPrice(result); // En este caso el shoppinglist.calculated_price es la suma de todos los itemsUnits.total_price que tenga asociaso
+            shoppinglistItem.setCalculatedPrice(result);
             updateShoppinglistItem(shoppinglistItem);
         }
     }
@@ -253,7 +242,7 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
             shoppinglistItem.setName(product.getName());
             shoppinglistItem.setAssignationToListDate(new Date());
             shoppinglistItem.setCalculateSystem(calculateSystem);
-            shoppinglistItem.setCalculatedPrice(getShoppinglistItemCalculatedPrice(shoppinglistItem));
+            shoppinglistItem.setCalculatedPrice(0.0);
             shoppinglistItem = shoppinglistItemRepository.save(shoppinglistItem);
             productService.assignProductToShoppinglistItem(shoppinglistItem, product);
             // TODO: Creamos el ItemUnit y su WP O UP item asociado
@@ -273,6 +262,14 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
                 shoppinglistItem.setCalculatedPrice(shoppinglistItem.getCalculatedPrice() + itemUnitCreated.getTotalPrice());
                 shoppinglistItemRepository.save(shoppinglistItem);
             }
+            if (shoppinglistItem.getCalculateSystem().getCode().equals("UP")) {
+                log.info("The shoppinglist item have a UP Calculate System");
+                shoppinglistItem.setCalculatedPrice(getShoppinglistItemCalculatedPrice(shoppinglistItem));
+            } else {
+                log.info("The shoppinglist item have a WP Calculate System");
+                shoppinglistItem.setCalculatedPrice(getShoppinglistItemCalculatedPriceWp(shoppinglistItem));
+            }
+            shoppinglistItemRepository.save(shoppinglistItem);
             // TODO: Faltaría indicar a que lista de la compra se debe de asignar este SLI
             return ResponseCreateShoppinglistItem.builder()
                     .created(true)
@@ -314,13 +311,27 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
     }
 
     private double getShoppinglistItemCalculatedPrice(ShoppinglistItem shoppinglistItem) {
-        log.info("Calculate of the calculate price value of the shoppinglist item with id : {}", shoppinglistItem.getId());
+        log.info("Calculate of the calculate price value of the shoppinglist item with id : {}, the calculate system is UP", shoppinglistItem.getId());
+        double calculatedPrice = 0.0;
+        try {
+            List<ItemUnit> itemsUnits = itemUnitService.findAllItemUnitsByShoppinglistItem(shoppinglistItem);
+            for (ItemUnit itemUnit : itemsUnits) {
+                calculatedPrice += itemUnit.getTotalPrice();
+            }
+        } catch (ItemUnitException e) {
+            log.info(e.getMessage());
+        }
+        return calculatedPrice;
+    }
+
+    private double getShoppinglistItemCalculatedPriceWp(ShoppinglistItem shoppinglistItem) {
+        log.info("Calculate of the calculate price value of the shoppinglist item with id : {}, the calculate system is WP", shoppinglistItem.getId());
         double calculatedPrice = 0.0;
         if(!shoppinglistItem.getItemUnitList().isEmpty()) {
-           for(ItemUnit itemUnit : shoppinglistItem.getItemUnitList()) {
-               log.info("Getting the total price of the item unit: {}", itemUnit.getId());
-               calculatedPrice += itemUnit.getTotalPrice();
-           }
+            for(ItemUnit itemUnit : shoppinglistItem.getItemUnitList()) {
+                log.info("Getting the total price of the item unit: {}", itemUnit.getId());
+                calculatedPrice += itemUnit.getTotalPrice();
+            }
         }
         return calculatedPrice;
     }

@@ -1,5 +1,6 @@
 package es.franricodev.shopping_list_gestor_service.upItemUnit.service;
 
+import es.franricodev.shopping_list_gestor_service.itemUnit.model.ItemUnit;
 import es.franricodev.shopping_list_gestor_service.upItemUnit.dto.request.RequestCreateUpItemUnitData;
 import es.franricodev.shopping_list_gestor_service.upItemUnit.dto.request.RequestUpdateItemUnitUpValues;
 import es.franricodev.shopping_list_gestor_service.upItemUnit.dto.request.UpdateItemUnitUpValues;
@@ -96,8 +97,14 @@ public class UpItemUnitServiceImpl implements UpItemUnitService{
     }
 
     @Override
-    public Double getItemUnitUpCalculatedPrice(UpItemUnit itemUnitUp) {
-        return itemUnitUp.getUnityPrice() * itemUnitUp.getQuantity();
+    public Double getItemUnitUpCalculatedPrice(List<UpItemUnit> itemUnitUpList) {
+        double totalPrice = 0D;
+        if (!itemUnitUpList.isEmpty()) {
+            for (UpItemUnit upItemUnit : itemUnitUpList) {
+                totalPrice += upItemUnit.getUnityPrice() * upItemUnit.getQuantity();
+            }
+        }
+        return totalPrice;
     }
 
 }
