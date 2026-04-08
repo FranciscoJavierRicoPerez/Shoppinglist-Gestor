@@ -1,6 +1,7 @@
 package es.franricodev.shopping_list_gestor_service.upItemUnit.service;
 
 import es.franricodev.shopping_list_gestor_service.itemUnit.model.ItemUnit;
+import es.franricodev.shopping_list_gestor_service.upItemUnit.constants.messages.error.UpItemUnitErrors;
 import es.franricodev.shopping_list_gestor_service.upItemUnit.dto.request.RequestCreateUpItemUnitData;
 import es.franricodev.shopping_list_gestor_service.upItemUnit.dto.request.RequestUpdateItemUnitUpValues;
 import es.franricodev.shopping_list_gestor_service.upItemUnit.dto.request.UpdateItemUnitUpValues;
@@ -40,10 +41,14 @@ public class UpItemUnitServiceImpl implements UpItemUnitService{
     @Override
     public void deleteUpItemUnitGroupeByPrice(Double price) throws UpItemUnitException {
         log.info("Deleting the up items unit with price: {}",price);
+        // TODO: Seria interesante que la busqueda tambien asegure que info block = false
         List<UpItemUnit> upItemUnitList =
-                upItemUnitRepository.findByunityPrice(price).orElseThrow(() -> new UpItemUnitException("ERROR-NOT-ITEM-UNITS-UP-FOUND-WITH-THAT-UNITARY-PRICE"));
+                upItemUnitRepository.findByunityPrice(price).orElseThrow(
+                        () -> new UpItemUnitException(UpItemUnitErrors.ERROR_NOT_ITEM_UNITS_UP_FOUND_WITH_THAT_UNITARY_PRICE)
+                );
         log.info("Found {} up items unit with {} price, proceed with his removing from the database", upItemUnitList.size(), price);
         // Me ha borrado todos los up item units independientemente del precio (BORRADO EN CASCADA DE LOS DUROS)
+        // TODO: Tramitar que sea un borrado logico
         upItemUnitRepository.deleteAll(upItemUnitList);
     }
 
@@ -86,10 +91,10 @@ public class UpItemUnitServiceImpl implements UpItemUnitService{
     public void updateUpItemUnitValues(UpdateItemUnitUpValues request) {
         log.info("Updating the values of the item unit up with id: {}", request.idItemUnitUp());
         try {
-            UpItemUnit upItemUnit = upItemUnitRepository.findById(request.idItemUnitUp()).orElseThrow(
-                    () ->  new UpItemUnitException("NOT_FOUND_ITEM_UNIT_UP_WITH_THE_REFERENCED_ID")
+            UpItemUnit upItemUnit = upItemUnitRepository.findByIdAndInfoBlockFalse(request.idItemUnitUp()).orElseThrow(
+                    () ->  new UpItemUnitException(UpItemUnitErrors.NOT_FOUND_ITEM_UNIT_UP_WITH_THE_REFERENCED_ID)
             );
-            upItemUnit.setQuantity(upItemUnit.getQuantity() + request.quantity());
+            upItemUnit.setQuantity(request.quantity());
             updateUpItemUnit(upItemUnit);
         } catch (UpItemUnitException e) {
             log.error(e.getMessage());

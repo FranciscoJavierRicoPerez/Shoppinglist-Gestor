@@ -18,10 +18,15 @@ export const useUpdateItemUnitUpdateMetadataStore = defineStore(
       requestUpItemUnitUpdateMetadataList.value = result
     }
 
+    function clear() {
+      requestUpItemUnitUpdateMetadataList.value = []
+    }
+
     return {
       requestUpItemUnitUpdateMetadataList,
       removeOldValue,
       add,
+      clear,
     }
   },
 )

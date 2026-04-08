@@ -64,11 +64,18 @@ const addNewItemUnitText = computed(() => {
 })
 
 async function updateShoppinglistPrice() {
+  let elementToSend = []
+  elementToSend.push(
+    requestUpdateUpItemStore.requestUpItemUnitUpdateMetadataList[
+      requestUpdateUpItemStore.requestUpItemUnitUpdateMetadataList.length - 1
+    ],
+  )
   let request: RequestUpdateShoppinglistItemItemUnitsUp = {
-    requestUpItemUnitUpdateMetadataList:
-      requestUpdateUpItemStore.requestUpItemUnitUpdateMetadataList,
+    requestUpItemUnitUpdateMetadataList: elementToSend,
   }
   await updateItemUnitUpValues(props.shoppinglistItem.idShoppinglistItem, request) // TENGO QUE LLAMAR A ESTA FUNCION CON LOS VALORES QUE HAY EN EL STORE upItemUnitUpdateMetadataStore
+  // Importante -> Limpiar el listado si no se acumulara informacion innecesaria
+  requestUpdateUpItemStore.clear()
   if (store.totalPrice !== null) {
     let oldValue = props.shoppinglistItem.calculatedPrice
     props.shoppinglistItem.calculatedPrice = store.totalPrice
