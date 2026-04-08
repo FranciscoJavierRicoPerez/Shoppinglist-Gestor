@@ -109,7 +109,12 @@ function createToast(toastOptions: ToastMessageOptions) {
           @click="archiveShoppinglist()"
         ></Button>
         <RouterLink :to="`/shoppinglist/${shoppinglist.idShoppinglist}`">
-          <Button class="buttons-separation" label="Ver" severity="info"></Button>
+          <Button
+            class="buttons-separation"
+            label="Ver"
+            severity="info"
+            :disabled="!slIsActive"
+          ></Button>
         </RouterLink>
         <Button
           class="buttons-separation"
