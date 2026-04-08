@@ -79,9 +79,11 @@ async function addNewItemUnitUp() {
       price: unitaryPrice.value,
       calculatedPrice: quantity.value * unitaryPrice.value,
       idItemUnitUp: -1,
+      idItemUnit: -1,
     })
   }
   groupedItemsUpStore.updateTotalPrice()
+  groupedItemsUpStore.totalPriceFixed = groupedItemsUpStore.totalPrice
 }
 </script>
 <template>

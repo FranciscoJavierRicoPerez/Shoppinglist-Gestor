@@ -5,6 +5,7 @@ import type { ItemUnitUpMetadata } from '../domain/ItemUnitUpMetadata'
 export const useItemUnitUpGroupedByPriceStore = defineStore('itemUnitUpGroupedByPriceStore', () => {
   const totalPrice = ref<number>(-1)
   const itemsGrouped = ref<ItemUnitUpMetadata[]>([])
+  const totalPriceFixed = ref<number>(-1)
 
   // Se puede utilizar el precio como identificador por que solo va a existir un precio, pero lo recomendable
   // seria que al refactorizar el BE, tambien lo cambie aqui para que sea por identificador
@@ -31,6 +32,7 @@ export const useItemUnitUpGroupedByPriceStore = defineStore('itemUnitUpGroupedBy
   return {
     totalPrice,
     itemsGrouped,
+    totalPriceFixed,
     removeItem,
     updateItemsGroupedList,
     updateTotalPrice,

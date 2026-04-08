@@ -87,6 +87,7 @@ async function updateShoppinglistPrice() {
   }
   await updateShoppinglistItemCalculatedPrice(props.shoppinglistItem.idShoppinglistItem)
   await updateShoppinglistTotalPrice(Number(router.params.id))
+  store.totalPriceFixed = store.totalPrice
 }
 </script>
 <template>
