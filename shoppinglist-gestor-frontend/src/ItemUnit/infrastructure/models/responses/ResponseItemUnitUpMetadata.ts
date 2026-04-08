@@ -3,4 +3,5 @@ export interface ResponseItemUnitUpMetadata {
   price: number
   calculatedPrice: number
   idItemUnitUp: number
+  idItemUnit: number
 }

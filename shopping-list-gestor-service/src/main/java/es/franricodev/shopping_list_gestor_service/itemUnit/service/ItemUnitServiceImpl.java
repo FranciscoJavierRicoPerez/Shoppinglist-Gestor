@@ -2,14 +2,17 @@ package es.franricodev.shopping_list_gestor_service.itemUnit.service;
 
 import es.franricodev.shopping_list_gestor_service.calculateSystem.model.CalculateSystem;
 import es.franricodev.shopping_list_gestor_service.itemUnit.dto.request.CreateItemUnitData;
+import es.franricodev.shopping_list_gestor_service.itemUnit.dto.request.RequestUpdateItemUnitWpTotalPrice;
+import es.franricodev.shopping_list_gestor_service.itemUnit.dto.response.ResponseVerifyExistsItemUnitUpWithUnitaryPrice;
 import es.franricodev.shopping_list_gestor_service.itemUnit.exception.ItemUnitException;
-import es.franricodev.shopping_list_gestor_service.itemUnit.messages.ItemUnitMessagesError;
+import es.franricodev.shopping_list_gestor_service.itemUnit.constants.messages.ItemUnitMessagesError;
 import es.franricodev.shopping_list_gestor_service.itemUnit.model.ItemUnit;
 import es.franricodev.shopping_list_gestor_service.itemUnit.repository.ItemUnitRepository;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseGetAllItemUnitUpGroupedByPrice;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseItemUnitUpGrouped;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.ShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.service.ShoppinglistItemService;
+import es.franricodev.shopping_list_gestor_service.upItemUnit.dto.request.UpdateItemUnitUpValues;
 import es.franricodev.shopping_list_gestor_service.upItemUnit.model.UpItemUnit;
 import es.franricodev.shopping_list_gestor_service.upItemUnit.service.UpItemUnitService;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.dto.request.RequestAddItemUnitWP;
@@ -22,7 +25,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -41,6 +43,7 @@ public class ItemUnitServiceImpl implements ItemUnitService {
     @Autowired
     private UpItemUnitService upItemUnitService;
 
+    // TODO: DEPRECATED
     @Override
     public ItemUnit createItemUnit(ShoppinglistItem shoppinglistItem, Double unitaryPrice, CalculateSystem calculateSystem) {
         log.info("Creating a item unit form the shoppinglist item: {}", shoppinglistItem.getId());
@@ -52,7 +55,8 @@ public class ItemUnitServiceImpl implements ItemUnitService {
             UpItemUnit upItemUnit = new UpItemUnit();
             upItemUnit.setQuantity(1);
             upItemUnit.setUnityPrice(unitaryPrice);
-            itemUnit.setUpItemUnit(upItemUnitService.updateUpItemUnit(upItemUnit));
+            // itemUnit.setUpItemUnit(upItemUnitService.updateUpItemUnit(upItemUnit));
+            itemUnit.setUpItemUnitList(List.of(upItemUnitService.updateUpItemUnit(upItemUnit)));
         }
         // TODO: REFACTOR -> DOBLE SAVE!!
         calculateItemUnitTotalPrice(itemUnit);
@@ -60,9 +64,12 @@ public class ItemUnitServiceImpl implements ItemUnitService {
     }
 
     @Override
-    public ItemUnit findItemUnitById(Long id) throws Exception {
-        return itemUnitRepository.findById(id).orElseThrow(Exception::new);
+    public ItemUnit findItemUnitByIdAndInfoBlockFalse(Long idItemUnit)  {
+        log.info("Search item unit with id: {}", idItemUnit);
+        return itemUnitRepository.findByIdAndInfoBlockFalse(idItemUnit).orElseThrow(() -> new ItemUnitException(ItemUnitMessagesError.ITEMUNIT_NOT_FOUND));
     }
+
+
 
     @Override
     public void deleteItemUnit(ItemUnit itemUnit) {
@@ -78,23 +85,25 @@ public class ItemUnitServiceImpl implements ItemUnitService {
         wpItemUnitService.updateWpItemUnit(wpItemUnit);
     }
 
-    // TODO: REFACTORIZAR -> MODIFICAR METODO POR UNO QUE NO HAGA ESTE SAVE QUE SENCILLAMENTE CALCULE EL TOTAL PRICE Y LO DEVUELVA
     @Override
     public Double calculateItemUnitTotalPrice(ItemUnit itemUnit) {
         double totalPriceCalculated = 0.0;
-        if(itemUnit.getUpItemUnit() != null) {
-            totalPriceCalculated = itemUnit.getUpItemUnit().getUnityPrice() * itemUnit.getUpItemUnit().getQuantity();
+        if(itemUnit.getUpItemUnitList() != null) {
+            totalPriceCalculated = upItemUnitService.getItemUnitUpCalculatedPrice(itemUnit.getUpItemUnitList());
         } else {
-            totalPriceCalculated = itemUnit.getWpItemUnit().getPriceKg() * itemUnit.getWpItemUnit().getWeight();
+            totalPriceCalculated = wpItemUnitService.getItemUnitWpCalculatedPrice(itemUnit.getWpItemUnit());
         }
         itemUnit.setTotalPrice(totalPriceCalculated);
         itemUnitRepository.save(itemUnit);
         return totalPriceCalculated;
     }
 
-    // TODO: REFACTORIZAR -> ESTE METODO SOLO DEBE USARSE EN EL PROCESO DE CREACION DE ITEM UNIT NO PARA LA ACTUALIZACION => ¡¡¡ DESACOPLAR, RESPONSABILIDAD UNICA !!!
     @Override
-    public ItemUnit createItemUnitV2(CreateItemUnitData createItemUnitData, boolean isWpItemUnit, ShoppinglistItem shoppinglistItem) throws ItemUnitException {
+    public ItemUnit createItemUnitV2(
+            CreateItemUnitData createItemUnitData,
+            boolean isWpItemUnit,
+            ShoppinglistItem shoppinglistItem
+    ) throws ItemUnitException {
         validateCorrectItemUnitCreationData(createItemUnitData, isWpItemUnit);
         if(!createItemUnitData.isCreateItemUnit()) {
             return null;
@@ -109,29 +118,16 @@ public class ItemUnitServiceImpl implements ItemUnitService {
             wpItemUnitCreated = wpItemUnitService.createWpItemUnit(createItemUnitData.getCreateWpItemUnitData());
         }
         if(!isWpItemUnit && createItemUnitData.getCreateUpItemUnitData() != null) {
-            // Se necesita una verificación previa para comprobar si ya existe algun item unit up con ese precio
-            // en el caso de que NO EXISTA se crea y si existiese ye debe de actualizar el registro con la nueva informacion
-            // aumentando el quantity
-            log.info("The item unit is a UP type, started the proccess for the verification if there is a item unit up with the unitary price: {}", createItemUnitData.getCreateUpItemUnitData().getUnitaryPrice());
-            if (createItemUnitData.getCreateUpItemUnitData().getIdItemUnitUp() != null) {
-                Optional<UpItemUnit> itemUnitUpOpt = upItemUnitService.findById(createItemUnitData.getCreateUpItemUnitData().getIdItemUnitUp());
-                if (itemUnitUpOpt.isPresent()) {
-                    log.info("The item unit up with id: {} have the unitary price requested, started the update process", itemUnitUpOpt.get().getId());
-                    UpItemUnit upItemUnit = itemUnitUpOpt.get();
-                    upItemUnit.setQuantity(upItemUnit.getQuantity() + createItemUnitData.getCreateUpItemUnitData().getQuantity());
-                    upItemUnitService.updateUpItemUnit(upItemUnit);
-                }
-            }
-            else {
-                log.info("The aren't any item unit up with the requested unitary price, so will proceed with his creation");
-                upItemUnitCreated = upItemUnitService.createUpItemUnit(createItemUnitData.getCreateUpItemUnitData());
-            }
+            log.info("The item unit expected is UP type, so will proceed with his creation");
+            upItemUnitCreated = upItemUnitService.createUpItemUnit(createItemUnitData.getCreateUpItemUnitData());
         }
 
         ItemUnit itemUnit = new ItemUnit();
         itemUnit.setInfoBlock(false);
         itemUnit.setWpItemUnit(wpItemUnitCreated);
-        itemUnit.setUpItemUnit(upItemUnitCreated);
+        List<UpItemUnit> upItemsUnitsList = new ArrayList<>();
+        upItemsUnitsList.add(upItemUnitCreated);
+        itemUnit.setUpItemUnitList(upItemUnitCreated != null ? upItemsUnitsList : null);
         itemUnit.setTotalPrice(calculateItemUnitTotalPriceV2(itemUnit));
         itemUnit = itemUnitRepository.save(itemUnit);
         addItemUnitToShoppinglistItem(itemUnit, shoppinglistItem);
@@ -145,7 +141,10 @@ public class ItemUnitServiceImpl implements ItemUnitService {
         boolean isUPItem = shoppinglistItem.getCalculateSystem().getCode().equalsIgnoreCase("UP");
         Double totalPriceCalculated = 0D;
         if (isUPItem) {
-            List<ItemUnit> itemUnits = shoppinglistItem.getItemUnitList();
+            log.info("The shoppinglist item {} is UP Type", shoppinglistItem.getId());
+            log.info("Proceed to filter the item unit list, actually the item unit list have {} elements", shoppinglistItem.getItemUnitList().size());
+            List<ItemUnit> itemUnits = shoppinglistItem.getItemUnitList().stream().filter(itemUnit -> !itemUnit.getInfoBlock()).toList();
+            log.info("Item unit list filtered, the new list size is : {}", itemUnits.size());
             List<Double> unitaryPrices = getAllUnitaryPrices(itemUnits);
             for (Double unitaryPrice : unitaryPrices) {
                 ResponseItemUnitUpGrouped responseItemUnitUpGrouped = createResponseItemUnitUpGrouped(itemUnits, unitaryPrice);
@@ -163,55 +162,123 @@ public class ItemUnitServiceImpl implements ItemUnitService {
     public void deleteLogicItemUnitList(List<ItemUnit> itemUnitList) {
         log.info("Logic deletion of the items unit from the list");
         for (ItemUnit itemUnit : itemUnitList) {
-            itemUnit.setInfoBlock(true);
-            if (itemUnit.isWpItem()) {
-                wpItemUnitService.deleteLogicWpItemUnit(itemUnit.getWpItemUnit());
-            } else {
-                upItemUnitService.deleteLogicUpItemUnit(itemUnit.getUpItemUnit());
-            }
-            itemUnitRepository.save(itemUnit);
+            deleteLogicItemUnit(itemUnit);
         }
     }
 
     @Override
-    public ItemUnit updateItemUnit(Long idItemUnit) throws ItemUnitException {
-        // TODO: Falta el objeto request con la informacion necesaria
-        ItemUnit toUpdate = itemUnitRepository.findById(idItemUnit).orElseThrow(() -> new ItemUnitException(ItemUnitMessagesError.ITEMUNIT_NOT_FOUND));
-        if (toUpdate.isWpItem()) {
-            log.info("The item unit {}, have item unit wp let procced with the calculate of his values", idItemUnit);
-            double totalPrice = wpItemUnitService.getCalcuatedValue(toUpdate.getWpItemUnit().getId());
-            toUpdate.setTotalPrice(totalPrice);
+    public void deleteLogicItemUnit(ItemUnit itemUnit) {
+        log.info("Logic deletion of the item unit {}", itemUnit.getId());
+        itemUnit.setInfoBlock(true);
+        itemUnitRepository.save(itemUnit);
+        if (itemUnit.isWpItem()) {
+            wpItemUnitService.deleteLogicWpItemUnit(itemUnit.getWpItemUnit());
         } else {
-            log.info("The item unit {}, hace items unit up let procced with the calculate of his values", idItemUnit);
-            //double totalPrice = upItemUnitService.upItemUnitTotalPrice();
-            double totalPrice = 0;
+            for (UpItemUnit upItemUnit : itemUnit.getUpItemUnitList()) {
+                upItemUnitService.deleteLogicUpItemUnit(upItemUnit);
+            }
         }
-        return null;
+    }
+
+    @Override
+    public void updateItemUnit(ItemUnit itemUnit) {
+        log.info("Update item unit with id {}", itemUnit.getId());
+        itemUnitRepository.save(itemUnit);
+    }
+
+    @Override
+    public void updateItemUnitTotalPrice(Long idItemUnit, RequestUpdateItemUnitWpTotalPrice request) {
+        log.info("Setting the new total price value [new total price: {}] to the item unit with id: {}", request.newTotalPrice(), idItemUnit);
+        ItemUnit itemUnit = findItemUnitByIdAndInfoBlockFalse(idItemUnit);
+        itemUnit.setTotalPrice(request.newTotalPrice());
+        updateItemUnit(itemUnit);
+    }
+
+    // TODO -> REFACTORIZAR
+    @Override
+    public ResponseVerifyExistsItemUnitUpWithUnitaryPrice verifyExistsAnItemUnitUpWithUnitaryPrice(List<ItemUnit> itemsUnits, Double unitaryPrice) {
+        ResponseVerifyExistsItemUnitUpWithUnitaryPrice response = null;
+        for(ItemUnit itemUnit : itemsUnits) {
+            Long idItemUnitUp = null;
+            if (itemUnit.isUpItem()) {
+                List<UpItemUnit> upItemUnitListFiltered = itemUnit.getUpItemUnitList().stream().filter(upItemUnit -> !upItemUnit.getInfoBlock()).toList();
+                for(UpItemUnit upItemUnit : upItemUnitListFiltered) {
+                    log.info("Verify if the item unit up: {} have the value", upItemUnit.getId());
+                    idItemUnitUp = upItemUnitService.searchUnitaryPrice(upItemUnit, unitaryPrice);
+                    if(idItemUnitUp != null) {
+                        response = new ResponseVerifyExistsItemUnitUpWithUnitaryPrice(
+                                idItemUnitUp,
+                                itemUnit.getId()
+                        );
+                        break;
+                    }
+                }
+            }
+            if (idItemUnitUp != null) {
+                break;
+            }
+        }
+        return response;
+    }
+
+    @Override
+    public ItemUnit updateItemUnitUpValues(Long idItemUnit, Long idItemUnitUp, int newQuantity) {
+        log.info("Updating the item unit up {} from the item unit {} with the new quantity {}", idItemUnitUp, idItemUnit, newQuantity);
+        ItemUnit itemUnit = findItemUnitByIdAndInfoBlockFalse(idItemUnit);
+        if (itemUnit.isUpItem()) {
+            upItemUnitService.updateUpItemUnitValues(new UpdateItemUnitUpValues(idItemUnitUp, newQuantity));
+        }
+        itemUnit.setInfoBlock(false);
+        itemUnit.setTotalPrice(calculateItemUnitTotalPriceV2(itemUnit));
+        itemUnit = itemUnitRepository.save(itemUnit);
+        return itemUnit;
+    }
+
+    @Override
+    public List<ItemUnit> findAllItemUnitsByShoppinglistItemAndInfoBlockFalse(ShoppinglistItem shoppinglistItem) {
+        log.info("Getting all the items units associated to the shoppinglist item {}", shoppinglistItem.getId());
+        return itemUnitRepository.findAllByShoppinglistItemAndInfoBlockFalse(shoppinglistItem).orElseThrow(
+                () -> new ItemUnitException(ItemUnitMessagesError.NO_ITEM_UNITS_ASSOCIATED_TO_SHOPPINGLIST_ITEM)
+        );
     }
 
     private ResponseItemUnitUpGrouped createResponseItemUnitUpGrouped(List<ItemUnit> itemUnits, Double unitaryPrice) {
-        ResponseItemUnitUpGrouped responseItemUnitUpGrouped = new ResponseItemUnitUpGrouped();
+        log.info("Creating the ResponseItemUnitUpGrouped, for the price value of {} ", unitaryPrice);
+        ResponseItemUnitUpGrouped responseItemUnitUpGrouped = null;
         int quantity = 0;
+        Long idItemUnit = null;
         Long id = null;
         for(ItemUnit itemUnit : itemUnits) {
-            if(itemUnit.getUpItemUnit().getUnityPrice().doubleValue() == unitaryPrice.doubleValue()) {
-                id = itemUnit.getUpItemUnit().getId();
-                quantity += itemUnit.getUpItemUnit().getQuantity();
+            List<UpItemUnit> filtered = itemUnit.getUpItemUnitList().stream().filter(upItemUnit -> !upItemUnit.getInfoBlock()).toList();
+            for(UpItemUnit upItemUnit : filtered) {
+                if(upItemUnit.getUnityPrice().doubleValue() == unitaryPrice.doubleValue()) {
+                    id = upItemUnit.getId();
+                    quantity += upItemUnit.getQuantity();
+                    idItemUnit = itemUnit.getId();
+                }
             }
         }
+        responseItemUnitUpGrouped = new ResponseItemUnitUpGrouped();
         responseItemUnitUpGrouped.setPrice(unitaryPrice);
         responseItemUnitUpGrouped.setQuantity(quantity);
         responseItemUnitUpGrouped.setCalculatedPrice(unitaryPrice * quantity);
         responseItemUnitUpGrouped.setIdItemUnitUp(id);
+        responseItemUnitUpGrouped.setIdItemUnit(idItemUnit);
         return responseItemUnitUpGrouped;
     }
 
     private List<Double> getAllUnitaryPrices(List<ItemUnit> itemUnits) {
+        log.info("Creating a list with all the different unitary prices in the item unit list");
         List<Double> unitaryPrices = new ArrayList<>();
         for (ItemUnit itemUnit : itemUnits) {
-            double unitaryPriceToCheck = itemUnit.getUpItemUnit().getUnityPrice();
-            if(!checkUnitaryPriceAlreadyExistsInList(unitaryPriceToCheck, unitaryPrices)) {
-                unitaryPrices.add(unitaryPriceToCheck);
+            // List<UpItemUnit> filtered = itemUnit.getUpItemUnitList().stream().filter(UpItemUnit::getInfoBlock).toList();
+            List<UpItemUnit> filtered = itemUnit.getUpItemUnitList();
+            for(UpItemUnit upItemUnit : filtered) {
+                double unitaryPriceToCheck = upItemUnit.getUnityPrice();
+                if(!checkUnitaryPriceAlreadyExistsInList(unitaryPriceToCheck, unitaryPrices)) {
+                    log.info("Adding to the unitary prices list the value {}", unitaryPriceToCheck);
+                    unitaryPrices.add(unitaryPriceToCheck);
+                }
             }
         }
         return unitaryPrices;
@@ -230,11 +297,11 @@ public class ItemUnitServiceImpl implements ItemUnitService {
 
     private double calculateItemUnitTotalPriceV2(ItemUnit itemUnit){
         double totalPriceCalculated = 0.0;
-        if(itemUnit.getUpItemUnit() != null) {
-            totalPriceCalculated = itemUnit.getUpItemUnit().getUnityPrice() * itemUnit.getUpItemUnit().getQuantity();
+        if (itemUnit.getUpItemUnitList() != null && !itemUnit.getUpItemUnitList().isEmpty()) {
+            totalPriceCalculated = upItemUnitService.getItemUnitUpCalculatedPrice(itemUnit.getUpItemUnitList());
         }
         if(itemUnit.getWpItemUnit() != null) {
-            totalPriceCalculated = itemUnit.getWpItemUnit().getPriceKg() * itemUnit.getWpItemUnit().getWeight();
+            totalPriceCalculated = wpItemUnitService.getItemUnitWpCalculatedPrice(itemUnit.getWpItemUnit());
         }
         return totalPriceCalculated;
     }

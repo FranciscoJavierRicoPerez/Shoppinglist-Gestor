@@ -5,6 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ShoppinglistViewException extends Exception{
+public class ShoppinglistViewException extends RuntimeException{
     public ShoppinglistViewException(String message) { super(message);}
 }

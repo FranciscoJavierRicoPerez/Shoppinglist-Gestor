@@ -2,6 +2,7 @@ package es.franricodev.shopping_list_gestor_service.wpItemUnit.service;
 
 import es.franricodev.shopping_list_gestor_service.itemUnit.exception.ItemUnitException;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.dto.request.RequestCreateWpItemUnitData;
+import es.franricodev.shopping_list_gestor_service.wpItemUnit.dto.request.RequestUpdateItemUnitWp;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.model.WpItemUnit;
 
 import java.util.Optional;
@@ -17,4 +18,7 @@ public interface WpItemUnitService {
 
     double getCalcuatedValue(Long idWpItem) throws ItemUnitException;
 
+    void updateWpItemUnit(Long idItemUnitWp, RequestUpdateItemUnitWp requestUpdateItemUnitWp);
+
+    Double getItemUnitWpCalculatedPrice(WpItemUnit wpItemUnit);
 }

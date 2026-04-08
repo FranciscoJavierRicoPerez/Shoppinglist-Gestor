@@ -1,5 +1,7 @@
 package es.franricodev.shopping_list_gestor_service.product.controller;
 
+import es.franricodev.shopping_list_gestor_service.constants.GeneralConstants;
+import es.franricodev.shopping_list_gestor_service.product.constants.api.ApiProductConstants;
 import es.franricodev.shopping_list_gestor_service.product.dto.ProductDTO;
 import es.franricodev.shopping_list_gestor_service.product.dto.response.ResponseProductsNames;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,37 +16,39 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.List;
 
 @Tag(
-        name = "Product Controller API Documentation",
-        description = "Management of the operations related with the products"
+        name = ApiProductConstants.API_NAME,
+        description = ApiProductConstants.API_DESCRIPTION
 )
 public interface ProductController {
-    @Operation(summary = "Returns all the products in the database")
+    @Operation(summary = ApiProductConstants.GET_ALL_PRODUCTS_V1_OP_SUMMARY)
     @ApiResponses({
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = GeneralConstants.HTTP_200,
+                    description = GeneralConstants.DESC_200,
                     content = {
                             @Content(
                                     schema = @Schema(implementation = ProductDTO.class),
-                                    mediaType = "application/json"
+                                    mediaType = GeneralConstants.APPLICATION_JSON
                             )
                     }
             )
     })
-    @GetMapping("/v1/all")
+    @GetMapping(ApiProductConstants.GET_ALL_PRODUCTS_V1)
     ResponseEntity<List<ProductDTO>> getAllProducts();
 
-    @Operation(summary = "Return the name of all products in the database")
+    @Operation(summary = ApiProductConstants.GET_ALL_PRODUCTS_NAMES_V1_OP_SUMMARY)
     @ApiResponses({
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = GeneralConstants.HTTP_200,
+                    description = GeneralConstants.DESC_200,
                     content = {
                             @Content(
                                     schema = @Schema(implementation = ResponseProductsNames.class),
-                                    mediaType = "application/json"
+                                    mediaType = GeneralConstants.APPLICATION_JSON
                             )
                     }
             )
     })
-    @GetMapping("/v1/names")
+    @GetMapping(ApiProductConstants.GET_ALL_PRODUCTS_NAMES_V1)
     ResponseEntity<ResponseProductsNames> getAllProductsNames();
 }

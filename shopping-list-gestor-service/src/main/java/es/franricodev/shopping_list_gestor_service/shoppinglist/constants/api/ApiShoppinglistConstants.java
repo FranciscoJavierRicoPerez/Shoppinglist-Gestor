@@ -27,6 +27,16 @@ public class ApiShoppinglistConstants {
     public static final String TOTAL_PRICE = "totalPrice";
     public static final String IS_ACTIVE = "isActive";
     public static final String ID_SHOPPINGLIST_ITEM = "idShoppinglistItem";
-    // -------------------------------------------------------------------------------------------------
-
+    // ------------ OPERATIONS DESCRIPTIONS -----------------------------------------------------------
+    public static final String GET_ALL_V1_OP_SUMMARY = "Get all shoppinglist in the database";
+    public static final String CREATE_V1_OP_SUMMARY = "Create a shoppinglist v1";
+    public static final String CREATE_V2_OP_SUMMARY = "Create a shoppinglist v2";
+    public static final String DELETE_V1_OP_SUMMARY = "Delete the information of a shoppinglist";
+    public static final String UPDATE_V1_OP_SUMMARY = "Update the information of a shoppinglist";
+    public static final String FILTER_V1_OP_SUMMARY = "Provides the information on all shoppinglists whose data is consistent with the filters";
+    public static final String GET_DETAILS_V1_OP_SUMMARY = "Provides the details of a shoppinglist";
+    public static final String UPDATE_IS_ACTIVE_V1_OP_SUMMARY = "Update the shoppinglist active value";
+    public static final String DELETE_LOGIC_V1_OP_SUMMARY = "Logic deletion of the shoppinglist entity";
+    public static final String ADD_SHOPPINGLIST_ITEM_V1_OP_SUMMARY = "Add a new ShoppinglistItem to the Shoppinglist";
+    public static final String UPDATE_TOTAL_PRICE_V1_OP_SUMMARY = "Update the total price of the shoppinglist";
 }

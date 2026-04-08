@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class ItemUnitException extends Exception{
+public class ItemUnitException extends RuntimeException{
     private String message;
     public ItemUnitException(String message) {
         this.message = message;

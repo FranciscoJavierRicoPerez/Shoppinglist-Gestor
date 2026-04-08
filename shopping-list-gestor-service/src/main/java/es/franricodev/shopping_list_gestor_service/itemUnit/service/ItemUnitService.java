@@ -2,6 +2,8 @@ package es.franricodev.shopping_list_gestor_service.itemUnit.service;
 
 import es.franricodev.shopping_list_gestor_service.calculateSystem.model.CalculateSystem;
 import es.franricodev.shopping_list_gestor_service.itemUnit.dto.request.CreateItemUnitData;
+import es.franricodev.shopping_list_gestor_service.itemUnit.dto.request.RequestUpdateItemUnitWpTotalPrice;
+import es.franricodev.shopping_list_gestor_service.itemUnit.dto.response.ResponseVerifyExistsItemUnitUpWithUnitaryPrice;
 import es.franricodev.shopping_list_gestor_service.itemUnit.exception.ItemUnitException;
 import es.franricodev.shopping_list_gestor_service.itemUnit.model.ItemUnit;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseGetAllItemUnitUpGroupedByPrice;
@@ -14,7 +16,7 @@ public interface ItemUnitService {
 
     ItemUnit createItemUnit(ShoppinglistItem shoppinglistItem, Double unitaryPrice, CalculateSystem calculateSystem);
 
-    ItemUnit findItemUnitById(Long id) throws Exception;
+    ItemUnit findItemUnitByIdAndInfoBlockFalse(Long id) throws Exception;
 
     void deleteItemUnit(ItemUnit itemUnit);
 
@@ -29,6 +31,15 @@ public interface ItemUnitService {
 
     void deleteLogicItemUnitList(List<ItemUnit> itemUnitList);
 
-    ItemUnit updateItemUnit(Long idItemUnit) throws ItemUnitException;
+    void deleteLogicItemUnit(ItemUnit itemUnit);
 
+    void updateItemUnit(ItemUnit itemUnit);
+
+    void updateItemUnitTotalPrice(Long idItemUnit, RequestUpdateItemUnitWpTotalPrice request);
+
+    ResponseVerifyExistsItemUnitUpWithUnitaryPrice verifyExistsAnItemUnitUpWithUnitaryPrice(List<ItemUnit> itemsUnits, Double unitaryPrice);
+
+    ItemUnit updateItemUnitUpValues(Long idItemUnit, Long idItemUnitUp, int newQuantity);
+
+    List<ItemUnit> findAllItemUnitsByShoppinglistItemAndInfoBlockFalse(ShoppinglistItem shoppinglistItem);
 }

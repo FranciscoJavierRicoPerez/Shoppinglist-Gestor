@@ -10,6 +10,7 @@ import { useToast, type ToastMessageOptions } from 'primevue'
 import { useShoppinglistDetailStore } from '@/Shoppinglist/stores/shoppinglistDetailStore'
 import { computed, type PropType } from 'vue'
 import { useAddShoppinglistItemToShoppinglist } from '@/Shoppinglist/application/useAddShoppinglistItemToShoppinglist'
+import { useUpdateShoppinglistTotalPrice } from '@/Shoppinglist/application/useUpdateShoppinglistTotalPrice'
 
 const props = defineProps({
   shoppinglistId: {
@@ -23,6 +24,7 @@ const shoppinglistDetailsStore = useShoppinglistDetailStore()
 
 const { refetch: createShoppinglistItem } = useCreateShoppinglistItem()
 const { refetch: addShoppinglistItemToShoppinglist } = useAddShoppinglistItemToShoppinglist()
+const { refetch: updateShoppinglistTotalPrice } = useUpdateShoppinglistTotalPrice()
 const toast = useToast()
 
 const createFormHeaderText = computed(() => {
@@ -88,10 +90,13 @@ async function createNewShoppinglistItem() {
     )
     // Debo de llamar al controlador -> ShoppinglistController.POST /v1/{idShoppinglist}/addShoppinglistItem
     // para que se encarge de añadir a la lista de la compra el nuevo SLI
-    addShoppinglistItemToShoppinglist(
+    await addShoppinglistItemToShoppinglist(
       props.shoppinglistId,
       response.shoppinglistItemMetadata.idShoppinglistItem,
     )
+    // Llamar al EP -> ShoppinglistController.PUT v1/{idShoppinglist}/updateTotalPrice para
+    // que se encarge de actualizar el total price en BBDD
+    await updateShoppinglistTotalPrice(props.shoppinglistId)
   } else {
     createToast({
       severity: 'danger',

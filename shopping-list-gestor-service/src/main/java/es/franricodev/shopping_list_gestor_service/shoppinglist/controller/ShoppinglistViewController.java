@@ -1,5 +1,6 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglist.controller;
 
+import es.franricodev.shopping_list_gestor_service.constants.GeneralConstants;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.constants.api.ApiShoppinglistViewConstants;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetShoppinglistDetailsMetadata;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetShoppinglistTableMetadata;
@@ -18,15 +19,16 @@ import org.springframework.web.bind.annotation.PathVariable;
         description = ApiShoppinglistViewConstants.API_DESCRIPTION
 )
 public interface ShoppinglistViewController {
-    @Operation(summary = "Get the metainformation necesary for the build of the shoppinglist table view")
+    @Operation(summary = ApiShoppinglistViewConstants.GET_ALL_V1_OP_SUMMARY)
     @ApiResponses(
             {
                     @ApiResponse(
-                            responseCode = "200",
+                            responseCode = GeneralConstants.HTTP_200,
+                            description = GeneralConstants.DESC_200,
                             content = {
                                     @Content(
                                             schema = @Schema(implementation = ResponseGetShoppinglistTableMetadata.class),
-                                            mediaType = "application/json"
+                                            mediaType = GeneralConstants.APPLICATION_JSON
                                     )
                             }
                     )
@@ -35,15 +37,16 @@ public interface ShoppinglistViewController {
     @GetMapping(ApiShoppinglistViewConstants.GET_ALL_V1)
     ResponseEntity<ResponseGetShoppinglistTableMetadata> getShoppinglistTableMetadata();
 
-    @Operation(summary = "Get the metainformation necessary for the build of the shoppinglist details view")
+    @Operation(summary = ApiShoppinglistViewConstants.GET_DETAILS_V1_OP_SUMMARY)
     @ApiResponses(
             {
                     @ApiResponse(
-                            responseCode = "200",
+                            responseCode = GeneralConstants.HTTP_200,
+                            description = GeneralConstants.DESC_200,
                             content = {
                                     @Content(
                                             schema = @Schema(implementation = ResponseGetShoppinglistDetailsMetadata.class),
-                                            mediaType = "application/json"
+                                            mediaType = GeneralConstants.APPLICATION_JSON
                                     )
                             }
                     )

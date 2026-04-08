@@ -10,4 +10,7 @@ public class ApiShoppinglistViewConstants {
     public static final String GET_DETAILS_V1 = "v1/{idShoppinglist}/details";
     // ------------ PATH VARIABLE CONSTANTS -----------------------------------------------------------
     public static final String ID_SHOPPINGLIST = "idShoppinglist";
+    // ------------ OPERATIONS DESCRIPTIONS -----------------------------------------------------------
+    public static final String GET_ALL_V1_OP_SUMMARY  = "Get the metainformation necesary for the build of the shoppinglist table view";
+    public static final String GET_DETAILS_V1_OP_SUMMARY = "Get the metainformation necessary for the build of the shoppinglist details view";
 }

@@ -5,6 +5,8 @@ import Tag from 'primevue/tag'
 import type { ItemUnitUpMetadata } from '@/ItemUnit/domain/ItemUnitUpMetadata'
 import { computed, type PropType } from 'vue'
 import { useItemUnitUpGroupedByPriceStore } from '../store/itemUnitUpGroupedByPriceStore'
+import { useUpdateItemUnitUpdateMetadataStore } from '../store/upItemUnitUpdateMetadataStore'
+import type { RequestUpItemUnitUpUpdateMetadata } from '../infrastructure/models/request/RequestUpItemUnitUpdateMetadata'
 
 const props = defineProps({
   itemUnitUpMetadata: {
@@ -24,6 +26,7 @@ const props = defineProps({
 // Añadir aqui un store para actualizar el estado del itemUnitMetadata
 
 const store = useItemUnitUpGroupedByPriceStore()
+const upItemUnitUpdateMetadataStore = useUpdateItemUnitUpdateMetadataStore()
 
 const calculatedPriceText = computed(() => {
   return 'Calculado: ' + props.itemUnitUpMetadata.calculatedPrice
@@ -40,6 +43,7 @@ const priceText = computed(() => {
 function removeItem(): void {
   store.updateItemsGroupedList(store.removeItem(props.itemUnitUpMetadata.price))
   store.updateTotalPrice()
+  createRequestUpItemUpdateMetadata(true, null)
 }
 
 function updateQuantity(add: boolean): void {
@@ -54,6 +58,26 @@ function updateQuantity(add: boolean): void {
   props.itemUnitUpMetadata.calculatedPrice =
     props.itemUnitUpMetadata.price * props.itemUnitUpMetadata.quantity
   store.updateTotalPrice()
+  createRequestUpItemUpdateMetadata(false, add ? null : true)
+}
+
+function createRequestUpItemUpdateMetadata(
+  removeOperation: boolean,
+  reduceOperation: boolean | null,
+) {
+  let requestData: RequestUpItemUnitUpUpdateMetadata = {
+    idItemUnit: props.itemUnitUpMetadata.idItemUnit,
+    idItemUnitUp: props.itemUnitUpMetadata.idItemUnitUp,
+    newQuantity: props.itemUnitUpMetadata.quantity,
+    removeItemUnitUp: removeOperation,
+    reduceOperation: reduceOperation,
+  }
+  // NO RECUERDO EXACTAMENTE EL MOTIVO DE ESTO :S
+  /* upItemUnitUpdateMetadataStore.removeOldValue(
+    props.itemUnitUpMetadata.idItemUnit,
+    props.itemUnitUpMetadata.idItemUnitUp,
+  ) */
+  upItemUnitUpdateMetadataStore.add(requestData)
 }
 </script>
 <template>

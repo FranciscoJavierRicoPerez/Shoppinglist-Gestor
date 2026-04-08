@@ -1,6 +1,6 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglistitem.service;
 
-import es.franricodev.shopping_list_gestor_service.calculateSystem.error.CalculateSystemError;
+import es.franricodev.shopping_list_gestor_service.calculateSystem.constants.messages.error.CalculateSystemError;
 import es.franricodev.shopping_list_gestor_service.calculateSystem.exception.CalculateSystemException;
 import es.franricodev.shopping_list_gestor_service.calculateSystem.model.CalculateSystem;
 import es.franricodev.shopping_list_gestor_service.calculateSystem.service.CalculateSystemServicelmpl;

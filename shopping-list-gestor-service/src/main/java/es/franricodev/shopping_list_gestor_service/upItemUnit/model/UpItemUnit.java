@@ -23,6 +23,6 @@ public class UpItemUnit {
     @Column(name = "INFO_BLOCK")
     private Boolean infoBlock;
 
-    @OneToOne(mappedBy = "upItemUnit", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private ItemUnit itemUnit;
+    /*@OneToOne(mappedBy = "upItemUnit", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private ItemUnit itemUnit;*/
 }

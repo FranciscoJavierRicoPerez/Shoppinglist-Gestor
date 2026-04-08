@@ -39,7 +39,7 @@ public interface ShoppinglistService {
 
     void addShoppinglistItemToShoppinglist(ShoppinglistItem shoppinglistItem, Shoppinglist shoppinglist);
 
-    void updateShoppinglistTotalPrice(Shoppinglist shoppinglist);
+    ReponseUpdateShoppinglistTotalPrice updateShoppinglistTotalPrice(Shoppinglist shoppinglist);
 
     void deleteLogicShoppinglist(Long id) throws ShoppinglistException;
 

@@ -1,6 +1,4 @@
 export interface RequestUpdateItemUnitWpData {
-  idWpItemUnit: number
-  newQuantity: number
+  newWeight: number
   newPriceKg: number
-  newProductPrice: number
 }
