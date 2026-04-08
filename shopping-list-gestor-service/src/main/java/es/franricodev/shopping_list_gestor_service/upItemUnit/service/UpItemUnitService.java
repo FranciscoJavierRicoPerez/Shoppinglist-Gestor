@@ -18,13 +18,11 @@ public interface UpItemUnitService {
 
     void deleteLogicUpItemUnit(UpItemUnit upItemUnit);
 
-    Optional<UpItemUnit> findByUnitaryPrice(double price);
+    UpItemUnit findByUnitaryPrice(double price);
 
     void updateItemUnitUpValues(RequestUpdateItemUnitUpValues request);
 
     Optional<UpItemUnit> findById(Long id);
-
-    double upItemUnitTotalPrice(List<Long> ids);
 
     Long searchUnitaryPrice(UpItemUnit upItemUnit, Double unitaryPrice);
 

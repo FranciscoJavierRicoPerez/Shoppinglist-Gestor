@@ -59,8 +59,10 @@ public class UpItemUnitServiceImpl implements UpItemUnitService{
     }
 
     @Override
-    public Optional<UpItemUnit> findByUnitaryPrice(double price) {
-        return upItemUnitRepository.findOneByunityPrice(price);
+    public UpItemUnit findByUnitaryPrice(double price) {
+        return upItemUnitRepository.findOneByunityPrice(price).orElseThrow(
+                () -> new UpItemUnitException(UpItemUnitErrors.ERROR_NOT_ITEM_UNITS_UP_FOUND_WITH_THAT_UNITARY_PRICE)
+        );
     }
 
     @Override
@@ -73,12 +75,6 @@ public class UpItemUnitServiceImpl implements UpItemUnitService{
     public Optional<UpItemUnit> findById(Long id) {
         log.info("Find up item unit with id: {}", id);
         return upItemUnitRepository.findById(id);
-    }
-
-    @Override
-    public double upItemUnitTotalPrice(List<Long> ids) {
-        double totalPrice = 0;
-        return totalPrice;
     }
 
     @Override
