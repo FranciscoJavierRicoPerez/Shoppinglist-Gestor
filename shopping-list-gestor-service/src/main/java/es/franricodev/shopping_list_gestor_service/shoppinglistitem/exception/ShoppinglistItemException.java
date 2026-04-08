@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ShoppinglistItemException extends Exception{
+public class ShoppinglistItemException extends RuntimeException {
     private String message;
 }

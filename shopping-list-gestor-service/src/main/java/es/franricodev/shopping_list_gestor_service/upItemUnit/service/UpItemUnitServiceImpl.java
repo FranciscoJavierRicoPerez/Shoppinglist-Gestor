@@ -1,5 +1,7 @@
 package es.franricodev.shopping_list_gestor_service.upItemUnit.service;
 
+import es.franricodev.shopping_list_gestor_service.itemUnit.model.ItemUnit;
+import es.franricodev.shopping_list_gestor_service.upItemUnit.constants.messages.error.UpItemUnitErrors;
 import es.franricodev.shopping_list_gestor_service.upItemUnit.dto.request.RequestCreateUpItemUnitData;
 import es.franricodev.shopping_list_gestor_service.upItemUnit.dto.request.RequestUpdateItemUnitUpValues;
 import es.franricodev.shopping_list_gestor_service.upItemUnit.dto.request.UpdateItemUnitUpValues;
@@ -39,10 +41,14 @@ public class UpItemUnitServiceImpl implements UpItemUnitService{
     @Override
     public void deleteUpItemUnitGroupeByPrice(Double price) throws UpItemUnitException {
         log.info("Deleting the up items unit with price: {}",price);
+        // TODO: Seria interesante que la busqueda tambien asegure que info block = false
         List<UpItemUnit> upItemUnitList =
-                upItemUnitRepository.findByunityPrice(price).orElseThrow(() -> new UpItemUnitException("ERROR-NOT-ITEM-UNITS-UP-FOUND-WITH-THAT-UNITARY-PRICE"));
+                upItemUnitRepository.findByunityPrice(price).orElseThrow(
+                        () -> new UpItemUnitException(UpItemUnitErrors.ERROR_NOT_ITEM_UNITS_UP_FOUND_WITH_THAT_UNITARY_PRICE)
+                );
         log.info("Found {} up items unit with {} price, proceed with his removing from the database", upItemUnitList.size(), price);
         // Me ha borrado todos los up item units independientemente del precio (BORRADO EN CASCADA DE LOS DUROS)
+        // TODO: Tramitar que sea un borrado logico
         upItemUnitRepository.deleteAll(upItemUnitList);
     }
 
@@ -53,8 +59,10 @@ public class UpItemUnitServiceImpl implements UpItemUnitService{
     }
 
     @Override
-    public Optional<UpItemUnit> findByUnitaryPrice(double price) {
-        return upItemUnitRepository.findOneByunityPrice(price);
+    public UpItemUnit findByUnitaryPrice(double price) {
+        return upItemUnitRepository.findOneByunityPrice(price).orElseThrow(
+                () -> new UpItemUnitException(UpItemUnitErrors.ERROR_NOT_ITEM_UNITS_UP_FOUND_WITH_THAT_UNITARY_PRICE)
+        );
     }
 
     @Override
@@ -70,22 +78,34 @@ public class UpItemUnitServiceImpl implements UpItemUnitService{
     }
 
     @Override
-    public double upItemUnitTotalPrice(List<Long> ids) {
-        double totalPrice = 0;
-
+    public Long searchUnitaryPrice(UpItemUnit upItemUnit, Double unitaryPrice) {
+        log.info("Verify if the item unit up : {}, has an unitary price : {} associated", upItemUnit.getId(), unitaryPrice);
+        return upItemUnit.getUnityPrice().equals(unitaryPrice) ?  upItemUnit.getId() : null;
     }
 
-    private void updateUpItemUnitValues(UpdateItemUnitUpValues request) {
+    @Override
+    public void updateUpItemUnitValues(UpdateItemUnitUpValues request) {
         log.info("Updating the values of the item unit up with id: {}", request.idItemUnitUp());
         try {
-            UpItemUnit upItemUnit = upItemUnitRepository.findById(request.idItemUnitUp()).orElseThrow(
-                    () ->  new UpItemUnitException("NOT_FOUND_ITEM_UNIT_UP_WITH_THE_REFERENCED_ID")
+            UpItemUnit upItemUnit = upItemUnitRepository.findByIdAndInfoBlockFalse(request.idItemUnitUp()).orElseThrow(
+                    () ->  new UpItemUnitException(UpItemUnitErrors.NOT_FOUND_ITEM_UNIT_UP_WITH_THE_REFERENCED_ID)
             );
-            upItemUnit.setQuantity(upItemUnit.getQuantity() + request.quantity());
+            upItemUnit.setQuantity(request.quantity());
             updateUpItemUnit(upItemUnit);
         } catch (UpItemUnitException e) {
             log.error(e.getMessage());
         }
+    }
+
+    @Override
+    public Double getItemUnitUpCalculatedPrice(List<UpItemUnit> itemUnitUpList) {
+        double totalPrice = 0D;
+        if (!itemUnitUpList.isEmpty()) {
+            for (UpItemUnit upItemUnit : itemUnitUpList) {
+                totalPrice += upItemUnit.getUnityPrice() * upItemUnit.getQuantity();
+            }
+        }
+        return totalPrice;
     }
 
 }

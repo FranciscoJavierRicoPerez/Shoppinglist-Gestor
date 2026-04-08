@@ -11,6 +11,9 @@ import { useDeleteShoppinglistItem } from '../application/useDeleteShoppinglistI
 import type { DeleteShoppinglistItemData } from '../infrastructure/models/dto/DeleteShoppinglistItemData'
 import ItemUnitUpDialog from '@/ItemUnit/components/ItemUnitUpDialog.vue'
 import ItemUnitWpDialog from '@/ItemUnit/components/ItemUnitWpDialog.vue'
+import { useUpdateShoppinglistTotalPrice } from '@/Shoppinglist/application/useUpdateShoppinglistTotalPrice'
+import { useRoute } from 'vue-router'
+import { useItemUnitUpGroupedByPriceStore } from '@/ItemUnit/store/itemUnitUpGroupedByPriceStore'
 
 /** --- PROPS SECTIONS --- */
 const props = defineProps({
@@ -20,8 +23,11 @@ const props = defineProps({
   },
 })
 /** ---------------------- */
+const router = useRoute()
 
 const calculatedPrice = ref<number>(-1)
+
+const store = useItemUnitUpGroupedByPriceStore()
 
 onMounted(() => {
   calculatedPrice.value = props.shoppinglistItem.calculatedPrice
@@ -29,6 +35,7 @@ onMounted(() => {
 
 /** ---- USE CASES ---- */
 const { refetch: deleteShoppinglistItem } = useDeleteShoppinglistItem()
+const { refetch: updateShoppinglistTotalPrice } = useUpdateShoppinglistTotalPrice()
 /** ------------------- */
 
 /** ---- STORE SECTION ---- */
@@ -39,7 +46,17 @@ const toast = useToast()
 
 /** ---- COMPUTED SECTION ---- */
 const shoppinglistItemPriceText = computed(() => {
-  return 'Coste producto: ' + props.shoppinglistItem.calculatedPrice + '€'
+  if (props.shoppinglistItem.calculateSystemCode === 'WP') {
+    return 'Coste producto: ' + props.shoppinglistItem.calculatedPrice + '€'
+  } else {
+    return (
+      'Coste producto: ' +
+      (store.totalPriceFixed === -1
+        ? props.shoppinglistItem.calculatedPrice
+        : store.totalPriceFixed) +
+      '€'
+    )
+  }
 })
 
 const shoppinglistItemAssignationToListDateText = computed(() => {
@@ -83,6 +100,7 @@ async function removeShoppinglistItem(id: number): Promise<void> {
   if (response.delete) {
     shoppinglistDetailsStore.updateItemsList(shoppinglistDetailsStore.removeItem(id))
     shoppinglistDetailsStore.updateTotalPrice(false, props.shoppinglistItem.calculatedPrice)
+    await updateShoppinglistTotalPrice(Number(router.params.id))
     createToast({
       severity: 'success',
       summary: 'Se ha borrado el producto ' + props.shoppinglistItem.name,

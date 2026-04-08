@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class UpItemUnitException extends Exception {
+public class UpItemUnitException extends RuntimeException {
     private String message;
 }

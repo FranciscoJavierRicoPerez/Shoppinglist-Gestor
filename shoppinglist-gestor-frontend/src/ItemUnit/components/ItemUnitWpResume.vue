@@ -23,7 +23,7 @@ const props = defineProps({
 })
 
 onMounted(async () => {
-  if (props.shoppinglistItem.idShoppinglistItem)
+  if (props.shoppinglistItem && props.shoppinglistItem.idShoppinglistItem)
     itemUnitWpMetadata.value = await getItemUnitWpMetadata(
       props.shoppinglistItem.idShoppinglistItem,
     )

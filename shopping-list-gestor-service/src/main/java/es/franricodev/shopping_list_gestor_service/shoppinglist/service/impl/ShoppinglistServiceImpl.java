@@ -1,9 +1,9 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglist.service.impl;
 
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.*;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ReponseUpdateShoppinglistTotalPrice;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseCreateShoppinglist;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetFilteredShoppinglistMetadata;
-import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetShoppinglistTableMetadata;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ShoppinglistMetadata;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.mapper.ShoppinglistMapper;
@@ -149,7 +149,7 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
         return shoppinglist;
     }
 
-    // TODO: REFACTORIZAR A PROGRAMACION FUNCIONAL O QUERY QUE DEVUELVA ESTO CONCRETAMENTE
+    // TODO: REFACTORIZAR A PROGRAMACION FUNCIONAL O QUERY QUE DEVUELVA ESTO CONCRETAMENTE :(
     @Override
     public Shoppinglist findShoppinglistByShoppinglistItemId(Long idItem) {
         List<Shoppinglist> shoppinglistList = shoppinglistRepository.findAll();
@@ -176,7 +176,6 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
     @Transactional
     @Override
     public Shoppinglist updateShoppinglist(Shoppinglist shoppinglist) {
-        System.out.println(shoppinglist.toString());
         log.info("Updating the values of the shoppinglist with id: {}", shoppinglist.getId());
         return shoppinglistRepository.save(shoppinglist);
     }
@@ -196,12 +195,15 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
     }
 
     @Override
-    public void updateShoppinglistTotalPrice(Shoppinglist shoppinglist) {
+    public ReponseUpdateShoppinglistTotalPrice updateShoppinglistTotalPrice(Shoppinglist shoppinglist) {
+        ReponseUpdateShoppinglistTotalPrice response = null;
         if(shoppinglist != null) {
             log.info("Updating shoppinglist total price");
             shoppinglist.setTotalPrice(calculateShoppinglistTotalPrice(shoppinglist));
-            updateShoppinglist(shoppinglist);
+            shoppinglist = updateShoppinglist(shoppinglist);
+            response = new ReponseUpdateShoppinglistTotalPrice(shoppinglist.getTotalPrice());
         }
+        return response;
     }
 
     @Override
@@ -219,9 +221,9 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
     @Override
     public void addShoppinglistItem(Long idShoppinglistItem, Long idShoppinglist) throws ShoppinglistException, ShoppinglistItemException {
         log.info("Add shoppinglist item with id: {} to the shoppinglist with id: {}", idShoppinglistItem, idShoppinglist);
-        ShoppinglistItem shoppinglistItem = shoppinglistItemService.findShoppinglistItemById(idShoppinglistItem);
+        ShoppinglistItem shoppinglistItem = shoppinglistItemService.findShoppinglistItemByIdInfoBlockFalse(idShoppinglistItem);
         Shoppinglist shoppinglist = shoppinglistRepository
-                .findById(idShoppinglist)
+                .findByIdAndInfoBlockFalse(idShoppinglist)
                 .orElseThrow(() -> new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND));
         addShoppinglistItemToShoppinglist(shoppinglistItem, shoppinglist);
     }
@@ -264,6 +266,8 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
                 }
             }
             log.info("The new total cost will be {}", totalPriceCalculated);
+        } else {
+            log.info("There are not any items for the calculate");
         }
         return totalPriceCalculated;
     }

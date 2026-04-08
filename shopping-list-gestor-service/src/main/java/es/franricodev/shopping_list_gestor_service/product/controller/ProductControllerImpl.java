@@ -1,5 +1,6 @@
 package es.franricodev.shopping_list_gestor_service.product.controller;
 
+import es.franricodev.shopping_list_gestor_service.product.constants.api.ApiProductConstants;
 import es.franricodev.shopping_list_gestor_service.product.dto.ProductDTO;
 import es.franricodev.shopping_list_gestor_service.product.dto.response.ResponseProductsNames;
 import es.franricodev.shopping_list_gestor_service.product.exception.ProductException;
@@ -17,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/product")
+@RequestMapping(ApiProductConstants.BASE_URL)
 @CrossOrigin(origins = {"http://localhost:8100/", "http://192.168.18.7:9000/", "*"})
 public class ProductControllerImpl implements ProductController {
 

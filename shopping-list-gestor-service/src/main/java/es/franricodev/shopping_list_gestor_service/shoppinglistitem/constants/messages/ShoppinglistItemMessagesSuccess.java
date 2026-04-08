@@ -1,4 +1,4 @@
-package es.franricodev.shopping_list_gestor_service.shoppinglistitem.messages;
+package es.franricodev.shopping_list_gestor_service.shoppinglistitem.constants.messages;
 
 import lombok.NoArgsConstructor;
 

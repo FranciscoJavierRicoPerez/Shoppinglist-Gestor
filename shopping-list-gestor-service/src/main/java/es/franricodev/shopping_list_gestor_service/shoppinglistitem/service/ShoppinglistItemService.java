@@ -6,6 +6,7 @@ import es.franricodev.shopping_list_gestor_service.itemUnit.exception.ItemUnitEx
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.ShoppinglistItemMetadataDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItemV2;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestUpdateShoppinglistItemItemUnitsUp;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.*;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.exception.ShoppinglistItemException;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.ShoppinglistItem;
@@ -15,7 +16,7 @@ import java.util.List;
 
 public interface ShoppinglistItemService {
 
-    void addItemUnitToShoppinglistItem(CreateItemUnitData createItemUnitData, Long idShoppinglistItem) throws ShoppinglistItemException, ItemUnitException, ShoppinglistException;
+    void addItemUnitUpToShoppinglistItem(CreateItemUnitData createItemUnitData, Long idShoppinglistItem) throws ShoppinglistItemException, ItemUnitException, ShoppinglistException;
 
     List<ItemUnitDTO> getAllItemUnitsFromShoppinglistItem(Long idShoppinglistItem) throws ShoppinglistItemException;
 
@@ -37,11 +38,15 @@ public interface ShoppinglistItemService {
 
     ShoppinglistItem findShoppinglistItemById(Long idShoppinglistItem) throws ShoppinglistItemException;
 
+    ShoppinglistItem findShoppinglistItemByIdInfoBlockFalse(Long idShoppinglistItem);
+
     ResponseCreateShoppinglistItem createShoppinglistItemMetadata(RequestCreateShoppinglistItemV2 requestCreateShoppinglistItem) throws ShoppinglistItemException;
 
     List<ShoppinglistItemMetadataDTO> getShoppinglistItemMetadataDTO(Long idShoppinglist) throws ShoppinglistItemException;
 
-    // ResponseGetItemUnitWpMetadata getItemUnitWpMetadata(Long idShoppinglist) throws ShoppinglistItemException;
+    void updateShoppinglistItemCalculatedPrice(Long idShoppinglistItem);
+
+    void updateShoppinglistItemUpItemsUnitData(Long idShoppinglistItem, RequestUpdateShoppinglistItemItemUnitsUp request);
 
 }
 

@@ -5,6 +5,9 @@ export const PRODUCTION_BASE_URL = ''
 // --------- SHOPPINGLIST_ENDPOINTS --------------------------------------------------------------------
 export const SHOPPINGLIST_ENDPOINTS = {
   BASE_URL: '/api/shoppinglist',
+  UPDATE_TOTAL_PRICE_V1: (idShoppinglist: number): string => {
+    return SHOPPINGLIST_ENDPOINTS.BASE_URL + `/v1/${idShoppinglist}/updateTotalPrice`
+  },
   CREATE_V2: (): string => {
     return SHOPPINGLIST_ENDPOINTS.BASE_URL + `/v2/create`
   },
@@ -78,7 +81,7 @@ export const SHOPPINGLIST_VIEW_ENDPOINTS = {
 // -----------------------------------------------------------------------------------------------
 // ---------- CALCULATE_SYSTEM_ENDPOINTS ---------------------------------------------------------
 export const CALCULATE_SYSTEM_ENDPOINTS = {
-  BASE_URL: '/api/calculateSystem/',
+  BASE_URL: '/api/calculatesystem/',
   GET_ALL_V1: (): string => {
     return CALCULATE_SYSTEM_ENDPOINTS.BASE_URL + `v1/all`
   },
@@ -100,5 +103,32 @@ export const SHOPPINGLIST_ITEMS_ENDPOINTS = {
   },
   GET_ITEM_UNIT_WP_V1: (idShoppinglistItem: number): string => {
     return SHOPPINGLIST_ITEMS_ENDPOINTS.BASE_URL + `/v1/${idShoppinglistItem}/itemsUnitsWpInfo`
+  },
+  UPDATE_CALCULATED_PRICE_V1: (idShoppinglistItem: number): string => {
+    return (
+      SHOPPINGLIST_ITEMS_ENDPOINTS.BASE_URL + `/v1/${idShoppinglistItem}/update/calculatedPrice`
+    )
+  },
+  ADD_ITEM_UNIT_UP_V1: (idShoppinglistItem: number): string => {
+    return SHOPPINGLIST_ITEMS_ENDPOINTS.BASE_URL + `/v1/${idShoppinglistItem}/addItemUnitUp`
+  },
+  UPDATE_ITEM_UNIT_UP_V1: (idShoppinglistItem: number): string => {
+    return SHOPPINGLIST_ITEMS_ENDPOINTS.BASE_URL + `/v1/${idShoppinglistItem}/updateItemsUnitUpData`
+  },
+}
+// -------------------------------------------------------------------------------------------------
+// ---------- WP_ITEM_UNIT_ENDPOINTS ---------------------------------------------------------
+export const WP_ITEM_UNIT_ENDPOINTS = {
+  BASE_URL: '/api/itemunitwp',
+  UPDATE_ITEM_UNIT_WP_V1: (idItemUnitWp: number): string => {
+    return WP_ITEM_UNIT_ENDPOINTS.BASE_URL + `/v1/${idItemUnitWp}/update`
+  },
+}
+// -------------------------------------------------------------------------------------------------
+// ---------- ITEM_UNIT_ENDPOINTS ---------------------------------------------------------
+export const ITEM_UNIT_ENDPOINTS = {
+  BASE_URL: '/api/itemunit',
+  UPDATE_ITEM_UNIT_TOTAL_PRICE_V1: (idItemUnit: number): string => {
+    return ITEM_UNIT_ENDPOINTS.BASE_URL + `/v1/${idItemUnit}/update/totalPrice`
   },
 }

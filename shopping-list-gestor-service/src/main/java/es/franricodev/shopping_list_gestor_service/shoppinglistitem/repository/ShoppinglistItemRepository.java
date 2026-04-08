@@ -15,4 +15,6 @@ public interface ShoppinglistItemRepository extends JpaRepository<ShoppinglistIt
     @Query(value = "SELECT sli.* FROM SHOPPINGLIST_ITEM sli WHERE sli.shoppinglist_id = :idShoppinglist AND sli.info_block = 0", nativeQuery = true)
     Optional<List<ShoppinglistItem>> findAllShoppinglistItemByShoppinglistIdAndInfoBlockFalse(@Param("idShoppinglist") Long id);
 
+    Optional<ShoppinglistItem> findByIdAndInfoBlockFalse(Long idShoppinglistItem);
+
 }

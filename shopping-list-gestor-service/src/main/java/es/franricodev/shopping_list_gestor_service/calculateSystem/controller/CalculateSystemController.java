@@ -1,6 +1,8 @@
 package es.franricodev.shopping_list_gestor_service.calculateSystem.controller;
 
+import es.franricodev.shopping_list_gestor_service.calculateSystem.constants.api.ApiCalculateSystemConstants;
 import es.franricodev.shopping_list_gestor_service.calculateSystem.dto.response.ResponseGetAllCalculateSystems;
+import es.franricodev.shopping_list_gestor_service.constants.GeneralConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -10,25 +12,23 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.List;
-
 @Tag(
-        name = "Calculate System Controller API Documentation",
-        description = "Management of the operations related with the calculate system"
+        name = ApiCalculateSystemConstants.API_NAME,
+        description = ApiCalculateSystemConstants.API_DESCRIPTION
 )
 public interface CalculateSystemController {
 
-    @Operation(summary = "Returns all the calculate system in the database")
+    @Operation(summary = ApiCalculateSystemConstants.GET_ALL_V1_OP_SUMMARY)
     @ApiResponses({
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = GeneralConstants.HTTP_200,
                     content = {
                         @Content(
                                 schema = @Schema(implementation = ResponseGetAllCalculateSystems.class),
-                                mediaType = "application/json"
+                                mediaType = GeneralConstants.APPLICATION_JSON
                         )
                     })
     })
-    @GetMapping("/v1/all")
+    @GetMapping(ApiCalculateSystemConstants.GET_ALL_V1)
     ResponseEntity<ResponseGetAllCalculateSystems> getAllCalculateSystems();
 }

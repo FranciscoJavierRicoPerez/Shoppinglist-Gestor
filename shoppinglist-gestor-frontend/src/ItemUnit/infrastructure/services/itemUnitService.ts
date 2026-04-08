@@ -22,6 +22,7 @@ export function createItemUnitUpMetadataList(
       calculatedPrice: element.calculatedPrice,
       price: element.price,
       idItemUnitUp: element.idItemUnitUp,
+      idItemUnit: element.idItemUnit,
     })
   })
   return response

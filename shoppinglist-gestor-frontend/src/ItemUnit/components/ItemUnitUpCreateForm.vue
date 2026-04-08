@@ -5,16 +5,33 @@ import Button from 'primevue/button'
 import { useCreateShoppinglistItemFormStore } from '@/ShoppinglistItem/stores/createShoppinglistItemFormStore'
 import { ref, watch, type PropType } from 'vue'
 import { useItemUnitUpGroupedByPriceStore } from '../store/itemUnitUpGroupedByPriceStore'
+import { useAddItemUnitUpToShoppinglistItem } from '@/ShoppinglistItem/application/useAddItemUnitUpToShoppinglistItem'
+import { useUpdateShoppinglistTotalPrice } from '@/Shoppinglist/application/useUpdateShoppinglistTotalPrice'
+import { useRoute } from 'vue-router'
+import { useShoppinglistDetailStore } from '@/Shoppinglist/stores/shoppinglistDetailStore'
 
 const props = defineProps({
   quickCreate: {
     type: Boolean as PropType<Boolean>,
     default: () => false,
   },
+  idShoppinglistItem: {
+    type: Number as PropType<number>,
+    default: () => -1,
+  },
 })
+
+const { refetch: addItemUnitUpToShoppinglist } = useAddItemUnitUpToShoppinglistItem()
+const { refetch: updateShoppinglistTotalPrice } = useUpdateShoppinglistTotalPrice()
+
+const router = useRoute()
 
 const quantity = ref<number | null>(null)
 const unitaryPrice = ref<number | null>(null)
+
+const store = useCreateShoppinglistItemFormStore()
+const groupedItemsUpStore = useItemUnitUpGroupedByPriceStore()
+const shoppinglistDetailsStore = useShoppinglistDetailStore()
 
 watch(quantity, () => {
   if (!props.quickCreate) {
@@ -28,10 +45,6 @@ watch(unitaryPrice, () => {
   }
 })
 
-const store = useCreateShoppinglistItemFormStore()
-
-const groupedItemsUpStore = useItemUnitUpGroupedByPriceStore()
-
 function calculateShoppinglistItemTotalPrice(): void {
   let totalPrice: number | null = null
   if (quantity.value && unitaryPrice.value) {
@@ -42,19 +55,35 @@ function calculateShoppinglistItemTotalPrice(): void {
   store.shoppinglistItemPrice = totalPrice
 }
 
-function addNewItemUnitUp(): void {
-  console.log('llamar al servicio que se encarga de añadir un nuevo item unit')
+async function addNewItemUnitUp() {
+  console.log('llamar al servicio que se encarga de añadir un nuevo item unit up')
+
   // TAMBIEN TIENE QUE LLAMARSE AL STORE useItemUnitUpGroupedByPriceStore PARA AÑADIR LA NUEVA INSTANCIA
   if (quantity.value && unitaryPrice.value) {
+    await addItemUnitUpToShoppinglist(props.idShoppinglistItem, {
+      createItemUnit: true,
+      createUpItemUnitData: {
+        idItemUnitUp: null,
+        quantity: quantity.value,
+        unitaryPrice: unitaryPrice.value,
+      },
+      createWpItemUnitData: null,
+    })
+    // ACTUALIZAMOS EL PRECIO TOTAL DE LA LISTA DE LA COMPRA CON EL NUEVO VALOR DEL SLI AL HABER AÑADIDO UN NUEVO ITEM UNIT UP
+    shoppinglistDetailsStore.totalPrice = await updateShoppinglistTotalPrice(
+      Number(router.params.id),
+    )
     // ESTO NO SERA ASI, SERA CON LA RESPUESTA DEL SERVICIO
     groupedItemsUpStore.add({
       quantity: quantity.value,
       price: unitaryPrice.value,
       calculatedPrice: quantity.value * unitaryPrice.value,
       idItemUnitUp: -1,
+      idItemUnit: -1,
     })
   }
   groupedItemsUpStore.updateTotalPrice()
+  groupedItemsUpStore.totalPriceFixed = groupedItemsUpStore.totalPrice
 }
 </script>
 <template>

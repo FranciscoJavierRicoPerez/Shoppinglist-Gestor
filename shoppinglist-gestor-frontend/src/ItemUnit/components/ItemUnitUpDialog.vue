@@ -11,10 +11,17 @@ import { useItemUnitUpGroupedByPriceStore } from '../store/itemUnitUpGroupedByPr
 import ItemUnitUpCreateForm from './ItemUnitUpCreateForm.vue'
 import ItemUnitUpUpdateForm from './ItemUnitUpUpdateForm.vue'
 import { useUpdateItemUnitUpValues } from '../application/useUpdateItemUnitUpValues'
+import type { RequestUpdateShoppinglistItemItemUnitsUp } from '../infrastructure/models/request/RequestUpdateShoppinglistItemItemUnitsUp'
+import { useUpdateItemUnitUpdateMetadataStore } from '../store/upItemUnitUpdateMetadataStore'
+import { useUpdateShoppinglistItemCalculatedPrice } from '@/ShoppinglistItem/application/useUpdateShoppinglistItemCalculatedPrice'
+import { useUpdateShoppinglistTotalPrice } from '@/Shoppinglist/application/useUpdateShoppinglistTotalPrice'
+import { useRoute } from 'vue-router'
 
 const visible = ref<boolean>(false)
 
 const store = useItemUnitUpGroupedByPriceStore()
+
+const requestUpdateUpItemStore = useUpdateItemUnitUpdateMetadataStore()
 
 const shoppinglistDetailsStore = useShoppinglistDetailStore()
 
@@ -25,7 +32,12 @@ const props = defineProps({
   },
 })
 
+const router = useRoute()
+
+const { refetch: updateShoppinglistItemCalculatedPrice } =
+  useUpdateShoppinglistItemCalculatedPrice()
 const { refetch: updateItemUnitUpValues } = useUpdateItemUnitUpValues()
+const { refetch: updateShoppinglistTotalPrice } = useUpdateShoppinglistTotalPrice()
 
 const modalHeaderText = computed(() => {
   return 'Detalle del producto'
@@ -52,7 +64,18 @@ const addNewItemUnitText = computed(() => {
 })
 
 async function updateShoppinglistPrice() {
-  await updateItemUnitUpValues()
+  let elementToSend = []
+  elementToSend.push(
+    requestUpdateUpItemStore.requestUpItemUnitUpdateMetadataList[
+      requestUpdateUpItemStore.requestUpItemUnitUpdateMetadataList.length - 1
+    ],
+  )
+  let request: RequestUpdateShoppinglistItemItemUnitsUp = {
+    requestUpItemUnitUpdateMetadataList: elementToSend,
+  }
+  await updateItemUnitUpValues(props.shoppinglistItem.idShoppinglistItem, request) // TENGO QUE LLAMAR A ESTA FUNCION CON LOS VALORES QUE HAY EN EL STORE upItemUnitUpdateMetadataStore
+  // Importante -> Limpiar el listado si no se acumulara informacion innecesaria
+  requestUpdateUpItemStore.clear()
   if (store.totalPrice !== null) {
     let oldValue = props.shoppinglistItem.calculatedPrice
     props.shoppinglistItem.calculatedPrice = store.totalPrice
@@ -62,6 +85,9 @@ async function updateShoppinglistPrice() {
       store.totalPrice,
     )
   }
+  await updateShoppinglistItemCalculatedPrice(props.shoppinglistItem.idShoppinglistItem)
+  await updateShoppinglistTotalPrice(Number(router.params.id))
+  store.totalPriceFixed = store.totalPrice
 }
 </script>
 <template>
@@ -78,7 +104,10 @@ async function updateShoppinglistPrice() {
       <b>{{ addNewItemUnitText }}</b>
     </Divider>
     <!-- Formulario para añadir un nuevo item unit  -->
-    <ItemUnitUpCreateForm :quickCreate="true"></ItemUnitUpCreateForm>
+    <ItemUnitUpCreateForm
+      :quickCreate="true"
+      :idShoppinglistItem="props.shoppinglistItem.idShoppinglistItem"
+    ></ItemUnitUpCreateForm>
     <Divider align="center" type="solid">
       <b>{{ updateProductText }}</b>
     </Divider>
