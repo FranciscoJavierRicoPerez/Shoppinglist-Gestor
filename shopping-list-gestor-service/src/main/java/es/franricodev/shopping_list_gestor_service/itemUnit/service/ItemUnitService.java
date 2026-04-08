@@ -16,7 +16,7 @@ public interface ItemUnitService {
 
     ItemUnit createItemUnit(ShoppinglistItem shoppinglistItem, Double unitaryPrice, CalculateSystem calculateSystem);
 
-    ItemUnit findItemUnitById(Long id) throws Exception;
+    ItemUnit findItemUnitByIdAndInfoBlockFalse(Long id) throws Exception;
 
     void deleteItemUnit(ItemUnit itemUnit);
 
@@ -41,5 +41,5 @@ public interface ItemUnitService {
 
     ItemUnit updateItemUnitUpValues(Long idItemUnit, Long idItemUnitUp, int newQuantity);
 
-    List<ItemUnit> findAllItemUnitsByShoppinglistItem(ShoppinglistItem shoppinglistItem);
+    List<ItemUnit> findAllItemUnitsByShoppinglistItemAndInfoBlockFalse(ShoppinglistItem shoppinglistItem);
 }

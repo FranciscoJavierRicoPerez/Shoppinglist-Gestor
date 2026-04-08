@@ -28,7 +28,9 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
     private ShoppinglistItemService shoppinglistItemService;
 
     @Override
-    public ResponseEntity<ResponseDeleteShoppinglistItem> deleteShoppinglistItem(Long idShoppinglistItem) {
+    public ResponseEntity<ResponseDeleteShoppinglistItem> deleteShoppinglistItem(
+            Long idShoppinglistItem
+    ) {
         log.info("Delete the shoppinglist item with id: {}", idShoppinglistItem);
         ResponseDeleteShoppinglistItem responseDeleteShoppinglistItem = null;
         HttpStatus httpStatus = HttpStatus.OK;
@@ -41,7 +43,10 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
     }
 
     @Override
-    public ResponseEntity<Void> addItemUnitUp(Long idShoppinglistItem, CreateItemUnitData request) {
+    public ResponseEntity<Void> addItemUnitUp(
+            Long idShoppinglistItem,
+            CreateItemUnitData request
+    ) {
         log.info("Creating a new item unit UP for the shoppinglist item with id: {}", idShoppinglistItem);
         HttpStatus httpStatus = HttpStatus.OK;
         try {
@@ -53,7 +58,10 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
     }
 
     @Override
-    public ResponseEntity<Void> removeItemUnit(Long idItem, Long idShoppinglistItem) {
+    public ResponseEntity<Void> removeItemUnit(
+            Long idItem,
+            Long idShoppinglistItem
+    ) {
         log.info("Removing the item unit with id: {} from the shoppinglist item with id: {}", idItem, idShoppinglistItem);
         HttpStatus httpStatus = HttpStatus.OK;
         try {
@@ -65,7 +73,9 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
     }
 
     @Override
-    public ResponseEntity<ResponseGetAllItemsUnit> getAllItemUnitsFromShoppinglistItem(Long idShoppinglistItem) {
+    public ResponseEntity<ResponseGetAllItemsUnit> getAllItemUnitsFromShoppinglistItem(
+            Long idShoppinglistItem
+    ) {
         log.info("Getting all the items units with calculate system UP of shoppinglist item with id: {}", idShoppinglistItem);
         ResponseGetAllItemsUnit responseGetAllItemsUnit = new ResponseGetAllItemsUnit();
         HttpStatus httpStatus = HttpStatus.OK;
@@ -79,9 +89,11 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
         return new ResponseEntity<>(responseGetAllItemsUnit, httpStatus);
     }
 
-
     @Override
-    public ResponseEntity<Void> addItemUnitWPToShoppinglistItem(Long idShoppinglistItem, RequestAddItemUnitWP requestAddItemUnitWP) {
+    public ResponseEntity<Void> addItemUnitWPToShoppinglistItem(
+            Long idShoppinglistItem,
+            RequestAddItemUnitWP requestAddItemUnitWP
+    ) {
         log.info("Creating a new item unit WP for the shoppinglist item with id: {}", idShoppinglistItem);
         HttpStatus httpStatus = HttpStatus.OK;
         try {
@@ -94,7 +106,9 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
 
     // TODO: ERROR AL EJECUTAR ESTE ENDPOINT
     @Override
-    public ResponseEntity<ResponseGetAllItemUnitUpGroupedByPrice> getItemsUnitsUpGroupedByPrice(Long idShoppinglistItem) {
+    public ResponseEntity<ResponseGetAllItemUnitUpGroupedByPrice> getItemsUnitsUpGroupedByPrice(
+            Long idShoppinglistItem
+    ) {
         log.info("Getting the information of all items units of the shoppinglist item with id {} grouped by his price", idShoppinglistItem);
         ResponseGetAllItemUnitUpGroupedByPrice response = null;
         HttpStatus httpStatus = HttpStatus.OK;
@@ -108,7 +122,9 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
     }
 
     @Override
-    public ResponseEntity<ResponseItemUnitWpMetadata> getItemsUnitsWpMetadata(Long idShoppinglistItem) {
+    public ResponseEntity<ResponseItemUnitWpMetadata> getItemsUnitsWpMetadata(
+            Long idShoppinglistItem
+    ) {
         log.info("Getting the information of a item unit wp from the shoppinglist item with id: {}", idShoppinglistItem);
         ResponseItemUnitWpMetadata response = null;
         HttpStatus httpStatus = HttpStatus.OK;
@@ -121,7 +137,9 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
     }
 
     @Override
-    public ResponseEntity<ResponseCreateShoppinglistItem> createShoppinglistItemMetadata(RequestCreateShoppinglistItemV2 requestCreateShoppinglistItem) {
+    public ResponseEntity<ResponseCreateShoppinglistItem> createShoppinglistItemMetadata(
+            RequestCreateShoppinglistItemV2 requestCreateShoppinglistItem
+    ) {
         log.info("Creation of the shoppinglist item metadata");
         ResponseCreateShoppinglistItem response = null;
         HttpStatus httpStatus = HttpStatus.CREATED;
@@ -134,13 +152,21 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
     }
 
     @Override
-    public ResponseEntity<ResponseGetItemUnitWpMetadata> getItemUnitWpMetadata(Long idShoppinglistItem) {
+    public ResponseEntity<ResponseGetItemUnitWpMetadata> getItemUnitWpMetadata(
+            Long idShoppinglistItem
+    ) {
         log.info("Getting the item unit metadata");
         ResponseGetItemUnitWpMetadata response = null;
         ResponseItemUnitWpMetadata result = null;
         try {
             result = shoppinglistItemService.getItemUnitWpMetadata(idShoppinglistItem);
-            response = new ResponseGetItemUnitWpMetadata(result.getPriceKg(), result.getWeight(), result.getCalculatedPrice(), result.getIdItemUnitWp(), result.getIdItemUnit());
+            response = new ResponseGetItemUnitWpMetadata(
+                    result.getPriceKg(),
+                    result.getWeight(),
+                    result.getCalculatedPrice(),
+                    result.getIdItemUnitWp(),
+                    result.getIdItemUnit()
+            );
         } catch (ShoppinglistItemException e) {
             throw new RuntimeException(e);
         }
@@ -148,7 +174,9 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
     }
 
     @Override
-    public ResponseEntity<Void> updateShoppinglistItemCalcualatedPrice(Long idShoppinglistItem) {
+    public ResponseEntity<Void> updateShoppinglistItemCalcualatedPrice(
+            Long idShoppinglistItem
+    ) {
         log.info("Update the calculated price of the shoppinglist item with id {} ", idShoppinglistItem);
         HttpStatus httpStatus = HttpStatus.OK;
         try {
@@ -160,7 +188,10 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
     }
 
     @Override
-    public ResponseEntity<Void> updateShoppinglistItemUpItemsUnitData(Long idShoppinglistItem, RequestUpdateShoppinglistItemItemUnitsUp request) {
+    public ResponseEntity<Void> updateShoppinglistItemUpItemsUnitData(
+            Long idShoppinglistItem,
+            RequestUpdateShoppinglistItemItemUnitsUp request
+    ) {
         log.info("Update the shoppinglist item {} items units up values", idShoppinglistItem);
         HttpStatus httpStatus = HttpStatus.OK;
         shoppinglistItemService.updateShoppinglistItemUpItemsUnitData(idShoppinglistItem, request);

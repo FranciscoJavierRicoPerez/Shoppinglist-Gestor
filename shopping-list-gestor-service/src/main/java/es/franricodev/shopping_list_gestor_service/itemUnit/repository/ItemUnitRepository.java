@@ -10,5 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface ItemUnitRepository extends JpaRepository<ItemUnit, Long> {
-    Optional<List<ItemUnit>> findAllByShoppinglistItem(ShoppinglistItem shoppinglistItem);
+    Optional<List<ItemUnit>> findAllByShoppinglistItemAndInfoBlockFalse(ShoppinglistItem shoppinglistItem);
+
+    Optional<ItemUnit> findByIdAndInfoBlockFalse(Long idItemUnit);
 }

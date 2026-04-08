@@ -4,6 +4,7 @@ public record RequestUpItemUnitUpdateMetadata(
         Long idItemUnit,
         Long idItemUnitUp,
         Integer newQuantity,
-        Boolean removeItemUnitUp
+        Boolean removeItemUnitUp,
+        Boolean reduceOperation
 ) {
 }

@@ -38,6 +38,8 @@ public interface ShoppinglistItemService {
 
     ShoppinglistItem findShoppinglistItemById(Long idShoppinglistItem) throws ShoppinglistItemException;
 
+    ShoppinglistItem findShoppinglistItemByIdInfoBlockFalse(Long idShoppinglistItem);
+
     ResponseCreateShoppinglistItem createShoppinglistItemMetadata(RequestCreateShoppinglistItemV2 requestCreateShoppinglistItem) throws ShoppinglistItemException;
 
     List<ShoppinglistItemMetadataDTO> getShoppinglistItemMetadataDTO(Long idShoppinglist) throws ShoppinglistItemException;

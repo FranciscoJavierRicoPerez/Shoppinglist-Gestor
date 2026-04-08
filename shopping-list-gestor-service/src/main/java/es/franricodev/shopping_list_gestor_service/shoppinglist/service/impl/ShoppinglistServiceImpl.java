@@ -221,9 +221,9 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
     @Override
     public void addShoppinglistItem(Long idShoppinglistItem, Long idShoppinglist) throws ShoppinglistException, ShoppinglistItemException {
         log.info("Add shoppinglist item with id: {} to the shoppinglist with id: {}", idShoppinglistItem, idShoppinglist);
-        ShoppinglistItem shoppinglistItem = shoppinglistItemService.findShoppinglistItemById(idShoppinglistItem);
+        ShoppinglistItem shoppinglistItem = shoppinglistItemService.findShoppinglistItemByIdInfoBlockFalse(idShoppinglistItem);
         Shoppinglist shoppinglist = shoppinglistRepository
-                .findById(idShoppinglist)
+                .findByIdAndInfoBlockFalse(idShoppinglist)
                 .orElseThrow(() -> new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND));
         addShoppinglistItemToShoppinglist(shoppinglistItem, shoppinglist);
     }

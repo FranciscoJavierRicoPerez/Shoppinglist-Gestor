@@ -64,10 +64,12 @@ public class ItemUnitServiceImpl implements ItemUnitService {
     }
 
     @Override
-    public ItemUnit findItemUnitById(Long idItemUnit)  {
+    public ItemUnit findItemUnitByIdAndInfoBlockFalse(Long idItemUnit)  {
         log.info("Search item unit with id: {}", idItemUnit);
-        return itemUnitRepository.findById(idItemUnit).orElseThrow(() -> new ItemUnitException(ItemUnitMessagesError.ITEMUNIT_NOT_FOUND));
+        return itemUnitRepository.findByIdAndInfoBlockFalse(idItemUnit).orElseThrow(() -> new ItemUnitException(ItemUnitMessagesError.ITEMUNIT_NOT_FOUND));
     }
+
+
 
     @Override
     public void deleteItemUnit(ItemUnit itemUnit) {
@@ -97,7 +99,11 @@ public class ItemUnitServiceImpl implements ItemUnitService {
     }
 
     @Override
-    public ItemUnit createItemUnitV2(CreateItemUnitData createItemUnitData, boolean isWpItemUnit, ShoppinglistItem shoppinglistItem) throws ItemUnitException {
+    public ItemUnit createItemUnitV2(
+            CreateItemUnitData createItemUnitData,
+            boolean isWpItemUnit,
+            ShoppinglistItem shoppinglistItem
+    ) throws ItemUnitException {
         validateCorrectItemUnitCreationData(createItemUnitData, isWpItemUnit);
         if(!createItemUnitData.isCreateItemUnit()) {
             return null;
@@ -135,7 +141,10 @@ public class ItemUnitServiceImpl implements ItemUnitService {
         boolean isUPItem = shoppinglistItem.getCalculateSystem().getCode().equalsIgnoreCase("UP");
         Double totalPriceCalculated = 0D;
         if (isUPItem) {
-            List<ItemUnit> itemUnits = shoppinglistItem.getItemUnitList();
+            log.info("The shoppinglist item {} is UP Type", shoppinglistItem.getId());
+            log.info("Proceed to filter the item unit list, actually the item unit list have {} elements", shoppinglistItem.getItemUnitList().size());
+            List<ItemUnit> itemUnits = shoppinglistItem.getItemUnitList().stream().filter(itemUnit -> !itemUnit.getInfoBlock()).toList();
+            log.info("Item unit list filtered, the new list size is : {}", itemUnits.size());
             List<Double> unitaryPrices = getAllUnitaryPrices(itemUnits);
             for (Double unitaryPrice : unitaryPrices) {
                 ResponseItemUnitUpGrouped responseItemUnitUpGrouped = createResponseItemUnitUpGrouped(itemUnits, unitaryPrice);
@@ -153,15 +162,15 @@ public class ItemUnitServiceImpl implements ItemUnitService {
     public void deleteLogicItemUnitList(List<ItemUnit> itemUnitList) {
         log.info("Logic deletion of the items unit from the list");
         for (ItemUnit itemUnit : itemUnitList) {
-            itemUnit.setInfoBlock(true);
             deleteLogicItemUnit(itemUnit);
-            itemUnitRepository.save(itemUnit);
         }
     }
 
     @Override
     public void deleteLogicItemUnit(ItemUnit itemUnit) {
         log.info("Logic deletion of the item unit {}", itemUnit.getId());
+        itemUnit.setInfoBlock(true);
+        itemUnitRepository.save(itemUnit);
         if (itemUnit.isWpItem()) {
             wpItemUnitService.deleteLogicWpItemUnit(itemUnit.getWpItemUnit());
         } else {
@@ -180,7 +189,7 @@ public class ItemUnitServiceImpl implements ItemUnitService {
     @Override
     public void updateItemUnitTotalPrice(Long idItemUnit, RequestUpdateItemUnitWpTotalPrice request) {
         log.info("Setting the new total price value [new total price: {}] to the item unit with id: {}", request.newTotalPrice(), idItemUnit);
-        ItemUnit itemUnit = findItemUnitById(idItemUnit);
+        ItemUnit itemUnit = findItemUnitByIdAndInfoBlockFalse(idItemUnit);
         itemUnit.setTotalPrice(request.newTotalPrice());
         updateItemUnit(itemUnit);
     }
@@ -189,24 +198,11 @@ public class ItemUnitServiceImpl implements ItemUnitService {
     @Override
     public ResponseVerifyExistsItemUnitUpWithUnitaryPrice verifyExistsAnItemUnitUpWithUnitaryPrice(List<ItemUnit> itemsUnits, Double unitaryPrice) {
         ResponseVerifyExistsItemUnitUpWithUnitaryPrice response = null;
-        /* for(ItemUnit itemUnit : itemsUnits) {
-            Long idItemUnitUp = null;
-            if(itemUnit.isUpItem()) {
-                log.info("Verify if the item unit up: {} have the value", itemUnit.getUpItemUnit().getId());
-                idItemUnitUp = upItemUnitService.searchUnitaryPrice(itemUnit.getUpItemUnit(), unitaryPrice);
-                if(idItemUnitUp != null) {
-                    response = new ResponseVerifyExistsItemUnitUpWithUnitaryPrice(
-                            idItemUnitUp,
-                            itemUnit.getId()
-                    );
-                    break;
-                }
-            }
-        } */
         for(ItemUnit itemUnit : itemsUnits) {
             Long idItemUnitUp = null;
             if (itemUnit.isUpItem()) {
-                for(UpItemUnit upItemUnit : itemUnit.getUpItemUnitList()) {
+                List<UpItemUnit> upItemUnitListFiltered = itemUnit.getUpItemUnitList().stream().filter(upItemUnit -> !upItemUnit.getInfoBlock()).toList();
+                for(UpItemUnit upItemUnit : upItemUnitListFiltered) {
                     log.info("Verify if the item unit up: {} have the value", upItemUnit.getId());
                     idItemUnitUp = upItemUnitService.searchUnitaryPrice(upItemUnit, unitaryPrice);
                     if(idItemUnitUp != null) {
@@ -228,7 +224,7 @@ public class ItemUnitServiceImpl implements ItemUnitService {
     @Override
     public ItemUnit updateItemUnitUpValues(Long idItemUnit, Long idItemUnitUp, int newQuantity) {
         log.info("Updating the item unit up {} from the item unit {} with the new quantity {}", idItemUnitUp, idItemUnit, newQuantity);
-        ItemUnit itemUnit = findItemUnitById(idItemUnit);
+        ItemUnit itemUnit = findItemUnitByIdAndInfoBlockFalse(idItemUnit);
         if (itemUnit.isUpItem()) {
             upItemUnitService.updateUpItemUnitValues(new UpdateItemUnitUpValues(idItemUnitUp, newQuantity));
         }
@@ -239,38 +235,48 @@ public class ItemUnitServiceImpl implements ItemUnitService {
     }
 
     @Override
-    public List<ItemUnit> findAllItemUnitsByShoppinglistItem(ShoppinglistItem shoppinglistItem) {
+    public List<ItemUnit> findAllItemUnitsByShoppinglistItemAndInfoBlockFalse(ShoppinglistItem shoppinglistItem) {
         log.info("Getting all the items units associated to the shoppinglist item {}", shoppinglistItem.getId());
-        return itemUnitRepository.findAllByShoppinglistItem(shoppinglistItem).orElseThrow(
+        return itemUnitRepository.findAllByShoppinglistItemAndInfoBlockFalse(shoppinglistItem).orElseThrow(
                 () -> new ItemUnitException(ItemUnitMessagesError.NO_ITEM_UNITS_ASSOCIATED_TO_SHOPPINGLIST_ITEM)
         );
     }
 
     private ResponseItemUnitUpGrouped createResponseItemUnitUpGrouped(List<ItemUnit> itemUnits, Double unitaryPrice) {
-        ResponseItemUnitUpGrouped responseItemUnitUpGrouped = new ResponseItemUnitUpGrouped();
+        log.info("Creating the ResponseItemUnitUpGrouped, for the price value of {} ", unitaryPrice);
+        ResponseItemUnitUpGrouped responseItemUnitUpGrouped = null;
         int quantity = 0;
+        Long idItemUnit = null;
         Long id = null;
         for(ItemUnit itemUnit : itemUnits) {
-            for(UpItemUnit upItemUnit : itemUnit.getUpItemUnitList()) {
+            List<UpItemUnit> filtered = itemUnit.getUpItemUnitList().stream().filter(upItemUnit -> !upItemUnit.getInfoBlock()).toList();
+            for(UpItemUnit upItemUnit : filtered) {
                 if(upItemUnit.getUnityPrice().doubleValue() == unitaryPrice.doubleValue()) {
                     id = upItemUnit.getId();
                     quantity += upItemUnit.getQuantity();
+                    idItemUnit = itemUnit.getId();
                 }
             }
         }
+        responseItemUnitUpGrouped = new ResponseItemUnitUpGrouped();
         responseItemUnitUpGrouped.setPrice(unitaryPrice);
         responseItemUnitUpGrouped.setQuantity(quantity);
         responseItemUnitUpGrouped.setCalculatedPrice(unitaryPrice * quantity);
         responseItemUnitUpGrouped.setIdItemUnitUp(id);
+        responseItemUnitUpGrouped.setIdItemUnit(idItemUnit);
         return responseItemUnitUpGrouped;
     }
 
     private List<Double> getAllUnitaryPrices(List<ItemUnit> itemUnits) {
+        log.info("Creating a list with all the different unitary prices in the item unit list");
         List<Double> unitaryPrices = new ArrayList<>();
         for (ItemUnit itemUnit : itemUnits) {
-            for(UpItemUnit upItemUnit : itemUnit.getUpItemUnitList()) {
+            // List<UpItemUnit> filtered = itemUnit.getUpItemUnitList().stream().filter(UpItemUnit::getInfoBlock).toList();
+            List<UpItemUnit> filtered = itemUnit.getUpItemUnitList();
+            for(UpItemUnit upItemUnit : filtered) {
                 double unitaryPriceToCheck = upItemUnit.getUnityPrice();
                 if(!checkUnitaryPriceAlreadyExistsInList(unitaryPriceToCheck, unitaryPrices)) {
+                    log.info("Adding to the unitary prices list the value {}", unitaryPriceToCheck);
                     unitaryPrices.add(unitaryPriceToCheck);
                 }
             }
