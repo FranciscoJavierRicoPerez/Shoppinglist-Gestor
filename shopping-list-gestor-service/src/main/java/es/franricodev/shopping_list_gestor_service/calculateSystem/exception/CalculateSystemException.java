@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class CalculateSystemException extends Exception {
+public class CalculateSystemException extends RuntimeException {
     private String message;
 }

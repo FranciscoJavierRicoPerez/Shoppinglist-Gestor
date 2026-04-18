@@ -5,6 +5,7 @@ import es.franricodev.shopping_list_gestor_service.itemUnit.dto.request.CreateIt
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetAllItemsUnit;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.constants.api.ApiShoppinglistItemConstants;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItemV2;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestQuickCreateShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestUpdateShoppinglistItemItemUnitsUp;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.*;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.dto.request.RequestAddItemUnitWP;
@@ -180,4 +181,13 @@ public interface ShoppinglistItemController {
             @RequestBody RequestUpdateShoppinglistItemItemUnitsUp request
     );
 
+    @Operation(summary = ApiShoppinglistItemConstants.QUICK_CREATE_SHOPPINGLIST_ITEM_V1_OP_SUMMARY)
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = GeneralConstants.HTTP_201,
+                    description = GeneralConstants.DESC_201
+            )
+    })
+    @PostMapping(ApiShoppinglistItemConstants.QUICK_CREATE_SHOPPINGLIST_ITEM_V1)
+    ResponseEntity<Void> quickCreateShoppinglistItem(@RequestBody RequestQuickCreateShoppinglistItem request);
 }

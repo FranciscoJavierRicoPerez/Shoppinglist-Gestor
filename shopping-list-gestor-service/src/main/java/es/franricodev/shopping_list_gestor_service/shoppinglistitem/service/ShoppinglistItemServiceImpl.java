@@ -15,6 +15,7 @@ import es.franricodev.shopping_list_gestor_service.product.service.ProductServic
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.ShoppinglistItemMetadataDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItemV2;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestQuickCreateShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestUpItemUnitUpdateMetadata;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestUpdateShoppinglistItemItemUnitsUp;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseCreateShoppinglistItem;
@@ -234,18 +235,9 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
     public ResponseCreateShoppinglistItem createShoppinglistItemMetadata(RequestCreateShoppinglistItemV2 requestCreateShoppinglistItem) throws ShoppinglistItemException {
         log.info("Creation of the shoppinglist item metadata");
         try {
-            ShoppinglistItem shoppinglistItem = new ShoppinglistItem();
             Product product = productService.createProductV2(requestCreateShoppinglistItem.getProductInfo());
             CalculateSystem calculateSystem = calculateSystemService.findCalculateSystemById(requestCreateShoppinglistItem.getSelectedCalculateSystem());
-            shoppinglistItem.setCalculateSystem(calculateSystem);
-            shoppinglistItem.setInfoBlock(false);
-            // TODO: Procedemos a la creacion del shoppinglist item (SLI)
-            shoppinglistItem.setName(product.getName());
-            shoppinglistItem.setAssignationToListDate(new Date());
-            shoppinglistItem.setCalculateSystem(calculateSystem);
-            shoppinglistItem.setCalculatedPrice(0.0);
-            shoppinglistItem = shoppinglistItemRepository.save(shoppinglistItem);
-            productService.assignProductToShoppinglistItem(shoppinglistItem, product);
+            ShoppinglistItem shoppinglistItem = createShoppinglistItemMetadata(product, calculateSystem);
             // TODO: Creamos el ItemUnit y su WP O UP item asociado
             ItemUnit itemUnitCreated = null;
             if (requestCreateShoppinglistItem.getCreateItemUnitData() != null && requestCreateShoppinglistItem.getCreateItemUnitData().isCreateItemUnit()) {
@@ -320,6 +312,27 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
                 }
             }
         }
+    }
+
+    @Override
+    public void quickCreateShoppinglistItem(RequestQuickCreateShoppinglistItem request) {
+        log.info("Creating a new shoppinglist item using with the quick version mode");
+        Product product = productService.createProductV2(request.createProductInfo());
+        CalculateSystem calculateSystem = calculateSystemService.findCalculateSystemById(request.selectedCalculateSystem());
+        createShoppinglistItemMetadata(product, calculateSystem);
+    }
+
+    private ShoppinglistItem createShoppinglistItemMetadata(Product product, CalculateSystem calculateSystem) {
+        log.info("Create new shoppinglist item with product id : {} and calculate system id: {}", product.getId(), calculateSystem.getId());
+        ShoppinglistItem shoppinglistItem = new ShoppinglistItem();
+        shoppinglistItem.setInfoBlock(false);
+        shoppinglistItem.setName(product.getName());
+        shoppinglistItem.setAssignationToListDate(new Date());
+        shoppinglistItem.setCalculateSystem(calculateSystem);
+        shoppinglistItem.setCalculatedPrice(0.0);
+        shoppinglistItem = shoppinglistItemRepository.save(shoppinglistItem);
+        productService.assignProductToShoppinglistItem(shoppinglistItem, product);
+        return shoppinglistItem;
     }
 
     private ShoppinglistItemMetadataDTO buildShoppinglistItemMetadataDTO(ShoppinglistItem shoppinglistItem) {
