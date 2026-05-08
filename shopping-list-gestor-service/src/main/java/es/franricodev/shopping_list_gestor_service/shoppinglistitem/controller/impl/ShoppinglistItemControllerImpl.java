@@ -7,6 +7,7 @@ import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.Shoppi
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.constants.api.ApiShoppinglistItemConstants;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.controller.ShoppinglistItemController;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestCreateShoppinglistItemV2;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestQuickCreateShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestUpdateShoppinglistItemItemUnitsUp;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.*;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.exception.ShoppinglistItemException;
@@ -195,6 +196,14 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
         log.info("Update the shoppinglist item {} items units up values", idShoppinglistItem);
         HttpStatus httpStatus = HttpStatus.OK;
         shoppinglistItemService.updateShoppinglistItemUpItemsUnitData(idShoppinglistItem, request);
+        return new ResponseEntity<>(httpStatus);
+    }
+
+    @Override
+    public ResponseEntity<Void> quickCreateShoppinglistItem(RequestQuickCreateShoppinglistItem request) {
+        log.info("Quick create of a new shoppinglist item");
+        HttpStatus httpStatus = HttpStatus.CREATED;
+        shoppinglistItemService.quickCreateShoppinglistItem(request);
         return new ResponseEntity<>(httpStatus);
     }
 }

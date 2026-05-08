@@ -17,6 +17,7 @@ public class ApiShoppinglistItemConstants {
     public static final String UPDATE_SHOPPINGLIST_ITEM_CALCULATED_PRICE_V1 = "/v1/{idShoppinglistItem}/update/calculatedPrice";
     public static final String GET_ITEM_UNITS_WP_METADATA_V2 = "/v2/{idShoppinglistItem}/itemsUnitWpInfo";
     public static final String UPDATE_SHOPPINGLIST_ITEM_UP_ITEM_UNIT_V1_DATA = "/v1/{idShoppinglistItem}/updateItemsUnitUpData";
+    public static final String QUICK_CREATE_SHOPPINGLIST_ITEM_V1 = "/v1/quickCreate";
     // -------------------- PATH VARIABLE CONSTANTS ----------------
     public static final String ID_SHOPPINGLIST_ITEM = "idShoppinglistItem";
     public static final String ID_ITEM_UNIT = "idItemUnit";
@@ -32,4 +33,5 @@ public class ApiShoppinglistItemConstants {
     public static final String UPDATE_SHOPPINGLIST_ITEM_CALCULATED_PRICE_V1_OP_SUMMARY = "Update the calculated price of the shoppinglist item, the process recalculate the value with the item units associated";
     public static final String GET_ITEM_UNITS_WP_METADATA_V2_OP_SUMAMRY = "Return the information of a wp item unit";
     public static final String UPDATE_SHOPPINGLIST_ITEM_UP_ITEM_UNIT_DATA_V1_OP_SUMMARY = "Update of the items units up associated to the shoppinglist item with the requested data from de update item unit up form";
+    public static final String QUICK_CREATE_SHOPPINGLIST_ITEM_V1_OP_SUMMARY = "Add a new shoppinglist item without item unit only basic information";
 }
