@@ -4,7 +4,7 @@
     "code": "Shoppinglist_Code_1",
     "creationDate": "15/01/2026",
     "totalPrice": 39.48,
-    "isActive": true
+    "isActive": false
   },
   "items": [
     {

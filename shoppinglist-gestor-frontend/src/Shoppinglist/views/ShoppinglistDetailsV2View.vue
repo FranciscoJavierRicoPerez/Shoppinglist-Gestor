@@ -5,7 +5,7 @@ import ShoppinglistItemsTable from '@/ShoppinglistItem/components/ShoppinglistIt
 import { useShoppinglistDetailStore } from '@/Shoppinglist/stores/shoppinglistDetailStore'
 import { useGetShoppinglistDetailsMetadata } from '@/Shoppinglist/application/useGetShoppinglistDetailsMetadata'
 import { useRoute } from 'vue-router'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import Toast from 'primevue/toast'
 /**
  * - Obtener el detalle de la lista de la compra del EP: /api/shoppinglistview/v1/{id}/details
@@ -14,6 +14,8 @@ import Toast from 'primevue/toast'
 const route = useRoute()
 const shoppinglistDetailStore = useShoppinglistDetailStore()
 const { refetch: getShoppinglistDetailsMetadata } = useGetShoppinglistDetailsMetadata()
+
+const isSLActive = ref<boolean>(true)
 
 onMounted(async () => {
   const param = Number(route.params.id)
@@ -25,6 +27,8 @@ onMounted(async () => {
     ? (shoppinglistDetailStore.totalPrice =
         shoppinglistDetailStore.shoppinglistDetails?.shoppinglistMetadata.totalPrice)
     : -1
+  isSLActive.value = shoppinglistDetailStore.shoppinglistDetails.shoppinglistMetadata.isActive
+  debugger
 })
 </script>
 <template>
@@ -32,8 +36,12 @@ onMounted(async () => {
   <div class="flex flex-column gap-2">
     <ShoppinglistDetailsInformation class="grow shadow-5"></ShoppinglistDetailsInformation>
     <div class="flex flex-wrap gap-2 align-items-start sm:flex-nowrap">
-      <ShoppinglistItemsTable class="w-full grow-0 shadow-5"></ShoppinglistItemsTable>
+      <ShoppinglistItemsTable
+        :isSLActive="isSLActive"
+        class="w-full grow-0 shadow-5"
+      ></ShoppinglistItemsTable>
       <ShoppinglistItemCreateForm
+        v-if="isSLActive"
         class="w-full grow shadow-5"
         :shoppinglistId="Number(route.params.id)"
       ></ShoppinglistItemCreateForm>
