@@ -44,6 +44,12 @@ async function archiveShoppinglist() {
   if (response) {
     shoppinglistTableStore.updateShoppinglistActive(props.shoppinglist.idShoppinglist)
     emit('updateShoppinglistTables')
+    createToast({
+      severity: 'success',
+      summary: 'Archivada lista de la compra',
+      detail: 'Se ha archivado la lista de la compra: ' + props.shoppinglist.code,
+      life: 3000,
+    })
   }
 }
 
