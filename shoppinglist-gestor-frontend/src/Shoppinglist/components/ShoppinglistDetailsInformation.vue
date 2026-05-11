@@ -2,11 +2,9 @@
 import Panel from 'primevue/panel'
 import Tag from 'primevue/tag'
 import { useShoppinglistDetailStore } from '@/Shoppinglist/stores/shoppinglistDetailStore'
-import type { ShoppinglistMetadata } from '@/Shoppinglist/domain/ShoppinglistMetadata'
-import { computed, onMounted, ref } from 'vue'
+import { computed } from 'vue'
 
 const shoppinglistDetailsStore = useShoppinglistDetailStore()
-const shoppinglistMetadata = ref<ShoppinglistMetadata>()
 
 /** --- COMPUTED ----*/
 const informacionHeaderText = computed(() => {
