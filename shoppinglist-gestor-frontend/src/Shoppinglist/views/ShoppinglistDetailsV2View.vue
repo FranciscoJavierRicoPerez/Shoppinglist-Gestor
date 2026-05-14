@@ -28,7 +28,6 @@ onMounted(async () => {
         shoppinglistDetailStore.shoppinglistDetails?.shoppinglistMetadata.totalPrice)
     : -1
   isSLActive.value = shoppinglistDetailStore.shoppinglistDetails.shoppinglistMetadata.isActive
-  debugger
 })
 </script>
 <template>
