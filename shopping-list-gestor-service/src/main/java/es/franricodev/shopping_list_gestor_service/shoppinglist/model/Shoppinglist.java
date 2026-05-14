@@ -4,6 +4,7 @@ import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.Shoppi
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 
 @Getter
 @Setter
@@ -32,7 +34,6 @@ public class Shoppinglist implements Serializable {
     @Column(name = "CODE")
     private String code;
 
-    @Null
     @Column(name = "CLOSE_DATE")
     private LocalDate closeDate;
 

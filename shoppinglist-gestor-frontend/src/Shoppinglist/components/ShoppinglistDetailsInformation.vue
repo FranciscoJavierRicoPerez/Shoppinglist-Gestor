@@ -3,6 +3,7 @@ import Panel from 'primevue/panel'
 import Tag from 'primevue/tag'
 import { useShoppinglistDetailStore } from '@/Shoppinglist/stores/shoppinglistDetailStore'
 import { computed } from 'vue'
+import { ColorPicker } from 'primevue'
 
 const shoppinglistDetailsStore = useShoppinglistDetailStore()
 
@@ -13,8 +14,8 @@ const informacionHeaderText = computed(() => {
 
 const shoppinglistStatusText = computed(() => {
   return shoppinglistDetailsStore.shoppinglistDetails?.shoppinglistMetadata.isActive
-    ? 'ABIERTA'
-    : 'CERRADA'
+    ? 'Activa'
+    : 'Archivada'
 })
 
 const shoppinglistCodeText = computed(() => {
@@ -41,6 +42,11 @@ const shoppinglistDatesText = computed(() => {
   }
   return response
 })
+
+const sliIsActive = computed(() => {
+  return shoppinglistDetailsStore.shoppinglistDetails?.shoppinglistMetadata.isActive
+})
+
 /** ---------------- */
 </script>
 <template>
@@ -50,10 +56,12 @@ const shoppinglistDatesText = computed(() => {
         <div class="text-2xl italic">{{ informacionHeaderText }}</div>
       </template>
       <div class="flex flex-row flex-wrap gap-2">
-        <Tag class="text-xl italic">{{ shoppinglistStatusText }}</Tag>
+        <Tag class="text-xl italic" :severity="sliIsActive ? 'success' : 'warn'">{{
+          shoppinglistStatusText
+        }}</Tag>
         <Tag class="text-xl italic" severity="info">{{ shoppinglistCodeText }}</Tag>
         <Tag class="text-xl italic" severity="danger">{{ shoppinglistTotalPriceText }}</Tag>
-        <Tag class="text-xl italic" severity="warn">
+        <Tag class="text-xl italic" severity="secondary">
           {{ shoppinglistDatesText }}
         </Tag>
       </div>

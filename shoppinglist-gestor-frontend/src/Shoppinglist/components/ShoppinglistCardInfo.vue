@@ -10,7 +10,6 @@ import { useToast } from 'primevue/usetoast'
 import { useDeleteShoppinglistData } from '@/Shoppinglist/application/useDeleteShoppinglistData'
 import type { ShoppinglistMetadata } from '@/Shoppinglist/domain/ShoppinglistMetadata'
 import { useShoppinglistTableStore } from '@/Shoppinglist/stores/shoppinglistTableStore'
-import { useUpdateShoppinglistTotalPrice } from '../application/useUpdateShoppinglistTotalPrice'
 const { refetch: updateIsActive } = useUpdateIsActiveShoppinglist()
 const { refetch: deleteShoppinglist } = useDeleteShoppinglistData()
 const shoppinglistTableStore = useShoppinglistTableStore()
@@ -37,6 +36,14 @@ const slTotalPrice = computed(() => {
 
 const slIsActive = computed(() => {
   return props.shoppinglist.isActive
+})
+
+const slStatusTagText = computed(() => {
+  if (props.shoppinglist.isActive) {
+    return 'Activa'
+  } else {
+    return 'Archivada'
+  }
 })
 
 async function archiveShoppinglist() {
@@ -94,16 +101,9 @@ function createToast(toastOptions: ToastMessageOptions) {
     <template #subtitle>{{ slCreationDate }}</template>
     <template #content>
       <p>{{ slTotalPrice }}</p>
-      <div v-if="slIsActive">
-        <Tag severity="success">
-          <span class="tag-custom">Activo</span>
-        </Tag>
-      </div>
-      <div v-else>
-        <Tag severity="warn">
-          <span class="tag-custom">Archivado</span>
-        </Tag>
-      </div>
+      <Tag :severity="slIsActive ? 'success' : 'warn'">
+        <span class="tag-custom">{{ slStatusTagText }}</span>
+      </Tag>
     </template>
     <template #footer>
       <div class="d-flex flex-row justify-content-start flex-wrap">

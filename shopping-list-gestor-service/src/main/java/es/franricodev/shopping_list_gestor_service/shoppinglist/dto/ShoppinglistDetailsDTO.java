@@ -1,11 +1,13 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglist.dto;
 
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.ShoppinglistItemMetadataDTO;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;
 import java.util.List;
 
+@Builder
 @Data
 public class ShoppinglistDetailsDTO {
     private Long id;

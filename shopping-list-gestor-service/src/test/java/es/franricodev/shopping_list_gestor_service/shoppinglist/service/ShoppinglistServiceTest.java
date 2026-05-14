@@ -5,7 +5,7 @@ import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestUpdat
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.ShoppinglistDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.ShoppinglistDetailsDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
-import es.franricodev.shopping_list_gestor_service.shoppinglist.mapper.ShoppinglistMapper;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.mapper.mapstruct.ShoppinglistMapper;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.model.Shoppinglist;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.repository.ShoppinglistRepository;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.service.impl.ShoppinglistServiceImpl;

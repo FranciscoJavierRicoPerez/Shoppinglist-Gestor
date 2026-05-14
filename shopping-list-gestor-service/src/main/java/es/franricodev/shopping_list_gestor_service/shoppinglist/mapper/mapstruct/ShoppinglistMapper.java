@@ -1,4 +1,4 @@
-package es.franricodev.shopping_list_gestor_service.shoppinglist.mapper;
+package es.franricodev.shopping_list_gestor_service.shoppinglist.mapper.mapstruct;
 
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestCreateShoppinglistDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestUpdateShoppinglistDTO;
