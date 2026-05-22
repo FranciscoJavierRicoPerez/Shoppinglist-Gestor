@@ -15,4 +15,5 @@ public class ShoppinglistMetadata {
     private String creationDate;
     private Double totalPrice;
     private Boolean isActive;
+    private String closeDate;
 }

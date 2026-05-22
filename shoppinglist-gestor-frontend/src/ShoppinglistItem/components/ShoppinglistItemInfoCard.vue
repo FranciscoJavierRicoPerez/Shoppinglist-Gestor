@@ -21,6 +21,10 @@ const props = defineProps({
     type: Object as PropType<ShoppinglistItemMetadata>,
     default: () => null,
   },
+  isSLActive: {
+    type: Boolean as PropType<boolean>,
+    default: () => false,
+  },
 })
 /** ---------------------- */
 const router = useRoute()
@@ -142,7 +146,7 @@ async function removeShoppinglistItem(id: number): Promise<void> {
           }}</Tag>
         </div>
       </template>
-      <template #footer>
+      <template #footer v-if="isSLActive">
         <div class="flex flex-column gap-2">
           <div v-if="shoppinglistItem.calculateSystemCode === 'WP'">
             <ItemUnitWpDialog

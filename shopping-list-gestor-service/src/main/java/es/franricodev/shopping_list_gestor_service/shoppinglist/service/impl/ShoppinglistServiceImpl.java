@@ -6,8 +6,8 @@ import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.Res
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetFilteredShoppinglistMetadata;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ShoppinglistMetadata;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
-import es.franricodev.shopping_list_gestor_service.shoppinglist.mapper.ShoppinglistMapper;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.constants.messages.ErrorMessages;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.mapper.ShoppinglistMapperV2;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.model.Shoppinglist;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.repository.ShoppinglistRepository;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.service.ShoppinglistService;
@@ -15,16 +15,18 @@ import es.franricodev.shopping_list_gestor_service.shoppinglist.specifications.S
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.exception.ShoppinglistItemException;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.ShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.service.ShoppinglistItemService;
-import es.franricodev.shopping_list_gestor_service.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import static es.franricodev.shopping_list_gestor_service.shoppinglist.mapper.ShoppinglistMapperV2.*;
 
 @Slf4j
 @Service
@@ -36,31 +38,24 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
     @Autowired
     private ShoppinglistItemService shoppinglistItemService;
 
-    @Autowired
-    private ShoppinglistMapper shoppinglistMapper;
-
     @Override
     public List<ShoppinglistDTO> findAllShoppinglists() throws ShoppinglistException {
         log.info("Find all the shoppinglists actives");
         List<Shoppinglist> shoppinglistList = shoppinglistRepository.findAllByInfoBlockFalse().orElseThrow(
                 () -> new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND));
-        return shoppinglistMapper.toDTOList(shoppinglistList);
+        return toShoppinglistDtoList(shoppinglistList);
     }
 
     @Override
     public ShoppinglistDTO create(RequestCreateShoppinglistDTO request) {
         log.info("Creation of the new shoppinglist");
-        return shoppinglistMapper.toDTO(
-                shoppinglistRepository.save(
-                        shoppinglistMapper.createShoppinglist(request)
-                )
-        );
+        return toShoppinglistDto(shoppinglistRepository.save(generateShoppinglist(request)));
     }
 
     @Override
     public ResponseCreateShoppinglist createV2(RequestCreateShoppinglistDTO request) {
         log.info("Creation of the new shoppinglist V2");
-        Shoppinglist shoppinglist = shoppinglistRepository.save(shoppinglistMapper.createShoppinglist(request));
+        Shoppinglist shoppinglist = shoppinglistRepository.save(generateShoppinglist(request));
         return ResponseCreateShoppinglist
                 .builder()
                 .shoppinglistCreated(
@@ -94,9 +89,9 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
             throw new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND);
         }
         Shoppinglist toUpdate = shoppinglistOptional.get();
-        shoppinglistMapper.updateShoppinglist(toUpdate, request);
+        toUpdateShoppinglist(toUpdate, request);
         toUpdate = shoppinglistRepository.save(toUpdate);
-        return shoppinglistMapper.toDTO(toUpdate);
+        return toShoppinglistDto(toUpdate);
     }
 
     @Override
@@ -107,7 +102,7 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
         if (shoppinglistFiltered.isEmpty()) {
             throw new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND);
         }
-        return new ResponseGetFilteredShoppinglistMetadata(shoppinglistFiltered.stream().map(this::createShoppinglistMetadataFromShoppinglist).toList());
+        return new ResponseGetFilteredShoppinglistMetadata(shoppinglistFiltered.stream().map(ShoppinglistMapperV2::toShoppinglistMetadata).toList());
     }
 
     @Override
@@ -115,7 +110,7 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
         log.info("Getting the shoppinglist details");
         Shoppinglist shoppinglist = shoppinglistRepository.findById(id).orElseThrow(() -> new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_DETAILS));
         shoppinglist.setItems(shoppinglist.getItems().stream().filter(shoppinglistItem -> !shoppinglistItem.getInfoBlock()).toList());
-        return shoppinglistMapper.shoppinglistToShoppinglistDetailsDTO(shoppinglist);
+        return toShoppinglistDetailsDto(shoppinglist);
     }
 
     @Override
@@ -127,8 +122,8 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
         }
         Shoppinglist shoppinglist = optionalShoppinglist.get();
         shoppinglist.setIsActive(!shoppinglist.getIsActive());
-        shoppinglistRepository.save(shoppinglist);
-        return shoppinglistMapper.toDTO(shoppinglist);
+        shoppinglist.setCloseDate(LocalDate.now());
+        return toShoppinglistDto(shoppinglistRepository.save(shoppinglist));
     }
 
     @Override
@@ -147,20 +142,6 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
         }
         shoppinglist.setTotalPrice(price);
         return shoppinglist;
-    }
-
-    // TODO: REFACTORIZAR A PROGRAMACION FUNCIONAL O QUERY QUE DEVUELVA ESTO CONCRETAMENTE :(
-    @Override
-    public Shoppinglist findShoppinglistByShoppinglistItemId(Long idItem) {
-        List<Shoppinglist> shoppinglistList = shoppinglistRepository.findAll();
-        for(Shoppinglist shoppinglist : shoppinglistList) {
-            for (ShoppinglistItem shoppinglistItem : shoppinglist.getItems()) {
-                if (shoppinglistItem.getId().equals(idItem)) {
-                    return shoppinglist;
-                }
-            }
-        }
-        return null;
     }
 
     @Override
@@ -234,7 +215,7 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
         Shoppinglist shoppinglist =
                 shoppinglistRepository.findByIdAndInfoBlockFalse(idShoppinglist)
                         .orElseThrow( () -> new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND));
-        return createShoppinglistMetadataFromShoppinglist(shoppinglist);
+        return toShoppinglistMetadata(shoppinglist);
     }
 
     @Override
@@ -242,17 +223,17 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
         log.info("Building a list of ShoppinglistMetadata with all the shoppinglist in the database");
         List<Shoppinglist> shoppinglistList = shoppinglistRepository.findAllByInfoBlockFalse()
                 .orElseThrow(() -> new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND));
-        return shoppinglistList.stream().map(this::createShoppinglistMetadataFromShoppinglist).toList();
+        return shoppinglistList.stream().map(ShoppinglistMapperV2::toShoppinglistMetadata).toList();
     }
 
-    private ShoppinglistMetadata createShoppinglistMetadataFromShoppinglist(Shoppinglist shoppinglist) {
-        return ShoppinglistMetadata.builder()
-                .code(shoppinglist.getCode())
-                .creationDate(DateUtils.formatLocalDate(shoppinglist.getCreationDate(), "dd/MM/yyyy"))
-                .isActive(shoppinglist.getIsActive())
-                .totalPrice(shoppinglist.getTotalPrice())
-                .idShoppinglist(shoppinglist.getId())
-                .build();
+    @Override
+    public boolean verifyShoppinglistActive(Long idShoppinglist) {
+        boolean isActive = false;
+        Optional<Shoppinglist> shoppinglist = shoppinglistRepository.findById(idShoppinglist);
+        if (shoppinglist.isPresent()) {
+            isActive = shoppinglist.get().getIsActive();
+        }
+        return isActive;
     }
 
     private double calculateShoppinglistTotalPrice(Shoppinglist shoppinglist) {
