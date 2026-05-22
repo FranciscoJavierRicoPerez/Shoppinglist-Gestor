@@ -226,6 +226,16 @@ public class ShoppinglistServiceImpl implements ShoppinglistService {
         return shoppinglistList.stream().map(ShoppinglistMapperV2::toShoppinglistMetadata).toList();
     }
 
+    @Override
+    public boolean verifyShoppinglistActive(Long idShoppinglist) {
+        boolean isActive = false;
+        Optional<Shoppinglist> shoppinglist = shoppinglistRepository.findById(idShoppinglist);
+        if (shoppinglist.isPresent()) {
+            isActive = shoppinglist.get().getIsActive();
+        }
+        return isActive;
+    }
+
     private double calculateShoppinglistTotalPrice(Shoppinglist shoppinglist) {
         log.info("Calculate the new total cost of the shoppinglist with id {}, the actual value is: {}"
                 , shoppinglist.getId(), shoppinglist.getTotalPrice());
