@@ -77,7 +77,7 @@ export function createShoppinglistDetailsViewMetadata(
       creationDate: data.shoppinglistMetadata.creationDate,
       totalPrice: data.shoppinglistMetadata.totalPrice,
       isActive: data.shoppinglistMetadata.isActive,
-      closeDate: '',
+      closeDate: data.shoppinglistMetadata.closeDate,
     },
     items: createShoppinglistItemMetadataArray(data.items),
   }
