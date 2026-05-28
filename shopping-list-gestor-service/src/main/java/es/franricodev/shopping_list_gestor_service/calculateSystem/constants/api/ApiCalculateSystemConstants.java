@@ -1,7 +1,7 @@
 package es.franricodev.shopping_list_gestor_service.calculateSystem.constants.api;
 
 public class ApiCalculateSystemConstants {
-    // -------------- GENERAL CONSTANSTS ---------------------
+    // --------------  CONSTANSTS ---------------------
     public static final String API_NAME = "Calculate System Controller API Documentation";
     public static final String API_DESCRIPTION = "Management of the operations related with the calculate system";
     // -------------- URL CONSTANTS --------------------------

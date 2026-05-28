@@ -43,6 +43,15 @@ public class OpenApiConfig {
     }
 
     @Bean
+    public GroupedOpenApi apiShoppinglistV3() {
+        return GroupedOpenApi.builder()
+                .group("api-shoppinglist-v3")
+                .pathsToMatch("/api/shoppinglist/v3/**")
+                .pathsToExclude("/dto/**", "/exception/**", "/mapper/**", "/messages/**", "/model", "/repository/**", "/service/**")
+                .build();
+    }
+
+    @Bean
     public GroupedOpenApi apiShoppinglistView(){
         return GroupedOpenApi.builder()
                 .group("api-shoppinglist-view")
