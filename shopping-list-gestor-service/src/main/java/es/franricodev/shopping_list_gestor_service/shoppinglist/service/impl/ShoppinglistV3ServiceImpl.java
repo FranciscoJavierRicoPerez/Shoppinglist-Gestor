@@ -13,17 +13,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.yaml.snakeyaml.events.Event;
-
-import java.util.Optional;
 
 @Slf4j
 @Service
 public class ShoppinglistV3ServiceImpl implements ShoppinglistV3Service {
 
+    /**
+     * The shoppinglist repository
+     */
     @Autowired
     private ShoppinglistRepository shoppinglistRepository;
 
+    /**
+     * The shoppinglist item service
+     */
     @Autowired
     private ShoppinglistItemService shoppinglistItemService;
 
@@ -67,7 +70,7 @@ public class ShoppinglistV3ServiceImpl implements ShoppinglistV3Service {
      */
     private Shoppinglist getShoppinglistById(Long idShoppinglist) {
         log.info("Getting the shoppinglist with id [{}]", idShoppinglist);
-        return shoppinglistRepository.findById(idShoppinglist).orElseThrow(
+        return shoppinglistRepository.findByIdAndInfoBlockFalse(idShoppinglist).orElseThrow(
                 () -> new ShoppinglistException(ErrorMessages.ERR_SHOPPINGLIST_NOT_FOUND)
         );
     }

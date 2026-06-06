@@ -17,6 +17,12 @@ public class ShoppinglistV3ControllerImpl implements ShoppinglistV3Controller {
     @Autowired
     private ShoppinglistV3Service shoppinglistV3Service;
 
+    /**
+     * Logic delete of a shoppinglist item
+     * @param idShoppinglist
+     * @param idShoppinglistItem
+     * @return
+     */
     @Override
     public ResponseEntity<?> deleteShoppinglistItem(Long idShoppinglist, Long idShoppinglistItem) {
         log.info("Delete the shoppinglist item with id: {}", idShoppinglistItem);

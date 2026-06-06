@@ -137,18 +137,6 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
         recalculateShoppinglistItemsTotalPrice(shoppinglistItem);
     }
 
-    private void recalculateShoppinglistItemsTotalPrice(ShoppinglistItem shoppinglistItem) {
-        double totalShoppinglistPrice = 0D;
-        List<ItemUnit> itemUnitList = shoppinglistItem.getItemUnitList();
-        for(ItemUnit itemUnit : itemUnitList) {
-            if(itemUnit != null) {
-                totalShoppinglistPrice += itemUnitService.calculateItemUnitTotalPrice(itemUnit);
-            }
-        }
-        shoppinglistItem.setCalculatedPrice(totalShoppinglistPrice);
-        shoppinglistItemRepository.save(shoppinglistItem);
-    }
-
     @Override
     public ResponseGetAllItemUnitUpGroupedByPrice getItemsUnitsUpGroupedByPrice(Long idShoppinglistItem) throws ShoppinglistItemException {
         log.info("Getting all the items units UP type of the shoppinglist item with id {}", idShoppinglistItem);
@@ -205,11 +193,16 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
         shoppinglistItemRepository.save(shoppinglistItem);
     }
 
+    /**
+     * Delete a shoppinglist item by his id, using a logic mode
+     * @param idShoppinglistItem
+     * @return ResponseDeleteShoppinglistItem
+     * @throws ShoppinglistItemException
+     */
     @Override
     public ResponseDeleteShoppinglistItem deleteLogicShoppinglistItemById(Long idShoppinglistItem) throws ShoppinglistItemException {
         log.info("Logic deletion of the shoppinglist item with id: {}", idShoppinglistItem);
-        ShoppinglistItem shoppinglistItem = shoppinglistItemRepository.findByIdAndInfoBlockFalse(idShoppinglistItem).orElseThrow(
-                () -> new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_NOT_FOUND_ERR));
+        ShoppinglistItem shoppinglistItem = findShoppinglistItemByIdInfoBlockFalse(idShoppinglistItem);
         deleteLogicShoppinglistItem(shoppinglistItem);
         return ResponseDeleteShoppinglistItem.builder()
                 .delete(true)
@@ -218,15 +211,17 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
     }
 
     @Override
-    public ShoppinglistItem findShoppinglistItemById(Long idShoppinglistItem) throws ShoppinglistItemException {
-        return shoppinglistItemRepository.findByIdAndInfoBlockFalse(idShoppinglistItem).orElseThrow(
-                () -> new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_NOT_FOUND_ERR));
-    }
-
-    @Override
     public ShoppinglistItem findShoppinglistItemByIdInfoBlockFalse(Long idShoppinglistItem) {
         log.info("Getting the information of the shoppinglist item {}", idShoppinglistItem);
         return shoppinglistItemRepository.findByIdAndInfoBlockFalse(idShoppinglistItem).orElseThrow(
+                () -> new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_NOT_FOUND_ERR)
+        );
+    }
+
+    @Override
+    public List<ShoppinglistItem> findAllShoppinglistItemByShoppinglistIdAndInfoBlockFalse(Long idShoppinglist) {
+        log.info("Getting al the shoppinglist items in the shoppinglist [{}]", idShoppinglist);
+        return  shoppinglistItemRepository.findAllShoppinglistItemByShoppinglistIdAndInfoBlockFalse(idShoppinglist).orElseThrow(
                 () -> new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_NOT_FOUND_ERR)
         );
     }
@@ -278,10 +273,7 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
     @Override
     public List<ShoppinglistItemMetadataDTO> getShoppinglistItemMetadataDTO(Long idShoppinglist) throws ShoppinglistItemException {
         log.info("Building a list with the metainformation of the shoppinglist items of the shoppinglist with id: {}", idShoppinglist);
-        List<ShoppinglistItem> shoppinglistItems =
-                shoppinglistItemRepository.findAllShoppinglistItemByShoppinglistIdAndInfoBlockFalse(idShoppinglist).orElseThrow(
-                        () -> new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_NOT_FOUND_ERR)
-                );
+        List<ShoppinglistItem> shoppinglistItems = findAllShoppinglistItemByShoppinglistIdAndInfoBlockFalse(idShoppinglist);
         return shoppinglistItems.stream().map(this::buildShoppinglistItemMetadataDTO).toList();
     }
 
@@ -369,6 +361,18 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
             }
         }
         return calculatedPrice;
+    }
+
+    private void recalculateShoppinglistItemsTotalPrice(ShoppinglistItem shoppinglistItem) {
+        double totalShoppinglistPrice = 0D;
+        List<ItemUnit> itemUnitList = shoppinglistItem.getItemUnitList();
+        for(ItemUnit itemUnit : itemUnitList) {
+            if(itemUnit != null) {
+                totalShoppinglistPrice += itemUnitService.calculateItemUnitTotalPrice(itemUnit);
+            }
+        }
+        shoppinglistItem.setCalculatedPrice(totalShoppinglistPrice);
+        shoppinglistItemRepository.save(shoppinglistItem);
     }
 
 
