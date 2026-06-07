@@ -32,4 +32,7 @@ public class ApiShoppinglistV3Constants {
     // ------------ OPERATIONS DESCRIPTIONS -----------------------------------------------------------
     public static final String DELETE_LOGIC_SHOPPINGLIST_ITEM_FROM_SHOPPINGLIST_V3_OP_SUMMARY =
             "Logic delete of a shoppinglist item from an specific shoppinglist";
+    public static final String ADD_ITEM_UNIT_UP_TO_SHOPPINGLIST_ITEM_V3_OP_SUMMARY =
+            "Add new item unit of UP type in the shoppinglist item";
+
 }

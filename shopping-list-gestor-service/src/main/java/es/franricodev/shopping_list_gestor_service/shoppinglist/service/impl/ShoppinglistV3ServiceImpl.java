@@ -1,6 +1,7 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglist.service.impl;
 
 import es.franricodev.shopping_list_gestor_service.constants.GeneralConstants;
+import es.franricodev.shopping_list_gestor_service.itemUnit.dto.request.CreateItemUnitData;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.constants.messages.ErrorMessages;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistExceptionV2;
@@ -39,7 +40,32 @@ public class ShoppinglistV3ServiceImpl implements ShoppinglistV3Service {
     @Override
     public ResponseDeleteShoppinglistItem deleteShoppinglistItem(Long idShoppinglist, Long idShoppinglistItem) {
         log.info("Logic delete of the shoppinglist item : [{}]",idShoppinglistItem);
-        if (!isActive(idShoppinglist)) {
+        isActive(idShoppinglist);
+        return shoppinglistItemService.deleteLogicShoppinglistItemById(idShoppinglistItem);
+    }
+
+    /**
+     * Add a item unit up to the shoppinglist item
+     * @param idShoppinglist
+     * @param idShoppinglistItem
+     * @param request
+     */
+    @Override
+    public void addItemUnitUpToShoppinglistItem(Long idShoppinglist, Long idShoppinglistItem, CreateItemUnitData request) {
+        log.info("Adding new ITEM_UNIT_UP to SHOPPINGLIST_ITEM with ID: [{}]", idShoppinglistItem);
+        isActive(idShoppinglist);
+        shoppinglistItemService.addItemUnitUpToShoppinglistItem(request, idShoppinglistItem);
+    }
+
+    /**
+     * Verify if a shoppinglist is active or not
+     * @param idShoppinglist
+     * @return boolean
+     */
+    private void isActive(Long idShoppinglist) {
+        log.info("Verifying if the shoppinglist [{}] is active or not", idShoppinglist);
+        Shoppinglist shoppinglist = getShoppinglistById(idShoppinglist);
+        if (!shoppinglist.getIsActive()) {
             log.info("The shoppinglist [{}] is not active", idShoppinglist);
             throw new ShoppinglistExceptionV2(
                     ErrorMessages.ERR_SHOPPINGLIST_IS_NOT_ACTIVE,
@@ -49,18 +75,6 @@ public class ShoppinglistV3ServiceImpl implements ShoppinglistV3Service {
             );
         }
         log.info("The shoppinglist [{}] is active", idShoppinglist);
-        return shoppinglistItemService.deleteLogicShoppinglistItemById(idShoppinglistItem);
-    }
-
-    /**
-     * Verify if a shoppinglist is active or not
-     * @param idShoppinglist
-     * @return boolean
-     */
-    private boolean isActive(Long idShoppinglist) {
-        log.info("Verifying if the shoppinglist [{}] is active or not", idShoppinglist);
-        Shoppinglist shoppinglist = getShoppinglistById(idShoppinglist);
-        return shoppinglist.getIsActive();
     }
 
     /**
