@@ -1,19 +1,27 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglist.service.impl;
 
 import es.franricodev.shopping_list_gestor_service.constants.GeneralConstants;
+import es.franricodev.shopping_list_gestor_service.itemUnit.dto.ItemUnitDTO;
 import es.franricodev.shopping_list_gestor_service.itemUnit.dto.request.CreateItemUnitData;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.constants.messages.ErrorMessages;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetAllItemsUnit;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistException;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistExceptionV2;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.model.Shoppinglist;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.repository.ShoppinglistRepository;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.service.ShoppinglistV3Service;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.RequestUpdateShoppinglistItemItemUnitsUp;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseDeleteShoppinglistItem;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseGetAllItemUnitUpGroupedByPrice;
+import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseItemUnitWpMetadata;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.service.ShoppinglistItemService;
+import es.franricodev.shopping_list_gestor_service.wpItemUnit.dto.request.RequestAddItemUnitWP;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -55,6 +63,77 @@ public class ShoppinglistV3ServiceImpl implements ShoppinglistV3Service {
         log.info("Adding new ITEM_UNIT_UP to SHOPPINGLIST_ITEM with ID: [{}]", idShoppinglistItem);
         isActive(idShoppinglist);
         shoppinglistItemService.addItemUnitUpToShoppinglistItem(request, idShoppinglistItem);
+    }
+
+    /**
+     * Delete item unit from shoppinglist item
+     * @param idShoppinglist
+     * @param idShoppinglistItem
+     * @param idItemUnit
+     */
+    @Override
+    public void deleteItemUnitFromShoppinglistItem(Long idShoppinglist, Long idShoppinglistItem, Long idItemUnit) {
+        log.info("Remove ITEM_UNIT with id: [{}] from the SHOPPINGLIST_ITEM with id: [{}] in the SHOPPINGLIST with id: [{}]", idItemUnit, idShoppinglistItem, idShoppinglist);
+        isActive(idShoppinglist);
+        shoppinglistItemService.removeItemUnitFromShoppinglistItem(idShoppinglistItem, idItemUnit);
+    }
+
+    /**
+     * Gives all the items units from the shoppinglist item
+     *
+     * @param idShoppinglist
+     * @param idShoppinglistItem
+     * @return
+     */
+    @Override
+    public ResponseGetAllItemsUnit getAllItemUnitsFromShoppinglistItem(Long idShoppinglist, Long idShoppinglistItem) {
+        log.info("Get all ITEMS UNITS from the SHOPPINGLIST ITEM with id: [{}] from the SHOPPINGLIST with id: [{}]", idShoppinglistItem, idShoppinglist);
+        isActive(idShoppinglist);
+        List<ItemUnitDTO> itemUnitDTOList = shoppinglistItemService.getAllItemUnitsFromShoppinglistItem(idShoppinglistItem);
+        ResponseGetAllItemsUnit responseGetAllItemsUnit = new ResponseGetAllItemsUnit();
+        responseGetAllItemsUnit.setItemUnitList(itemUnitDTOList);
+        responseGetAllItemsUnit.setMessage("ITEMS UNITS OBTENIDOS CON EXITO");
+        return responseGetAllItemsUnit;
+    }
+
+    /**
+     * Add a new item unit wp to the shoppinglist item
+     * @param idShoppinglist
+     * @param idShoppinglistItem
+     * @param request
+     */
+    @Override
+    public void addItemUnitWpToShoppinglistItem(Long idShoppinglist, Long idShoppinglistItem, RequestAddItemUnitWP request) {
+        log.info("Add ITEM UNIT WP to the SHOPPINGLIST_ITEM with id: [{}] from the SHOPPINGLIST with id: [{}]", idShoppinglistItem, idShoppinglistItem);
+        isActive(idShoppinglist);
+        shoppinglistItemService.addItemUnitWPToShoppinglistItem(idShoppinglistItem, request);
+    }
+
+    /**
+     * Get items units up grouped by price
+     * @param idShoppinglist
+     * @param idShoppinglistItem
+     * @return
+     */
+    @Override
+    public ResponseGetAllItemUnitUpGroupedByPrice getItemsUnitGroupedByPrice(Long idShoppinglist, Long idShoppinglistItem) {
+        log.info("Get all items units up grouped by price from SHOPPINGLIST_ITEM with id: [{}] from the SHOPPINGLIST with id: [{}]", idShoppinglistItem, idShoppinglist);
+        isActive(idShoppinglist);
+        return shoppinglistItemService.getItemsUnitsUpGroupedByPrice(idShoppinglistItem);
+    }
+
+    @Override
+    public ResponseItemUnitWpMetadata getItemUnitsWpMetadata(Long idShoppinglist, Long idShoppinglistItem) {
+        log.info("Get items units wp metadata from SHOPPINGLIST_ITEM with id: [{}] from the SHOPPINGLIST with id: [{}]", idShoppinglistItem, idShoppinglist);
+        isActive(idShoppinglist);
+        return shoppinglistItemService.getItemUnitWpMetadata(idShoppinglistItem);
+    }
+
+    @Override
+    public void updateItemUnitUpDataFromShoppinglistItem(Long idShoppinglist, Long idShoppinglistItem, RequestUpdateShoppinglistItemItemUnitsUp request) {
+        log.info("Update item unit up data from SHOPPINGLIST_ITEM with id: [{}] from the SHOPPINGLIST with id: [{}]", idShoppinglistItem, idShoppinglist);
+        isActive(idShoppinglist);
+        shoppinglistItemService.updateShoppinglistItemUpItemsUnitData(idShoppinglistItem, request);
     }
 
     /**
