@@ -122,6 +122,12 @@ public class ShoppinglistV3ServiceImpl implements ShoppinglistV3Service {
         return shoppinglistItemService.getItemsUnitsUpGroupedByPrice(idShoppinglistItem);
     }
 
+    /**
+     * Get item units Wp metadata
+     * @param idShoppinglist
+     * @param idShoppinglistItem
+     * @return
+     */
     @Override
     public ResponseItemUnitWpMetadata getItemUnitsWpMetadata(Long idShoppinglist, Long idShoppinglistItem) {
         log.info("Get items units wp metadata from SHOPPINGLIST_ITEM with id: [{}] from the SHOPPINGLIST with id: [{}]", idShoppinglistItem, idShoppinglist);
@@ -129,6 +135,12 @@ public class ShoppinglistV3ServiceImpl implements ShoppinglistV3Service {
         return shoppinglistItemService.getItemUnitWpMetadata(idShoppinglistItem);
     }
 
+    /**
+     * Update item unit up data from a shoppinglist item
+     * @param idShoppinglist
+     * @param idShoppinglistItem
+     * @param request
+     */
     @Override
     public void updateItemUnitUpDataFromShoppinglistItem(Long idShoppinglist, Long idShoppinglistItem, RequestUpdateShoppinglistItemItemUnitsUp request) {
         log.info("Update item unit up data from SHOPPINGLIST_ITEM with id: [{}] from the SHOPPINGLIST with id: [{}]", idShoppinglistItem, idShoppinglist);
