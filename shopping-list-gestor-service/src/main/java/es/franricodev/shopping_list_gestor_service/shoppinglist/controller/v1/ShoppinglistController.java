@@ -1,13 +1,12 @@
-package es.franricodev.shopping_list_gestor_service.shoppinglist.controller;
+package es.franricodev.shopping_list_gestor_service.shoppinglist.controller.v1;
 
 import es.franricodev.shopping_list_gestor_service.constants.GeneralConstants;
-import es.franricodev.shopping_list_gestor_service.shoppinglist.constants.api.ApiShoppinglistConstants;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.constants.api.v1.ApiShoppinglistConstants;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestCreateShoppinglistDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.RequestUpdateShoppinglistDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.ShoppinglistDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.ShoppinglistDetailsDTO;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ReponseUpdateShoppinglistTotalPrice;
-import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseCreateShoppinglist;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetFilteredShoppinglistMetadata;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -34,10 +33,6 @@ public interface ShoppinglistController {
     @Operation(summary = ApiShoppinglistConstants.CREATE_V1_OP_SUMMARY, deprecated = true)
     @PostMapping(ApiShoppinglistConstants.CREATE_V1)
     ResponseEntity<ShoppinglistDTO> createShoppinglist(@NotNull @RequestBody RequestCreateShoppinglistDTO request);
-
-    @Operation(summary = ApiShoppinglistConstants.CREATE_V2_OP_SUMMARY)
-    @PostMapping(ApiShoppinglistConstants.CREATE_V2)
-    ResponseEntity<ResponseCreateShoppinglist> createShoppinglistV2(@NotNull @RequestBody RequestCreateShoppinglistDTO request);
 
     @Operation(summary = ApiShoppinglistConstants.DELETE_V1_OP_SUMMARY, deprecated = true)
     @DeleteMapping(ApiShoppinglistConstants.DELETE_V1)

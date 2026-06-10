@@ -1,4 +1,4 @@
-package es.franricodev.shopping_list_gestor_service.shoppinglist.constants.api;
+package es.franricodev.shopping_list_gestor_service.shoppinglist.constants.api.v1;
 
 public class ApiShoppinglistViewConstants {
     // ------------------- GENERAL CONSTANTS -------------------------

@@ -1,7 +1,7 @@
-package es.franricodev.shopping_list_gestor_service.shoppinglist.controller;
+package es.franricodev.shopping_list_gestor_service.shoppinglist.controller.v1;
 
 import es.franricodev.shopping_list_gestor_service.constants.GeneralConstants;
-import es.franricodev.shopping_list_gestor_service.shoppinglist.constants.api.ApiShoppinglistViewConstants;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.constants.api.v1.ApiShoppinglistViewConstants;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetShoppinglistDetailsMetadata;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetShoppinglistTableMetadata;
 import io.swagger.v3.oas.annotations.Operation;

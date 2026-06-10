@@ -37,9 +37,9 @@ public interface ShoppinglistItemService {
 
     ResponseDeleteShoppinglistItem deleteLogicShoppinglistItemById(Long idShoppinglistItem) throws ShoppinglistItemException;
 
-    ShoppinglistItem findShoppinglistItemById(Long idShoppinglistItem) throws ShoppinglistItemException;
-
     ShoppinglistItem findShoppinglistItemByIdInfoBlockFalse(Long idShoppinglistItem);
+
+    List<ShoppinglistItem> findAllShoppinglistItemByShoppinglistIdAndInfoBlockFalse(Long idShoppinglist);
 
     ResponseCreateShoppinglistItem createShoppinglistItemMetadata(RequestCreateShoppinglistItemV2 requestCreateShoppinglistItem) throws ShoppinglistItemException;
 
