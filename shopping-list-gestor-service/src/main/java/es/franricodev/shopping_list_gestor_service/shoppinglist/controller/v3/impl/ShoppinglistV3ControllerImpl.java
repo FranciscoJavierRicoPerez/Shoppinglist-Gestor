@@ -108,7 +108,7 @@ public class ShoppinglistV3ControllerImpl implements ShoppinglistV3Controller {
     @Override
     public ResponseEntity<?> getItemUnitsWpMetadata(Long idShoppinglist, Long idShoppinglistItem) {
         log.info("Get items units wp metadata from SHOPPINGLIST_ITEM with id: [{}] from the SHOPPINGLIST with id: [{}]", idShoppinglistItem, idShoppinglist);
-        return null;
+        return ResponseEntity.ok(shoppinglistV3Service.getItemUnitsWpMetadata(idShoppinglist, idShoppinglistItem));
     }
 
     /**
@@ -121,6 +121,7 @@ public class ShoppinglistV3ControllerImpl implements ShoppinglistV3Controller {
     @Override
     public ResponseEntity<?> updateItemUnitUpDataFromShoppinglistItem(Long idShoppinglist, Long idShoppinglistItem, RequestUpdateShoppinglistItemItemUnitsUp request) {
         log.info("Update item unit up data from SHOPPINGLIST_ITEM with id: [{}] from the SHOPPINGLIST with id: [{}]", idShoppinglistItem, idShoppinglist);
-        return null;
+        shoppinglistV3Service.updateItemUnitUpDataFromShoppinglistItem(idShoppinglist, idShoppinglistItem, request);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
