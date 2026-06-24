@@ -1,0 +1,18 @@
+spring:
+  profiles:
+    active: ${env.spring.profiles.active}
+  application:
+    name: ${env.spring.application.name}
+  datasource:
+    url: ${env.spring.datasource.url}
+    username: ${env.spring.datasource.username}
+    password: ${env.spring.datasource.password}
+  jpa:
+    database-platform: ${env.spring.jpa.database-platform}
+    hibernate:
+      ddl-auto: ${env.spring.jpa.hibernate.ddl-auto}
+    show-sql: ${end.spring.jpa.show-sql}
+
+server:
+  port: ${env.server.port}
+  address: ${env.server.address}
