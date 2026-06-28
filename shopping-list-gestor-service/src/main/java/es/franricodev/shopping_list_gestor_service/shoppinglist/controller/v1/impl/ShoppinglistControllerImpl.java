@@ -64,7 +64,7 @@ public class ShoppinglistControllerImpl implements ShoppinglistController {
     @Override
     public ResponseEntity<ShoppinglistDTO> updateShoppinglist(RequestUpdateShoppinglistDTO request) {
         log.info("Update the shoppinglist with id: {}", request.getId());
-        HttpStatus httpStatus = HttpStatus.CREATED;
+        HttpStatus httpStatus = HttpStatus.OK;
         ShoppinglistDTO updated = null;
         try {
             updated = shoppinglistService.updateShoppinglist(request);

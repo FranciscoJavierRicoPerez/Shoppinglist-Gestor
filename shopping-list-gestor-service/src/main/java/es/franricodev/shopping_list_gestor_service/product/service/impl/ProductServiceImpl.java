@@ -1,11 +1,11 @@
-package es.franricodev.shopping_list_gestor_service.product.service;
+package es.franricodev.shopping_list_gestor_service.product.service.impl;
 
 import es.franricodev.shopping_list_gestor_service.product.dto.ProductDTO;
 import es.franricodev.shopping_list_gestor_service.product.dto.request.CreateProductInfo;
-import es.franricodev.shopping_list_gestor_service.product.exception.ProductException;
 import es.franricodev.shopping_list_gestor_service.product.mapper.ProductMapper;
 import es.franricodev.shopping_list_gestor_service.product.model.Product;
 import es.franricodev.shopping_list_gestor_service.product.repository.ProductRepository;
+import es.franricodev.shopping_list_gestor_service.product.service.ProductService;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.ShoppinglistItem;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,11 +82,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<String> getAllProductsNames() {
         log.info("Getting all the names of the products in the database");
-        List<String> productsNames = productRepository.findAll().stream().map(Product::getName).toList();
-        if (productsNames.isEmpty()) {
-            throw new ProductException("No se han encontrado ningun producto");
-        }
-        return productsNames;
+        return productRepository.findAll().stream().map(Product::getName).toList();
     }
 
     @Override
