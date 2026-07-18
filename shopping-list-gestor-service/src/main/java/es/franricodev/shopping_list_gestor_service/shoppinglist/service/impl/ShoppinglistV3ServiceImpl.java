@@ -14,7 +14,6 @@ import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseDeleteShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseGetAllItemUnitUpGroupedByPrice;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseItemUnitWpMetadata;
-import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.ShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.service.ShoppinglistItemService;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.dto.request.RequestAddItemUnitWP;
 import lombok.extern.slf4j.Slf4j;
@@ -50,9 +49,7 @@ public class ShoppinglistV3ServiceImpl implements ShoppinglistV3Service {
     public ResponseDeleteShoppinglistItem deleteShoppinglistItem(Long idShoppinglist, Long idShoppinglistItem) {
         log.info("Logic delete of the shoppinglist item : [{}]",idShoppinglistItem);
         isActive(idShoppinglist);
-        ResponseDeleteShoppinglistItem response = shoppinglistItemService.deleteLogicShoppinglistItemById(idShoppinglistItem);
-        updateShoppinglistInformation(idShoppinglist, idShoppinglistItem);
-        return response;
+        return shoppinglistItemService.deleteLogicShoppinglistItemById(idShoppinglistItem);
     }
 
     /**
@@ -66,7 +63,6 @@ public class ShoppinglistV3ServiceImpl implements ShoppinglistV3Service {
         log.info("Adding new ITEM_UNIT_UP to SHOPPINGLIST_ITEM with ID: [{}]", idShoppinglistItem);
         isActive(idShoppinglist);
         shoppinglistItemService.addItemUnitUpToShoppinglistItem(request, idShoppinglistItem);
-        updateShoppinglistInformation(idShoppinglist, idShoppinglistItem);
     }
 
     /**
@@ -80,7 +76,6 @@ public class ShoppinglistV3ServiceImpl implements ShoppinglistV3Service {
         log.info("Remove ITEM_UNIT with id: [{}] from the SHOPPINGLIST_ITEM with id: [{}] in the SHOPPINGLIST with id: [{}]", idItemUnit, idShoppinglistItem, idShoppinglist);
         isActive(idShoppinglist);
         shoppinglistItemService.removeItemUnitFromShoppinglistItem(idShoppinglistItem, idItemUnit);
-        updateShoppinglistInformation(idShoppinglist, idShoppinglistItem);
     }
 
     /**
@@ -112,7 +107,6 @@ public class ShoppinglistV3ServiceImpl implements ShoppinglistV3Service {
         log.info("Add ITEM UNIT WP to the SHOPPINGLIST_ITEM with id: [{}] from the SHOPPINGLIST with id: [{}]", idShoppinglistItem, idShoppinglistItem);
         isActive(idShoppinglist);
         shoppinglistItemService.addItemUnitWPToShoppinglistItem(idShoppinglistItem, request);
-        updateShoppinglistInformation(idShoppinglist, idShoppinglistItem);
     }
 
     /**
@@ -152,25 +146,6 @@ public class ShoppinglistV3ServiceImpl implements ShoppinglistV3Service {
         log.info("Update item unit up data from SHOPPINGLIST_ITEM with id: [{}] from the SHOPPINGLIST with id: [{}]", idShoppinglistItem, idShoppinglist);
         isActive(idShoppinglist);
         shoppinglistItemService.updateShoppinglistItemUpItemsUnitData(idShoppinglistItem, request);
-        updateShoppinglistInformation(idShoppinglist, idShoppinglistItem);
-    }
-
-    /**
-     * Update the shoppinglist information, recalculating the data
-     * @param idShoppinglist
-     * @param idShoppinglistItem
-     */
-    @Override
-    public void updateShoppinglistInformation(Long idShoppinglist, Long idShoppinglistItem) {
-        log.info("Recalculating the data of the shoppinglist with id [{}]", idShoppinglist);
-        Shoppinglist shoppinglist = getShoppinglistById(idShoppinglist);
-        shoppinglistItemService.updateShoppinglistItemCalculatedPrice(idShoppinglistItem);
-        Double recalculatedTotalPrice = 0D;
-        for (ShoppinglistItem shoppinglistItem : shoppinglist.getItems()) {
-            recalculatedTotalPrice += shoppinglistItem.getCalculatedPrice();
-        }
-        shoppinglist.setTotalPrice(recalculatedTotalPrice);
-        shoppinglistRepository.save(shoppinglist);
     }
 
     /**
