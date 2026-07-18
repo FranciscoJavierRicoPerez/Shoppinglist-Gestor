@@ -1,6 +1,7 @@
-package es.franricodev.shopping_list_gestor_service.product.controller;
+package es.franricodev.shopping_list_gestor_service.product.controller.impl;
 
 import es.franricodev.shopping_list_gestor_service.product.constants.api.ApiProductConstants;
+import es.franricodev.shopping_list_gestor_service.product.controller.ProductController;
 import es.franricodev.shopping_list_gestor_service.product.dto.ProductDTO;
 import es.franricodev.shopping_list_gestor_service.product.dto.response.ResponseProductsNames;
 import es.franricodev.shopping_list_gestor_service.product.exception.ProductException;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,7 +26,6 @@ public class ProductControllerImpl implements ProductController {
     private ProductService productService;
 
     @Override
-    @GetMapping("/v1/all")
     public ResponseEntity<List<ProductDTO>> getAllProducts() {
         log.info("Getting all the products from the database");
         HttpStatus httpStatus = HttpStatus.OK;

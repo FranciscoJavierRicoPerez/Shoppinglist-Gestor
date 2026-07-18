@@ -29,7 +29,7 @@ public class ShoppinglistMapperV2 {
                  .id(shoppinglist.getId())
                  .code(shoppinglist.getCode())
                  .creationDate(Date.from(shoppinglist.getCreationDate().atStartOfDay(ZoneOffset.UTC).toInstant()))
-                 .closeDate(Date.from(shoppinglist.getCloseDate().atStartOfDay(ZoneOffset.UTC).toInstant()))
+                 .closeDate(shoppinglist.getCloseDate() != null ? Date.from(shoppinglist.getCloseDate().atStartOfDay(ZoneOffset.UTC).toInstant()) : null)
                  .isActive(shoppinglist.getIsActive())
                  .totalPrice(shoppinglist.getTotalPrice())
                  .build();
@@ -59,7 +59,7 @@ public class ShoppinglistMapperV2 {
                 .code(shoppinglist.getCode())
                 .totalPrice(shoppinglist.getTotalPrice())
                 .creationDate(Date.from(shoppinglist.getCreationDate().atStartOfDay(ZoneOffset.UTC).toInstant()))
-                .closeDate(Date.from(shoppinglist.getCloseDate().atStartOfDay(ZoneOffset.UTC).toInstant()))
+                .closeDate(shoppinglist.getCloseDate() != null ? Date.from(shoppinglist.getCloseDate().atStartOfDay(ZoneOffset.UTC).toInstant()) : null)
                 .isActive(shoppinglist.getIsActive())
                 .items(toShoppinglistItemMetadataDTOList(shoppinglist.getItems()))
                 .build();

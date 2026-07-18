@@ -1,7 +1,7 @@
-package es.franricodev.shopping_list_gestor_service.shoppinglist.controller.impl;
+package es.franricodev.shopping_list_gestor_service.shoppinglist.controller.v1.impl;
 
-import es.franricodev.shopping_list_gestor_service.shoppinglist.constants.api.ApiShoppinglistViewConstants;
-import es.franricodev.shopping_list_gestor_service.shoppinglist.controller.ShoppinglistViewController;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.constants.api.v1.ApiShoppinglistViewConstants;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.controller.v1.ShoppinglistViewController;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetShoppinglistDetailsMetadata;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseGetShoppinglistTableMetadata;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.exception.ShoppinglistViewException;
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

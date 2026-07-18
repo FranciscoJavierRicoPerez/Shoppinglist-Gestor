@@ -1,0 +1,370 @@
+{
+  "info": {
+    "_postman_id": "3fba33d2-ea9c-4fed-85cc-716ee7055421",
+    "name": "SHOPPINGLIST-GESTOR-SERVICE-TESTS-COLLECTION",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "21320193"
+  },
+  "item": [
+    {
+      "name": "1 - Create a Shoppinglist - v2",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Create Shoppinglist is 201\", function() {\r",
+              "    pm.response.to.have.status(201);\r",
+              "    var idShoppinglistGenerated = pm.response.json().shoppinglistCreated.idShoppinglist\r",
+              "    pm.environment.set(\"idShoppinglistGenerated\", idShoppinglistGenerated)\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"code\": \"shoppinglist-create-in-postman\",\r\n  \"totalPrice\": 0.0,\r\n  \"isActive\": true,\r\n  \"infoBlock\": false\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{local_url}}{{api_shoppinglist}}{{v2}}create",
+          "host": [
+            "{{local_url}}{{api_shoppinglist}}{{v2}}create"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "2 - Get shoppinglist details view information - v1",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Get Shoppinglist details must returns 200', function () {\r",
+              "    pm.response.to.have.status(200)\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{local_url}}{{api_shoppinglist_view}}{{v1}}{{idShoppinglistGenerated}}/details",
+          "host": [
+            "{{local_url}}{{api_shoppinglist_view}}{{v1}}{{idShoppinglistGenerated}}"
+          ],
+          "path": [
+            "details"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "3 - Get all Shoppinglist - v1",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Get all Shoppinglists must returns 200', function () {\r",
+              "    pm.response.to.have.status(200)\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{local_url}}{{api_shoppinglist_view}}{{v1}}all",
+          "host": [
+            "{{local_url}}{{api_shoppinglist_view}}{{v1}}all"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "4 - Filter Shoppinglists - v1",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Get filtered Shoppinglists must returns 200', function () {\r",
+              "    pm.response.to.have.status(200)\r",
+              "});\r",
+              "pm.test('Get filtered Shoppinglist must return empty list', function() {\r",
+              "    pm.expect(pm.response.json().shoppinglistTableMetadataList).to.eql([])\r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{local_url}}{{api_shoppinglist}}{{v1}}filter?code={{filter_get_code}}",
+          "host": [
+            "{{local_url}}{{api_shoppinglist}}{{v1}}filter"
+          ],
+          "query": [
+            {
+              "key": "code",
+              "value": "{{filter_get_code}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "5 - Update Shoppinglist - v1",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Update Shoppinglist is 200\", function() {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"id\": {{idShoppinglistGenerated}},\r\n  \"code\": \"codigo_actualizado\",\r\n  \"totalPrice\": 0.0,\r\n  \"isActive\": true\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{local_url}}{{api_shoppinglist}}{{v1}}update",
+          "host": [
+            "{{local_url}}{{api_shoppinglist}}{{v1}}update"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "6 - Update Shoppinglist isActive - v1",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Update Shoppinglist isActive value is 200\", function() {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": {
+          "raw": "{{local_url}}{{api_shoppinglist}}{{v1}}{{idShoppinglistGenerated}}/update/isActive",
+          "host": [
+            "{{local_url}}{{api_shoppinglist}}{{v1}}{{idShoppinglistGenerated}}"
+          ],
+          "path": [
+            "update",
+            "isActive"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "7 - Get all calculate system - v1",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Get all Calculate System must returns 200', function () {\r",
+              "    pm.response.to.have.status(200)\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{local_url}}{{api_calculate_system}}{{v1}}all",
+          "host": [
+            "{{local_url}}{{api_calculate_system}}{{v1}}all"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "8 - Get all products names - v1",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Get all Products names must returns 200', function () {\r",
+              "    pm.response.to.have.status(200)\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{local_url}}{{api_product}}{{v1}}names",
+          "host": [
+            "{{local_url}}{{api_product}}{{v1}}names"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "9 - Get all products - v1",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Get all Products must returns 200', function () {\r",
+              "    pm.response.to.have.status(200)\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{local_url}}{{api_product}}{{v1}}all",
+          "host": [
+            "{{local_url}}{{api_product}}{{v1}}all"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "X - 1 - Delete logic shoppinglist item",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{local_url}}{{api_shoppinglist}}{{v3}}",
+          "host": [
+            "{{local_url}}{{api_shoppinglist}}{{v3}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "X - Delete Logic of the shoppinglist generated - v1",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Delete Logic Shoppinglist is 200\", function() {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Delete Logic of a Shoppinglist must return TRUE\", function() {\r",
+              "    console.log(pm.response.json())\r",
+              "    pm.expect(pm.response.json()).to.eql(true)\r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{local_url}}{{api_shoppinglist}}{{v1}}{{idShoppinglistGenerated}}/delete/logic",
+          "host": [
+            "{{local_url}}{{api_shoppinglist}}{{v1}}{{idShoppinglistGenerated}}"
+          ],
+          "path": [
+            "delete",
+            "logic"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

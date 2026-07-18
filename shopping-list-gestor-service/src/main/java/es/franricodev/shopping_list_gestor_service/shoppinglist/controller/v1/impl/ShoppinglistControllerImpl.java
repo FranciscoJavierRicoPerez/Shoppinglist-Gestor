@@ -1,7 +1,7 @@
-package es.franricodev.shopping_list_gestor_service.shoppinglist.controller.impl;
+package es.franricodev.shopping_list_gestor_service.shoppinglist.controller.v1.impl;
 
-import es.franricodev.shopping_list_gestor_service.shoppinglist.constants.api.ApiShoppinglistConstants;
-import es.franricodev.shopping_list_gestor_service.shoppinglist.controller.ShoppinglistController;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.constants.api.v1.ApiShoppinglistConstants;
+import es.franricodev.shopping_list_gestor_service.shoppinglist.controller.v1.ShoppinglistController;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.*;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ReponseUpdateShoppinglistTotalPrice;
 import es.franricodev.shopping_list_gestor_service.shoppinglist.dto.response.ResponseCreateShoppinglist;
@@ -49,12 +49,6 @@ public class ShoppinglistControllerImpl implements ShoppinglistController {
     }
 
     @Override
-    public ResponseEntity<ResponseCreateShoppinglist> createShoppinglistV2(RequestCreateShoppinglistDTO request) {
-        log.info("Creation v2 of the new shoppinglist");
-        return new ResponseEntity<>(shoppinglistService.createV2(request), HttpStatus.CREATED);
-    }
-
-    @Override
     public ResponseEntity<Boolean> deleteShoppinglist(Long id) {
         log.info("Delete of the shoppinglist with id: {}", id);
         HttpStatus httpStatus = HttpStatus.OK;
@@ -70,7 +64,7 @@ public class ShoppinglistControllerImpl implements ShoppinglistController {
     @Override
     public ResponseEntity<ShoppinglistDTO> updateShoppinglist(RequestUpdateShoppinglistDTO request) {
         log.info("Update the shoppinglist with id: {}", request.getId());
-        HttpStatus httpStatus = HttpStatus.CREATED;
+        HttpStatus httpStatus = HttpStatus.OK;
         ShoppinglistDTO updated = null;
         try {
             updated = shoppinglistService.updateShoppinglist(request);
