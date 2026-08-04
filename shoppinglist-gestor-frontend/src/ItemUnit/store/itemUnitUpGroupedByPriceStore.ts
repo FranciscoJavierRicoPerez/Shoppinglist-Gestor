@@ -26,7 +26,15 @@ export const useItemUnitUpGroupedByPriceStore = defineStore('itemUnitUpGroupedBy
   }
 
   function add(data: ItemUnitUpMetadata): void {
-    itemsGrouped.value.push(data)
+    var updateQuantity: boolean = false
+    itemsGrouped.value.forEach((element) => {
+      if (element.price === data.price) {
+        updateQuantity = true
+        element.quantity += data.quantity
+      }
+    })
+
+    if (!updateQuantity) itemsGrouped.value.push(data)
   }
 
   return {
