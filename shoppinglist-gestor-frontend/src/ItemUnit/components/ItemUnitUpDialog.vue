@@ -6,7 +6,6 @@ import Button from 'primevue/button'
 import { useShoppinglistDetailStore } from '@/Shoppinglist/stores/shoppinglistDetailStore'
 import type { ShoppinglistItemMetadata } from '@/ShoppinglistItem/domain/ShoppinglistItemMetadata'
 import Divider from 'primevue/divider'
-import ItemUnitUpPopover from './ItemUnitUpUpdateForm.vue'
 import { useItemUnitUpGroupedByPriceStore } from '../store/itemUnitUpGroupedByPriceStore'
 import ItemUnitUpCreateForm from './ItemUnitUpCreateForm.vue'
 import ItemUnitUpUpdateForm from './ItemUnitUpUpdateForm.vue'
@@ -56,7 +55,7 @@ const updatedProductResumeText = computed(() => {
 })
 
 const actualTotalPrice = computed(() => {
-  return 'Precio total: ' + props.shoppinglistItem.calculatedPrice
+  return 'Precio total: ' + shoppinglistDetailsStore.totalPrice
 })
 
 const addNewItemUnitText = computed(() => {

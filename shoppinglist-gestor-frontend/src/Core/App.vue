@@ -9,8 +9,8 @@ const toast = useToast()
 onErrorCaptured((error) => {
   console.log(error.message)
   toast.add({
-    summary: 'EJEMPLO TOAST GENERICO DE ERROR',
-    detail: 'EJEMPLO TOAST GENERICO DE ERROR',
+    summary: 'Found Error',
+    detail: error.message,
     life: 3000,
     severity: 'error',
   })

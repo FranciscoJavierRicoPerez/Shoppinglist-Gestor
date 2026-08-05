@@ -15,6 +15,14 @@ import { useUpdateShoppinglistTotalPrice } from '@/Shoppinglist/application/useU
 import { useRoute } from 'vue-router'
 import { useItemUnitUpGroupedByPriceStore } from '@/ItemUnit/store/itemUnitUpGroupedByPriceStore'
 
+/** TODO -> REFACTORIZACION DE TODO ESTE COMPONENTE  */
+/**
+ * Coste producto: X€ -> Debe actualizarse dinamicamente si se modifican los precios de los items units up y wp
+ * CREACIÓN DE UNA V2 DEL COMPONENTE ->  <ItemUnitUpDialog :shoppinglistItem="shoppinglistItem"></ItemUnitUpDialog>
+ *  CON LAS SIGUIENTES CARACTERISTICAS
+ *  ->
+ */
+
 /** --- PROPS SECTIONS --- */
 const props = defineProps({
   shoppinglistItem: {
@@ -29,11 +37,12 @@ const props = defineProps({
 /** ---------------------- */
 const router = useRoute()
 
-const calculatedPrice = ref<number>(-1)
+const calculatedPrice = ref<number>(-1) // ESTO EN VEZ DE SER UN const FIJO DEBE DE CAMBIAR A UN store ASI PUEDO USAR ESE STORE COMO ALMACEN EN MEMORIA DE TODOS LOS DATOS QUE SE PUEDAN MODIFICAR
 
 const store = useItemUnitUpGroupedByPriceStore()
 
 onMounted(() => {
+  // TODO -> 1º - Crear un store llamado shoppinglistItemDetails -> que se encarge de gestionar la información visual de los datos que se muestran dinamicante de un shoppinglist item
   calculatedPrice.value = props.shoppinglistItem.calculatedPrice
 })
 
@@ -155,6 +164,7 @@ async function removeShoppinglistItem(id: number): Promise<void> {
             ></ItemUnitWpDialog>
           </div>
           <div v-else>
+            <!-- -->
             <ItemUnitUpDialog :shoppinglistItem="shoppinglistItem"></ItemUnitUpDialog>
           </div>
           <Button

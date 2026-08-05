@@ -288,11 +288,9 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
     @Override
     public void updateShoppinglistItemUpItemsUnitData(Long idShoppinglistItem, RequestUpdateShoppinglistItemItemUnitsUp request) {
         log.info("Update the shoppinglist item {} items units up values", idShoppinglistItem);
-
         if (request.requestUpItemUnitUpdateMetadataList() == null) {
             throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_GENERIC_ERR);
         }
-
         ShoppinglistItem shoppinglistItem = findShoppinglistItemByIdInfoBlockFalse(idShoppinglistItem);
         if (shoppinglistItem.getCalculateSystem().getCode().equals("UP")) {
             log.info("The shoppinglist item {} found have the calculate system up, lets proceed getting all the items units associated", idShoppinglistItem);
