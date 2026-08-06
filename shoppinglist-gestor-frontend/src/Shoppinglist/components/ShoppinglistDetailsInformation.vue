@@ -3,7 +3,6 @@ import Panel from 'primevue/panel'
 import Tag from 'primevue/tag'
 import { useShoppinglistDetailStore } from '@/Shoppinglist/stores/shoppinglistDetailStore'
 import { computed } from 'vue'
-import { ColorPicker } from 'primevue'
 
 const shoppinglistDetailsStore = useShoppinglistDetailStore()
 

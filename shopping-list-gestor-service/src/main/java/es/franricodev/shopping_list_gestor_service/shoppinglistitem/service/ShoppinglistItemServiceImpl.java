@@ -288,6 +288,9 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
     @Override
     public void updateShoppinglistItemUpItemsUnitData(Long idShoppinglistItem, RequestUpdateShoppinglistItemItemUnitsUp request) {
         log.info("Update the shoppinglist item {} items units up values", idShoppinglistItem);
+        if (request.requestUpItemUnitUpdateMetadataList() == null) {
+            throw new ShoppinglistItemException(ShoppinglistItemMessagesError.SHOPPINGLISTITEM_GENERIC_ERR);
+        }
         ShoppinglistItem shoppinglistItem = findShoppinglistItemByIdInfoBlockFalse(idShoppinglistItem);
         if (shoppinglistItem.getCalculateSystem().getCode().equals("UP")) {
             log.info("The shoppinglist item {} found have the calculate system up, lets proceed getting all the items units associated", idShoppinglistItem);
@@ -296,8 +299,10 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
                 for(RequestUpItemUnitUpdateMetadata requestData : request.requestUpItemUnitUpdateMetadataList()) {
                     if (itemUnit.getId().equals(requestData.idItemUnit())) {
                         if (!requestData.removeItemUnitUp()) {
+                            log.info("Detected an update operation of the item unit [{}] values", itemUnit.getId());
                             itemUnitService.updateItemUnitUpValues(requestData.idItemUnit(), requestData.idItemUnitUp(), requestData.newQuantity());
                         } else {
+                            log.info("Proceed with the logic delete of the item unit [{}]", itemUnit.getId());
                             itemUnitService.deleteLogicItemUnit(itemUnit);
                         }
                     }

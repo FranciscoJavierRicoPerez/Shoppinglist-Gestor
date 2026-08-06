@@ -84,6 +84,12 @@ async function addNewItemUnitUp() {
   }
   groupedItemsUpStore.updateTotalPrice()
   groupedItemsUpStore.totalPriceFixed = groupedItemsUpStore.totalPrice
+  clearForm()
+}
+
+function clearForm() {
+  quantity.value = null
+  unitaryPrice.value = null
 }
 </script>
 <template>
@@ -106,6 +112,7 @@ async function addNewItemUnitUp() {
       v-if="quickCreate"
       class="w-full"
       label="Añadir unidad"
+      :disabled="unitaryPrice === null || quantity == null"
       @click="addNewItemUnitUp()"
     ></Button>
   </div>
