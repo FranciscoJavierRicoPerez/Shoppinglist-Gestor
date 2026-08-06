@@ -14,6 +14,7 @@ import ItemUnitWpDialog from '@/ItemUnit/components/ItemUnitWpDialog.vue'
 import { useUpdateShoppinglistTotalPrice } from '@/Shoppinglist/application/useUpdateShoppinglistTotalPrice'
 import { useRoute } from 'vue-router'
 import { useItemUnitUpGroupedByPriceStore } from '@/ItemUnit/store/itemUnitUpGroupedByPriceStore'
+import { useShoppinglistItemDetailsStore } from '../stores/shoppinglistItemDetailsStore'
 
 /** TODO -> REFACTORIZACION DE TODO ESTE COMPONENTE  */
 /**
@@ -37,14 +38,7 @@ const props = defineProps({
 /** ---------------------- */
 const router = useRoute()
 
-const calculatedPrice = ref<number>(-1) // ESTO EN VEZ DE SER UN const FIJO DEBE DE CAMBIAR A UN store ASI PUEDO USAR ESE STORE COMO ALMACEN EN MEMORIA DE TODOS LOS DATOS QUE SE PUEDAN MODIFICAR
-
-const store = useItemUnitUpGroupedByPriceStore()
-
-onMounted(() => {
-  // TODO -> 1º - Crear un store llamado shoppinglistItemDetails -> que se encarge de gestionar la información visual de los datos que se muestran dinamicante de un shoppinglist item
-  calculatedPrice.value = props.shoppinglistItem.calculatedPrice
-})
+// const calculatedPrice = ref<number>(-1) // ESTO EN VEZ DE SER UN const FIJO DEBE DE CAMBIAR A UN store ASI PUEDO USAR ESE STORE COMO ALMACEN EN MEMORIA DE TODOS LOS DATOS QUE SE PUEDAN MODIFICAR
 
 /** ---- USE CASES ---- */
 const { refetch: deleteShoppinglistItem } = useDeleteShoppinglistItem()
@@ -52,20 +46,42 @@ const { refetch: updateShoppinglistTotalPrice } = useUpdateShoppinglistTotalPric
 /** ------------------- */
 
 /** ---- STORE SECTION ---- */
+/**
+ * Management the data of a shoppinglist
+ */
 const shoppinglistDetailsStore = useShoppinglistDetailStore()
+/**
+ * Management the data of a shoppinglist item
+ */
+const shoppinglistItemDetailsStore = useShoppinglistItemDetailsStore()
+/**
+ * Management the data of the items units up grouped by his price
+ */
+const store = useItemUnitUpGroupedByPriceStore()
 /** ----------------------- */
 
 const toast = useToast()
 
+onMounted(() => {
+  // TODO -> 1º - Crear un store llamado shoppinglistItemDetails -> que se encarge de gestionar la información visual de los datos que se muestran dinamicante de un shoppinglist item
+  // calculatedPrice.value = props.shoppinglistItem.calculatedPrice
+  shoppinglistItemDetailsStore.initializateValues(
+    props.shoppinglistItem.name,
+    props.shoppinglistItem.calculateSystemCode,
+    props.shoppinglistItem.assignationToLisDate,
+    props.shoppinglistItem.calculatedPrice,
+  )
+})
+
 /** ---- COMPUTED SECTION ---- */
 const shoppinglistItemPriceText = computed(() => {
-  if (props.shoppinglistItem.calculateSystemCode === 'WP') {
-    return 'Coste producto: ' + props.shoppinglistItem.calculatedPrice + '€'
+  if (shoppinglistItemDetailsStore.sliCalculateSystem === 'WP') {
+    return 'Coste producto: ' + shoppinglistItemDetailsStore.sliCalculatedPrice + '€'
   } else {
     return (
       'Coste producto: ' +
       (store.totalPriceFixed === -1
-        ? props.shoppinglistItem.calculatedPrice
+        ? shoppinglistItemDetailsStore.sliCalculatedPrice
         : store.totalPriceFixed) +
       '€'
     )
@@ -73,15 +89,15 @@ const shoppinglistItemPriceText = computed(() => {
 })
 
 const shoppinglistItemAssignationToListDateText = computed(() => {
-  return 'Añadido el: ' + props.shoppinglistItem.assignationToLisDate
+  return 'Añadido el: ' + shoppinglistItemDetailsStore.sliAssignationToListDate
 })
 
 const shoppinglistItemCalculateSystemText = computed(() => {
-  return 'Sistema de calculo: ' + props.shoppinglistItem.calculateSystemCode
+  return 'Sistema de calculo: ' + shoppinglistItemDetailsStore.sliCalculateSystem
 })
 
 const shoppinglistItemNameText = computed(() => {
-  return props.shoppinglistItem.name
+  return shoppinglistItemDetailsStore.sliName
 })
 /** ---- END COMPUTED SECTION ---- */
 
@@ -96,12 +112,12 @@ function createToast(toastOptions: ToastMessageOptions) {
 
 function updateCalculatedPrice(data: any) {
   console.log(data)
-  calculatedPrice.value = data
+  shoppinglistItemDetailsStore.sliCalculatedPrice = data
   if (shoppinglistDetailsStore.shoppinglistDetails) {
     shoppinglistDetailsStore.recalculateShoppinglistTotalPrice(
       shoppinglistDetailsStore.shoppinglistDetails?.shoppinglistMetadata.totalPrice,
       props.shoppinglistItem.calculatedPrice,
-      calculatedPrice.value,
+      shoppinglistItemDetailsStore.sliCalculatedPrice,
     )
   }
 }

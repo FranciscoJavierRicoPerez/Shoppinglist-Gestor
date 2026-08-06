@@ -13,9 +13,14 @@ import { useRoute } from 'vue-router'
 import { useUpdateItemUnitWpValues } from '../application/useUpdateItemUnitWpValues'
 import { useUpdateItemUnitTotalPrice } from '../application/useUpdateItemUnitTotalPrice'
 import { useUpdateShoppinglistItemCalculatedPrice } from '@/ShoppinglistItem/application/useUpdateShoppinglistItemCalculatedPrice'
+import { useShoppinglistItemDetailsStore } from '@/ShoppinglistItem/stores/shoppinglistItemDetailsStore.ts'
 const visible = ref<boolean>(false)
 
 const store = useUpdateItemWpFormStore()
+/**
+ * Management the data of a shoppinglist item
+ */
+const shoppinglistItemDetailsStore = useShoppinglistItemDetailsStore()
 
 const shoppinglistDetailsStore = useShoppinglistDetailStore()
 
@@ -87,6 +92,8 @@ async function updateItemUnitWp() {
     // CREAR UN SERVICIO QUE RECALCULE EL TOTAL_PRICE DEL item unit indicado
     // - servio que actualice el precio del item unit indicado
     await updateItemUnitTotalPrice(idItemUnit.value, store.newProductPrice)
+    shoppinglistItemDetailsStore.sliCalculatedPrice = store.newProductPrice
+
     // UNA VEZ RECALCULADO ESE TOTAL PRICE HAY QUE RECALCULAR EL PRECIO DEL SLI
     // - servicio que actualice el precio del sli indicado
     await updateShoppinglistItemCalculatedPrice(props.shoppinglistItem.idShoppinglistItem) // -> ESTE SERVICIO ES MEJOR QUE HAGA TODO EL CALCULO EN EL BE
