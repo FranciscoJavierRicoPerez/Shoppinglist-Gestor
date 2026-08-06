@@ -34,6 +34,7 @@ const listHeaderText = computed(() => {
       ></InformationCard>
     </div>
     <div v-else>
+      <!-- TODO: REFACTORIZACION DE TODO ESTE COMPONENTE -->
       <ScrollPanel style="width: 100%; height: 50rem">
         <div v-for="item in shoppinglistDetailsStore.items">
           <ShoppinglistItemInfoCard

@@ -6,7 +6,6 @@ import Button from 'primevue/button'
 import { useShoppinglistDetailStore } from '@/Shoppinglist/stores/shoppinglistDetailStore'
 import type { ShoppinglistItemMetadata } from '@/ShoppinglistItem/domain/ShoppinglistItemMetadata'
 import Divider from 'primevue/divider'
-import ItemUnitUpPopover from './ItemUnitUpUpdateForm.vue'
 import { useItemUnitUpGroupedByPriceStore } from '../store/itemUnitUpGroupedByPriceStore'
 import ItemUnitUpCreateForm from './ItemUnitUpCreateForm.vue'
 import ItemUnitUpUpdateForm from './ItemUnitUpUpdateForm.vue'
@@ -56,7 +55,7 @@ const updatedProductResumeText = computed(() => {
 })
 
 const actualTotalPrice = computed(() => {
-  return 'Precio total: ' + props.shoppinglistItem.calculatedPrice
+  return 'Precio total: ' + shoppinglistDetailsStore.totalPrice
 })
 
 const addNewItemUnitText = computed(() => {
@@ -65,13 +64,15 @@ const addNewItemUnitText = computed(() => {
 
 async function updateShoppinglistPrice() {
   let elementToSend = []
-  elementToSend.push(
-    requestUpdateUpItemStore.requestUpItemUnitUpdateMetadataList[
-      requestUpdateUpItemStore.requestUpItemUnitUpdateMetadataList.length - 1
-    ],
-  )
+  if (requestUpdateUpItemStore.requestUpItemUnitUpdateMetadataList.length > 0) {
+    elementToSend.push(
+      requestUpdateUpItemStore.requestUpItemUnitUpdateMetadataList[
+        requestUpdateUpItemStore.requestUpItemUnitUpdateMetadataList.length - 1
+      ],
+    )
+  }
   let request: RequestUpdateShoppinglistItemItemUnitsUp = {
-    requestUpItemUnitUpdateMetadataList: elementToSend,
+    requestUpItemUnitUpdateMetadataList: elementToSend.length > 0 ? elementToSend : null,
   }
   await updateItemUnitUpValues(props.shoppinglistItem.idShoppinglistItem, request) // TENGO QUE LLAMAR A ESTA FUNCION CON LOS VALORES QUE HAY EN EL STORE upItemUnitUpdateMetadataStore
   // Importante -> Limpiar el listado si no se acumulara informacion innecesaria

@@ -7,10 +7,13 @@ import type { ShoppinglistItemMetadata } from '@/ShoppinglistItem/domain/Shoppin
 import ItemUnitUpDetailsCard from './ItemUnitUpDetailsCard.vue'
 import { useItemUnitUpGroupedByPriceStore } from '../store/itemUnitUpGroupedByPriceStore'
 import InformationCard from '@/Shared/components/InformationCard.vue'
+import { useShoppinglistDetailStore } from '@/Shoppinglist/stores/shoppinglistDetailStore.ts'
 
 const { refetch: getItemUnitsUpGroupedByPrice } = useGetItemUnitUpGroupedByPrice()
 
 const store = useItemUnitUpGroupedByPriceStore()
+
+const shoppinglistDetailsStore = useShoppinglistDetailStore()
 
 const props = defineProps({
   shoppinglistItem: {

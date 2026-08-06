@@ -1,6 +1,20 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
 import Navbar from '@/Shared/components/Navbar.vue'
+import { onErrorCaptured } from 'vue'
+import { useToast } from 'primevue'
+
+const toast = useToast()
+
+onErrorCaptured((error) => {
+  console.log(error.message)
+  toast.add({
+    summary: 'Found Error',
+    detail: error.message,
+    life: 3000,
+    severity: 'error',
+  })
+})
 </script>
 
 <template>
