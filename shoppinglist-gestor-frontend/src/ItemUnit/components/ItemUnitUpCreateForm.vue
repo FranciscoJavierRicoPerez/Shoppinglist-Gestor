@@ -9,6 +9,7 @@ import { useAddItemUnitUpToShoppinglistItem } from '@/ShoppinglistItem/applicati
 import { useUpdateShoppinglistTotalPrice } from '@/Shoppinglist/application/useUpdateShoppinglistTotalPrice'
 import { useRoute } from 'vue-router'
 import { useShoppinglistDetailStore } from '@/Shoppinglist/stores/shoppinglistDetailStore'
+import { useShoppinglistItemDetailsStore } from '@/ShoppinglistItem/stores/shoppinglistItemDetailsStore'
 
 const props = defineProps({
   quickCreate: {
@@ -23,6 +24,8 @@ const props = defineProps({
 
 const { refetch: addItemUnitUpToShoppinglist } = useAddItemUnitUpToShoppinglistItem()
 const { refetch: updateShoppinglistTotalPrice } = useUpdateShoppinglistTotalPrice()
+
+const shoppinglistItemDetailsStore = useShoppinglistItemDetailsStore()
 
 const router = useRoute()
 
@@ -56,8 +59,6 @@ function calculateShoppinglistItemTotalPrice(): void {
 }
 
 async function addNewItemUnitUp() {
-  console.log('llamar al servicio que se encarga de añadir un nuevo item unit up')
-
   // TAMBIEN TIENE QUE LLAMARSE AL STORE useItemUnitUpGroupedByPriceStore PARA AÑADIR LA NUEVA INSTANCIA
   if (quantity.value && unitaryPrice.value) {
     await addItemUnitUpToShoppinglist(props.idShoppinglistItem, {

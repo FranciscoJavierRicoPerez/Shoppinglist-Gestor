@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-export const useItemUnitUpMetadataStore = defineStore('itemUnitUpMetadataStore', () => {
+export const useItemUnitUpDetailsStore = defineStore('itemUnitUpDetailsStore', () => {
   const quantity = ref<number>(-1)
   const price = ref<number>(-1)
   const calculatedPrice = ref<number>(-1)

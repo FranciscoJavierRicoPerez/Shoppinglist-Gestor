@@ -41,7 +41,6 @@ function createToast(toastOptions: ToastMessageOptions) {
 }
 
 async function createNewShoppinglistItem() {
-  console.log('Info: creacion de un shoppinglistitem')
   const request: RequestCreateShoppinglistItemForm = {
     productInfo: {
       alreadyExists: store.verifyIsSelectedProductAlreadyExists(

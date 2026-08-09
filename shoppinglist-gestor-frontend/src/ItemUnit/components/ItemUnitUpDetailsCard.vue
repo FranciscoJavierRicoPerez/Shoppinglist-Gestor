@@ -15,16 +15,6 @@ const props = defineProps({
   },
 })
 
-// NECESITARE 2 STORE
-/**
- * STORE DEL GROUPED EN EL CUAL ESTARA EL NUEVO TOTAL QUE SE IRA ACTUALIZANDO Y UNA LISTA DE ITEMUNITUPMETADATA
- * STORE DEL ITEMUNITUPMETADATA EL CUAL USARE PARA CARGAR LA INFORMACION Y PARA ACTUALIZAR EN EL SUPERIOR
- *
- * Y EL SUPERIOR SERA EL QUE UTILIZARE PARA CREAR EL OBJETO DE PETICION DE ACTUALIZACIPON
- */
-
-// Añadir aqui un store para actualizar el estado del itemUnitMetadata
-
 const store = useItemUnitUpGroupedByPriceStore()
 const upItemUnitUpdateMetadataStore = useUpdateItemUnitUpdateMetadataStore()
 

@@ -15,6 +15,7 @@ import { useUpdateShoppinglistTotalPrice } from '@/Shoppinglist/application/useU
 import { useRoute } from 'vue-router'
 import { useItemUnitUpGroupedByPriceStore } from '@/ItemUnit/store/itemUnitUpGroupedByPriceStore'
 import { useShoppinglistItemDetailsStore } from '../stores/shoppinglistItemDetailsStore'
+import ItemUnitUpDialogV2 from '@/ItemUnit/components/v2/ItemUnitUpDialogV2.vue'
 
 /** TODO -> REFACTORIZACION DE TODO ESTE COMPONENTE  */
 /**
@@ -47,7 +48,7 @@ const { refetch: updateShoppinglistTotalPrice } = useUpdateShoppinglistTotalPric
 
 /** ---- STORE SECTION ---- */
 /**
- * Management the data of a shoppinglist
+ * Management the data of a shoppinglist - Information Section
  */
 const shoppinglistDetailsStore = useShoppinglistDetailStore()
 /**
@@ -70,6 +71,7 @@ onMounted(() => {
     props.shoppinglistItem.calculateSystemCode,
     props.shoppinglistItem.assignationToLisDate,
     props.shoppinglistItem.calculatedPrice,
+    props.shoppinglistItem.idShoppinglistItem,
   )
 })
 
@@ -111,7 +113,6 @@ function createToast(toastOptions: ToastMessageOptions) {
 }
 
 function updateCalculatedPrice(data: any) {
-  console.log(data)
   shoppinglistItemDetailsStore.sliCalculatedPrice = data
   if (shoppinglistDetailsStore.shoppinglistDetails) {
     shoppinglistDetailsStore.recalculateShoppinglistTotalPrice(
@@ -123,7 +124,6 @@ function updateCalculatedPrice(data: any) {
 }
 
 async function removeShoppinglistItem(id: number): Promise<void> {
-  console.log('INFO: Borrando el shoppinglist item con id : ' + id)
   // IMPLEMENTACION LLAMANDO AL BACKEND
   const response: DeleteShoppinglistItemData = await deleteShoppinglistItem(id)
   if (response.delete) {
@@ -182,6 +182,7 @@ async function removeShoppinglistItem(id: number): Promise<void> {
           <div v-else>
             <!-- -->
             <ItemUnitUpDialog :shoppinglistItem="shoppinglistItem"></ItemUnitUpDialog>
+            <!-- <ItemUnitUpDialogV2></ItemUnitUpDialogV2> -->
           </div>
           <Button
             class="w-full"

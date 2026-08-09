@@ -7,7 +7,6 @@ import { useToast } from 'primevue'
 const toast = useToast()
 
 onErrorCaptured((error) => {
-  console.log(error.message)
   toast.add({
     summary: 'Found Error',
     detail: error.message,

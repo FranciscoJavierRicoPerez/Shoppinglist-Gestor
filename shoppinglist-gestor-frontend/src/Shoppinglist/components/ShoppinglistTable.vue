@@ -43,7 +43,6 @@ watch(actualPanelSelected, (newActualPanelSelected) => {
 })
 
 async function addNewShoppinglist() {
-  console.log('INFO: Añadiendo una nueva lista de la compra')
   let shoppinglistMetadata: ShoppinglistMetadata = await createShoppinglistMetadata()
   if (shoppinglistMetadata) {
     shoppinglistTableStore.addShoppinglist(shoppinglistMetadata)

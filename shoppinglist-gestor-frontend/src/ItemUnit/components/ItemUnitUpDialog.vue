@@ -92,7 +92,13 @@ async function updateShoppinglistPrice() {
 }
 </script>
 <template>
-  <Button class="w-full" severity="info" label="Uds/€" raised @click="visible = true"></Button>
+  <Button
+    class="w-full"
+    severity="info"
+    label="Uds/€ (VERSION 1)"
+    raised
+    @click="visible = true"
+  ></Button>
   <Dialog v-model:visible="visible" :position="'top'" :modal="true" :draggable="false">
     <template #header>
       <div class="ml-3 mt-2 text-2xl text-left font-italic">{{ modalHeaderText }}</div>
