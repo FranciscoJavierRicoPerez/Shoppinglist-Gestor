@@ -29,21 +29,22 @@ const store = useItemUnitUpGroupedByPriceStore()
 const upItemUnitUpdateMetadataStore = useUpdateItemUnitUpdateMetadataStore()
 
 const calculatedPriceText = computed(() => {
-  return 'Calculado: ' + props.itemUnitUpMetadata.calculatedPrice
+  return 'Nuevo precio de la unidad: ' + props.itemUnitUpMetadata.calculatedPrice.toFixed(2) + '€'
 })
 
 const quantityText = computed(() => {
-  return 'Cantidad: ' + props.itemUnitUpMetadata.quantity
+  return 'Nueva cantidad de unidades: ' + props.itemUnitUpMetadata.quantity + 'uds'
 })
 
 const priceText = computed(() => {
-  return 'Precio unitario: ' + props.itemUnitUpMetadata.price
+  return 'Precio unitario: ' + props.itemUnitUpMetadata.price + '€'
 })
 
 function removeItem(): void {
   store.updateItemsGroupedList(store.removeItem(props.itemUnitUpMetadata.price))
   store.updateTotalPrice()
   createRequestUpItemUpdateMetadata(true, null)
+  // Marcar que esta Card se actualice a disabled
 }
 
 function updateQuantity(add: boolean): void {

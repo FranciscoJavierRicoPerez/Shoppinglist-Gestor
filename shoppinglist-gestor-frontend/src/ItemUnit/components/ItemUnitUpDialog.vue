@@ -55,7 +55,7 @@ const updatedProductResumeText = computed(() => {
 })
 
 const actualTotalPrice = computed(() => {
-  return 'Precio total: ' + shoppinglistDetailsStore.totalPrice
+  return 'Precio actual: ' + props.shoppinglistItem.calculatedPrice.toFixed(2) + '€'
 })
 
 const addNewItemUnitText = computed(() => {
@@ -105,6 +105,7 @@ async function updateShoppinglistPrice() {
       <b>{{ addNewItemUnitText }}</b>
     </Divider>
     <!-- Formulario para añadir un nuevo item unit  -->
+    <!-- A MODIFICAR EN VEZ DE MANDAR EL id MANDAR TODO EL shoppinglistItem -->
     <ItemUnitUpCreateForm
       :quickCreate="true"
       :idShoppinglistItem="props.shoppinglistItem.idShoppinglistItem"

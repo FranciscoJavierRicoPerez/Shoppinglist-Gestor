@@ -29,7 +29,7 @@ onMounted(async () => {
 })
 
 const totalPriceText = computed(() => {
-  return 'Precio total: ' + store.totalPrice
+  return 'Nuevo precio: ' + store.totalPrice.toFixed(2) + '€'
 })
 </script>
 <template>
