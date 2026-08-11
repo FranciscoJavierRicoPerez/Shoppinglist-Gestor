@@ -44,18 +44,19 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
     }
 
     @Override
-    public ResponseEntity<Void> addItemUnitUp(
+    public ResponseEntity<Double> addItemUnitUp(
             Long idShoppinglistItem,
             CreateItemUnitData request
     ) {
         log.info("Creating a new item unit UP for the shoppinglist item with id: {}", idShoppinglistItem);
         HttpStatus httpStatus = HttpStatus.OK;
+        Double newSliCalculatedPrice = null;
         try {
-            shoppinglistItemService.addItemUnitUpToShoppinglistItem(request, idShoppinglistItem);
-        } catch (ShoppinglistItemException |ItemUnitException | ShoppinglistException e) {
+            newSliCalculatedPrice = shoppinglistItemService.addItemUnitUpToShoppinglistItem(request, idShoppinglistItem);
+        } catch (ShoppinglistItemException | ItemUnitException | ShoppinglistException e) {
             httpStatus =  HttpStatus.BAD_REQUEST;
         }
-        return new ResponseEntity<>(httpStatus);
+        return new ResponseEntity<>(newSliCalculatedPrice, httpStatus);
     }
 
     @Override

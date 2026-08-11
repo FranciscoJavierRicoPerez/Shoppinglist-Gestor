@@ -43,8 +43,8 @@ public class ShoppinglistV3ControllerImpl implements ShoppinglistV3Controller {
     @Override
     public ResponseEntity<?> addItemUnitUpToShoppinglistItem(Long idShoppinglist, Long idShoppinglistItem, CreateItemUnitData request) {
         log.info("Add ITEM_UNIT_UP to SHOPPINGLIST_ITEM with id: [{}] from SHOPPINGLIST with id: [{}]", idShoppinglistItem, idShoppinglist);
-        shoppinglistV3Service.addItemUnitUpToShoppinglistItem(idShoppinglist, idShoppinglistItem, request);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        Double newSliCalculatedPrice = shoppinglistV3Service.addItemUnitUpToShoppinglistItem(idShoppinglist, idShoppinglistItem, request);
+        return new ResponseEntity<>(newSliCalculatedPrice, HttpStatus.CREATED);
     }
 
     /**

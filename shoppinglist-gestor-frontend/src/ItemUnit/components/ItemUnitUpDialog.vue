@@ -55,7 +55,13 @@ const updatedProductResumeText = computed(() => {
 })
 
 const actualTotalPrice = computed(() => {
-  return 'Precio actual: ' + props.shoppinglistItem.calculatedPrice.toFixed(2) + '€'
+  return (
+    'Precio actual: ' +
+    (store.totalPriceFixed === -1
+      ? props.shoppinglistItem.calculatedPrice.toFixed(2)
+      : store.totalPriceFixed.toFixed(2)) +
+    '€'
+  )
 })
 
 const addNewItemUnitText = computed(() => {
@@ -108,7 +114,7 @@ async function updateShoppinglistPrice() {
     <!-- A MODIFICAR EN VEZ DE MANDAR EL id MANDAR TODO EL shoppinglistItem -->
     <ItemUnitUpCreateForm
       :quickCreate="true"
-      :idShoppinglistItem="props.shoppinglistItem.idShoppinglistItem"
+      :shoppinglistItem="props.shoppinglistItem"
     ></ItemUnitUpCreateForm>
     <Divider align="center" type="solid">
       <b>{{ updateProductText }}</b>

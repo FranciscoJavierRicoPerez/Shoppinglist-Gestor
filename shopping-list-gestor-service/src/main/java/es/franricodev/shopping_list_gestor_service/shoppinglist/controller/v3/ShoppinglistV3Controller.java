@@ -71,7 +71,7 @@ public interface ShoppinglistV3Controller {
                             description = GeneralConstants.DESC_201,
                             content = {
                                     @Content(
-                                            schema = @Schema(implementation = Void.class),
+                                            schema = @Schema(implementation = Double.class),
                                             mediaType = GeneralConstants.APPLICATION_JSON
                                     )
                             }

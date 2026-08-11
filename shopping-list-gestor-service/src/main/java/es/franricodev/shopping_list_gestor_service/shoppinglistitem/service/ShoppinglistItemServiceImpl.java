@@ -61,7 +61,7 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
     private ItemUnitMapper itemUnitMapper;
 
     @Override
-    public void addItemUnitUpToShoppinglistItem(CreateItemUnitData createItemUnitData, Long idShoppinglistItem) throws ShoppinglistItemException, ItemUnitException, ShoppinglistException {
+    public Double addItemUnitUpToShoppinglistItem(CreateItemUnitData createItemUnitData, Long idShoppinglistItem) throws ShoppinglistItemException, ItemUnitException, ShoppinglistException {
         log.info("Add a new item unit to the shoppinglist item: {}", idShoppinglistItem);
         ShoppinglistItem shoppinglistItem = findShoppinglistItemByIdInfoBlockFalse(idShoppinglistItem);
         List<ItemUnit> filteredItemUnit = shoppinglistItem.getItemUnitList().stream().filter(itemUnit -> !itemUnit.getInfoBlock()).toList();
@@ -82,6 +82,7 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
             shoppinglistItem.setCalculatedPrice(result);
             updateShoppinglistItem(shoppinglistItem);
         }
+        return shoppinglistItem.getCalculatedPrice();
     }
 
     @Override
