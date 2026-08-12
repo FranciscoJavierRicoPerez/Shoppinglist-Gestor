@@ -32,6 +32,7 @@ public class InitializationConfig {
             csWp.setId(2L);
             csWp.setCode("WP");
             csWp.setName("Precio KG/€");
+            calculateSystemRepository.save(csWp);
         }
     }
 
