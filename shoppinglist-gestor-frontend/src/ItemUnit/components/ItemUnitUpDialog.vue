@@ -15,7 +15,6 @@ import { useUpdateItemUnitUpdateMetadataStore } from '../store/upItemUnitUpdateM
 import { useUpdateShoppinglistItemCalculatedPrice } from '@/ShoppinglistItem/application/useUpdateShoppinglistItemCalculatedPrice'
 import { useUpdateShoppinglistTotalPrice } from '@/Shoppinglist/application/useUpdateShoppinglistTotalPrice'
 import { useRoute } from 'vue-router'
-import { C } from 'vue-router/dist/router-CWoNjPRp.mjs'
 
 const visible = ref<boolean>(false)
 
