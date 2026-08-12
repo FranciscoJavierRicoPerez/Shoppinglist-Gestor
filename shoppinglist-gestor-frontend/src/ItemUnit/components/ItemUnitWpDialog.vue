@@ -120,6 +120,12 @@ function getItemUnitId(data: number | null) {
     idItemUnit.value = data
   }
 }
+
+function clearForm() {
+  store.newPriceKg = null
+  store.newWeight = null
+  store.newProductPrice = null
+}
 </script>
 <template>
   <Button class="w-full" severity="info" label="Kg/€" raised @click="visible = true"></Button>
@@ -152,13 +158,14 @@ function getItemUnitId(data: number | null) {
         type="button"
         label="Cancel"
         severity="danger"
-        @click="visible = false"
+        @click="((visible = false), clearForm())"
       ></Button>
       <Button
         class="w-full"
         severity="info"
         type="button"
         label="Actualizar"
+        :disabled="store.newPriceKg === null"
         @click="((visible = false), updateItemUnitWp())"
       ></Button>
     </div>
