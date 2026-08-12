@@ -29,12 +29,12 @@ onMounted(async () => {
 })
 
 const totalPriceText = computed(() => {
-  return 'Precio total: ' + store.totalPrice
+  return 'Nuevo precio: ' + store.totalPrice.toFixed(2) + '€'
 })
 </script>
 <template>
   <div class="flex flex-column gap-2">
-    <Tag>{{ totalPriceText }}</Tag>
+    <Tag severity="info">{{ totalPriceText }}</Tag>
     <div v-if="store.itemsGrouped.length === 0">
       <InformationCard
         class="mb-2"

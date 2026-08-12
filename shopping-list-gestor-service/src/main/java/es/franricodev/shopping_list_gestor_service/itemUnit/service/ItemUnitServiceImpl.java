@@ -222,11 +222,11 @@ public class ItemUnitServiceImpl implements ItemUnitService {
     }
 
     @Override
-    public ItemUnit updateItemUnitUpValues(Long idItemUnit, Long idItemUnitUp, int newQuantity) {
+    public ItemUnit updateItemUnitUpValues(Long idItemUnit, Long idItemUnitUp, int newQuantity, boolean isReduceOperation) {
         log.info("Updating the item unit up {} from the item unit {} with the new quantity {}", idItemUnitUp, idItemUnit, newQuantity);
         ItemUnit itemUnit = findItemUnitByIdAndInfoBlockFalse(idItemUnit);
         if (itemUnit.isUpItem()) {
-            upItemUnitService.updateUpItemUnitValues(new UpdateItemUnitUpValues(idItemUnitUp, newQuantity));
+            upItemUnitService.updateUpItemUnitValues(new UpdateItemUnitUpValues(idItemUnitUp, newQuantity, isReduceOperation));
         }
         itemUnit.setInfoBlock(false);
         itemUnit.setTotalPrice(calculateItemUnitTotalPriceV2(itemUnit));

@@ -50,12 +50,14 @@ const updateProductText = computed(() => {
   return 'Actualización del producto'
 })
 
-const updatedProductResumeText = computed(() => {
-  return 'Resumen del producto actualizado'
-})
-
 const actualTotalPrice = computed(() => {
-  return 'Precio total: ' + shoppinglistDetailsStore.totalPrice
+  return (
+    'Precio actual: ' +
+    (store.totalPriceFixed === -1
+      ? props.shoppinglistItem.calculatedPrice.toFixed(2)
+      : store.totalPriceFixed.toFixed(2)) +
+    '€'
+  )
 })
 
 const addNewItemUnitText = computed(() => {
@@ -63,32 +65,30 @@ const addNewItemUnitText = computed(() => {
 })
 
 async function updateShoppinglistPrice() {
-  let elementToSend = []
   if (requestUpdateUpItemStore.requestUpItemUnitUpdateMetadataList.length > 0) {
-    elementToSend.push(
-      requestUpdateUpItemStore.requestUpItemUnitUpdateMetadataList[
-        requestUpdateUpItemStore.requestUpItemUnitUpdateMetadataList.length - 1
-      ],
-    )
+    let request: RequestUpdateShoppinglistItemItemUnitsUp = {
+      requestUpItemUnitUpdateMetadataList:
+        requestUpdateUpItemStore.requestUpItemUnitUpdateMetadataList.length > 0
+          ? requestUpdateUpItemStore.requestUpItemUnitUpdateMetadataList
+          : null,
+    }
+    await updateItemUnitUpValues(props.shoppinglistItem.idShoppinglistItem, request) // TENGO QUE LLAMAR A ESTA FUNCION CON LOS VALORES QUE HAY EN EL STORE upItemUnitUpdateMetadataStore
+    // Importante -> Limpiar el listado si no se acumulara informacion innecesaria
+    requestUpdateUpItemStore.clear()
+    if (store.totalPrice !== null) {
+      let oldValue = props.shoppinglistItem.calculatedPrice
+      props.shoppinglistItem.calculatedPrice = store.totalPrice
+      shoppinglistDetailsStore.recalculateShoppinglistTotalPrice(
+        shoppinglistDetailsStore.totalPrice,
+        oldValue,
+        store.totalPrice,
+      )
+    }
+    await updateShoppinglistItemCalculatedPrice(props.shoppinglistItem.idShoppinglistItem)
+    await updateShoppinglistTotalPrice(Number(router.params.id))
+    store.totalPriceFixed = store.totalPrice
+    requestUpdateUpItemStore.updateButtonDisabledValue()
   }
-  let request: RequestUpdateShoppinglistItemItemUnitsUp = {
-    requestUpItemUnitUpdateMetadataList: elementToSend.length > 0 ? elementToSend : null,
-  }
-  await updateItemUnitUpValues(props.shoppinglistItem.idShoppinglistItem, request) // TENGO QUE LLAMAR A ESTA FUNCION CON LOS VALORES QUE HAY EN EL STORE upItemUnitUpdateMetadataStore
-  // Importante -> Limpiar el listado si no se acumulara informacion innecesaria
-  requestUpdateUpItemStore.clear()
-  if (store.totalPrice !== null) {
-    let oldValue = props.shoppinglistItem.calculatedPrice
-    props.shoppinglistItem.calculatedPrice = store.totalPrice
-    shoppinglistDetailsStore.recalculateShoppinglistTotalPrice(
-      shoppinglistDetailsStore.totalPrice,
-      oldValue,
-      store.totalPrice,
-    )
-  }
-  await updateShoppinglistItemCalculatedPrice(props.shoppinglistItem.idShoppinglistItem)
-  await updateShoppinglistTotalPrice(Number(router.params.id))
-  store.totalPriceFixed = store.totalPrice
 }
 </script>
 <template>
@@ -100,14 +100,15 @@ async function updateShoppinglistPrice() {
     <Divider align="center" type="solid">
       <b>{{ productInfoText }}</b>
     </Divider>
-    <Tag class="w-full">{{ actualTotalPrice }}</Tag>
+    <Tag severity="info" class="w-full">{{ actualTotalPrice }}</Tag>
     <Divider>
       <b>{{ addNewItemUnitText }}</b>
     </Divider>
     <!-- Formulario para añadir un nuevo item unit  -->
+    <!-- A MODIFICAR EN VEZ DE MANDAR EL id MANDAR TODO EL shoppinglistItem -->
     <ItemUnitUpCreateForm
       :quickCreate="true"
-      :idShoppinglistItem="props.shoppinglistItem.idShoppinglistItem"
+      :shoppinglistItem="props.shoppinglistItem"
     ></ItemUnitUpCreateForm>
     <Divider align="center" type="solid">
       <b>{{ updateProductText }}</b>
@@ -126,6 +127,7 @@ async function updateShoppinglistPrice() {
         severity="info"
         type="button"
         label="Actualizar"
+        :disabled="requestUpdateUpItemStore.updateButtonDisabled"
         @click="((visible = false), updateShoppinglistPrice())"
       ></Button>
     </div>

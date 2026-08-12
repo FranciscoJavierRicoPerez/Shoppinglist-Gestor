@@ -31,7 +31,7 @@ const slCreationDate = computed(() => {
 })
 
 const slTotalPrice = computed(() => {
-  return props.shoppinglist.totalPrice + '€'
+  return props.shoppinglist.totalPrice.toFixed(2) + '€'
 })
 
 const slIsActive = computed(() => {

@@ -59,10 +59,10 @@ public class ShoppinglistV3ServiceImpl implements ShoppinglistV3Service {
      * @param request
      */
     @Override
-    public void addItemUnitUpToShoppinglistItem(Long idShoppinglist, Long idShoppinglistItem, CreateItemUnitData request) {
+    public Double addItemUnitUpToShoppinglistItem(Long idShoppinglist, Long idShoppinglistItem, CreateItemUnitData request) {
         log.info("Adding new ITEM_UNIT_UP to SHOPPINGLIST_ITEM with ID: [{}]", idShoppinglistItem);
         isActive(idShoppinglist);
-        shoppinglistItemService.addItemUnitUpToShoppinglistItem(request, idShoppinglistItem);
+        return shoppinglistItemService.addItemUnitUpToShoppinglistItem(request, idShoppinglistItem);
     }
 
     /**

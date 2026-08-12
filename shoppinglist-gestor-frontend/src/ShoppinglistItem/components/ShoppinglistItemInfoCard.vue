@@ -60,13 +60,13 @@ const toast = useToast()
 /** ---- COMPUTED SECTION ---- */
 const shoppinglistItemPriceText = computed(() => {
   if (props.shoppinglistItem.calculateSystemCode === 'WP') {
-    return 'Coste producto: ' + props.shoppinglistItem.calculatedPrice + '€'
+    return 'Coste producto: ' + props.shoppinglistItem.calculatedPrice.toFixed(2) + '€'
   } else {
     return (
       'Coste producto: ' +
       (store.totalPriceFixed === -1
-        ? props.shoppinglistItem.calculatedPrice
-        : store.totalPriceFixed) +
+        ? props.shoppinglistItem.calculatedPrice.toFixed(2)
+        : store.totalPriceFixed.toFixed(2)) +
       '€'
     )
   }

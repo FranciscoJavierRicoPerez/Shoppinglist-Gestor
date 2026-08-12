@@ -2,8 +2,8 @@ import type { RequestCreateUnitData } from '@/ItemUnit/infrastructure/models/req
 import { addItemUnitUpToShoppinglistItem } from '../infrastructure/useCases/addItemUnitUpToShoppinglistItem'
 
 export function useAddItemUnitUpToShoppinglistItem() {
-  async function refetch(idShoppinglistItem: number, data: RequestCreateUnitData): Promise<void> {
-    await addItemUnitUpToShoppinglistItem(idShoppinglistItem, data)
+  async function refetch(idShoppinglistItem: number, data: RequestCreateUnitData): Promise<number> {
+    return await addItemUnitUpToShoppinglistItem(idShoppinglistItem, data)
   }
   return { refetch }
 }
