@@ -39,7 +39,7 @@ public interface ItemUnitService {
 
     ResponseVerifyExistsItemUnitUpWithUnitaryPrice verifyExistsAnItemUnitUpWithUnitaryPrice(List<ItemUnit> itemsUnits, Double unitaryPrice);
 
-    ItemUnit updateItemUnitUpValues(Long idItemUnit, Long idItemUnitUp, int newQuantity);
+    ItemUnit updateItemUnitUpValues(Long idItemUnit, Long idItemUnitUp, int newQuantity, boolean isReduceOperation);
 
     List<ItemUnit> findAllItemUnitsByShoppinglistItemAndInfoBlockFalse(ShoppinglistItem shoppinglistItem);
 }

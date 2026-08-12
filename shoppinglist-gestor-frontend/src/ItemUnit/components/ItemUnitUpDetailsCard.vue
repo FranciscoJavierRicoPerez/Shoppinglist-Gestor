@@ -59,7 +59,7 @@ function updateQuantity(add: boolean): void {
   props.itemUnitUpMetadata.calculatedPrice =
     props.itemUnitUpMetadata.price * props.itemUnitUpMetadata.quantity
   store.updateTotalPrice()
-  createRequestUpItemUpdateMetadata(false, add ? null : true)
+  createRequestUpItemUpdateMetadata(false, add ? false : true)
 }
 
 function createRequestUpItemUpdateMetadata(
@@ -73,23 +73,27 @@ function createRequestUpItemUpdateMetadata(
     removeItemUnitUp: removeOperation,
     reduceOperation: reduceOperation,
   }
-  // NO RECUERDO EXACTAMENTE EL MOTIVO DE ESTO :S
-  /* upItemUnitUpdateMetadataStore.removeOldValue(
+  /* Se encarga de limpiar el acumulado de objetos repetidos
+     ya que es cada vez que se indica una acción con los botones
+     se actualiza el listado y puede a ver instrucciones repetidas
+     para mismo items units
+  */
+  upItemUnitUpdateMetadataStore.removeOldValue(
     props.itemUnitUpMetadata.idItemUnit,
     props.itemUnitUpMetadata.idItemUnitUp,
-  ) */
+  )
   upItemUnitUpdateMetadataStore.add(requestData)
 }
 </script>
 <template>
   <Card>
     <template #title
-      ><Tag class="w-full">{{ calculatedPriceText }}</Tag></template
+      ><Tag class="w-full" severity="primary">{{ calculatedPriceText }}</Tag></template
     >
     <template #content>
       <div class="flex flex-row gap-2">
-        <Tag class="w-full">{{ quantityText }}</Tag>
-        <Tag class="w-full">{{ priceText }}</Tag>
+        <Tag class="w-full" severity="danger">{{ quantityText }}</Tag>
+        <Tag class="w-full" severity="warn">{{ priceText }}</Tag>
       </div>
     </template>
     <template #footer>

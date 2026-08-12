@@ -15,6 +15,7 @@ import { useUpdateItemUnitUpdateMetadataStore } from '../store/upItemUnitUpdateM
 import { useUpdateShoppinglistItemCalculatedPrice } from '@/ShoppinglistItem/application/useUpdateShoppinglistItemCalculatedPrice'
 import { useUpdateShoppinglistTotalPrice } from '@/Shoppinglist/application/useUpdateShoppinglistTotalPrice'
 import { useRoute } from 'vue-router'
+import { C } from 'vue-router/dist/router-CWoNjPRp.mjs'
 
 const visible = ref<boolean>(false)
 
@@ -50,10 +51,6 @@ const updateProductText = computed(() => {
   return 'Actualización del producto'
 })
 
-const updatedProductResumeText = computed(() => {
-  return 'Resumen del producto actualizado'
-})
-
 const actualTotalPrice = computed(() => {
   return (
     'Precio actual: ' +
@@ -80,6 +77,12 @@ async function updateShoppinglistPrice() {
   let request: RequestUpdateShoppinglistItemItemUnitsUp = {
     requestUpItemUnitUpdateMetadataList: elementToSend.length > 0 ? elementToSend : null,
   }
+
+  console.log('ESTADO DEL OBJETO REQUEST ANTES DE LA PETICION -> ')
+  console.log(request)
+
+  debugger
+
   await updateItemUnitUpValues(props.shoppinglistItem.idShoppinglistItem, request) // TENGO QUE LLAMAR A ESTA FUNCION CON LOS VALORES QUE HAY EN EL STORE upItemUnitUpdateMetadataStore
   // Importante -> Limpiar el listado si no se acumulara informacion innecesaria
   requestUpdateUpItemStore.clear()
@@ -106,7 +109,7 @@ async function updateShoppinglistPrice() {
     <Divider align="center" type="solid">
       <b>{{ productInfoText }}</b>
     </Divider>
-    <Tag class="w-full">{{ actualTotalPrice }}</Tag>
+    <Tag severity="info" class="w-full">{{ actualTotalPrice }}</Tag>
     <Divider>
       <b>{{ addNewItemUnitText }}</b>
     </Divider>

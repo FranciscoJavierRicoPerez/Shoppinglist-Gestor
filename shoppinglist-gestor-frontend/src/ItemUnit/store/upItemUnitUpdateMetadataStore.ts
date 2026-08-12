@@ -12,10 +12,11 @@ export const useUpdateItemUnitUpdateMetadataStore = defineStore(
     }
 
     function removeOldValue(idItemUnit: number, idItemUnitUp: number) {
-      let result = requestUpItemUnitUpdateMetadataList.value.filter((element) => {
-        idItemUnit === element.idItemUnit && idItemUnitUp === element.idItemUnitUp
+      requestUpItemUnitUpdateMetadataList.value.forEach((element, index) => {
+        if (idItemUnit === element.idItemUnit && idItemUnitUp === element.idItemUnitUp) {
+          requestUpItemUnitUpdateMetadataList.value.splice(index, 1)
+        }
       })
-      requestUpItemUnitUpdateMetadataList.value = result
     }
 
     function clear() {
