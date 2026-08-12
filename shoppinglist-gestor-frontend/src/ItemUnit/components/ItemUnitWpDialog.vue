@@ -92,6 +92,7 @@ async function updateItemUnitWp() {
     await updateShoppinglistItemCalculatedPrice(props.shoppinglistItem.idShoppinglistItem) // -> ESTE SERVICIO ES MEJOR QUE HAGA TODO EL CALCULO EN EL BE
     // AHORA POR ULTIMO RECALCULAMOS EL PRECIO DE LA SL
     updateShoppinglistPrice()
+    clearForm()
   }
 }
 
