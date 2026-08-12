@@ -16,7 +16,7 @@ async function InMemory(): Promise<ResponseGetItemUnitUpGroupedByPrice> {
 
 async function Api(idShoppinglistItem: number): Promise<ResponseGetItemUnitUpGroupedByPrice> {
   const url =
-    import.meta.env.VITE_API_URL_COMPUTER +
+    import.meta.env.VITE_API_URL_PRODUCTION +
     'api/shoppinglistitem/v1/' +
     idShoppinglistItem +
     '/itemsUnitsUpGroupedByPrice'
