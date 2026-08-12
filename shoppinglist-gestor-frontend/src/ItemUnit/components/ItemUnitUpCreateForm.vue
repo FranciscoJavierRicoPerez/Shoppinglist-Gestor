@@ -64,12 +64,9 @@ function calculateShoppinglistItemTotalPrice(): void {
 // SE ESTA ACTUALIZANDO CORRECTAMENTE EL NUEVO VALOR TOTAL DEL SLI, PERO AÑADIENDO PRECIO QUE NO EXISTIAN PREVIAMENTE SI
 // SE HACE CORRECTAMENTE
 async function addNewItemUnitUp() {
-  console.log('llamar al servicio que se encarga de añadir un nuevo item unit up')
-  debugger
   // TAMBIEN TIENE QUE LLAMARSE AL STORE useItemUnitUpGroupedByPriceStore PARA AÑADIR LA NUEVA INSTANCIA
   if (quantity.value && unitaryPrice.value) {
     // Hacer que este EP devuelva como respuesta el nuevo valor calculado del shoppinglistItem
-    debugger
     let result = await addItemUnitUpToShoppinglist(props.shoppinglistItem.idShoppinglistItem, {
       createItemUnit: true,
       createUpItemUnitData: {
@@ -79,8 +76,6 @@ async function addNewItemUnitUp() {
       },
       createWpItemUnitData: null,
     })
-    console.log(result)
-    debugger
     props.shoppinglistItem.calculatedPrice = result
     // ACTUALIZAMOS EL PRECIO TOTAL DE LA LISTA DE LA COMPRA CON EL NUEVO VALOR DEL SLI AL HABER AÑADIDO UN NUEVO ITEM UNIT UP
     shoppinglistDetailsStore.totalPrice = await updateShoppinglistTotalPrice(

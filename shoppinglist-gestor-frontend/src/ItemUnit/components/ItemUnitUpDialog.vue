@@ -66,38 +66,29 @@ const addNewItemUnitText = computed(() => {
 })
 
 async function updateShoppinglistPrice() {
-  let elementToSend = []
   if (requestUpdateUpItemStore.requestUpItemUnitUpdateMetadataList.length > 0) {
-    elementToSend.push(
-      requestUpdateUpItemStore.requestUpItemUnitUpdateMetadataList[
-        requestUpdateUpItemStore.requestUpItemUnitUpdateMetadataList.length - 1
-      ],
-    )
+    let request: RequestUpdateShoppinglistItemItemUnitsUp = {
+      requestUpItemUnitUpdateMetadataList:
+        requestUpdateUpItemStore.requestUpItemUnitUpdateMetadataList.length > 0
+          ? requestUpdateUpItemStore.requestUpItemUnitUpdateMetadataList
+          : null,
+    }
+    await updateItemUnitUpValues(props.shoppinglistItem.idShoppinglistItem, request) // TENGO QUE LLAMAR A ESTA FUNCION CON LOS VALORES QUE HAY EN EL STORE upItemUnitUpdateMetadataStore
+    // Importante -> Limpiar el listado si no se acumulara informacion innecesaria
+    requestUpdateUpItemStore.clear()
+    if (store.totalPrice !== null) {
+      let oldValue = props.shoppinglistItem.calculatedPrice
+      props.shoppinglistItem.calculatedPrice = store.totalPrice
+      shoppinglistDetailsStore.recalculateShoppinglistTotalPrice(
+        shoppinglistDetailsStore.totalPrice,
+        oldValue,
+        store.totalPrice,
+      )
+    }
+    await updateShoppinglistItemCalculatedPrice(props.shoppinglistItem.idShoppinglistItem)
+    await updateShoppinglistTotalPrice(Number(router.params.id))
+    store.totalPriceFixed = store.totalPrice
   }
-  let request: RequestUpdateShoppinglistItemItemUnitsUp = {
-    requestUpItemUnitUpdateMetadataList: elementToSend.length > 0 ? elementToSend : null,
-  }
-
-  console.log('ESTADO DEL OBJETO REQUEST ANTES DE LA PETICION -> ')
-  console.log(request)
-
-  debugger
-
-  await updateItemUnitUpValues(props.shoppinglistItem.idShoppinglistItem, request) // TENGO QUE LLAMAR A ESTA FUNCION CON LOS VALORES QUE HAY EN EL STORE upItemUnitUpdateMetadataStore
-  // Importante -> Limpiar el listado si no se acumulara informacion innecesaria
-  requestUpdateUpItemStore.clear()
-  if (store.totalPrice !== null) {
-    let oldValue = props.shoppinglistItem.calculatedPrice
-    props.shoppinglistItem.calculatedPrice = store.totalPrice
-    shoppinglistDetailsStore.recalculateShoppinglistTotalPrice(
-      shoppinglistDetailsStore.totalPrice,
-      oldValue,
-      store.totalPrice,
-    )
-  }
-  await updateShoppinglistItemCalculatedPrice(props.shoppinglistItem.idShoppinglistItem)
-  await updateShoppinglistTotalPrice(Number(router.params.id))
-  store.totalPriceFixed = store.totalPrice
 }
 </script>
 <template>
