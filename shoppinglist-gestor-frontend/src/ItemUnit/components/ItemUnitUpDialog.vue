@@ -87,6 +87,7 @@ async function updateShoppinglistPrice() {
     await updateShoppinglistItemCalculatedPrice(props.shoppinglistItem.idShoppinglistItem)
     await updateShoppinglistTotalPrice(Number(router.params.id))
     store.totalPriceFixed = store.totalPrice
+    requestUpdateUpItemStore.updateButtonDisabledValue()
   }
 }
 </script>
@@ -126,6 +127,7 @@ async function updateShoppinglistPrice() {
         severity="info"
         type="button"
         label="Actualizar"
+        :disabled="requestUpdateUpItemStore.updateButtonDisabled"
         @click="((visible = false), updateShoppinglistPrice())"
       ></Button>
     </div>

@@ -10,6 +10,7 @@ import { useUpdateShoppinglistTotalPrice } from '@/Shoppinglist/application/useU
 import { useRoute } from 'vue-router'
 import { useShoppinglistDetailStore } from '@/Shoppinglist/stores/shoppinglistDetailStore'
 import type { ShoppinglistItemMetadata } from '@/ShoppinglistItem/domain/ShoppinglistItemMetadata'
+import { useUpdateItemUnitUpdateMetadataStore } from '../store/upItemUnitUpdateMetadataStore'
 
 const props = defineProps({
   quickCreate: {
@@ -37,6 +38,7 @@ const unitaryPrice = ref<number | null>(null)
 const store = useCreateShoppinglistItemFormStore()
 const groupedItemsUpStore = useItemUnitUpGroupedByPriceStore()
 const shoppinglistDetailsStore = useShoppinglistDetailStore()
+const updateItemUnitUpStore = useUpdateItemUnitUpdateMetadataStore()
 
 watch(quantity, () => {
   if (!props.quickCreate) {
@@ -120,7 +122,11 @@ function clearForm() {
       v-if="quickCreate"
       class="w-full"
       label="Añadir unidad"
-      :disabled="unitaryPrice === null || quantity == null"
+      :disabled="
+        unitaryPrice === null ||
+        quantity == null ||
+        updateItemUnitUpStore.requestUpItemUnitUpdateMetadataList.length > 0
+      "
       @click="addNewItemUnitUp()"
     ></Button>
   </div>

@@ -5,9 +5,11 @@ import type { RequestUpItemUnitUpUpdateMetadata } from '../infrastructure/models
 export const useUpdateItemUnitUpdateMetadataStore = defineStore(
   'upItemUnitUpdateMetadataStore',
   () => {
+    const updateButtonDisabled = ref<boolean>(true)
     const requestUpItemUnitUpdateMetadataList = ref<RequestUpItemUnitUpUpdateMetadata[]>([])
 
     function add(data: RequestUpItemUnitUpUpdateMetadata) {
+      updateButtonDisabled.value = false
       requestUpItemUnitUpdateMetadataList.value.push(data)
     }
 
@@ -20,14 +22,21 @@ export const useUpdateItemUnitUpdateMetadataStore = defineStore(
     }
 
     function clear() {
+      updateButtonDisabled.value = false
       requestUpItemUnitUpdateMetadataList.value = []
+    }
+
+    function updateButtonDisabledValue() {
+      updateButtonDisabled.value = !updateButtonDisabled.value
     }
 
     return {
       requestUpItemUnitUpdateMetadataList,
+      updateButtonDisabled,
       removeOldValue,
       add,
       clear,
+      updateButtonDisabledValue,
     }
   },
 )
