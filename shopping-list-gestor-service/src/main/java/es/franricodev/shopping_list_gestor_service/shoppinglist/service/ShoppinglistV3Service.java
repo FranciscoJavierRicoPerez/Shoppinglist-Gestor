@@ -12,7 +12,7 @@ public interface ShoppinglistV3Service {
 
     ResponseDeleteShoppinglistItem deleteShoppinglistItem(Long idShoppinglist, Long idShoppinglistItem);
 
-    void addItemUnitUpToShoppinglistItem(Long idShoppinglist, Long idShoppinglistItem, CreateItemUnitData request);
+    Double addItemUnitUpToShoppinglistItem(Long idShoppinglist, Long idShoppinglistItem, CreateItemUnitData request);
 
     void deleteItemUnitFromShoppinglistItem(Long idShoppinglist, Long idShoppinglistItem, Long idItemUnit);
 

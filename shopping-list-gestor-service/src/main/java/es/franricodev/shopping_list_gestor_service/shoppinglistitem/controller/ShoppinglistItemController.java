@@ -47,7 +47,7 @@ public interface ShoppinglistItemController {
             )
     })
     @PostMapping(ApiShoppinglistItemConstants.ADD_ITEM_UNIT_UP_V1)
-    ResponseEntity<Void> addItemUnitUp(
+    ResponseEntity<Double> addItemUnitUp(
             @PathVariable(ApiShoppinglistItemConstants.ID_SHOPPINGLIST_ITEM) Long idShoppinglistItem,
             @RequestBody CreateItemUnitData request
     );

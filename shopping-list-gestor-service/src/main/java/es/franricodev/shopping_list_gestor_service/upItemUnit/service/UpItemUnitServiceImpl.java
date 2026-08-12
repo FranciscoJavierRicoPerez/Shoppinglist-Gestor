@@ -90,9 +90,7 @@ public class UpItemUnitServiceImpl implements UpItemUnitService{
             UpItemUnit upItemUnit = upItemUnitRepository.findByIdAndInfoBlockFalse(request.idItemUnitUp()).orElseThrow(
                     () ->  new UpItemUnitException(UpItemUnitErrors.NOT_FOUND_ITEM_UNIT_UP_WITH_THE_REFERENCED_ID)
             );
-            // upItemUnit.setQuantity(request.quantity());
-            // TODO (WARNING) -> PUEDE QUE ESTO DE PROBLEMAS
-            upItemUnit.setQuantity(request.quantity() + upItemUnit.getQuantity());
+            upItemUnit.setQuantity(request.quantity());
             updateUpItemUnit(upItemUnit);
         } catch (UpItemUnitException e) {
             log.error(e.getMessage());

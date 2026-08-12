@@ -31,6 +31,7 @@ export const useItemUnitUpGroupedByPriceStore = defineStore('itemUnitUpGroupedBy
       if (element.price === data.price) {
         updateQuantity = true
         element.quantity += data.quantity
+        element.calculatedPrice = element.quantity * element.price
       }
     })
 

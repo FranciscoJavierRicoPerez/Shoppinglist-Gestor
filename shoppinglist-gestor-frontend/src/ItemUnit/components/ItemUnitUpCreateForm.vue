@@ -9,15 +9,21 @@ import { useAddItemUnitUpToShoppinglistItem } from '@/ShoppinglistItem/applicati
 import { useUpdateShoppinglistTotalPrice } from '@/Shoppinglist/application/useUpdateShoppinglistTotalPrice'
 import { useRoute } from 'vue-router'
 import { useShoppinglistDetailStore } from '@/Shoppinglist/stores/shoppinglistDetailStore'
+import type { ShoppinglistItemMetadata } from '@/ShoppinglistItem/domain/ShoppinglistItemMetadata'
+import { useUpdateItemUnitUpdateMetadataStore } from '../store/upItemUnitUpdateMetadataStore'
 
 const props = defineProps({
   quickCreate: {
     type: Boolean as PropType<Boolean>,
     default: () => false,
   },
-  idShoppinglistItem: {
+  /* idShoppinglistItem: {
     type: Number as PropType<number>,
     default: () => -1,
+  }, */
+  shoppinglistItem: {
+    type: Object as PropType<ShoppinglistItemMetadata>,
+    default: () => null,
   },
 })
 
@@ -32,6 +38,7 @@ const unitaryPrice = ref<number | null>(null)
 const store = useCreateShoppinglistItemFormStore()
 const groupedItemsUpStore = useItemUnitUpGroupedByPriceStore()
 const shoppinglistDetailsStore = useShoppinglistDetailStore()
+const updateItemUnitUpStore = useUpdateItemUnitUpdateMetadataStore()
 
 watch(quantity, () => {
   if (!props.quickCreate) {
@@ -55,12 +62,14 @@ function calculateShoppinglistItemTotalPrice(): void {
   store.shoppinglistItemPrice = totalPrice
 }
 
+// TODO -> Al llamar a esta función con un precio unitario que ya existe en el listado de groupedItemsUpStore NO
+// SE ESTA ACTUALIZANDO CORRECTAMENTE EL NUEVO VALOR TOTAL DEL SLI, PERO AÑADIENDO PRECIO QUE NO EXISTIAN PREVIAMENTE SI
+// SE HACE CORRECTAMENTE
 async function addNewItemUnitUp() {
-  console.log('llamar al servicio que se encarga de añadir un nuevo item unit up')
-
   // TAMBIEN TIENE QUE LLAMARSE AL STORE useItemUnitUpGroupedByPriceStore PARA AÑADIR LA NUEVA INSTANCIA
   if (quantity.value && unitaryPrice.value) {
-    await addItemUnitUpToShoppinglist(props.idShoppinglistItem, {
+    // Hacer que este EP devuelva como respuesta el nuevo valor calculado del shoppinglistItem
+    let result = await addItemUnitUpToShoppinglist(props.shoppinglistItem.idShoppinglistItem, {
       createItemUnit: true,
       createUpItemUnitData: {
         idItemUnitUp: null,
@@ -69,6 +78,7 @@ async function addNewItemUnitUp() {
       },
       createWpItemUnitData: null,
     })
+    props.shoppinglistItem.calculatedPrice = result
     // ACTUALIZAMOS EL PRECIO TOTAL DE LA LISTA DE LA COMPRA CON EL NUEVO VALOR DEL SLI AL HABER AÑADIDO UN NUEVO ITEM UNIT UP
     shoppinglistDetailsStore.totalPrice = await updateShoppinglistTotalPrice(
       Number(router.params.id),
@@ -112,7 +122,11 @@ function clearForm() {
       v-if="quickCreate"
       class="w-full"
       label="Añadir unidad"
-      :disabled="unitaryPrice === null || quantity == null"
+      :disabled="
+        unitaryPrice === null ||
+        quantity == null ||
+        updateItemUnitUpStore.requestUpItemUnitUpdateMetadataList.length > 0
+      "
       @click="addNewItemUnitUp()"
     ></Button>
   </div>

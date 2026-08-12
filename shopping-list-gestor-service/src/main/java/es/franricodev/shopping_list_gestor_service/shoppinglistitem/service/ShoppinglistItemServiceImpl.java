@@ -61,7 +61,7 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
     private ItemUnitMapper itemUnitMapper;
 
     @Override
-    public void addItemUnitUpToShoppinglistItem(CreateItemUnitData createItemUnitData, Long idShoppinglistItem) throws ShoppinglistItemException, ItemUnitException, ShoppinglistException {
+    public Double addItemUnitUpToShoppinglistItem(CreateItemUnitData createItemUnitData, Long idShoppinglistItem) throws ShoppinglistItemException, ItemUnitException, ShoppinglistException {
         log.info("Add a new item unit to the shoppinglist item: {}", idShoppinglistItem);
         ShoppinglistItem shoppinglistItem = findShoppinglistItemByIdInfoBlockFalse(idShoppinglistItem);
         List<ItemUnit> filteredItemUnit = shoppinglistItem.getItemUnitList().stream().filter(itemUnit -> !itemUnit.getInfoBlock()).toList();
@@ -72,7 +72,7 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
             itemUnit = itemUnitService.createItemUnitV2(createItemUnitData, false, shoppinglistItem);
         } else {
             log.info("There are at least one Item Unit UP with an unitary price of : {} in the SHOPPINGLIST-ITEM with id : {}, adding quantity process started for the ITEM UNIT UP with id: {}", createItemUnitData.getCreateUpItemUnitData().getUnitaryPrice(), shoppinglistItem.getId(), response.idUpItemUnit());
-            itemUnit = itemUnitService.updateItemUnitUpValues(response.idItemUnit(), response.idUpItemUnit(), createItemUnitData.getCreateUpItemUnitData().getQuantity());
+            itemUnit = itemUnitService.updateItemUnitUpValues(response.idItemUnit(), response.idUpItemUnit(), createItemUnitData.getCreateUpItemUnitData().getQuantity(), false);
         }
         if(itemUnit != null) {
             ArrayList<ItemUnit> itemsUnitCreated = new ArrayList<>();
@@ -82,6 +82,7 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
             shoppinglistItem.setCalculatedPrice(result);
             updateShoppinglistItem(shoppinglistItem);
         }
+        return shoppinglistItem.getCalculatedPrice();
     }
 
     @Override
@@ -300,7 +301,7 @@ public class ShoppinglistItemServiceImpl implements ShoppinglistItemService {
                     if (itemUnit.getId().equals(requestData.idItemUnit())) {
                         if (!requestData.removeItemUnitUp()) {
                             log.info("Detected an update operation of the item unit [{}] values", itemUnit.getId());
-                            itemUnitService.updateItemUnitUpValues(requestData.idItemUnit(), requestData.idItemUnitUp(), requestData.newQuantity());
+                            itemUnitService.updateItemUnitUpValues(requestData.idItemUnit(), requestData.idItemUnitUp(), requestData.newQuantity(), requestData.reduceOperation());
                         } else {
                             log.info("Proceed with the logic delete of the item unit [{}]", itemUnit.getId());
                             itemUnitService.deleteLogicItemUnit(itemUnit);

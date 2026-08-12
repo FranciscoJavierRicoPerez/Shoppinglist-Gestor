@@ -5,15 +5,21 @@ import type { RequestCreateUnitData } from '@/ItemUnit/infrastructure/models/req
 async function addItemUnitUpToShoppinglistItem(
   idShoppinglistItem: number,
   data: RequestCreateUnitData,
-): Promise<void> {
-  import.meta.env.VITE_DATA_ACCESS === 'LOCAL'
+): Promise<number> {
+  return import.meta.env.VITE_DATA_ACCESS === 'LOCAL'
     ? await InMemory()
     : await Api(idShoppinglistItem, data)
 }
 
-async function Api(idShoppinglistItem: number, data: RequestCreateUnitData): Promise<void> {
-  await apiClient.post(SHOPPINGLIST_ITEMS_ENDPOINTS.ADD_ITEM_UNIT_UP_V1(idShoppinglistItem), data)
+async function Api(idShoppinglistItem: number, data: RequestCreateUnitData): Promise<number> {
+  const response = await apiClient.post(
+    SHOPPINGLIST_ITEMS_ENDPOINTS.ADD_ITEM_UNIT_UP_V1(idShoppinglistItem),
+    data,
+  )
+  return response.data !== null ? response.data : -1
 }
-async function InMemory(): Promise<void> {}
+async function InMemory(): Promise<number> {
+  return 0
+}
 
 export { addItemUnitUpToShoppinglistItem }
