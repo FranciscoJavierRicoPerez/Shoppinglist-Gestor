@@ -17,7 +17,7 @@ public class InitializationConfig {
     private CalculateSystemRepository calculateSystemRepository;
 
     @Bean
-    void verifyCalculateSystems() {
+    public String verifyCalculateSystems() {
         log.info("Verification if calculatesystems exists in the database");
         List<CalculateSystem> calculateSystemList = calculateSystemRepository.findAll();
         if (calculateSystemList.isEmpty()) {
@@ -33,7 +33,9 @@ public class InitializationConfig {
             csWp.setCode("WP");
             csWp.setName("Precio KG/€");
             calculateSystemRepository.save(csWp);
+            return "Added new values";
         }
+        return "No new values added";
     }
 
 
