@@ -10,10 +10,10 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 
 @Slf4j
-@Configuration
+//@Configuration
 public class InitializationConfig {
 
-    @Autowired
+    /* @Autowired
     private CalculateSystemRepository calculateSystemRepository;
 
     @Bean
@@ -36,7 +36,7 @@ public class InitializationConfig {
             return "Added new values";
         }
         return "No new values added";
-    }
+    } */
 
 
 }
