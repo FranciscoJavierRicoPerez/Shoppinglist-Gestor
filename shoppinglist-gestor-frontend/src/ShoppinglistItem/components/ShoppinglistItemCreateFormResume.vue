@@ -25,19 +25,19 @@ const quantityText = computed(() => {
 })
 
 const unitaryPriceText = computed(() => {
-  return 'Precio unitario: ' + store.unitaryPrice + '€'
+  return 'Precio unitario: ' + store.unitaryPrice?.toFixed(2) + '€'
 })
 
 const priceKgText = computed(() => {
-  return 'Kg/€: ' + store.priceKg
+  return 'Kg/€: ' + store.priceKg?.toFixed(2)
 })
 
 const weightText = computed(() => {
-  return 'Peso: ' + store.weight
+  return 'Peso: ' + store.weight?.toFixed(2)
 })
 
 const shoppinglistItemPriceText = computed(() => {
-  return 'Precio del item: ' + store.shoppinglistItemPrice + '€'
+  return 'Precio del item: ' + store.shoppinglistItemPrice?.toFixed(2) + '€'
 })
 /** ------------------------- */
 </script>
