@@ -10,10 +10,10 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 
 @Slf4j
-//@Configuration
+@Configuration
 public class InitializationConfig {
 
-    /* @Autowired
+    @Autowired
     private CalculateSystemRepository calculateSystemRepository;
 
     @Bean
@@ -21,7 +21,7 @@ public class InitializationConfig {
         log.info("Verification if calculatesystems exists in the database");
         List<CalculateSystem> calculateSystemList = calculateSystemRepository.findAll();
         if (calculateSystemList.isEmpty()) {
-            log.info("Adding calculate system UP");
+            log.info("The calculate systems values don't exists in the database, Adding calculate system UP");
             CalculateSystem csUp = new CalculateSystem();
             csUp.setId(1L);
             csUp.setCode("UP");
@@ -35,8 +35,7 @@ public class InitializationConfig {
             calculateSystemRepository.save(csWp);
             return "Added new values";
         }
+        log.info("The calculate system values there are already in the database");
         return "No new values added";
-    } */
-
-
+    }
 }
