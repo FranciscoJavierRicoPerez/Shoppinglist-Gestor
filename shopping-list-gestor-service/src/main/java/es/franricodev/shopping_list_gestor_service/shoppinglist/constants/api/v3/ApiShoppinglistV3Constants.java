@@ -44,7 +44,8 @@ public class ApiShoppinglistV3Constants {
             "Returns all the items units of the shoppinglist item type UP grouped by price";
     public static final String GET_ITEM_UNITS_WP_METADATA_V3_OP_SUMAMRY =
             "Returns the metadata of the items units wp";
-    public static final String UPDATE_SHOPPINGLIST_ITEM_UP_ITEM_UNIT_DATA_V3_OP_SUMMARY = "Update of the items units up associated to the shoppinglist item with the requested data from de update item unit up form";
+    public static final String UPDATE_SHOPPINGLIST_ITEM_UP_ITEM_UNIT_DATA_V3_OP_SUMMARY =
+            "Update of the items units up associated to the shoppinglist item with the requested data from de update item unit up form";
 
 
 
