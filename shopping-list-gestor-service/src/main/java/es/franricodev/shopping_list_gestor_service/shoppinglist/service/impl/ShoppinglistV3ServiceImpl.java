@@ -14,7 +14,6 @@ import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.request.
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseDeleteShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseGetAllItemUnitUpGroupedByPrice;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.dto.response.ResponseItemUnitWpMetadata;
-import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.ShoppinglistItem;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.service.ShoppinglistItemService;
 import es.franricodev.shopping_list_gestor_service.wpItemUnit.dto.request.RequestAddItemUnitWP;
 import lombok.extern.slf4j.Slf4j;
@@ -51,11 +50,7 @@ public class ShoppinglistV3ServiceImpl implements ShoppinglistV3Service {
     public ResponseDeleteShoppinglistItem deleteShoppinglistItem(Long idShoppinglist, Long idShoppinglistItem) {
         log.info("Logic delete of the shoppinglist item : [{}]",idShoppinglistItem);
         isActive(idShoppinglist);
-        var result = shoppinglistItemService.deleteLogicShoppinglistItemById(idShoppinglistItem);
-        log.info("Logic delete of the shoppinglist item : [{}] completed, continue updating the total price of the shoppinglist with id: [{}]", idShoppinglistItem, idShoppinglist);
-        double newShoppinglistTotalPrice = updateShoppinglistTotalPrice(idShoppinglist);
-        result.setNewShoppinglistTotalPrice(newShoppinglistTotalPrice);
-        return result;
+        return shoppinglistItemService.deleteLogicShoppinglistItemById(idShoppinglistItem);
     }
 
     /**
@@ -152,17 +147,6 @@ public class ShoppinglistV3ServiceImpl implements ShoppinglistV3Service {
         log.info("Update item unit up data from SHOPPINGLIST_ITEM with id: [{}] from the SHOPPINGLIST with id: [{}]", idShoppinglistItem, idShoppinglist);
         isActive(idShoppinglist);
         shoppinglistItemService.updateShoppinglistItemUpItemsUnitData(idShoppinglistItem, request);
-    }
-
-    @Override
-    public Double updateShoppinglistTotalPrice(Long idShoppinglist) {
-        Shoppinglist shoppinglist = getShoppinglistById(idShoppinglist);
-        List<ShoppinglistItem> shoppinglistItemList = shoppinglist.getItems();
-        Double newCalculateTotalPrice = shoppinglistItemList.stream().map((ShoppinglistItem::getCalculatedPrice)).mapToDouble(Double::doubleValue).sum();
-        log.info("The actual total price is [{}], the new total price is: [{}]", shoppinglist.getTotalPrice(), newCalculateTotalPrice);
-        shoppinglist.setTotalPrice(newCalculateTotalPrice);
-        shoppinglistRepository.save(shoppinglist);
-        return newCalculateTotalPrice;
     }
 
     /**

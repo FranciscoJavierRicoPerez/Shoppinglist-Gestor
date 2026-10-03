@@ -37,7 +37,6 @@ public class ShoppinglistV3ControllerImplTest {
                         .builder()
                         .message("Test message")
                         .delete(true)
-                        .newShoppinglistTotalPrice(0D)
                         .build();
         Mockito.when(shoppinglistV3Service.deleteShoppinglistItem(Mockito.anyLong(), Mockito.anyLong()))
                 .thenReturn(responseDeleteShoppinglistItem);

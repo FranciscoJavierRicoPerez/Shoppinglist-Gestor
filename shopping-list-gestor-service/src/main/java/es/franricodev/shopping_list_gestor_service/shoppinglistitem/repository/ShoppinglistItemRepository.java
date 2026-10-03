@@ -12,6 +12,7 @@ import java.util.Optional;
 @Repository
 public interface ShoppinglistItemRepository extends JpaRepository<ShoppinglistItem, Long>{
 
+    // TODO -> Modificar query nativa por una JPA correcta -> Ahora mismo fallara por que existe una bbdd MySQL
     @Query(value = "SELECT sli.* FROM SHOPPINGLIST_ITEM sli WHERE sli.shoppinglist_id = :idShoppinglist AND sli.info_block is false", nativeQuery = true)
     Optional<List<ShoppinglistItem>> findAllShoppinglistItemByShoppinglistIdAndInfoBlockFalse(@Param("idShoppinglist") Long id);
 
