@@ -96,7 +96,7 @@ public class ShoppinglistV3ServiceImpl implements ShoppinglistV3Service {
         log.info("Get all ITEMS UNITS from the SHOPPINGLIST ITEM with id: [{}] from the SHOPPINGLIST with id: [{}]", idShoppinglistItem, idShoppinglist);
         isActive(idShoppinglist);
         List<ItemUnitDTO> itemUnitDTOList = shoppinglistItemService.getAllItemUnitsFromShoppinglistItem(idShoppinglistItem);
-        ResponseGetAllItemsUnit responseGetAllItemsUnit = new ResponseGetAllItemsUnit();
+        ResponseGetAllItemsUnit responseGetAllItemsUnit = ResponseGetAllItemsUnit.builder().build();
         responseGetAllItemsUnit.setItemUnitList(itemUnitDTOList);
         responseGetAllItemsUnit.setMessage("ITEMS UNITS OBTENIDOS CON EXITO");
         return responseGetAllItemsUnit;

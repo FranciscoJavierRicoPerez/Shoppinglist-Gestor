@@ -79,7 +79,7 @@ public class ShoppinglistItemControllerImpl implements ShoppinglistItemControlle
             Long idShoppinglistItem
     ) {
         log.info("Getting all the items units with calculate system UP of shoppinglist item with id: {}", idShoppinglistItem);
-        ResponseGetAllItemsUnit responseGetAllItemsUnit = new ResponseGetAllItemsUnit();
+        ResponseGetAllItemsUnit responseGetAllItemsUnit = ResponseGetAllItemsUnit.builder().build();
         HttpStatus httpStatus = HttpStatus.OK;
         try {
             responseGetAllItemsUnit.setItemUnitList( shoppinglistItemService.getAllItemUnitsFromShoppinglistItem(idShoppinglistItem));
