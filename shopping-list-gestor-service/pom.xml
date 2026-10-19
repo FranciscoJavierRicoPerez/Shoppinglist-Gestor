@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>es.franricodev</groupId>
 	<artifactId>shopping-list-gestor-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.2.1-SNAPSHOT</version>
 	<name>shopping-list-gestor-service</name>
 	<description>Shoppinglist gestor service</description>
 	<url/>

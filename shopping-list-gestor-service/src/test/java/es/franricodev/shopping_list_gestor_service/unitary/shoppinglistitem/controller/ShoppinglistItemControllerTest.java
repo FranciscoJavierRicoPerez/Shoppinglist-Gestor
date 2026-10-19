@@ -1,4 +1,4 @@
-package es.franricodev.shopping_list_gestor_service.shoppinglistitem.controller;
+package es.franricodev.shopping_list_gestor_service.unitary.shoppinglistitem.controller;
 
 import es.franricodev.shopping_list_gestor_service.shoppinglist.service.impl.ShoppinglistServiceImpl;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.controller.impl.ShoppinglistItemControllerImpl;

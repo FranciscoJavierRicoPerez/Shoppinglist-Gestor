@@ -3,6 +3,8 @@ import type { ResponseGetItemUnitUpGroupedByPrice } from '../models/responses/Re
 import responseGetItemUnitUpGroupedByPrice from '@/ItemUnit/infrastructure/mocks/responseGetItemUnitUpGroupedByPrice.json'
 import { createItemUnitGroupedByPrice } from '../services/itemUnitService'
 import type { ItemUnitUpGroupedByPrice } from '@/ItemUnit/domain/ItemUnitUpGroupedByPrice'
+import { apiClient } from '@/Core/config/apiClient'
+import { ITEM_UNIT_ENDPOINTS, SHOPPINGLIST_ITEMS_ENDPOINTS } from '@/Core/config/config'
 async function getItemUnitUpGroupedByPrice(
   idShoppinglistItem: number,
 ): Promise<ItemUnitUpGroupedByPrice> {
@@ -15,12 +17,9 @@ async function InMemory(): Promise<ResponseGetItemUnitUpGroupedByPrice> {
 }
 
 async function Api(idShoppinglistItem: number): Promise<ResponseGetItemUnitUpGroupedByPrice> {
-  const url =
-    import.meta.env.VITE_API_URL_PRODUCTION +
-    'api/shoppinglistitem/v1/' +
-    idShoppinglistItem +
-    '/itemsUnitsUpGroupedByPrice'
-  const response = await axios.get(url)
+  const response = await apiClient.get(
+    SHOPPINGLIST_ITEMS_ENDPOINTS.ITEMS_UNITS_UP_GROUPED_BY_PRICE_V1(idShoppinglistItem),
+  )
   return response.data
 }
 

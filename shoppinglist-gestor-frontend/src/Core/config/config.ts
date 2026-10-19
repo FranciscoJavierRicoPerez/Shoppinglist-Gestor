@@ -115,6 +115,14 @@ export const SHOPPINGLIST_ITEMS_ENDPOINTS = {
   UPDATE_ITEM_UNIT_UP_V1: (idShoppinglistItem: number): string => {
     return SHOPPINGLIST_ITEMS_ENDPOINTS.BASE_URL + `/v1/${idShoppinglistItem}/updateItemsUnitUpData`
   },
+  ITEMS_UNITS_UP_GROUPED_BY_PRICE_V1: (idShoppinglistItem: number): string => {
+    return (
+      SHOPPINGLIST_ITEMS_ENDPOINTS.BASE_URL + `/v1/${idShoppinglistItem}/itemsUnitsUpGroupedByPrice`
+    )
+  },
+  CREATE_SHOPPINGLIST_ITEM_METADATA: () => {
+    return SHOPPINGLIST_ITEMS_ENDPOINTS.BASE_URL + `/v1/createShoppinglistItemMetadata`
+  },
 }
 // -------------------------------------------------------------------------------------------------
 // ---------- WP_ITEM_UNIT_ENDPOINTS ---------------------------------------------------------

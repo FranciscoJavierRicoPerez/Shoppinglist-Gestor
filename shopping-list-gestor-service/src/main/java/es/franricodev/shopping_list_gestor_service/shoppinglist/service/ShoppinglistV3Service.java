@@ -26,5 +26,4 @@ public interface ShoppinglistV3Service {
 
     void updateItemUnitUpDataFromShoppinglistItem(Long idShoppinglist, Long idShoppinglistItem, RequestUpdateShoppinglistItemItemUnitsUp request);
 
-
 }
