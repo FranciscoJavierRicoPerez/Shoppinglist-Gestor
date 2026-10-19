@@ -1,6 +1,16 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglist.constants.api.v3;
 
 public class ApiShoppinglistV3Constants {
+    // --------------- TABLE NAME --------------------------------------------------------------------
+    public static final String SHOPPINGLIST = "SHOPPINGLIST";
+    // --------------- COLUMN NAMES ------------------------------------------------------------------
+    public static final String CREATION_DATE = "CREATION_DATE";
+    public static final String CODE = "CODE";
+    public static final String CLOSE_DATE = "CLOSE_DATE";
+    public static final String TOTAL_PRICE = "TOTAL_PRICE";
+    public static final String IS_ACTIVE = "IS_ACTIVE";
+    public static final String INFO_BLOCK = "INFO_BLOCK";
+    public static final String SHOPPINGLIST_ID = "shoppinglist_id";
     // --------------- GENERAL CONSTANTS -------------------------------------------------------------
     public static final String API_NAME =
             "Shoppinglist Controller [Version 3] API Documentation";
