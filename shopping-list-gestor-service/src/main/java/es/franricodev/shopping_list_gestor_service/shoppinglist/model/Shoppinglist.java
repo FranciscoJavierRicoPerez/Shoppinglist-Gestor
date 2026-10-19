@@ -1,55 +1,50 @@
 package es.franricodev.shopping_list_gestor_service.shoppinglist.model;
 
+import es.franricodev.shopping_list_gestor_service.shoppinglist.constants.api.v3.ApiShoppinglistV3Constants;
 import es.franricodev.shopping_list_gestor_service.shoppinglistitem.model.ShoppinglistItem;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.xml.stream.events.Comment;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
 
 @Getter
 @Setter
 @Entity
-@Table(name = "SHOPPINGLIST")
+@Table(name = ApiShoppinglistV3Constants.SHOPPINGLIST)
 public class Shoppinglist implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "CREATION_DATE")
+    @Column(name = ApiShoppinglistV3Constants.CREATION_DATE)
     private LocalDate creationDate;
 
     @NotNull
-    @Column(name = "CODE")
+    @Column(name = ApiShoppinglistV3Constants.CODE)
     private String code;
 
-    @Column(name = "CLOSE_DATE")
+    @Column(name = ApiShoppinglistV3Constants.CLOSE_DATE)
     private LocalDate closeDate;
 
     @NotNull
-    @Column(name = "TOTAL_PRICE")
+    @Column(name = ApiShoppinglistV3Constants.TOTAL_PRICE)
     private Double totalPrice;
 
     @NotNull
-    @Column(name = "IS_ACTIVE")
+    @Column(name = ApiShoppinglistV3Constants.IS_ACTIVE)
     private Boolean isActive;
 
     @NotNull
-    @Column(name = "INFO_BLOCK")
+    @Column(name = ApiShoppinglistV3Constants.INFO_BLOCK)
     private Boolean infoBlock;
 
     @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    @JoinColumn(name = "shoppinglist_id")
+    @JoinColumn(name = ApiShoppinglistV3Constants.SHOPPINGLIST_ID)
     private List<ShoppinglistItem> items = new ArrayList<>();
 }

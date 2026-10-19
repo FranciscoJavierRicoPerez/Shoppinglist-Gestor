@@ -8,5 +8,4 @@ import lombok.Data;
 public class ResponseDeleteShoppinglistItem {
     private String message;
     private boolean delete;
-    private Double newShoppinglistTotalPrice;
 }

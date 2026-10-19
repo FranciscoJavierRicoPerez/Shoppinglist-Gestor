@@ -5,6 +5,8 @@ import responseCreateShoppinglistItem from '@/ShoppinglistItem/infrastructure/mo
 import { createShoppinglistItemMetadataFromCreateForm } from '../services/shoppinglistItemService'
 import axios from 'axios'
 import type { CreateShoppinglistItemData } from '../models/dto/CreateShoppinglistItemData'
+import { apiClient } from '@/Core/config/apiClient'
+import { SHOPPINGLIST_ITEMS_ENDPOINTS } from '@/Core/config/config'
 
 async function createShoppinglistItem(
   data: RequestCreateShoppinglistItemForm,
@@ -22,10 +24,10 @@ async function createShoppinglistItem(
 async function Api(
   data: RequestCreateShoppinglistItemForm,
 ): Promise<ResponseCreateShoppinglistItem> {
-  const url =
-    import.meta.env.VITE_API_URL_PRODUCTION +
-    'api/shoppinglistitem/v1/createShoppinglistItemMetadata'
-  const response = await axios.post(url, data)
+  const response = await apiClient.post(
+    SHOPPINGLIST_ITEMS_ENDPOINTS.CREATE_SHOPPINGLIST_ITEM_METADATA(),
+    data,
+  )
   return response.data
 }
 
